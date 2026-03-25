@@ -1,50 +1,24 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法
-const clickCount = ref(0)
-const lastClickTime = ref<string | null>(null)
-
-const handleClick = () => {
-	clickCount.value++
-	lastClickTime.value = new Date().toLocaleTimeString()
-}
-
-// 场景2: 自定义延迟时间
-const customCount = ref(0)
-
-// 场景3: leading vs trailing
-const leadingCount = ref(0)
-const trailingCount = ref(0)
-
-// 场景4: 滚动事件
-const scrollCount = ref(0)
-const scrollPosition = ref(0)
-
-const handleScroll = (event: Event) => {
-	const target = event.target as HTMLElement
-	scrollPosition.value = target.scrollTop
-	scrollCount.value++
-}
-
-// 场景5: 表单提交
-const submitCount = ref(0)
-const lastSubmitTime = ref<string | null>(null)
-const isSubmitting = ref(false)
-
-const handleSubmit = () => {
-	submitCount.value++
-	lastSubmitTime.value = new Date().toLocaleTimeString()
-	// 模拟提交
-	isSubmitting.value = true
-	setTimeout(() => {
-		isSubmitting.value = false
-	}, 500)
-}
-
-const basicCode = `<button v-throttle="handleClick">
+export default defineComponent({
+	name: 'ThrottleDemo',
+	components: { DemoSection, CodeBlock },
+	data() {
+		return {
+			clickCount: 0,
+			lastClickTime: null as string | null,
+			customCount: 0,
+			leadingCount: 0,
+			trailingCount: 0,
+			scrollCount: 0,
+			scrollPosition: 0,
+			submitCount: 0,
+			lastSubmitTime: null as string | null,
+			isSubmitting: false,
+			basicCode: `<button v-throttle="handleClick">
   Click Me
 </button>
 
@@ -52,28 +26,48 @@ const basicCode = `<button v-throttle="handleClick">
 const handleClick = () => {
   console.log('Throttled click!')
 }
-<\/script>`
-
-const customDelayCode = `<!-- 使用 arg 指定延迟时间 -->
+<\/script>`,
+			customDelayCode: `<!-- 使用 arg 指定延迟时间 -->
 <button v-throttle:1000="handler">1s Throttle</button>
 
 <!-- 使用 options 配置 -->
-<button v-throttle="{ handler: fn, wait: 500 }">500ms Throttle</button>`
-
-const optionsCode = `interface ThrottleOptions {
+<button v-throttle="{ handler: fn, wait: 500 }">500ms Throttle</button>`,
+			optionsCode: `interface ThrottleOptions {
   handler: Function      // 节流处理函数
   wait?: number          // 节流时间，默认 300ms
   leading?: boolean      // 是否在开始时触发，默认 true
   trailing?: boolean     // 是否在结束时触发，默认 true
-}`
-
-const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
+}`,
+			scrollCode: `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 <div v-throttle:100.scroll="handleScroll">
   Scrollable content
 </div>
 
 <!-- 也支持 resize、mousemove 等事件 -->
 <Window v-throttle.resize="handleResize" />`
+		}
+	},
+	methods: {
+		handleClick() {
+			this.clickCount++
+			this.lastClickTime = new Date().toLocaleTimeString()
+		},
+		handleScroll(event: Event) {
+			const target = event.target as HTMLElement
+			this.scrollPosition = target.scrollTop
+			this.scrollCount++
+		},
+		handleSubmit() {
+			this.submitCount++
+			this.lastSubmitTime = new Date().toLocaleTimeString()
+			// 模拟提交
+			this.isSubmitting = true
+			setTimeout(() => {
+				this.isSubmitting = false
+			}, 500)
+		}
+	}
+})
 </script>
 
 <template>

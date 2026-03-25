@@ -1,45 +1,25 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法 - 下拉菜单
-const showDropdown = ref(false)
-const handleDropdownClickOutside = () => {
-	showDropdown.value = false
-}
-
-// 场景2: 排除特定元素
-const showModal = ref(false)
-const triggerBtnRef = ref<HTMLElement | null>(null)
-const openModal = () => {
-	showModal.value = true
-}
-const closeModal = () => {
-	showModal.value = false
-}
-
-// 场景3: 禁用状态
-const disabled = ref(false)
-const clickCount = ref(0)
-const handleDisabledClickOutside = () => {
-	clickCount.value++
-}
-
-// 场景4: 多事件类型
-const touchCount = ref(0)
-const handleTouchClickOutside = () => {
-	touchCount.value++
-}
-
-const basicCode = `<div v-click-outside="handleClickOutside">
+export default defineComponent({
+	name: 'ClickOutsideDemo',
+	components: { DemoSection, CodeBlock },
+	data() {
+		return {
+			showDropdown: false,
+			showModal: false,
+			disabled: false,
+			clickCount: 0,
+			touchCount: 0,
+			basicCode: `<div v-click-outside="handleClickOutside">
   <button @click="show = !show">Toggle Dropdown</button>
   <div v-show="show" class="dropdown">
     Dropdown Content
   </div>
-</div>`
-
-const excludeCode = `<!-- 触发按钮只负责打开 -->
+</div>`,
+			excludeCode: `<!-- 触发按钮只负责打开 -->
 <button ref="triggerBtn" @click="openModal">Open Modal</button>
 
 <!-- modal 使用 exclude 排除触发按钮 -->
@@ -48,22 +28,45 @@ const excludeCode = `<!-- 触发按钮只负责打开 -->
   exclude: [triggerBtn]
 }">
   Modal Content
-</div>`
-
-const disabledCode = `<div v-click-outside="{ handler: handleClick, disabled: isDisabled }">
+</div>`,
+			disabledCode: `<div v-click-outside="{ handler: handleClick, disabled: isDisabled }">
   <p>Click outside to count</p>
   <label>
     <input type="checkbox" v-model="disabled" />
     Disable detection
   </label>
-</div>`
-
-const eventsCode = `<div v-click-outside="{
+</div>`,
+			eventsCode: `<div v-click-outside="{
   handler: handleClick,
   events: ['click', 'touchstart']
 }">
   Responds to click and touch events
 </div>`
+		}
+	},
+	computed: {
+		triggerBtnRef(): HTMLElement | null {
+			return this.$refs.triggerBtnRef as HTMLElement | null
+		}
+	},
+	methods: {
+		handleDropdownClickOutside() {
+			this.showDropdown = false
+		},
+		openModal() {
+			this.showModal = true
+		},
+		closeModal() {
+			this.showModal = false
+		},
+		handleDisabledClickOutside() {
+			this.clickCount++
+		},
+		handleTouchClickOutside() {
+			this.touchCount++
+		}
+	}
+})
 </script>
 
 <template>
@@ -106,7 +109,7 @@ const eventsCode = `<div v-click-outside="{
 					v-if="showModal"
 					v-click-outside="{
 						handler: closeModal,
-						exclude: [triggerBtnRef!]
+						exclude: [triggerBtnRef]
 					}"
 					class="modal"
 				>

@@ -1,53 +1,35 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法
-const searchText = ref('')
-const searchResults = ref<string[]>([])
-const searchCount = ref(0)
-
-const handleSearch = () => {
-	searchCount.value++
-	// 模拟搜索
-	searchResults.value = ['Apple', 'Banana', 'Orange', 'Grape'].filter(f =>
-		f.toLowerCase().includes(searchText.value.toLowerCase())
-	)
-}
-
-// 场景2: 自定义延迟时间
-const customText = ref('')
-const customCount = ref(0)
-
-// 场景3: leading 选项
-const trailingCount = ref(0)
-const leadingCount = ref(0)
-
-const resetLeadingDemo = () => {
-	trailingCount.value = 0
-	leadingCount.value = 0
-}
-
-// 场景4: 实时显示
-const inputHistory = ref<string[]>([])
-
-const basicCode = `<input
+export default defineComponent({
+	name: 'DebounceDemo',
+	components: { DemoSection, CodeBlock },
+	data() {
+		return {
+			searchText: '',
+			searchResults: [] as string[],
+			searchCount: 0,
+			customText: '',
+			customCount: 0,
+			trailingCount: 0,
+			leadingCount: 0,
+			inputHistory: [] as string[],
+			basicCode: `<input
   v-model="search"
   v-debounce="handleSearch"
   placeholder="Search..."
-/>`
-
-const customDelayCode = `<!-- 使用 arg 指定延迟时间（毫秒） -->
+/>`,
+			customDelayCode: `<!-- 使用 arg 指定延迟时间（毫秒） -->
 <input v-debounce:500="handler" />
 
 <!-- 使用 options 配置 -->
 <input v-debounce="{
   handler: handleInput,
   wait: 500
-}" />`
-
-const leadingCode = `<!-- trailing only (默认): 停止输入后触发 -->
+}" />`,
+			leadingCode: `<!-- trailing only (默认): 停止输入后触发 -->
 <input v-debounce="{
   handler: handleInput,
   wait: 300,
@@ -59,14 +41,30 @@ const leadingCode = `<!-- trailing only (默认): 停止输入后触发 -->
   handler: handleInput,
   wait: 300,
   leading: true
-}" />`
-
-const optionsCode = `interface DebounceOptions {
+}" />`,
+			optionsCode: `interface DebounceOptions {
   handler: Function      // 防抖处理函数
   wait?: number          // 延迟时间，默认 300ms
   leading?: boolean      // 是否在开始时触发，默认 false
   trailing?: boolean     // 是否在结束时触发，默认 true
 }`
+		}
+	},
+	methods: {
+		handleSearch() {
+			this.searchCount++
+			// 模拟搜索
+			const fruits = ['Apple', 'Banana', 'Orange', 'Grape']
+			this.searchResults = fruits.filter(f =>
+				f.toLowerCase().includes(this.searchText.toLowerCase())
+			)
+		},
+		resetLeadingDemo() {
+			this.trailingCount = 0
+			this.leadingCount = 0
+		}
+	}
+})
 </script>
 
 <template>

@@ -1,47 +1,30 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法
-const basicText = ref('Hello, Directix!')
-const basicCopied = ref(false)
-const handleBasicCopy = () => {
-	basicCopied.value = true
-	window.setTimeout(() => { basicCopied.value = false }, 2000)
-}
-
-// 场景2: 复制动态内容
-const dynamicText = ref('Dynamic content here')
-const dynamicCopied = ref(false)
-const handleDynamicCopy = () => {
-	dynamicCopied.value = true
-	window.setTimeout(() => { dynamicCopied.value = false }, 2000)
-}
-
-// 场景3: 回调函数
-const callbackText = ref('Copy with callback')
-const lastCopyTime = ref<string | null>(null)
-const handleCopySuccess = (text: string) => {
-	lastCopyTime.value = new Date().toLocaleTimeString()
-	console.log('Copied:', text)
-}
-
-// 场景4: 复制按钮
-const codeText = `import { createApp } from 'vue'
+export default defineComponent({
+	name: 'CopyDemo',
+	components: { DemoSection, CodeBlock },
+	data() {
+		return {
+			basicText: 'Hello, Directix!',
+			basicCopied: false,
+			dynamicText: 'Dynamic content here',
+			dynamicCopied: false,
+			callbackText: 'Copy with callback',
+			lastCopyTime: null as string | null,
+			codeText: `import { createApp } from 'vue'
 import { Directix } from 'directix'
 
 const app = createApp(App)
-app.use(Directix)`
-
-const basicCode = `<button v-copy="{ value: text, onSuccess: onCopy }">
+app.use(Directix)`,
+			basicCode: `<button v-copy="{ value: text, onSuccess: onCopy }">
   {{ copied ? 'Copied!' : 'Copy' }}
-</button>`
-
-const dynamicCode = `<input v-model="text" />
-<button v-copy="{ value: text }">Copy Input Value</button>`
-
-const callbackCode = `<button v-copy="{
+</button>`,
+			dynamicCode: `<input v-model="text" />
+<button v-copy="{ value: text }">Copy Input Value</button>`,
+			callbackCode: `<button v-copy="{
   value: text,
   onSuccess: (text) => {
     console.log('Copied:', text)
@@ -51,13 +34,29 @@ const callbackCode = `<button v-copy="{
   }
 }">
   Copy with Callback
-</button>`
-
-const optionsCode = `interface CopyOptions {
+</button>`,
+			optionsCode: `interface CopyOptions {
   value: string                        // 要复制的文本
   onSuccess?: (text: string) => void   // 成功回调
   onError?: (err: Error) => void       // 失败回调
 }`
+		}
+	},
+	methods: {
+		handleBasicCopy() {
+			this.basicCopied = true
+			window.setTimeout(() => { this.basicCopied = false }, 2000)
+		},
+		handleDynamicCopy() {
+			this.dynamicCopied = true
+			window.setTimeout(() => { this.dynamicCopied = false }, 2000)
+		},
+		handleCopySuccess(text: string) {
+			this.lastCopyTime = new Date().toLocaleTimeString()
+			console.log('Copied:', text)
+		}
+	}
+})
 </script>
 
 <template>
