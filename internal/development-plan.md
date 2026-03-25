@@ -3510,80 +3510,130 @@ export default defineConfig({
 
 ### 10.1 详细开发计划
 
-#### 第一阶段：项目搭建 (Week 1)
+#### 第一阶段：项目搭建 (Week 1) ✅ 已完成
 
-| 任务 | 工时 | 负责人 | 产出 |
-|------|------|--------|------|
-| 项目初始化 | 2h | - | 项目骨架 |
-| 配置构建工具 | 4h | - | Vite/Vitest/ESLint 配置 |
-| 核心适配层开发 | 8h | - | Vue 2/3 兼容层 |
-| 共享工具开发 | 4h | - | DOM/事件/工具函数 |
-| CI/CD 配置 | 2h | - | GitHub Actions |
-| 文档站点搭建 | 4h | - | VitePress 配置 |
+| 任务 | 工时 | 负责人 | 产出 | 状态 |
+|------|------|--------|------|------|
+| 项目初始化 | 2h | - | 项目骨架 | ✅ |
+| 配置构建工具 | 4h | - | Vite/Vitest/ESLint 配置 | ✅ |
+| 核心适配层开发 | 8h | - | Vue 2/3 兼容层 | ✅ |
+| 共享工具开发 | 4h | - | DOM/事件/工具函数 | ✅ |
+| CI/CD 配置 | 2h | - | GitHub Actions | 待完成 |
+| 文档站点搭建 | 4h | - | VitePress 配置 | 待完成 |
 
-**里程碑 M1：项目基础设施完成**
+**里程碑 M1：项目基础设施完成** ✅
 
-#### 第二阶段：核心指令开发 (Week 2-3)
+#### 第二阶段：核心指令开发 (Week 2-3) 🚧 进行中
 
-| 指令 | 预计工时 | 优先级 | 依赖 |
-|------|---------|--------|------|
-| v-click-outside | 4h | P0 | - |
-| v-copy | 4h | P0 | - |
-| v-debounce | 4h | P0 | - |
-| v-throttle | 4h | P0 | - |
-| v-focus | 2h | P0 | - |
-| v-lazy | 8h | P0 | IntersectionObserver |
-| v-permission | 6h | P0 | - |
-| v-long-press | 4h | P1 | - |
-| v-hover | 4h | P1 | - |
-| v-ripple | 6h | P1 | - |
+| 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| v-click-outside | 4h | P0 | - | ✅ 已完成 |
+| v-copy | 4h | P0 | - | ✅ 已完成 |
+| v-debounce | 4h | P0 | - | ✅ 已完成 |
+| v-throttle | 4h | P0 | - | ✅ 已完成 |
+| v-focus | 2h | P0 | - | ✅ 已完成 |
+| v-lazy | 8h | P0 | IntersectionObserver | ⏳ 待开发 |
+| v-permission | 6h | P0 | - | ⏳ 待开发 |
+| v-long-press | 4h | P1 | - | ⏳ 待开发 |
+| v-hover | 4h | P1 | - | ⏳ 待开发 |
+| v-ripple | 6h | P1 | - | ⏳ 待开发 |
 
-**里程碑 M2：核心指令完成，可用性验证**
+**里程碑 M2：核心指令完成，可用性验证** 🚧 进行中
 
 #### 第三阶段：增强指令开发 (Week 4-5)
 
-| 指令 | 预计工时 | 优先级 | 依赖 |
-|------|---------|--------|------|
-| v-scroll | 6h | P1 | - |
-| v-resize | 4h | P1 | ResizeObserver |
-| v-intersect | 4h | P1 | IntersectionObserver |
-| v-infinite-scroll | 6h | P1 | v-scroll, v-intersect |
-| v-sticky | 4h | P1 | v-scroll |
-| v-mask | 8h | P1 | - |
-| v-sanitize | 4h | P2 | DOMPurify |
-| v-loading | 4h | P2 | - |
-| v-visible | 4h | P2 | - |
-| v-mutation | 4h | P2 | MutationObserver |
+| 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| v-scroll | 6h | P1 | - | ⏳ 待开发 |
+| v-resize | 4h | P1 | ResizeObserver | ⏳ 待开发 |
+| v-intersect | 4h | P1 | IntersectionObserver | ⏳ 待开发 |
+| v-infinite-scroll | 6h | P1 | v-scroll, v-intersect | ⏳ 待开发 |
+| v-sticky | 4h | P1 | v-scroll | ⏳ 待开发 |
+| v-mask | 8h | P1 | - | ⏳ 待开发 |
+| v-sanitize | 4h | P2 | DOMPurify | ⏳ 待开发 |
+| v-loading | 4h | P2 | - | ⏳ 待开发 |
+| v-visible | 4h | P2 | - | ⏳ 待开发 |
+| v-mutation | 4h | P2 | MutationObserver | ⏳ 待开发 |
 
 **里程碑 M3：增强指令完成**
 
 #### 第四阶段：扩展指令开发 (Week 6)
 
-| 指令 | 预计工时 | 优先级 | 依赖 |
-|------|---------|--------|------|
-| v-tooltip | 8h | P2 | floating-ui |
-| v-draggable | 8h | P2 | - |
-| v-touch | 8h | P2 | - |
-| v-image-preview | 6h | P3 | - |
-| v-truncate | 2h | P3 | - |
-| v-uppercase/lowercase | 2h | P3 | - |
-| v-number | 4h | P3 | - |
-| v-money | 4h | P3 | - |
+| 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| v-tooltip | 8h | P2 | floating-ui | ⏳ 待开发 |
+| v-draggable | 8h | P2 | - | ⏳ 待开发 |
+| v-touch | 8h | P2 | - | ⏳ 待开发 |
+| v-image-preview | 6h | P3 | - | ⏳ 待开发 |
+| v-truncate | 2h | P3 | - | ⏳ 待开发 |
+| v-uppercase/lowercase | 2h | P3 | - | ⏳ 待开发 |
+| v-number | 4h | P3 | - | ⏳ 待开发 |
+| v-money | 4h | P3 | - | ⏳ 待开发 |
 
 **里程碑 M4：全部指令开发完成**
 
 #### 第五阶段：优化与发布 (Week 7)
 
-| 任务 | 工时 | 产出 |
-|------|------|------|
-| 性能优化 | 8h | 体积优化、性能报告 |
-| 文档完善 | 12h | 完整文档、示例 |
-| 测试覆盖 | 8h | 测试覆盖率 > 80% |
-| 发布准备 | 4h | 发布脚本、NPM 发布 |
+| 任务 | 工时 | 产出 | 状态 |
+|------|------|------|------|
+| 性能优化 | 8h | 体积优化、性能报告 | ⏳ 待开发 |
+| 文档完善 | 12h | 完整文档、示例 | ⏳ 待开发 |
+| 测试覆盖 | 8h | 测试覆盖率 > 80% | ⏳ 待开发 |
+| 发布准备 | 4h | 发布脚本、NPM 发布 | ⏳ 待开发 |
 
 **里程碑 M5：v1.0 正式发布**
 
-### 10.2 版本规划
+---
+
+### 10.2 当前进度总览
+
+#### 已完成指令 (5/30+)
+
+| 指令 | 功能描述 | 测试 | 示例 |
+|------|---------|------|------|
+| v-click-outside | 点击外部检测 | ✅ | ✅ |
+| v-copy | 复制到剪贴板 | ✅ | ✅ |
+| v-debounce | 防抖指令 | ✅ | ✅ |
+| v-throttle | 节流指令 | ✅ | ✅ |
+| v-focus | 自动聚焦 | ✅ | ✅ |
+
+#### 开发中
+
+暂无
+
+#### 待开发指令 (25+)
+
+**P0 高优先级：**
+- v-lazy - 图片/组件懒加载
+- v-permission - 权限控制
+
+**P1 中优先级：**
+- v-long-press - 长按事件
+- v-hover - 悬停状态
+- v-ripple - 波纹效果
+- v-scroll - 滚动监听
+- v-resize - 尺寸监听
+- v-intersect - 交叉检测
+- v-infinite-scroll - 无限滚动
+- v-sticky - 粘性定位
+- v-mask - 输入掩码
+
+**P2/P3 低优先级：**
+- v-sanitize - 安全过滤
+- v-loading - 加载状态
+- v-visible - 可见性
+- v-mutation - DOM 监听
+- v-tooltip - 提示框
+- v-draggable - 拖拽
+- v-touch - 手势
+- v-image-preview - 图片预览
+- v-truncate - 文本截断
+- v-uppercase/lowercase - 大小写转换
+- v-number - 数字格式化
+- v-money - 金额格式化
+- v-skeleton - 骨架屏
+
+### 10.3 版本规划
 
 | 版本 | 时间 | 主要内容 |
 |------|------|---------|
