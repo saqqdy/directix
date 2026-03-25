@@ -132,11 +132,12 @@ export const vFocus = defineDirective<FocusBinding, HTMLElement>({
  */
 function normalizeOptions(binding: FocusBinding | undefined): FocusOptions {
 	if (typeof binding === 'boolean') {
-		return { focus: binding }
+		return { focus: binding, refocus: false }
 	}
 
 	return {
 		focus: true,
+		refocus: false,
 		...binding,
 	}
 }
