@@ -1,4 +1,4 @@
-import type { App, Plugin } from 'vue'
+import type { App, Directive, Plugin } from 'vue'
 import type { DirectiveInstallOptions } from '@directix/core'
 import {
 	vClickOutside,
@@ -38,7 +38,7 @@ export {
 } from '@directix/shared'
 
 // 所有指令列表
-const allDirectives: Record<string, unknown> = {
+const allDirectives: Record<string, Directive> = {
 	'click-outside': vClickOutside,
 	copy: vCopy,
 	debounce: vDebounce,
@@ -60,7 +60,7 @@ const install = (app: App, options: DirectiveInstallOptions = {}): void => {
 	} else {
 		// 注册指定指令
 		directives.forEach(name => {
-			const directive = allDirectives[name as keyof typeof allDirectives]
+			const directive = allDirectives[name]
 
 			if (directive) {
 				app.directive(name, directive)
