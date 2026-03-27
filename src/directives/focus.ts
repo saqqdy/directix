@@ -1,50 +1,67 @@
 import { defineDirective, isBrowser } from '@directix/core'
 
 /**
- * 焦点指令选项
+ * Focus directive options
  */
 export interface FocusOptions {
 	/**
-	 * 是否自动聚焦
+	 * Whether to auto focus
 	 * @default true
 	 */
 	focus?: boolean
 
 	/**
-	 * 是否在每次更新时重新聚焦
+	 * Whether to refocus when binding value changes
 	 * @default false
 	 */
 	refocus?: boolean
 
 	/**
-	 * 聚焦时的回调
+	 * Callback when focused
 	 */
 	onFocus?: (el: HTMLElement) => void
 
 	/**
-	 * 失焦时的回调
+	 * Callback when blurred
 	 */
 	onBlur?: (el: HTMLElement) => void
 }
 
 /**
- * 指令绑定值类型
+ * Directive binding value type
  */
 export type FocusBinding = boolean | FocusOptions
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface FocusState {
 	options: FocusOptions
 	handleFocus: () => void
 	handleBlur: () => void
+	lastValue: FocusBinding
 }
 
 const FOCUSABLE_TAGS = new Set(['input', 'textarea', 'select', 'button'])
 
 /**
- * v-focus 指令
+ * Compare two values for equality (supports primitive types and shallow object comparison)
+ */
+function isEqual(a: unknown, b: unknown): boolean {
+	if (a === b) return true
+	if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false
+	const objA = a as Record<string, unknown>
+	const objB = b as Record<string, unknown>
+	const keysA = Object.keys(objA)
+	const keysB = Object.keys(objB)
+
+	if (keysA.length !== keysB.length) return false
+
+	return keysA.every(key => objA[key] === objB[key])
+}
+
+/**
+ * v-focus directive
  *
  * @example
  * ```vue
@@ -83,6 +100,7 @@ export const vFocus = defineDirective<FocusBinding, HTMLElement>({
 			options,
 			handleFocus,
 			handleBlur,
+			lastValue: binding.value,
 		} as FocusState
 
 		el.focus()
@@ -95,7 +113,7 @@ export const vFocus = defineDirective<FocusBinding, HTMLElement>({
 
 		const newOptions = normalizeOptions(binding.value)
 
-		// 只在回调变化时更新事件监听器
+		// Update event listeners only when callbacks change
 		if (newOptions.onFocus !== state.options.onFocus) {
 			el.removeEventListener('focus', state.handleFocus)
 			state.handleFocus = () => newOptions.onFocus?.(el)
@@ -108,12 +126,16 @@ export const vFocus = defineDirective<FocusBinding, HTMLElement>({
 			el.addEventListener('blur', state.handleBlur)
 		}
 
-		state.options = newOptions
+		// Check if value actually changed
+		const valueChanged = !isEqual(binding.value, state.lastValue)
 
-		// refocus 时重新聚焦
-		if (newOptions.refocus && newOptions.focus) {
+		// Refocus when value changes and refocus is enabled
+		if (newOptions.refocus && newOptions.focus && valueChanged) {
 			el.focus()
 		}
+
+		state.options = newOptions
+		state.lastValue = binding.value
 	},
 
 	unmounted(el) {
@@ -128,7 +150,7 @@ export const vFocus = defineDirective<FocusBinding, HTMLElement>({
 })
 
 /**
- * 标准化选项
+ * Normalize options
  */
 function normalizeOptions(binding: FocusBinding | undefined): FocusOptions {
 	if (typeof binding === 'boolean') {
@@ -143,27 +165,27 @@ function normalizeOptions(binding: FocusBinding | undefined): FocusOptions {
 }
 
 /**
- * 检查元素是否可聚焦
+ * Check if element is focusable
  */
 function isFocusable(el: HTMLElement): boolean {
 	if (!isBrowser()) return false
 
 	const tagName = el.tagName.toLowerCase()
 
-	// 表单元素
+	// Form elements
 	if (FOCUSABLE_TAGS.has(tagName)) {
 		return !(el as HTMLInputElement).disabled
 	}
 
-	// 可编辑元素
+	// Contenteditable elements
 	if (el.isContentEditable) return true
 
-	// tabindex 属性
+	// Elements with tabindex
 	const tabindex = el.getAttribute('tabindex')
 
 	if (tabindex != null) return tabindex !== '-1'
 
-	// 链接元素
+	// Link elements
 	if (tagName === 'a' || tagName === 'area') {
 		return el.hasAttribute('href')
 	}

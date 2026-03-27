@@ -3,7 +3,7 @@ import { debounce, parseTime } from '@directix/shared'
 import type { DirectiveBinding } from '@directix/core'
 
 /**
- * 防抖函数类型
+ * Debounced function type
  */
 export interface DebouncedFunction<T extends (...args: any[]) => any> {
 	(...args: Parameters<T>): void
@@ -12,42 +12,42 @@ export interface DebouncedFunction<T extends (...args: any[]) => any> {
 }
 
 /**
- * 防抖指令选项
+ * Debounce directive options
  */
 export interface DebounceOptions<T extends (...args: any[]) => any = any> {
 	/**
-   * 要防抖的函数
+   * Function to debounce
    */
 	handler: T
 
 	/**
-   * 延迟时间（毫秒）
+   * Delay time in milliseconds
    * @default 300
    */
 	wait?: number
 
 	/**
-   * 是否在延迟开始前立即调用
+   * Whether to invoke immediately before delay starts
    * @default false
    */
 	leading?: boolean
 
 	/**
-   * 是否在延迟结束后调用
+   * Whether to invoke after delay ends
    * @default true
    */
 	trailing?: boolean
 }
 
 /**
- * 指令绑定值类型
+ * Directive binding value type
  */
 export type DebounceBinding<T extends (...args: any[]) => any = any> =
   | T
   | DebounceOptions<T>
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface DebounceState {
 	debouncedFn: DebouncedFunction<any>
@@ -56,7 +56,7 @@ interface DebounceState {
 }
 
 /**
- * v-debounce 指令
+ * v-debounce directive
  *
  * @example
  * ```vue
@@ -64,8 +64,8 @@ interface DebounceState {
  *   <input v-debounce="handleInput" />
  *   <input v-debounce:500ms="handleInput" />
  *   <input v-debounce="{ handler: handleInput, wait: 500 }" />
- *   <div v-debounce.scroll="handleScroll">滚动防抖</div>
- *   <div v-debounce:100.scroll="handleScroll">100ms 滚动防抖</div>
+ *   <div v-debounce.scroll="handleScroll">Scroll Debounce</div>
+ *   <div v-debounce:100.scroll="handleScroll">100ms Scroll Debounce</div>
  * </template>
  * ```
  */
@@ -80,16 +80,16 @@ export const vDebounce = defineDirective<DebounceBinding, HTMLElement>({
 
 	mounted(el, binding) {
 		const options = normalizeOptions(binding.value, binding)
-		// 优先使用修饰符指定的事件类型，否则根据元素类型推断
+		// Prefer event type from modifiers, otherwise infer from element type
 		const eventType = getEventTypeFromModifiers(binding.modifiers) || getEventType(el)
 
-		// 创建防抖函数
+		// Create debounced function
 		const debouncedFn = debounce(options.handler, options.wait, {
 			leading: options.leading,
 			trailing: options.trailing,
 		})
 
-		// 绑定事件
+		// Bind event
 		el.addEventListener(eventType, debouncedFn as any)
 
 		;(el as any).__debounce = {
@@ -106,16 +106,16 @@ export const vDebounce = defineDirective<DebounceBinding, HTMLElement>({
 
 		const newOptions = normalizeOptions(binding.value, binding)
 
-		// 如果配置变化，重新创建防抖函数
+		// If configuration changes, recreate debounced function
 		if (
 			newOptions.wait !== state.options.wait ||
 			newOptions.leading !== state.options.leading ||
 			newOptions.trailing !== state.options.trailing
 		) {
-			// 取消旧的
+			// Cancel old one
 			state.debouncedFn.cancel()
 
-			// 创建新的
+			// Create new one
 			const debouncedFn = debounce(newOptions.handler, newOptions.wait, {
 				leading: newOptions.leading,
 				trailing: newOptions.trailing,
@@ -130,7 +130,7 @@ export const vDebounce = defineDirective<DebounceBinding, HTMLElement>({
 				options: newOptions,
 			}
 		} else if (newOptions.handler !== state.options.handler) {
-			// 只更新 handler
+			// Only update handler
 			state.options.handler = newOptions.handler
 		}
 	},
@@ -147,7 +147,7 @@ export const vDebounce = defineDirective<DebounceBinding, HTMLElement>({
 })
 
 /**
- * 标准化选项
+ * Normalize options
  */
 function normalizeOptions(
 	binding: DebounceBinding,
@@ -163,7 +163,7 @@ function normalizeOptions(
 }
 
 /**
- * 获取元素默认事件类型
+ * Get default event type for element
  */
 function getEventType(el: HTMLElement): string {
 	const tagName = el.tagName.toLowerCase()
@@ -176,7 +176,7 @@ function getEventType(el: HTMLElement): string {
 }
 
 /**
- * 支持事件类型的修饰符列表
+ * Supported event type modifiers list
  */
 const EVENT_MODIFIERS = [
 	'click',
@@ -200,7 +200,7 @@ const EVENT_MODIFIERS = [
 ] as const
 
 /**
- * 从修饰符中提取事件类型
+ * Extract event type from modifiers
  */
 function getEventTypeFromModifiers(modifiers: Record<string, boolean>): string | null {
 	for (const modifier of EVENT_MODIFIERS) {

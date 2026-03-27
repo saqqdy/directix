@@ -3,7 +3,7 @@ import { parseTime, throttle } from '@directix/shared'
 import type { DirectiveBinding } from '@directix/core'
 
 /**
- * 节流函数类型
+ * Throttled function type
  */
 export interface ThrottledFunction<T extends (...args: any[]) => any> {
 	(...args: Parameters<T>): void
@@ -11,42 +11,42 @@ export interface ThrottledFunction<T extends (...args: any[]) => any> {
 }
 
 /**
- * 节流指令选项
+ * Throttle directive options
  */
 export interface ThrottleOptions<T extends (...args: any[]) => any = any> {
 	/**
-   * 要节流的函数
+   * Function to throttle
    */
 	handler: T
 
 	/**
-   * 延迟时间（毫秒）
+   * Delay time in milliseconds
    * @default 300
    */
 	wait?: number
 
 	/**
-   * 是否在延迟开始前立即调用
+   * Whether to invoke immediately before delay starts
    * @default true
    */
 	leading?: boolean
 
 	/**
-   * 是否在延迟结束后调用
+   * Whether to invoke after delay ends
    * @default true
    */
 	trailing?: boolean
 }
 
 /**
- * 指令绑定值类型
+ * Directive binding value type
  */
 export type ThrottleBinding<T extends (...args: any[]) => any = any> =
   | T
   | ThrottleOptions<T>
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface ThrottleState {
 	throttledFn: ThrottledFunction<any>
@@ -55,15 +55,15 @@ interface ThrottleState {
 }
 
 /**
- * v-throttle 指令
+ * v-throttle directive
  *
  * @example
  * ```vue
  * <template>
- *   <button v-throttle="handleClick">节流按钮</button>
- *   <button v-throttle:1s="handleClick">1秒节流</button>
- *   <div v-throttle.scroll="handleScroll">滚动节流</div>
- *   <div v-throttle:100.scroll="handleScroll">100ms 滚动节流</div>
+ *   <button v-throttle="handleClick">Throttled Button</button>
+ *   <button v-throttle:1s="handleClick">1s Throttled</button>
+ *   <div v-throttle.scroll="handleScroll">Scroll Throttle</div>
+ *   <div v-throttle:100.scroll="handleScroll">100ms Scroll Throttle</div>
  * </template>
  * ```
  */
@@ -78,16 +78,16 @@ export const vThrottle = defineDirective<ThrottleBinding, HTMLElement>({
 
 	mounted(el, binding) {
 		const options = normalizeOptions(binding.value, binding)
-		// 优先使用修饰符指定的事件类型，否则根据元素类型推断
+		// Prefer event type from modifiers, otherwise infer from element type
 		const eventType = getEventTypeFromModifiers(binding.modifiers) || getEventType(el)
 
-		// 创建节流函数
+		// Create throttled function
 		const throttledFn = throttle(options.handler, options.wait, {
 			leading: options.leading,
 			trailing: options.trailing,
 		})
 
-		// 绑定事件
+		// Bind event
 		el.addEventListener(eventType, throttledFn as any)
 
 		;(el as any).__throttle = {
@@ -104,16 +104,16 @@ export const vThrottle = defineDirective<ThrottleBinding, HTMLElement>({
 
 		const newOptions = normalizeOptions(binding.value, binding)
 
-		// 如果配置变化，重新创建节流函数
+		// If configuration changes, recreate throttled function
 		if (
 			newOptions.wait !== state.options.wait ||
 			newOptions.leading !== state.options.leading ||
 			newOptions.trailing !== state.options.trailing
 		) {
-			// 取消旧的
+			// Cancel old one
 			state.throttledFn.cancel()
 
-			// 创建新的
+			// Create new one
 			const throttledFn = throttle(newOptions.handler, newOptions.wait, {
 				leading: newOptions.leading,
 				trailing: newOptions.trailing,
@@ -128,7 +128,7 @@ export const vThrottle = defineDirective<ThrottleBinding, HTMLElement>({
 				options: newOptions,
 			}
 		} else if (newOptions.handler !== state.options.handler) {
-			// 只更新 handler
+			// Only update handler
 			state.options.handler = newOptions.handler
 		}
 	},
@@ -145,7 +145,7 @@ export const vThrottle = defineDirective<ThrottleBinding, HTMLElement>({
 })
 
 /**
- * 标准化选项
+ * Normalize options
  */
 function normalizeOptions(
 	binding: ThrottleBinding,
@@ -161,7 +161,7 @@ function normalizeOptions(
 }
 
 /**
- * 获取元素默认事件类型
+ * Get default event type for element
  */
 function getEventType(el: HTMLElement): string {
 	const tagName = el.tagName.toLowerCase()
@@ -174,7 +174,7 @@ function getEventType(el: HTMLElement): string {
 }
 
 /**
- * 支持事件类型的修饰符列表
+ * Supported event type modifiers list
  */
 const EVENT_MODIFIERS = [
 	'click',
@@ -198,7 +198,7 @@ const EVENT_MODIFIERS = [
 ] as const
 
 /**
- * 从修饰符中提取事件类型
+ * Extract event type from modifiers
  */
 function getEventTypeFromModifiers(modifiers: Record<string, boolean>): string | null {
 	for (const modifier of EVENT_MODIFIERS) {

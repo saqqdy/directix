@@ -1,54 +1,54 @@
 import { defineDirective, supportsClipboard } from '@directix/core'
 
 /**
- * 复制成功回调
+ * Copy success callback
  */
 export type CopySuccessCallback = (text: string) => void
 
 /**
- * 复制失败回调
+ * Copy error callback
  */
 export type CopyErrorCallback = (error: Error) => void
 
 /**
- * 复制指令选项
+ * Copy directive options
  */
 export interface CopyOptions {
 	/**
-   * 要复制的文本
+   * Text to copy
    * @required
    */
 	value: string
 
 	/**
-   * 复制成功回调
+   * Callback on copy success
    */
 	onSuccess?: CopySuccessCallback
 
 	/**
-   * 复制失败回调
+   * Callback on copy error
    */
 	onError?: CopyErrorCallback
 
 	/**
-   * 复制按钮的提示文本
+   * Tooltip text for the copy button
    */
 	title?: string
 
 	/**
-   * 是否禁用
+   * Whether to disable
    * @default false
    */
 	disabled?: boolean
 }
 
 /**
- * 指令绑定值类型
+ * Directive binding value type
  */
 export type CopyBinding = string | CopyOptions
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface CopyState {
 	handler: () => void
@@ -56,36 +56,36 @@ interface CopyState {
 }
 
 /**
- * 复制文本到剪贴板
- * 优先使用 Clipboard API，降级使用 execCommand
+ * Copy text to clipboard
+ * Prefer Clipboard API, fallback to execCommand
  */
 async function copyToClipboard(text: string): Promise<boolean> {
-	// 方式一：使用 Clipboard API
+	// Method 1: Use Clipboard API
 	if (supportsClipboard()) {
 		try {
 			await navigator.clipboard.writeText(text)
 
 			return true
 		} catch {
-			// 权限被拒绝或其他错误，降级处理
+			// Permission denied or other error, fallback
 			console.warn('[Directix] Clipboard API failed, falling back to execCommand')
 		}
 	}
 
-	// 方式二：使用 execCommand（已废弃但兼容性好）
+	// Method 2: Use execCommand (deprecated but has good compatibility)
 	return copyWithExecCommand(text)
 }
 
 /**
- * 使用 execCommand 复制
+ * Copy using execCommand
  */
 function copyWithExecCommand(text: string): boolean {
-	// 创建临时 textarea
+	// Create temporary textarea
 	const textarea = document.createElement('textarea')
 
 	textarea.value = text
 
-	// 设置样式使其不可见
+	// Set styles to make it invisible
 	textarea.style.cssText = `
     position: fixed;
     top: -9999px;
@@ -97,7 +97,7 @@ function copyWithExecCommand(text: string): boolean {
 	document.body.appendChild(textarea)
 
 	try {
-		// 选中并复制
+		// Select and copy
 		textarea.select()
 		textarea.setSelectionRange(0, textarea.value.length)
 
@@ -105,18 +105,18 @@ function copyWithExecCommand(text: string): boolean {
 	} catch {
 		return false
 	} finally {
-		// 清理
+		// Cleanup
 		document.body.removeChild(textarea)
 	}
 }
 
 /**
- * v-copy 指令
+ * v-copy directive
  *
  * @example
  * ```vue
  * <template>
- *   <button v-copy="textToCopy">复制文本</button>
+ *   <button v-copy="textToCopy">Copy Text</button>
  * </template>
  * ```
  */
@@ -129,18 +129,18 @@ export const vCopy = defineDirective<CopyBinding, HTMLElement>({
 
 		if (options.disabled) return
 
-		// 设置提示
+		// Set tooltip
 		if (options.title) {
 			el.setAttribute('title', options.title)
 		}
 
-		// 状态存储 - handler 会从这里读取最新值
+		// State storage - handler reads latest value from here
 		const state: CopyState = {
 			handler: null as any,
 			options,
 		}
 
-		// 添加点击事件 - 从 state 读取最新 options
+		// Add click event - read latest options from state
 		state.handler = async () => {
 			const text = state.options.value
 
@@ -194,7 +194,7 @@ export const vCopy = defineDirective<CopyBinding, HTMLElement>({
 })
 
 /**
- * 标准化选项
+ * Normalize options
  */
 function normalizeOptions(binding: CopyBinding): CopyOptions {
 	if (typeof binding === 'string') {

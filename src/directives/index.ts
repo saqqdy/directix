@@ -1,4 +1,4 @@
-// 事件类指令
+// Event directives
 export { vClickOutside, default as clickOutside } from './click-outside'
 export type { ClickOutsideOptions, ClickOutsideBinding, ClickOutsideHandler } from './click-outside'
 

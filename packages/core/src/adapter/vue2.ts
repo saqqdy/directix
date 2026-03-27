@@ -2,7 +2,7 @@ import type { VNode } from 'vue'
 import type { DirectiveBinding, DirectiveHooks } from '../types'
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface ElementState {
 	value: any
@@ -11,7 +11,7 @@ interface ElementState {
 }
 
 /**
- * Vue 2 指令适配器
+ * Vue 2 directive adapter
  * @returns Vue 2 directive object with bind/inserted/update/unbind hooks
  */
 export function createVue2Directive<T, B extends Element>(
@@ -19,7 +19,7 @@ export function createVue2Directive<T, B extends Element>(
 ): Record<string, any> {
 	const directive = {
 		bind(el: B, binding: any, vnode: VNode) {
-			// 存储状态
+			// Store state
 			const state: ElementState = {
 				value: binding.value,
 				vnode,
@@ -27,16 +27,14 @@ export function createVue2Directive<T, B extends Element>(
 			}
 
       ;(el as any).__directix_state__ = state
+		},
 
-			// 调用 mounted
+		inserted(el: B, binding: any, vnode: VNode) {
+			// Vue 2's inserted is called after element is inserted into DOM
+			// Call mounted here to ensure element is in DOM
 			if (hooks.mounted) {
 				hooks.mounted(el, normalizeBinding(binding), vnode)
 			}
-		},
-
-		inserted(_el: B, _binding: any, _vnode: VNode) {
-			// Vue 2 的 inserted 在 DOM 插入后调用
-			// 某些指令可能需要在这里执行 DOM 相关操作
 		},
 
 		update(el: B, binding: any, vnode: VNode, oldVnode: VNode) {
@@ -52,7 +50,7 @@ export function createVue2Directive<T, B extends Element>(
 				)
 			}
 
-			// 更新状态
+			// Update state
 			if (state) {
 				state.value = binding.value
 				state.vnode = vnode
@@ -60,8 +58,8 @@ export function createVue2Directive<T, B extends Element>(
 		},
 
 		componentUpdated(_el: B, _binding: any, _vnode: VNode, _oldVnode: VNode) {
-			// Vue 2 特有，组件更新完成后调用
-			// 通常 update 已经足够
+			// Vue 2 specific, called after component update completes
+			// Usually update is sufficient
 		},
 
 		unbind(el: B, binding: any, vnode: VNode) {
@@ -69,7 +67,7 @@ export function createVue2Directive<T, B extends Element>(
 				hooks.unmounted(el, normalizeBinding(binding), vnode)
 			}
 
-			// 执行清理函数
+			// Execute cleanup functions
 			const state: ElementState = (el as any).__directix_state__
 
 			if (state?.cleanup) {
@@ -83,7 +81,7 @@ export function createVue2Directive<T, B extends Element>(
 }
 
 /**
- * 标准化 Vue 2 binding 为统一格式
+ * Normalize Vue 2 binding to unified format
  */
 function normalizeBinding<T>(binding: any): DirectiveBinding<T> {
 	return {
@@ -96,7 +94,7 @@ function normalizeBinding<T>(binding: any): DirectiveBinding<T> {
 }
 
 /**
- * 添加清理函数到元素
+ * Add cleanup function to element
  */
 export function addCleanup(el: Element, fn: () => void): void {
 	const state = (el as any).__directix_state__

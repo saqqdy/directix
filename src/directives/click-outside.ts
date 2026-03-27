@@ -2,63 +2,63 @@ import { defineDirective } from '@directix/core'
 import { getElement, off, on } from '@directix/shared'
 
 /**
- * 点击外部处理函数
+ * Click outside handler
  */
 export type ClickOutsideHandler = (event: MouseEvent | TouchEvent) => void
 
 /**
- * 点击外部指令选项
+ * Click outside directive options
  */
 export interface ClickOutsideOptions {
 	/**
-   * 点击外部时的回调函数
+   * Callback when clicking outside
    * @required
    */
 	handler: ClickOutsideHandler
 
 	/**
-   * 排除的元素选择器或元素引用
+   * Excluded element selectors or element references
    */
 	exclude?: (string | HTMLElement | (() => HTMLElement | null))[]
 
 	/**
-   * 是否使用捕获模式
+   * Whether to use capture mode
    * @default true
    */
 	capture?: boolean
 
 	/**
-   * 监听的事件类型
+   * Event types to listen for
    * @default ['click']
    */
 	events?: ('click' | 'mousedown' | 'mouseup' | 'touchstart' | 'touchend')[]
 
 	/**
-   * 是否禁用
+   * Whether to disable
    * @default false
    */
 	disabled?: boolean
 
 	/**
-   * 停止传播
+   * Stop propagation
    * @default false
    */
 	stop?: boolean
 
 	/**
-   * 阻止默认行为
+   * Prevent default behavior
    * @default false
    */
 	prevent?: boolean
 }
 
 /**
- * 指令绑定值类型
+ * Directive binding value type
  */
 export type ClickOutsideBinding = ClickOutsideHandler | ClickOutsideOptions
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface ClickOutsideState {
 	options: ClickOutsideOptions
@@ -66,13 +66,13 @@ interface ClickOutsideState {
 }
 
 /**
- * v-click-outside 指令
+ * v-click-outside directive
  *
  * @example
  * ```vue
  * <template>
  *   <div v-click-outside="handleClickOutside">
- *     下拉菜单
+ *     Dropdown menu
  *   </div>
  * </template>
  * ```
@@ -100,30 +100,30 @@ export const vClickOutside = defineDirective<ClickOutsideBinding, HTMLElement>({
 
     ;(el as any).__clickOutside = state
 
-		// 创建事件处理器
+		// Create event handler
 		const createHandler = (_eventType: string) => {
 			return (event: Event) => {
-				// 检查事件目标
+				// Check event target
 				if (!isValidClick(el, event, options)) {
 					return
 				}
 
-				// 停止传播
+				// Stop propagation
 				if (options.stop) {
 					event.stopPropagation()
 				}
 
-				// 阻止默认行为
+				// Prevent default behavior
 				if (options.prevent) {
 					event.preventDefault()
 				}
 
-				// 调用处理函数
+				// Call handler
 				options.handler(event as MouseEvent | TouchEvent)
 			}
 		}
 
-		// 绑定事件
+		// Bind events
 		options.events!.forEach(eventType => {
 			const handler = createHandler(eventType)
 
@@ -146,16 +146,16 @@ export const vClickOutside = defineDirective<ClickOutsideBinding, HTMLElement>({
 		const oldOptions = state.options
 		const newOptions = normalizeOptions(binding.value)
 
-		// 如果禁用状态变化
+		// If disabled state changes
 		if (oldOptions.disabled !== newOptions.disabled) {
 			if (newOptions.disabled) {
-				// 移除所有监听
+				// Remove all listeners
 				state.handlers.forEach((handler, eventType) => {
 					off(document, eventType, handler, { capture: oldOptions.capture })
 				})
 				state.handlers.clear()
 			} else {
-				// 重新添加监听
+				// Re-add listeners
 				const createHandler = (_eventType: string) => {
 					return (event: Event) => {
 						if (!isValidClick(el, event, newOptions)) return
@@ -185,7 +185,7 @@ export const vClickOutside = defineDirective<ClickOutsideBinding, HTMLElement>({
 
 		if (!state) return
 
-		// 移除所有事件监听
+		// Remove all event listeners
 		state.handlers.forEach((handler, eventType) => {
 			off(document, eventType, handler, { capture: state.options.capture })
 		})
@@ -195,7 +195,7 @@ export const vClickOutside = defineDirective<ClickOutsideBinding, HTMLElement>({
 })
 
 /**
- * 标准化选项
+ * Normalize options
  */
 function normalizeOptions(binding: ClickOutsideBinding | undefined): ClickOutsideOptions {
 	if (typeof binding === 'function') {
@@ -224,7 +224,7 @@ function normalizeOptions(binding: ClickOutsideBinding | undefined): ClickOutsid
 }
 
 /**
- * 检查点击是否有效（在元素外部）
+ * Check if click is valid (outside the element)
  */
 function isValidClick(
 	el: HTMLElement,
@@ -233,12 +233,12 @@ function isValidClick(
 ): boolean {
 	const target = event.target as Node
 
-	// 检查是否点击了元素本身或其子元素
+	// Check if clicked on element itself or its children
 	if (el.contains(target)) {
 		return false
 	}
 
-	// 检查排除元素
+	// Check excluded elements
 	if (options.exclude?.length) {
 		for (const exclude of options.exclude) {
 			const excludeEl = typeof exclude === 'function' ? exclude() : getElement(exclude)

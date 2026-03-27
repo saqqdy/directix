@@ -8,13 +8,13 @@ import {
 	vThrottle,
 } from './directives'
 
-// 导出所有指令
+// Export all directives
 export * from './directives'
 
-// 导出核心工具
+// Export core utilities
 export * from '@directix/core'
 
-// 导出共享工具（排除与指令同名的工具）
+// Export shared utilities (excluding tools with the same name as directives)
 export {
 	isString,
 	isNumber,
@@ -31,13 +31,13 @@ export {
 	parseTime,
 	generateId,
 } from '@directix/shared'
-// 单独导出 debounce 和 throttle 工具函数（带别名）
+// Export debounce and throttle utility functions separately (with aliases)
 export {
 	debounce as debounceFn,
 	throttle as throttleFn,
 } from '@directix/shared'
 
-// 所有指令列表
+// All directives list
 const allDirectives: Record<string, Directive> = {
 	'click-outside': vClickOutside,
 	copy: vCopy,
@@ -47,18 +47,18 @@ const allDirectives: Record<string, Directive> = {
 }
 
 /**
- * 安装所有指令
+ * Install all directives
  */
 const install = (app: App, options: DirectiveInstallOptions = {}): void => {
 	const { directives, all = false } = options
 
 	if (all || !directives) {
-		// 注册所有指令
+		// Register all directives
 		Object.entries(allDirectives).forEach(([name, directive]) => {
 			app.directive(name, directive)
 		})
 	} else {
-		// 注册指定指令
+		// Register specified directives
 		directives.forEach(name => {
 			const directive = allDirectives[name]
 
@@ -72,7 +72,7 @@ const install = (app: App, options: DirectiveInstallOptions = {}): void => {
 }
 
 /**
- * Directix 插件
+ * Directix plugin
  */
 export const Directix: Plugin = {
 	install,
