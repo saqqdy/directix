@@ -17,7 +17,7 @@ export default defineConfig({
 				darkModeSwitchTitle: 'Switch to dark theme',
 				docFooter: { next: 'Next', prev: 'Previous' },
 				editLink: {
-					pattern: 'https://github.com/saqqdy/directix/edit/main/docs/:path',
+					pattern: 'https://github.com/saqqdy/directix/edit/master/docs/:path',
 					text: 'Edit this page on GitHub',
 				},
 				footer: {
@@ -110,7 +110,7 @@ export default defineConfig({
 				darkModeSwitchTitle: '切换到深色模式',
 				docFooter: { next: '下一页', prev: '上一页' },
 				editLink: {
-					pattern: 'https://github.com/saqqdy/directix/edit/main/docs/:path',
+					pattern: 'https://github.com/saqqdy/directix/edit/master/docs/:path',
 					text: '在 GitHub 上编辑此页',
 				},
 				footer: {

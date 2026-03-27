@@ -45,4 +45,4 @@ Directix supports all modern browsers:
 
 ## License
 
-[MIT License](https://github.com/saqqdy/directix/blob/main/LICENSE)
+[MIT License](https://github.com/saqqdy/directix/blob/master/LICENSE)

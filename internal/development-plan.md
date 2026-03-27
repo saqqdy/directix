@@ -3068,7 +3068,7 @@ async function release() {
 
   // 9. 推送到远程
   console.log(chalk.yellow('⬆️  Pushing to remote...'))
-  execSync('git push origin main --tags')
+  execSync('git push origin master --tags')
 
   console.log(chalk.green(`\n✅ Release v${newVersion} completed!\n`))
 }

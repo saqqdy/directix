@@ -45,4 +45,4 @@ Directix 支持所有现代浏览器：
 
 ## 许可证
 
-[MIT 许可证](https://github.com/saqqdy/directix/blob/main/LICENSE)
+[MIT 许可证](https://github.com/saqqdy/directix/blob/master/LICENSE)
