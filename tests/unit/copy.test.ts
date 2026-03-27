@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { defineComponent, nextTick } from 'vue'
 import { vCopy } from '../../src/directives/copy'
 
 describe('v-copy', () => {
-	let clipboardWriteText: vi.Mock
+	let clipboardWriteText: Mock
 
 	beforeEach(() => {
 		clipboardWriteText = vi.fn().mockResolvedValue(undefined)

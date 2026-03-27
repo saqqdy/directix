@@ -1,7 +1,7 @@
 import { vi } from 'vitest'
 import { config } from '@vue/test-utils'
 
-// 全局 mock
+// Global mocks
 vi.stubGlobal('IntersectionObserver', vi.fn().mockImplementation(() => ({
 	observe: vi.fn(),
 	unobserve: vi.fn(),
@@ -22,5 +22,5 @@ vi.stubGlobal('navigator', {
 	},
 })
 
-// Vue Test Utils 配置
+// Vue Test Utils config
 config.global.stubs = {}

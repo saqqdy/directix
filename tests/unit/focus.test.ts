@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { defineComponent, nextTick, ref } from 'vue'
 import { vFocus } from '../../src/directives/focus'
 
 describe('v-focus', () => {
-	let focusSpy: vi.SpyInstance
+	let focusSpy: MockInstance
 
 	beforeEach(() => {
 		focusSpy = vi.spyOn(HTMLElement.prototype, 'focus')
@@ -532,7 +532,7 @@ describe('v-focus', () => {
 			expect(focusSpy).not.toHaveBeenCalled()
 
 			// Update with different values
-			options.value = { focus: true, refocus: true, trigger: 1 }
+			options.value = { focus: true, refocus: false }
 			await nextTick()
 
 			// Should refocus because values changed
