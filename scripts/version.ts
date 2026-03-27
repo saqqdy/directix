@@ -27,7 +27,7 @@ if (argv.length) {
 		}
 		pkg.version = arr.join('.')
 
-		writeFileSync(PACKAGE_JSON_URL, JSON.stringify(pkg, null, '\t') + '\n')
+		writeFileSync(PACKAGE_JSON_URL, `${JSON.stringify(pkg, null, '\t')}\n`)
 	} else {
 		console.info('Please enter a valid version')
 		process.exit(1)

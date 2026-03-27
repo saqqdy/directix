@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - Unreleased
+## [1.0.0] - 2026-03-27
 
 ### Added
 
@@ -14,7 +14,6 @@ All notable changes to this project will be documented in this file.
 - Vite build configuration with `vite-plugin-dts`
 - Vitest test configuration with jsdom
 - ESLint 9 flat config with `@eslint-sets/eslint-config`
-- Prettier configuration
 
 #### Directives
 
@@ -47,21 +46,24 @@ All notable changes to this project will be documented in this file.
 - Auto focus an element on mount
 - Support `focus` option to conditionally focus
 - Support `refocus` option to re-focus on updates
-- Support `onFocus` and `onBlur` callbacks
 
 #### Examples
 - Vue 3 example project (`examples/vue3/`)
+- Vue 2 example project (`examples/vue2/`)
 - Interactive demo pages with Vue Router
-- Code snippets and API documentation for each directive
+- Code snippets for each directive
 
 #### Testing
 - Unit tests for all implemented directives
 - Test coverage setup with v8 provider
 
 #### Documentation
-- Internal development plan with progress tracking
-- Competitor analysis document
-- README with usage examples
+- VitePress documentation site (`docs/`)
+- Bilingual support (English & Chinese)
+- API reference for each directive
+- Usage examples with live demos
+- StackBlitz online demo integration
+- README with quick start guide
 
 ### Breaking Changes
 
