@@ -2,7 +2,7 @@ import type { VNode } from 'vue'
 import type { DirectiveBinding, DirectiveHooks } from '../types'
 
 /**
- * 元素状态存储
+ * Element state storage
  */
 interface ElementState {
 	value: any
@@ -11,7 +11,7 @@ interface ElementState {
 }
 
 /**
- * Vue 3 指令适配器
+ * Vue 3 directive adapter
  * @returns Vue 3 directive object with created/mounted/updated/unmounted hooks
  */
 export function createVue3Directive<T, B extends Element>(
@@ -19,8 +19,8 @@ export function createVue3Directive<T, B extends Element>(
 ): Record<string, any> {
 	const directive = {
 		created(el: B, binding: any, vnode: VNode) {
-			// Vue 3 的 created 在元素创建时调用
-			// 初始化状态
+			// Vue 3's created is called when element is created
+			// Initialize state
 			const state: ElementState = {
 				value: binding.value,
 				vnode,
@@ -31,7 +31,7 @@ export function createVue3Directive<T, B extends Element>(
 		},
 
 		beforeMount(_el: B, _binding: any, _vnode: VNode) {
-			// 挂载前
+			// Before mount
 		},
 
 		mounted(el: B, binding: any, vnode: VNode) {
@@ -41,7 +41,7 @@ export function createVue3Directive<T, B extends Element>(
 		},
 
 		beforeUpdate(_el: B, _binding: any, _vnode: VNode, _prevVnode: VNode) {
-			// 更新前
+			// Before update
 		},
 
 		updated(el: B, binding: any, vnode: VNode, prevVnode: VNode) {
@@ -57,7 +57,7 @@ export function createVue3Directive<T, B extends Element>(
 				)
 			}
 
-			// 更新状态
+			// Update state
 			if (state) {
 				state.value = binding.value
 				state.vnode = vnode
@@ -65,7 +65,7 @@ export function createVue3Directive<T, B extends Element>(
 		},
 
 		beforeUnmount(_el: B, _binding: any, _vnode: VNode) {
-			// 卸载前
+			// Before unmount
 		},
 
 		unmounted(el: B, binding: any, vnode: VNode) {
@@ -73,7 +73,7 @@ export function createVue3Directive<T, B extends Element>(
 				hooks.unmounted(el, normalizeBindingVue3(binding), vnode)
 			}
 
-			// 执行清理函数
+			// Execute cleanup functions
 			const state: ElementState = (el as any).__directix_state__
 
 			if (state?.cleanup) {
@@ -87,7 +87,7 @@ export function createVue3Directive<T, B extends Element>(
 }
 
 /**
- * 标准化 Vue 3 binding
+ * Normalize Vue 3 binding to unified format
  */
 function normalizeBindingVue3<T>(binding: any): DirectiveBinding<T> {
 	return {
@@ -100,7 +100,7 @@ function normalizeBindingVue3<T>(binding: any): DirectiveBinding<T> {
 }
 
 /**
- * 添加清理函数到元素
+ * Add cleanup function to element
  */
 export function addCleanup(el: Element, fn: () => void): void {
 	const state = (el as any).__directix_state__

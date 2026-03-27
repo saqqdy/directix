@@ -1,6 +1,17 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
+import { readFileSync } from 'fs'
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
+
+const banner =
+	`/*!\n` +
+	` * ${pkg.name} v${pkg.version}\n` +
+	` * ${pkg.description}\n` +
+	` * (c) 2021-present saqqdy <https://github.com/saqqdy>\n` +
+	` * Released under the MIT License.\n` +
+	` */`
 
 export default defineConfig({
 	plugins: [
@@ -12,14 +23,16 @@ export default defineConfig({
 	],
 
 	build: {
+		target: 'es2015',
 		lib: {
 			entry: resolve(__dirname, 'src/index.ts'),
 			name: 'Directix',
-			formats: ['es', 'cjs'],
+			formats: ['es', 'cjs', 'iife'],
 			fileName: format => {
 				const map: Record<string, string> = {
-					es: 'index.esm.js',
-					cjs: 'index.cjs.js',
+					es: 'index.mjs',
+					cjs: 'index.cjs',
+					iife: 'index.iife.js',
 				}
 
 				return map[format]
@@ -27,22 +40,19 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			external: ['vue'],
+			external: ['vue', 'vue-demi'],
 			output: {
+				banner,
 				globals: {
-					vue: 'Vue',
+					vue: 'VueDemi',
+					'vue-demi': 'VueDemi',
 				},
+				extend: true,
 			},
 		},
 
 		sourcemap: true,
-		minify: 'terser',
-		terserOptions: {
-			compress: {
-				drop_console: true,
-				drop_debugger: true,
-			},
-		},
+		minify: false,
 	},
 
 	resolve: {

@@ -1,47 +1,47 @@
 /**
- * 检查是否为字符串
+ * Check if value is a string
  */
 export function isString(value: unknown): value is string {
 	return typeof value === 'string'
 }
 
 /**
- * 检查是否为数字
+ * Check if value is a number
  */
 export function isNumber(value: unknown): value is number {
 	return typeof value === 'number' && !Number.isNaN(value)
 }
 
 /**
- * 检查是否为布尔值
+ * Check if value is a boolean
  */
 export function isBoolean(value: unknown): value is boolean {
 	return typeof value === 'boolean'
 }
 
 /**
- * 检查是否为函数
+ * Check if value is a function
  */
 export function isFunction(value: unknown): value is (...args: any[]) => any {
 	return typeof value === 'function'
 }
 
 /**
- * 检查是否为对象
+ * Check if value is an object
  */
 export function isObject(value: unknown): value is Record<string, any> {
 	return typeof value === 'object' && value !== null
 }
 
 /**
- * 检查是否为数组
+ * Check if value is an array
  */
 export function isArray(value: unknown): value is any[] {
 	return Array.isArray(value)
 }
 
 /**
- * 检查是否为空
+ * Check if value is empty
  */
 export function isEmpty(value: unknown): boolean {
 	if (value === null || value === undefined) return true
@@ -52,14 +52,14 @@ export function isEmpty(value: unknown): boolean {
 }
 
 /**
- * 检查是否为 Promise
+ * Check if value is a Promise
  */
 export function isPromise<T = any>(value: unknown): value is Promise<T> {
 	return isObject(value) && isFunction((value as any).then)
 }
 
 /**
- * 深拷贝
+ * Deep clone an object
  */
 export function deepClone<T>(obj: T): T {
 	if (obj === null || typeof obj !== 'object') {
@@ -82,7 +82,7 @@ export function deepClone<T>(obj: T): T {
 }
 
 /**
- * 深合并
+ * Deep merge objects
  */
 export function deepMerge<T extends Record<string, any>>(
 	target: T,
@@ -112,7 +112,7 @@ export function deepMerge<T extends Record<string, any>>(
 }
 
 /**
- * 获取嵌套属性值
+ * Get nested property value by path
  */
 export function get<T = any>(
 	obj: Record<string, any>,
@@ -133,7 +133,7 @@ export function get<T = any>(
 }
 
 /**
- * 设置嵌套属性值
+ * Set nested property value by path
  */
 export function set(obj: Record<string, any>, path: string, value: any): void {
 	const keys = path.split('.')
@@ -151,7 +151,7 @@ export function set(obj: Record<string, any>, path: string, value: any): void {
 }
 
 /**
- * 防抖函数
+ * Debounce function
  */
 export function debounce<T extends (...args: any[]) => any>(
 	func: T,
@@ -214,7 +214,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 /**
- * 节流函数
+ * Throttle function
  */
 export function throttle<T extends (...args: any[]) => any>(
 	func: T,
@@ -279,8 +279,8 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 /**
- * 解析时间参数
- * 支持格式: "300" | "300ms" | "1s"
+ * Parse time argument
+ * Supports formats: "300" | "300ms" | "1s"
  */
 export function parseTime(arg?: string): number | null {
 	if (!arg) return null
@@ -299,7 +299,7 @@ export function parseTime(arg?: string): number | null {
 }
 
 /**
- * 生成唯一 ID
+ * Generate unique ID
  */
 export function generateId(prefix: string = ''): string {
 	return `${prefix}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 9)}`

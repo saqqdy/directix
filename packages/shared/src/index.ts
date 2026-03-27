@@ -1,8 +1,8 @@
-// DOM 操作
+// DOM operations
 export * from './dom'
 
-// 事件处理
+// Event handling
 export * from './event'
 
-// 工具函数
+// Utility functions
 export * from './utils'

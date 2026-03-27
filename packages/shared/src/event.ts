@@ -7,7 +7,7 @@ export interface EventOptions {
 }
 
 /**
- * 添加事件监听
+ * Add event listener
  */
 export function on(
 	target: EventTarget,
@@ -22,7 +22,7 @@ export function on(
 }
 
 /**
- * 移除事件监听
+ * Remove event listener
  */
 export function off(
 	target: EventTarget,
@@ -37,7 +37,7 @@ export function off(
 }
 
 /**
- * 触发自定义事件
+ * Emit custom event
  */
 export function emit(target: EventTarget, event: string, detail?: any): boolean {
 	if (!isBrowser()) return false
@@ -46,7 +46,7 @@ export function emit(target: EventTarget, event: string, detail?: any): boolean 
 }
 
 /**
- * 标准化事件选项
+ * Normalize event options
  */
 function normalizeOptions(options: boolean | EventOptions): boolean | { capture: boolean; passive: boolean; once: boolean } {
 	if (typeof options === 'boolean') {
@@ -63,7 +63,7 @@ function normalizeOptions(options: boolean | EventOptions): boolean | { capture:
 }
 
 /**
- * 创建事件委托
+ * Create event delegation
  */
 export function delegate(
 	container: Element,
@@ -87,21 +87,21 @@ export function delegate(
 }
 
 /**
- * 阻止事件冒泡
+ * Stop event propagation
  */
 export function stopPropagation(e: Event): void {
 	e.stopPropagation()
 }
 
 /**
- * 阻止默认行为
+ * Prevent default behavior
  */
 export function preventDefault(e: Event): void {
 	e.preventDefault()
 }
 
 /**
- * 停止事件传播并阻止默认行为
+ * Stop event propagation and prevent default behavior
  */
 export function stopEvent(e: Event): void {
 	stopPropagation(e)
@@ -109,21 +109,21 @@ export function stopEvent(e: Event): void {
 }
 
 /**
- * 获取事件目标
+ * Get event target
  */
 export function getEventTarget<T extends EventTarget = EventTarget>(e: Event): T | null {
 	return e.target as T | null
 }
 
 /**
- * 获取当前事件目标
+ * Get current event target
  */
 export function getCurrentTarget<T extends EventTarget = EventTarget>(e: Event): T | null {
 	return e.currentTarget as T | null
 }
 
 /**
- * 获取鼠标/触摸位置
+ * Get mouse/touch position from event
  */
 export function getEventPosition(
 	e: MouseEvent | TouchEvent,

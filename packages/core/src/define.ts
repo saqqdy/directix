@@ -5,16 +5,16 @@ import { createVue3Directive } from './adapter/vue3'
 import type { DirectiveBinding, DirectiveDefinition, DirectiveHooks } from './types'
 
 /**
- * 定义一个跨版本兼容的指令
- * @param definition 指令定义
- * @returns Vue 指令对象
+ * Define a cross-version compatible directive
+ * @param definition The directive definition
+ * @returns Vue directive object
  */
 export function defineDirective<T = any, B extends Element = Element>(
 	definition: DirectiveDefinition<T, B>,
 ): Directive {
 	const { name, version, ssr, defaults, ...hooks } = definition
 
-	// SSR 检查
+	// SSR check
 	if (isSSR() && !ssr) {
 		if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'test') {
 			console.warn(
@@ -26,7 +26,7 @@ export function defineDirective<T = any, B extends Element = Element>(
 		return createNoOpDirective()
 	}
 
-	// 应用默认值包装
+	// Wrap hooks with default values
 	const wrappedHooks: DirectiveHooks<T, B> = {
 		mounted: hooks.mounted ? (el, binding, vnode) => {
 			const mergedBinding = applyDefaults(binding, defaults)
@@ -43,7 +43,7 @@ export function defineDirective<T = any, B extends Element = Element>(
 		unmounted: hooks.unmounted,
 	}
 
-	// 根据版本创建对应指令
+	// Create directive based on Vue version
 	if (isVue2()) {
 		return createVue2Directive(wrappedHooks) as Directive
 	}
@@ -52,7 +52,7 @@ export function defineDirective<T = any, B extends Element = Element>(
 }
 
 /**
- * 应用默认值
+ * Apply default values to binding
  */
 function applyDefaults<T>(
 	binding: DirectiveBinding<T>,
@@ -67,7 +67,7 @@ function applyDefaults<T>(
 }
 
 /**
- * 创建空操作指令（用于 SSR）
+ * Create a no-op directive (for SSR)
  */
 function createNoOpDirective(): Directive {
 	return {
@@ -78,7 +78,7 @@ function createNoOpDirective(): Directive {
 }
 
 /**
- * 定义指令组
+ * Define a directive group
  */
 export function defineDirectiveGroup(
 	name: string,

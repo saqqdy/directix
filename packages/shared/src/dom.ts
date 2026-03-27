@@ -1,21 +1,21 @@
 import { isBrowser } from '@directix/core'
 
 /**
- * 检查是否为元素
+ * Check if value is an Element
  */
 export function isElement(value: unknown): value is Element {
 	return value instanceof Element
 }
 
 /**
- * 检查是否为 HTML 元素
+ * Check if value is an HTMLElement
  */
 export function isHTMLElement(value: unknown): value is HTMLElement {
 	return value instanceof HTMLElement
 }
 
 /**
- * 获取元素
+ * Get element by selector or return element itself
  */
 export function getElement(target: string | Element | null | undefined): Element | null {
 	if (!target) return null
@@ -30,7 +30,7 @@ export function getElement(target: string | Element | null | undefined): Element
 }
 
 /**
- * 获取所有匹配元素
+ * Get all elements matching selector
  */
 export function getAllElements(target: string): Element[] {
 	if (!isBrowser()) return []
@@ -39,35 +39,35 @@ export function getAllElements(target: string): Element[] {
 }
 
 /**
- * 添加类名
+ * Add classes to element
  */
 export function addClass(el: Element, ...classes: string[]): void {
 	el.classList.add(...classes)
 }
 
 /**
- * 移除类名
+ * Remove classes from element
  */
 export function removeClass(el: Element, ...classes: string[]): void {
 	el.classList.remove(...classes)
 }
 
 /**
- * 切换类名
+ * Toggle class on element
  */
 export function toggleClass(el: Element, className: string, force?: boolean): void {
 	el.classList.toggle(className, force)
 }
 
 /**
- * 检查是否有类名
+ * Check if element has class
  */
 export function hasClass(el: Element, className: string): boolean {
 	return el.classList.contains(className)
 }
 
 /**
- * 获取元素样式
+ * Get element style property
  */
 export function getStyle(el: Element, property: string): string {
 	if (!isBrowser()) return ''
@@ -76,14 +76,14 @@ export function getStyle(el: Element, property: string): string {
 }
 
 /**
- * 设置元素样式
+ * Set element style property
  */
 export function setStyle(el: HTMLElement, property: string, value: string | number): void {
 	el.style.setProperty(property, typeof value === 'number' ? `${value}px` : value)
 }
 
 /**
- * 批量设置样式
+ * Set multiple styles on element
  */
 export function setStyles(el: HTMLElement, styles: Record<string, string | number>): void {
 	Object.entries(styles).forEach(([property, value]) => {
@@ -92,7 +92,7 @@ export function setStyles(el: HTMLElement, styles: Record<string, string | numbe
 }
 
 /**
- * 获取元素位置
+ * Get element offset position
  */
 export function getOffset(el: Element): { top: number; left: number } {
 	if (!isBrowser()) return { top: 0, left: 0 }
@@ -105,7 +105,7 @@ export function getOffset(el: Element): { top: number; left: number } {
 }
 
 /**
- * 获取元素尺寸
+ * Get element size
  */
 export function getSize(el: Element): { width: number; height: number } {
 	const rect = el.getBoundingClientRect()
@@ -117,7 +117,7 @@ export function getSize(el: Element): { width: number; height: number } {
 }
 
 /**
- * 检查元素是否在视口内
+ * Check if element is in viewport
  */
 export function isInViewport(el: Element): boolean {
 	if (!isBrowser()) return false
@@ -132,7 +132,7 @@ export function isInViewport(el: Element): boolean {
 }
 
 /**
- * 获取最近的滚动父元素
+ * Get nearest scrollable parent element
  */
 export function getScrollParent(el: Element): Element | Window {
 	if (!isBrowser()) return window
@@ -153,14 +153,14 @@ export function getScrollParent(el: Element): Element | Window {
 }
 
 /**
- * 检查元素是否匹配选择器
+ * Check if element matches selector
  */
 export function matches(el: Element, selector: string): boolean {
 	return el.matches(selector)
 }
 
 /**
- * 获取最近的匹配祖先元素
+ * Get nearest ancestor matching selector
  */
 export function closest(el: Element, selector: string): Element | null {
 	return el.closest(selector)

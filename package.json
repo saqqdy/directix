@@ -4,14 +4,16 @@
 	"type": "module",
 	"version": "1.0.0",
 	"packageManager": "pnpm@9.15.9",
-	"main": "./dist/index.cjs.js",
-	"module": "./dist/index.esm.js",
-	"types": "./dist/index.d.ts",
+	"main": "dist/index.cjs",
+	"module": "dist/index.mjs",
+	"unpkg": "dist/index.iife.min.js",
+	"jsdelivr": "dist/index.iife.min.js",
+	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.cjs.js",
-			"import": "./dist/index.esm.js"
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.mjs"
 		},
 		"./style.css": "./dist/style.css"
 	},
@@ -22,7 +24,7 @@
 		"dev": "vite",
 		"gen:version": "tsx scripts/version",
 		"tag:version": "tsx scripts/tag",
-		"build": "vite build",
+		"build": "vite build && tsx scripts/minify",
 		"build:types": "vue-tsc --emitDeclarationOnly --outDir dist",
 		"docs:dev": "vitepress dev docs",
 		"docs:build": "vitepress build docs",
@@ -42,6 +44,9 @@
 		"example:dev": "pnpm --dir examples/vue3 dev",
 		"example:build": "pnpm --dir examples/vue3 build"
 	},
+	"dependencies": {
+		"vue-demi": "^0.14.10"
+	},
 	"devDependencies": {
 		"@eslint-sets/eslint-config": "^6.2.0",
 		"@types/node": "^22.19.15",
@@ -58,10 +63,17 @@
 		"vitepress": "^1.6.4",
 		"vitest": "^3.2.4",
 		"vue": "^3.5.31",
-		"vue-tsc": "^2.2.12"
+		"vue-tsc": "^2.2.12",
+		"vue2": "npm:vue@^2.7.16"
 	},
 	"peerDependencies": {
-		"vue": "^2.6.0 || ^3.0.0"
+		"@vue/composition-api": ">=1.0.0",
+		"vue": "^2.0.0 || >=3.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@vue/composition-api": {
+			"optional": true
+		}
 	},
 	"engines": {
 		"node": ">=12.20"
@@ -84,7 +96,7 @@
 		"typescript"
 	],
 	"license": "MIT",
-	"author": "saqqdy",
+	"author": "saqqdy <https://github.com/saqqdy>",
 	"homepage": "https://github.com/saqqdy/directix#readme",
 	"bugs": {
 		"url": "https://github.com/saqqdy/directix/issues"

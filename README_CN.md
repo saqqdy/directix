@@ -11,11 +11,11 @@
 ## 特性
 
 - 🎯 **功能全面** - 提供 30+ 常用指令
-- 🔄 **Vue 2/3 兼容** - 单一代码库同时支持两个版本
+- 🔄 **Vue 2/3 兼容** - 基于 [vue-demi](https://github.com/vueuse/vue-demi)，单一代码库同时支持两个版本
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
 - 🚀 **SSR 友好** - 支持 Nuxt 等 SSR 框架
-- 🎨 **零依赖** - 轻量级，无外部依赖
+- 📦 **多格式支持** - 提供 ESM、CJS 和 IIFE (CDN) 格式
 
 ## 在线演示
 
@@ -38,6 +38,38 @@ yarn add directix
 # pnpm
 pnpm add directix
 ```
+
+### Vue 2 支持
+
+对于 Vue 2.0-2.6，需要安装 `@vue/composition-api`：
+
+```bash
+npm install @vue/composition-api
+```
+
+Vue 2.7+ 内置了 Composition API 支持，无需额外依赖。
+
+## CDN 使用
+
+你也可以通过 CDN 使用 Directix：
+
+```html
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
+
+<!-- Vue 2.7+ -->
+<script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+<script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
+```
+
+CDN 构建版本内置了 `vue-demi`，可以无缝支持 Vue 2 和 Vue 3。
+
+## 环境要求
+
+- Vue 2.0+ 或 Vue 3.0+
+- Node.js 12.20+ (用于构建工具)
+- Vue 2.0-2.6 需要：`@vue/composition-api`
 
 ## 快速开始
 
