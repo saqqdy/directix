@@ -13,7 +13,7 @@ export default defineComponent({
 			focusCount: 0,
 			blurCount: 0,
 			refocusValue: 'Hello',
-			refocusEnabled: true,
+			refocusTrigger: 0,
 			basicCode: `<!-- 自动聚焦 -->
 <input v-focus />
 
@@ -28,17 +28,16 @@ export default defineComponent({
     console.log('Blurred!', el)
   }
 }" />`,
-			refocusCode: `<!-- refocus: true 时，每次更新都会重新聚焦 -->
+			refocusCode: `<!-- refocus: true 时，当指令绑定值变化会重新聚焦 -->
 <input
-  v-focus="{ focus: true, refocus: true }"
-  v-model="value"
+  v-focus="{ focus: true, refocus: true, trigger: count }"
 />
 
-<!-- 点击按钮更新数据，焦点会自动回到输入框 -->
-<button @click="updateValue">Update Value</button>`,
+<!-- 点击按钮改变 trigger 值，焦点会自动回到输入框 -->
+<button @click="count++">Trigger Refocus</button>`,
 			optionsCode: `interface FocusOptions {
   focus?: boolean      // 是否自动聚焦，默认 true
-  refocus?: boolean    // 是否在每次更新时重新聚焦，默认 false
+  refocus?: boolean    // 是否在绑定值变化时重新聚焦，默认 false
   onFocus?: (el: HTMLElement) => void  // 聚焦回调
   onBlur?: (el: HTMLElement) => void   // 失焦回调
 }`,
@@ -54,8 +53,8 @@ export default defineComponent({
 		handleBlur() {
 			this.blurCount++
 		},
-		updateRefocusValue() {
-			this.refocusValue = 'Updated at ' + new Date().toLocaleTimeString()
+		triggerRefocus() {
+			this.refocusTrigger++
 		},
 	},
 })
@@ -135,7 +134,7 @@ export default defineComponent({
 		</DemoSection>
 
 		<!-- 场景4: refocus -->
-		<DemoSection title="Refocus 选项" description="数据更新后自动重新聚焦">
+		<DemoSection title="Refocus 选项" description="绑定值变化时自动重新聚焦">
 			<div class="demo-box">
 				<div class="refocus-demo">
 					<div class="input-group">
@@ -149,18 +148,18 @@ export default defineComponent({
 						/>
 					</div>
 					<div class="input-group">
-						<label>With refocus: {{ refocusEnabled }}</label>
+						<label>With refocus: true (trigger: {{ refocusTrigger }})</label>
 						<input
 							v-model="refocusValue"
-							v-focus="{ focus: true, refocus: refocusEnabled }"
+							v-focus="{ focus: true, refocus: true, trigger: refocusTrigger }"
 							class="input"
 							type="text"
-							placeholder="Type something..."
+							placeholder="Click button to refocus..."
 						/>
 					</div>
 				</div>
 				<div class="refocus-actions">
-					<button class="btn" @click="updateRefocusValue">Update Value</button>
+					<button class="btn" @click="triggerRefocus">Trigger Refocus</button>
 					<span class="hint">点击按钮后，右边输入框会自动获取焦点</span>
 				</div>
 			</div>
@@ -213,7 +212,7 @@ export default defineComponent({
 						<td>refocus</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否在每次更新时重新聚焦</td>
+						<td>是否在绑定值变化时重新聚焦</td>
 					</tr>
 					<tr>
 						<td>onFocus</td>

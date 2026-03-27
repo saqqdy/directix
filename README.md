@@ -4,6 +4,8 @@
 [![npm downloads](https://img.shields.io/npm/dm/directix.svg)](https://www.npmjs.com/package/directix)
 [![GitHub license](https://img.shields.io/github/license/saqqdy/directix)](https://github.com/saqqdy/directix/blob/main/LICENSE)
 
+**[中文文档](README_CN.md)**
+
 A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3.
 
 ## Features
@@ -11,9 +13,18 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🎯 **Comprehensive** - 30+ commonly used directives
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both versions
 - 📦 **Tree-shakable** - Import only what you need
-- 🔒 **TypeScript** - Full TypeScript support
-- 🚀 **SSR Friendly** - Works with server-side rendering
-- 🎨 **Zero Dependencies** - No external dependencies
+- 🔒 **TypeScript** - Full TypeScript support with type definitions
+- 🚀 **SSR Friendly** - Works with Nuxt and other SSR frameworks
+- 🎨 **Zero Dependencies** - Lightweight, no external dependencies
+
+## Online Demo
+
+Try it online with StackBlitz:
+
+| Demo | Link |
+|------|------|
+| Vue 3 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/main/examples/vue3) |
+| Vue 2 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/main/examples/vue2) |
 
 ## Installation
 
@@ -40,7 +51,7 @@ import Directix from 'directix'
 const app = createApp(App)
 app.use(Directix)
 
-// Or register specific directives
+// Or register specific directives only
 app.use(Directix, {
   directives: ['click-outside', 'copy', 'debounce']
 })
@@ -57,10 +68,14 @@ Vue.use(Directix)
 ### On-Demand Import
 
 ```typescript
-import { vClickOutside, vCopy } from 'directix'
+import { vClickOutside, vCopy, vDebounce } from 'directix'
 
+// Vue 3
 app.directive('click-outside', vClickOutside)
 app.directive('copy', vCopy)
+
+// Vue 2
+Vue.directive('click-outside', vClickOutside)
 ```
 
 ## Available Directives
@@ -103,6 +118,8 @@ app.directive('copy', vCopy)
 
 ### v-click-outside
 
+Detect clicks outside an element, useful for closing dropdowns, modals, etc.
+
 ```vue
 <template>
   <div v-click-outside="closeDropdown">
@@ -124,10 +141,17 @@ function closeDropdown() {
 
 ### v-copy
 
+Copy text to clipboard with a simple directive.
+
 ```vue
 <template>
+  <!-- Simple usage -->
   <button v-copy="textToCopy">Copy to clipboard</button>
-  <button v-copy="{ value: text, onSuccess: handleSuccess }">Copy with callback</button>
+
+  <!-- With callbacks -->
+  <button v-copy="{ value: text, onSuccess: handleSuccess, onError: handleError }">
+    Copy with callback
+  </button>
 </template>
 
 <script setup>
@@ -136,16 +160,27 @@ const textToCopy = 'Hello, World!'
 function handleSuccess(text) {
   console.log('Copied:', text)
 }
+
+function handleError(error) {
+  console.error('Copy failed:', error)
+}
 </script>
 ```
 
 ### v-debounce
 
+Debounce event handlers to limit execution frequency.
+
 ```vue
 <template>
+  <!-- Default: 300ms -->
   <input v-debounce="handleInput" />
+
+  <!-- Custom wait time with modifier -->
   <input v-debounce:500ms="handleInput" />
-  <input v-debounce="{ handler: handleInput, wait: 500 }" />
+
+  <!-- With options object -->
+  <input v-debounce="{ handler: handleInput, wait: 500, leading: true }" />
 </template>
 
 <script setup>
@@ -157,10 +192,20 @@ function handleInput(event) {
 
 ### v-throttle
 
+Throttle event handlers to limit execution frequency.
+
 ```vue
 <template>
+  <!-- Default: 300ms -->
   <button v-throttle="handleClick">Throttled click</button>
+
+  <!-- Custom wait time with modifier -->
   <button v-throttle:1s="handleClick">1 second throttle</button>
+
+  <!-- With options object -->
+  <button v-throttle="{ handler: handleClick, wait: 1000, leading: true, trailing: false }">
+    Throttle with options
+  </button>
 </template>
 
 <script setup>
@@ -172,27 +217,36 @@ function handleClick() {
 
 ### v-focus
 
+Auto focus an element when mounted.
+
 ```vue
 <template>
+  <!-- Simple usage -->
   <input v-focus />
+
+  <!-- With options -->
   <input v-focus="{ focus: true, refocus: true }" />
 </template>
 ```
 
-## API
+## API Reference
 
 ### DirectiveInstallOptions
 
 ```typescript
 interface DirectiveInstallOptions {
-  /** Register specific directives */
+  /** Register specific directives only */
   directives?: string[]
-  /** Register all directives */
+  /** Register all directives (default: true) */
   all?: boolean
-  /** Global configuration */
+  /** Global configuration for directives */
   config?: Record<string, any>
 }
 ```
+
+### Directive Options
+
+Each directive accepts different options. See the [documentation](https://github.com/saqqdy/directix#usage-examples) for detailed API.
 
 ## Browser Support
 

@@ -27,10 +27,10 @@ const handleBlur = () => {
 
 // 场景4: refocus
 const refocusValue = ref('Hello')
-const refocusEnabled = ref(true)
+const refocusTrigger = ref(0)
 
-const updateRefocusValue = () => {
-	refocusValue.value = 'Updated at ' + new Date().toLocaleTimeString()
+const triggerRefocus = () => {
+	refocusTrigger.value++
 }
 
 const basicCode = `<!-- 自动聚焦 -->
@@ -49,18 +49,17 @@ const callbackCode = `<input v-focus="{
   }
 }" />`
 
-const refocusCode = `<!-- refocus: true 时，每次更新都会重新聚焦 -->
+const refocusCode = `<!-- refocus: true 时，当指令绑定值变化会重新聚焦 -->
 <input
-  v-focus="{ focus: true, refocus: true }"
-  v-model="value"
+  v-focus="{ focus: true, refocus: true, trigger: count }"
 />
 
-<!-- 点击按钮更新数据，焦点会自动回到输入框 -->
-<button @click="updateValue">Update Value</button>`
+<!-- 点击按钮改变 trigger 值，焦点会自动回到输入框 -->
+<button @click="count++">Trigger Refocus</button>`
 
 const optionsCode = `interface FocusOptions {
   focus?: boolean      // 是否自动聚焦，默认 true
-  refocus?: boolean    // 是否在每次更新时重新聚焦，默认 false
+  refocus?: boolean    // 是否在绑定值变化时重新聚焦，默认 false
   onFocus?: (el: HTMLElement) => void  // 聚焦回调
   onBlur?: (el: HTMLElement) => void   // 失焦回调
 }`
@@ -140,7 +139,7 @@ const optionsCode = `interface FocusOptions {
 		</DemoSection>
 
 		<!-- 场景4: refocus -->
-		<DemoSection title="Refocus 选项" description="数据更新后自动重新聚焦">
+		<DemoSection title="Refocus 选项" description="绑定值变化时自动重新聚焦">
 			<div class="demo-box">
 				<div class="refocus-demo">
 					<div class="input-group">
@@ -154,18 +153,18 @@ const optionsCode = `interface FocusOptions {
 						/>
 					</div>
 					<div class="input-group">
-						<label>With refocus: {{ refocusEnabled }}</label>
+						<label>With refocus: true (trigger: {{ refocusTrigger }})</label>
 						<input
 							v-model="refocusValue"
-							v-focus="{ focus: true, refocus: refocusEnabled }"
+							v-focus="{ focus: true, refocus: true, trigger: refocusTrigger }"
 							class="input"
 							type="text"
-							placeholder="Type something..."
+							placeholder="Click button to refocus..."
 						/>
 					</div>
 				</div>
 				<div class="refocus-actions">
-					<button class="btn" @click="updateRefocusValue">Update Value</button>
+					<button class="btn" @click="triggerRefocus">Trigger Refocus</button>
 					<span class="hint">点击按钮后，右边输入框会自动获取焦点</span>
 				</div>
 			</div>
@@ -218,7 +217,7 @@ const optionsCode = `interface FocusOptions {
 						<td>refocus</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否在每次更新时重新聚焦</td>
+						<td>是否在绑定值变化时重新聚焦</td>
 					</tr>
 					<tr>
 						<td>onFocus</td>
