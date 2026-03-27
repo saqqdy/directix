@@ -506,7 +506,7 @@ describe('v-focus', () => {
 
 	describe('isEqual helper', () => {
 		it('should correctly compare object values for refocus decision', async () => {
-			const options = ref({ focus: true, refocus: true })
+			const options = ref({ focus: true, refocus: true, trigger: 0 })
 
 			const TestComponent = defineComponent({
 				directives: { focus: vFocus },
@@ -525,17 +525,18 @@ describe('v-focus', () => {
 			focusSpy.mockClear()
 
 			// Update with same values (different object, same content)
-			options.value = { focus: true, refocus: true }
+			options.value = { focus: true, refocus: true, trigger: 0 }
+
 			await nextTick()
 
 			// Should not refocus because values are equal
 			expect(focusSpy).not.toHaveBeenCalled()
 
-			// Update with different values
-			options.value = { focus: true, refocus: false }
+			// Update with different trigger value (refocus is still true)
+			options.value = { focus: true, refocus: true, trigger: 1 }
 			await nextTick()
 
-			// Should refocus because values changed
+			// Should refocus because trigger value changed and refocus is true
 			expect(focusSpy).toHaveBeenCalledTimes(1)
 		})
 
