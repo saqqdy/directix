@@ -73,11 +73,11 @@ export default defineComponent({
 	<div class="demo-page">
 		<h1>v-click-outside</h1>
 		<p class="intro">
-			检测点击元素外部的指令，常用于下拉菜单、模态框、弹出层等场景。
+			A directive that detects clicks outside an element, commonly used for dropdowns, modals, popups, etc.
 		</p>
 
-		<!-- 场景1: 基础用法 - 下拉菜单 -->
-		<DemoSection title="基础用法 - 下拉菜单" description="点击下拉菜单外部区域关闭菜单">
+		<!-- Scenario 1: Basic usage - Dropdown menu -->
+		<DemoSection title="Basic Usage - Dropdown Menu" description="Click outside the dropdown to close it">
 			<div class="demo-box">
 				<div v-click-outside="handleDropdownClickOutside" class="dropdown-container">
 					<button class="btn" @click="showDropdown = !showDropdown">
@@ -90,13 +90,13 @@ export default defineComponent({
 						<div class="dropdown-item">Option 3</div>
 					</div>
 				</div>
-				<p class="hint">点击下拉菜单外部区域关闭菜单</p>
+				<p class="hint">Click outside the dropdown area to close the menu</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
 
-		<!-- 场景2: 排除特定元素 -->
-		<DemoSection title="排除特定元素" description="使用 exclude 选项排除触发按钮，避免点击按钮时立即关闭">
+		<!-- Scenario 2: Exclude specific elements -->
+		<DemoSection title="Exclude Specific Elements" description="Use exclude option to exclude the trigger button">
 			<div class="demo-box">
 				<button
 					ref="triggerBtnRef"
@@ -116,13 +116,13 @@ export default defineComponent({
 					<h3>Modal Title</h3>
 					<p>Click outside to close this modal.</p>
 				</div>
-				<p class="hint">点击按钮只打开不关闭，点击其他区域关闭</p>
+				<p class="hint">Clicking the button only opens, clicking other areas closes</p>
 			</div>
 			<CodeBlock :code="excludeCode" />
 		</DemoSection>
 
-		<!-- 场景3: 禁用状态 -->
-		<DemoSection title="禁用状态" description="使用 disabled 选项动态控制是否启用检测">
+		<!-- Scenario 3: Disabled state -->
+		<DemoSection title="Disabled State" description="Use disabled option to dynamically control detection">
 			<div class="demo-box">
 				<div
 					v-click-outside="{
@@ -137,13 +137,13 @@ export default defineComponent({
 						<span>Disable click outside detection</span>
 					</label>
 				</div>
-				<p class="hint">勾选复选框后禁用检测，点击外部不再计数</p>
+				<p class="hint">Check the checkbox to disable detection</p>
 			</div>
 			<CodeBlock :code="disabledCode" />
 		</DemoSection>
 
-		<!-- 场景4: 多事件类型 -->
-		<DemoSection title="多事件类型" description="使用 events 选项指定监听的事件类型">
+		<!-- Scenario 4: Multiple event types -->
+		<DemoSection title="Multiple Event Types" description="Use events option to specify event types">
 			<div class="demo-box">
 				<div
 					v-click-outside="{
@@ -154,20 +154,20 @@ export default defineComponent({
 				>
 					<p>Click/Touch outside count: <strong>{{ touchCount }}</strong></p>
 				</div>
-				<p class="hint">同时监听 click 和 touchstart 事件（移动端友好）</p>
+				<p class="hint">Listens to both click and touchstart events (mobile-friendly)</p>
 			</div>
 			<CodeBlock :code="eventsCode" />
 		</DemoSection>
 
-		<!-- API 说明 -->
+		<!-- API Reference -->
 		<DemoSection title="API">
 			<table class="api-table">
 				<thead>
 					<tr>
-						<th>参数</th>
-						<th>类型</th>
-						<th>默认值</th>
-						<th>说明</th>
+						<th>Parameter</th>
+						<th>Type</th>
+						<th>Default</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -175,43 +175,43 @@ export default defineComponent({
 						<td>handler</td>
 						<td>Function</td>
 						<td>-</td>
-						<td>点击外部时的回调函数（必填）</td>
+						<td>Callback when clicking outside (required)</td>
 					</tr>
 					<tr>
 						<td>exclude</td>
 						<td>Array</td>
 						<td>[]</td>
-						<td>排除的元素选择器或元素引用</td>
+						<td>Excluded element selectors or refs</td>
 					</tr>
 					<tr>
 						<td>capture</td>
 						<td>Boolean</td>
 						<td>true</td>
-						<td>是否使用捕获模式</td>
+						<td>Whether to use capture mode</td>
 					</tr>
 					<tr>
 						<td>events</td>
 						<td>Array</td>
 						<td>['click']</td>
-						<td>监听的事件类型</td>
+						<td>Event types to listen</td>
 					</tr>
 					<tr>
 						<td>disabled</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否禁用检测</td>
+						<td>Whether to disable detection</td>
 					</tr>
 					<tr>
 						<td>stop</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否停止事件传播</td>
+						<td>Whether to stop event propagation</td>
 					</tr>
 					<tr>
 						<td>prevent</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否阻止默认行为</td>
+						<td>Whether to prevent default behavior</td>
 					</tr>
 				</tbody>
 			</table>

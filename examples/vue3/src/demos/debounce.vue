@@ -3,24 +3,24 @@ import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法
+// Scenario 1: Basic usage
 const searchText = ref('')
 const searchResults = ref<string[]>([])
 const searchCount = ref(0)
 
 const handleSearch = () => {
 	searchCount.value++
-	// 模拟搜索
+	// Simulate search
 	searchResults.value = ['Apple', 'Banana', 'Orange', 'Grape'].filter(f =>
 		f.toLowerCase().includes(searchText.value.toLowerCase())
 	)
 }
 
-// 场景2: 自定义延迟时间
+// Scenario 2: Custom delay time
 const customText = ref('')
 const customCount = ref(0)
 
-// 场景3: leading 选项
+// Scenario 3: Leading option
 const trailingCount = ref(0)
 const leadingCount = ref(0)
 
@@ -29,7 +29,7 @@ const resetLeadingDemo = () => {
 	leadingCount.value = 0
 }
 
-// 场景4: 实时显示
+// Scenario 4: Real-time display
 const inputHistory = ref<string[]>([])
 
 const basicCode = `<input
@@ -73,11 +73,11 @@ const optionsCode = `interface DebounceOptions {
 	<div class="demo-page">
 		<h1>v-debounce</h1>
 		<p class="intro">
-			输入防抖指令，在用户停止输入一段时间后才触发处理函数，常用于搜索、表单验证等场景。
+			Input debounce directive that triggers handler after user stops typing for a period, commonly used for search, form validation, etc.
 		</p>
 
-		<!-- 场景1: 基础用法 - 搜索 -->
-		<DemoSection title="基础用法 - 搜索" description="默认 300ms 防抖，停止输入后触发搜索">
+		<!-- Scenario 1: Basic usage - Search -->
+		<DemoSection title="Basic Usage - Search" description="Default 300ms debounce, triggers search after stopping input">
 			<div class="demo-box">
 				<input
 					v-model="searchText"
@@ -94,17 +94,17 @@ const optionsCode = `interface DebounceOptions {
 						{{ item }}
 					</div>
 				</div>
-				<p class="hint">快速输入多个字符，只有停止输入 300ms 后才会触发搜索</p>
+				<p class="hint">Type multiple characters quickly, search only triggers 300ms after stopping</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
 
-		<!-- 场景2: 自定义延迟时间 -->
-		<DemoSection title="自定义延迟时间" description="使用 arg 或 options 配置延迟时间">
+		<!-- Scenario 2: Custom delay time -->
+		<DemoSection title="Custom Delay Time" description="Use arg or options to configure delay">
 			<div class="demo-box">
 				<div class="delay-inputs">
 					<div class="input-group">
-						<label>500ms 防抖:</label>
+						<label>500ms debounce:</label>
 						<input
 							v-model="customText"
 							v-debounce:500="() => customCount++"
@@ -116,17 +116,17 @@ const optionsCode = `interface DebounceOptions {
 				<div class="stats">
 					<span>Trigger count: <strong>{{ customCount }}</strong></span>
 				</div>
-				<p class="hint">使用 v-debounce:500 指定 500ms 延迟</p>
+				<p class="hint">Use v-debounce:500 to specify 500ms delay</p>
 			</div>
 			<CodeBlock :code="customDelayCode" />
 		</DemoSection>
 
-		<!-- 场景3: leading 选项 -->
-		<DemoSection title="Leading 选项" description="首次输入立即触发，后续防抖">
+		<!-- Scenario 3: Leading option -->
+		<DemoSection title="Leading Option" description="Triggers immediately on first input, then debounces">
 			<div class="demo-box">
 				<div class="compare">
 					<div class="compare-item">
-						<label>默认 (trailing only):</label>
+						<label>Default (trailing only):</label>
 						<input
 							v-debounce="{
 								handler: () => trailingCount++,
@@ -136,7 +136,7 @@ const optionsCode = `interface DebounceOptions {
 							class="input"
 							placeholder="300ms after stop"
 						/>
-						<span class="count">Count: {{ trailingCount }} (触发于延迟后)</span>
+						<span class="count">Count: {{ trailingCount }} (triggers after delay)</span>
 					</div>
 					<div class="compare-item">
 						<label>Leading:</label>
@@ -149,17 +149,17 @@ const optionsCode = `interface DebounceOptions {
 							class="input"
 							placeholder="Immediate first trigger"
 						/>
-						<span class="count">Count: {{ leadingCount }} (首次立即触发)</span>
+						<span class="count">Count: {{ leadingCount }} (immediate first trigger)</span>
 					</div>
 				</div>
-				<p class="hint">快速输入: 左边只在停止后触发，右边首次输入立即触发</p>
+				<p class="hint">Type quickly: left only triggers after stopping, right triggers immediately on first input</p>
 				<button class="btn-reset" @click="resetLeadingDemo">Reset Counters</button>
 			</div>
 			<CodeBlock :code="leadingCode" />
 		</DemoSection>
 
-		<!-- 场景4: 实时显示输入历史 -->
-		<DemoSection title="实际应用 - 表单自动保存" description="用户停止输入后自动保存">
+		<!-- Scenario 4: Auto-save form -->
+		<DemoSection title="Practical Use - Form Auto-save" description="Auto-save after user stops typing">
 			<div class="demo-box">
 				<textarea
 					v-debounce="{
@@ -182,16 +182,16 @@ const optionsCode = `interface DebounceOptions {
 			</div>
 		</DemoSection>
 
-		<!-- API 说明 -->
+		<!-- API Reference -->
 		<DemoSection title="API">
 			<CodeBlock :code="optionsCode" />
 			<table class="api-table">
 				<thead>
 					<tr>
-						<th>参数</th>
-						<th>类型</th>
-						<th>默认值</th>
-						<th>说明</th>
+						<th>Parameter</th>
+						<th>Type</th>
+						<th>Default</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -199,25 +199,25 @@ const optionsCode = `interface DebounceOptions {
 						<td>handler</td>
 						<td>Function</td>
 						<td>-</td>
-						<td>防抖处理函数（必填）</td>
+						<td>Debounce handler function (required)</td>
 					</tr>
 					<tr>
 						<td>wait</td>
 						<td>Number</td>
 						<td>300</td>
-						<td>延迟时间（毫秒）</td>
+						<td>Delay time (milliseconds)</td>
 					</tr>
 					<tr>
 						<td>leading</td>
 						<td>Boolean</td>
 						<td>false</td>
-						<td>是否在开始时触发</td>
+						<td>Whether to trigger at the start</td>
 					</tr>
 					<tr>
 						<td>trailing</td>
 						<td>Boolean</td>
 						<td>true</td>
-						<td>是否在结束时触发</td>
+						<td>Whether to trigger at the end</td>
 					</tr>
 				</tbody>
 			</table>

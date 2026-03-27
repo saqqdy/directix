@@ -63,11 +63,11 @@ app.use(Directix)`,
 	<div class="demo-page">
 		<h1>v-copy</h1>
 		<p class="intro">
-			点击复制文本到剪贴板的指令，支持静态文本、动态内容和回调函数。
+			A directive that copies text to clipboard, supporting static text, dynamic content, and callbacks.
 		</p>
 
-		<!-- 场景1: 基础用法 -->
-		<DemoSection title="基础用法" description="点击按钮复制文本">
+		<!-- Scenario 1: Basic usage -->
+		<DemoSection title="Basic Usage" description="Click button to copy text">
 			<div class="demo-box">
 				<div class="copy-row">
 					<input v-model="basicText" class="input" />
@@ -82,16 +82,16 @@ app.use(Directix)`,
 						{{ basicCopied ? '✓ Copied!' : 'Copy' }}
 					</button>
 				</div>
-				<p class="hint">修改输入框内容后点击复制按钮</p>
+				<p class="hint">Modify the input and click the copy button</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
 
-		<!-- 场景2: 复制动态内容 -->
-		<DemoSection title="复制动态内容" description="绑定响应式数据，复制当前值">
+		<!-- Scenario 2: Copy dynamic content -->
+		<DemoSection title="Copy Dynamic Content" description="Bind reactive data, copy current value">
 			<div class="demo-box">
 				<div class="copy-row">
-					<input v-model="dynamicText" class="input" placeholder="输入要复制的内容" />
+					<input v-model="dynamicText" class="input" placeholder="Enter content to copy" />
 					<button
 						v-copy="{
 							value: dynamicText,
@@ -103,13 +103,13 @@ app.use(Directix)`,
 						{{ dynamicCopied ? '✓ Copied!' : 'Copy Input' }}
 					</button>
 				</div>
-				<p class="hint">当前值: "{{ dynamicText }}"</p>
+				<p class="hint">Current value: "{{ dynamicText }}"</p>
 			</div>
 			<CodeBlock :code="dynamicCode" />
 		</DemoSection>
 
-		<!-- 场景3: 回调函数 -->
-		<DemoSection title="回调函数" description="使用 onSuccess 和 onError 处理复制结果">
+		<!-- Scenario 3: Callback functions -->
+		<DemoSection title="Callback Functions" description="Use onSuccess and onError to handle copy results">
 			<div class="demo-box">
 				<div class="copy-row">
 					<input v-model="callbackText" class="input" />
@@ -130,8 +130,8 @@ app.use(Directix)`,
 			<CodeBlock :code="callbackCode" />
 		</DemoSection>
 
-		<!-- 场景4: 复制代码块 -->
-		<DemoSection title="复制代码块" description="实际应用场景 - 代码复制按钮">
+		<!-- Scenario 4: Code block copy -->
+		<DemoSection title="Code Block Copy" description="Practical use case - code copy button">
 			<div class="demo-box">
 				<div class="code-container">
 					<div class="code-header">
@@ -148,32 +148,32 @@ app.use(Directix)`,
 			</div>
 		</DemoSection>
 
-		<!-- API 说明 -->
+		<!-- API Reference -->
 		<DemoSection title="API">
 			<CodeBlock :code="optionsCode" />
 			<table class="api-table">
 				<thead>
 					<tr>
-						<th>参数</th>
-						<th>类型</th>
-						<th>说明</th>
+						<th>Parameter</th>
+						<th>Type</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>value</td>
 						<td>String</td>
-						<td>要复制的文本内容（必填）</td>
+						<td>Text content to copy (required)</td>
 					</tr>
 					<tr>
 						<td>onSuccess</td>
 						<td>Function</td>
-						<td>复制成功回调，参数为复制的文本</td>
+						<td>Success callback, receives copied text</td>
 					</tr>
 					<tr>
 						<td>onError</td>
 						<td>Function</td>
-						<td>复制失败回调，参数为错误对象</td>
+						<td>Error callback, receives error object</td>
 					</tr>
 				</tbody>
 			</table>

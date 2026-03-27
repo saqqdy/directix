@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-// 场景1: 基础用法
+// Scenario 1: Basic usage
 const clickCount = ref(0)
 const lastClickTime = ref<string | null>(null)
 
@@ -12,14 +12,14 @@ const handleClick = () => {
 	lastClickTime.value = new Date().toLocaleTimeString()
 }
 
-// 场景2: 自定义延迟时间
+// Scenario 2: Custom delay time
 const customCount = ref(0)
 
-// 场景3: leading vs trailing
+// Scenario 3: Leading vs trailing
 const leadingCount = ref(0)
 const trailingCount = ref(0)
 
-// 场景4: 滚动事件
+// Scenario 4: Scroll events
 const scrollCount = ref(0)
 const scrollPosition = ref(0)
 
@@ -29,7 +29,7 @@ const handleScroll = (event: Event) => {
 	scrollCount.value++
 }
 
-// 场景5: 表单提交
+// Scenario 5: Form submission
 const submitCount = ref(0)
 const lastSubmitTime = ref<string | null>(null)
 const isSubmitting = ref(false)
@@ -37,7 +37,7 @@ const isSubmitting = ref(false)
 const handleSubmit = () => {
 	submitCount.value++
 	lastSubmitTime.value = new Date().toLocaleTimeString()
-	// 模拟提交
+	// Simulate submission
 	isSubmitting.value = true
 	setTimeout(() => {
 		isSubmitting.value = false
@@ -80,11 +80,11 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 	<div class="demo-page">
 		<h1>v-throttle</h1>
 		<p class="intro">
-			节流指令，限制事件触发频率，常用于按钮点击、滚动事件、窗口调整等场景。
+			Throttle directive that limits event trigger frequency, commonly used for button clicks, scroll events, window resize, etc.
 		</p>
 
-		<!-- 场景1: 基础用法 - 按钮点击 -->
-		<DemoSection title="基础用法 - 按钮点击" description="默认 300ms 节流，防止重复点击">
+		<!-- Scenario 1: Basic usage - Button click -->
+		<DemoSection title="Basic Usage - Button Click" description="Default 300ms throttle, prevents repeated clicks">
 			<div class="demo-box">
 				<button v-throttle="handleClick" class="btn">
 					Click Me (300ms throttle)
@@ -93,13 +93,13 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 					<span>Click count: <strong>{{ clickCount }}</strong></span>
 					<span v-if="lastClickTime">Last: {{ lastClickTime }}</span>
 				</div>
-				<p class="hint">快速连续点击按钮，最多每 300ms 触发一次</p>
+				<p class="hint">Click button rapidly, triggers at most once every 300ms</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
 
-		<!-- 场景2: 自定义延迟时间 -->
-		<DemoSection title="自定义延迟时间" description="使用 arg 或 options 配置节流时间">
+		<!-- Scenario 2: Custom delay time -->
+		<DemoSection title="Custom Delay Time" description="Use arg or options to configure throttle time">
 			<div class="demo-box">
 				<div class="button-row">
 					<button
@@ -124,13 +124,13 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 				<div class="stats">
 					<span>Total count: <strong>{{ customCount }}</strong></span>
 				</div>
-				<p class="hint">不同节流时间的按钮</p>
+				<p class="hint">Buttons with different throttle times</p>
 			</div>
 			<CodeBlock :code="customDelayCode" />
 		</DemoSection>
 
-		<!-- 场景3: leading vs trailing -->
-		<DemoSection title="Leading vs Trailing" description="控制节流的触发时机">
+		<!-- Scenario 3: Leading vs trailing -->
+		<DemoSection title="Leading vs Trailing" description="Control when throttling triggers">
 			<div class="demo-box">
 				<div class="compare">
 					<div class="compare-item">
@@ -146,7 +146,7 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 							Leading Only
 						</button>
 						<span class="count">Count: {{ leadingCount }}</span>
-						<p class="small-hint">立即触发，不追尾</p>
+						<p class="small-hint">Immediate trigger, no trailing</p>
 					</div>
 					<div class="compare-item">
 						<button
@@ -161,15 +161,15 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 							Trailing Only
 						</button>
 						<span class="count">Count: {{ trailingCount }}</span>
-						<p class="small-hint">延迟触发，不立即</p>
+						<p class="small-hint">Delayed trigger, no immediate</p>
 					</div>
 				</div>
-				<p class="hint">快速点击对比两种模式的区别</p>
+				<p class="hint">Click rapidly to compare the difference between modes</p>
 			</div>
 		</DemoSection>
 
-		<!-- 场景4: 滚动事件 -->
-		<DemoSection title="滚动事件节流" description="限制滚动事件处理频率">
+		<!-- Scenario 4: Scroll events -->
+		<DemoSection title="Scroll Event Throttling" description="Limit scroll event processing frequency">
 			<div class="demo-box">
 				<div
 					v-throttle:100.scroll="handleScroll"
@@ -183,13 +183,13 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 					<span>Scroll events: <strong>{{ scrollCount }}</strong></span>
 					<span>Position: {{ Math.round(scrollPosition) }}px</span>
 				</div>
-				<p class="hint">使用 .scroll 修饰符指定滚动事件，最多每 100ms 触发一次</p>
+				<p class="hint">Use .scroll modifier to specify scroll event, triggers at most every 100ms</p>
 			</div>
 			<CodeBlock :code="scrollCode" />
 		</DemoSection>
 
-		<!-- 场景5: 提交按钮 -->
-		<DemoSection title="实际应用 - 表单提交" description="防止表单重复提交">
+		<!-- Scenario 5: Submit button -->
+		<DemoSection title="Practical Use - Form Submission" description="Prevent duplicate form submissions">
 			<div class="demo-box">
 				<form class="form" @submit.prevent>
 					<input class="input" type="text" placeholder="Username" />
@@ -206,20 +206,20 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 					<span>Submit count: <strong>{{ submitCount }}</strong></span>
 					<span v-if="lastSubmitTime">Last: {{ lastSubmitTime }}</span>
 				</div>
-				<p class="hint">快速点击按钮，2 秒内只会提交一次</p>
+				<p class="hint">Click button rapidly, only one submission within 2 seconds</p>
 			</div>
 		</DemoSection>
 
-		<!-- API 说明 -->
+		<!-- API Reference -->
 		<DemoSection title="API">
 			<CodeBlock :code="optionsCode" />
 			<table class="api-table">
 				<thead>
 					<tr>
-						<th>参数</th>
-						<th>类型</th>
-						<th>默认值</th>
-						<th>说明</th>
+						<th>Parameter</th>
+						<th>Type</th>
+						<th>Default</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -227,25 +227,25 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 						<td>handler</td>
 						<td>Function</td>
 						<td>-</td>
-						<td>节流处理函数（必填）</td>
+						<td>Throttle handler function (required)</td>
 					</tr>
 					<tr>
 						<td>wait</td>
 						<td>Number</td>
 						<td>300</td>
-						<td>节流时间（毫秒）</td>
+						<td>Throttle time (milliseconds)</td>
 					</tr>
 					<tr>
 						<td>leading</td>
 						<td>Boolean</td>
 						<td>true</td>
-						<td>是否在开始时触发</td>
+						<td>Whether to trigger at the start</td>
 					</tr>
 					<tr>
 						<td>trailing</td>
 						<td>Boolean</td>
 						<td>true</td>
-						<td>是否在结束时触发</td>
+						<td>Whether to trigger at the end</td>
 					</tr>
 				</tbody>
 			</table>

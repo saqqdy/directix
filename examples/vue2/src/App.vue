@@ -6,11 +6,11 @@ export default defineComponent({
 	data() {
 		return {
 			demos: [
-				{ path: '/click-outside', name: 'v-click-outside', desc: '点击外部检测' },
-				{ path: '/copy', name: 'v-copy', desc: '复制到剪贴板' },
-				{ path: '/debounce', name: 'v-debounce', desc: '防抖指令' },
-				{ path: '/throttle', name: 'v-throttle', desc: '节流指令' },
-				{ path: '/focus', name: 'v-focus', desc: '自动聚焦' },
+				{ path: '/click-outside', name: 'v-click-outside', desc: 'Click outside detection' },
+				{ path: '/copy', name: 'v-copy', desc: 'Copy to clipboard' },
+				{ path: '/debounce', name: 'v-debounce', desc: 'Debounce directive' },
+				{ path: '/throttle', name: 'v-throttle', desc: 'Throttle directive' },
+				{ path: '/focus', name: 'v-focus', desc: 'Auto focus' },
 			],
 		}
 	},
