@@ -19,24 +19,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
-      # 构建主库
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-
-      # 构建 examples
-      - working-directory: examples/vue3
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - working-directory: examples/vue3
+
+      - name: Build library
         run: pnpm build
+
+      - name: Build docs
+        run: pnpm docs:build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -44,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: examples/vue3/dist
+          path: docs/.vitepress/dist
 
   deploy:
     environment:
