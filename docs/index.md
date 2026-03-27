@@ -27,7 +27,7 @@ features:
     details: 30+ commonly used directives for events, forms, visibility, security and more.
   - icon: 🔄
     title: Vue 2/3 Compatible
-    details: Single codebase supports both Vue 2 and Vue 3. No need for separate packages.
+    details: Built on vue-demi, single codebase supports both Vue 2 and Vue 3. No need for separate packages.
   - icon: 📦
     title: Tree-shakable
     details: Import only what you need. Keep your bundle size minimal.
@@ -37,7 +37,7 @@ features:
   - icon: 🚀
     title: SSR Friendly
     details: Works with Nuxt and other SSR frameworks. No hydration mismatches.
-  - icon: 🎨
-    title: Zero Dependencies
-    details: Lightweight with no external dependencies. Just pure Vue directives.
+  - icon: 📦
+    title: Multiple Formats
+    details: ESM, CJS, and IIFE (CDN) formats available. Use it anywhere.
 ---

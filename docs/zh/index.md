@@ -27,7 +27,7 @@ features:
     details: 提供 30+ 常用指令，涵盖事件、表单、可见性、安全等多个场景。
   - icon: 🔄
     title: Vue 2/3 兼容
-    details: 单一代码库同时支持 Vue 2 和 Vue 3，无需单独安装不同包。
+    details: 基于 vue-demi，单一代码库同时支持 Vue 2 和 Vue 3，无需单独安装不同包。
   - icon: 📦
     title: Tree-shakable
     details: 按需引入，只打包你使用的指令，保持最小体积。
@@ -37,7 +37,7 @@ features:
   - icon: 🚀
     title: SSR 友好
     details: 支持 Nuxt 等 SSR 框架，无水合不匹配问题。
-  - icon: 🎨
-    title: 零依赖
-    details: 轻量级，无外部依赖，纯 Vue 指令实现。
+  - icon: 📦
+    title: 多格式支持
+    details: 提供 ESM、CJS 和 IIFE (CDN) 格式，随处可用。
 ---
