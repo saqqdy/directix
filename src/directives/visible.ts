@@ -190,7 +190,7 @@ function applyVisibility(el: HTMLElement, state: VisibleState, isVisible: boolea
 
 			if (hasTransition) {
 				// Wait for transition to complete
-				const handleTransitionEnd = (e: TransitionEvent) => {
+				const handleTransitionEnd = (e: TransitionEvent): void => {
 					if (e.target === el && (e.propertyName === 'opacity' || e.propertyName === 'transform')) {
 						if (!state.isVisible) {
 							el.style.visibility = 'hidden'
