@@ -5,6 +5,7 @@ const routes: RouteConfig[] = [
 		path: '/',
 		redirect: '/click-outside',
 	},
+	// Event directives
 	{
 		path: '/click-outside',
 		name: 'ClickOutside',
@@ -29,6 +30,87 @@ const routes: RouteConfig[] = [
 		path: '/focus',
 		name: 'Focus',
 		component: () => import('@/demos/focus.vue'),
+	},
+	// Visibility directives
+	{
+		path: '/lazy',
+		name: 'Lazy',
+		component: () => import('@/demos/lazy.vue'),
+	},
+	{
+		path: '/intersect',
+		name: 'Intersect',
+		component: () => import('@/demos/intersect.vue'),
+	},
+	{
+		path: '/visible',
+		name: 'Visible',
+		component: () => import('@/demos/visible.vue'),
+	},
+	{
+		path: '/loading',
+		name: 'Loading',
+		component: () => import('@/demos/loading.vue'),
+	},
+	// Scroll directives
+	{
+		path: '/scroll',
+		name: 'Scroll',
+		component: () => import('@/demos/scroll.vue'),
+	},
+	{
+		path: '/infinite-scroll',
+		name: 'InfiniteScroll',
+		component: () => import('@/demos/infinite-scroll.vue'),
+	},
+	{
+		path: '/sticky',
+		name: 'Sticky',
+		component: () => import('@/demos/sticky.vue'),
+	},
+	// Event interaction directives
+	{
+		path: '/long-press',
+		name: 'LongPress',
+		component: () => import('@/demos/long-press.vue'),
+	},
+	{
+		path: '/hover',
+		name: 'Hover',
+		component: () => import('@/demos/hover.vue'),
+	},
+	{
+		path: '/ripple',
+		name: 'Ripple',
+		component: () => import('@/demos/ripple.vue'),
+	},
+	// Form directives
+	{
+		path: '/mask',
+		name: 'Mask',
+		component: () => import('@/demos/mask.vue'),
+	},
+	// Security directives
+	{
+		path: '/permission',
+		name: 'Permission',
+		component: () => import('@/demos/permission.vue'),
+	},
+	{
+		path: '/sanitize',
+		name: 'Sanitize',
+		component: () => import('@/demos/sanitize.vue'),
+	},
+	// Observer directives
+	{
+		path: '/resize',
+		name: 'Resize',
+		component: () => import('@/demos/resize.vue'),
+	},
+	{
+		path: '/mutation',
+		name: 'Mutation',
+		component: () => import('@/demos/mutation.vue'),
 	},
 ]
 

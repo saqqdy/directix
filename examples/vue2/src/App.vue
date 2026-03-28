@@ -6,11 +6,33 @@ export default defineComponent({
 	data() {
 		return {
 			demos: [
+				// Event directives
 				{ path: '/click-outside', name: 'v-click-outside', desc: 'Click outside detection' },
 				{ path: '/copy', name: 'v-copy', desc: 'Copy to clipboard' },
 				{ path: '/debounce', name: 'v-debounce', desc: 'Debounce directive' },
 				{ path: '/throttle', name: 'v-throttle', desc: 'Throttle directive' },
 				{ path: '/focus', name: 'v-focus', desc: 'Auto focus' },
+				// Visibility directives
+				{ path: '/lazy', name: 'v-lazy', desc: 'Lazy loading images' },
+				{ path: '/intersect', name: 'v-intersect', desc: 'Intersection observer' },
+				{ path: '/visible', name: 'v-visible', desc: 'Visibility control' },
+				{ path: '/loading', name: 'v-loading', desc: 'Loading overlay' },
+				// Scroll directives
+				{ path: '/scroll', name: 'v-scroll', desc: 'Scroll event handler' },
+				{ path: '/infinite-scroll', name: 'v-infinite-scroll', desc: 'Infinite scrolling' },
+				{ path: '/sticky', name: 'v-sticky', desc: 'Sticky positioning' },
+				// Event interaction directives
+				{ path: '/long-press', name: 'v-long-press', desc: 'Long press detection' },
+				{ path: '/hover', name: 'v-hover', desc: 'Hover state tracking' },
+				{ path: '/ripple', name: 'v-ripple', desc: 'Material ripple effect' },
+				// Form directives
+				{ path: '/mask', name: 'v-mask', desc: 'Input masking' },
+				// Security directives
+				{ path: '/permission', name: 'v-permission', desc: 'Permission control' },
+				{ path: '/sanitize', name: 'v-sanitize', desc: 'HTML sanitization' },
+				// Observer directives
+				{ path: '/resize', name: 'v-resize', desc: 'Resize observer' },
+				{ path: '/mutation', name: 'v-mutation', desc: 'Mutation observer' },
 			],
 		}
 	},
