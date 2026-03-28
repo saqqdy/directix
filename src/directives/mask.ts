@@ -1,93 +1,47 @@
 import { defineDirective, isBrowser } from '@directix/core'
 import { off, on } from '@directix/shared'
 
-/**
- * Mask token types
- */
-interface MaskToken {
-	/** Character pattern */
-	pattern: RegExp
-	/** Placeholder character */
-	placeholder: string
-	/** Whether the character is optional */
-	optional?: boolean
-}
+const STATE_KEY = '__mask' as const
 
 /**
  * Mask directive options
  */
 export interface MaskOptions {
-	/**
-	 * Mask pattern
-	 * - Use '#' for digit
-	 * - Use 'A' for letter
-	 * - Use 'N' for alphanumeric
-	 * - Use 'X' for any character
-	 * - Use other characters as literals
-	 */
+	/** Mask pattern: # digit, A letter, N alphanumeric, X any, others as literals */
 	mask: string
-
-	/**
-	 * Placeholder character for unfilled positions
-	 * @default '_'
-	 */
+	/** Placeholder character @default '_' */
 	placeholder?: string
-
-	/**
-	 * Whether to show mask placeholder on focus
-	 * @default true
-	 */
+	/** Show mask placeholder on focus @default true */
 	showPlaceholder?: boolean
-
-	/**
-	 * Whether to show mask on blur (even if empty)
-	 * @default false
-	 */
+	/** Show mask on blur @default false */
 	showMaskOnBlur?: boolean
-
-	/**
-	 * Whether to clear mask on blur if incomplete
-	 * @default false
-	 */
+	/** Clear incomplete on blur @default false */
 	clearIncomplete?: boolean
-
-	/**
-	 * Whether to disable
-	 * @default false
-	 */
+	/** Disable @default false */
 	disabled?: boolean
-
-	/**
-	 * Callback when value changes
-	 */
+	/** Callback when value changes */
 	onChange?: (value: string, rawValue: string) => void
-
-	/**
-	 * Callback when mask is complete
-	 */
+	/** Callback when mask is complete */
 	onComplete?: (value: string) => void
 }
 
-/**
- * Directive binding value type
- */
 export type MaskBinding = string | MaskOptions
 
-/**
- * Element state storage
- */
-interface MaskState {
-	options: MaskOptions
-	inputHandler: (e: Event) => void
-	focusHandler: (e: Event) => void
-	blurHandler: (e: Event) => void
-	tokens: MaskToken[]
-	lastValue: string
+interface MaskToken {
+	pattern: RegExp
+	placeholder: string
+	isLiteral: boolean
 }
 
-/**
- * Token patterns
- */
+interface MaskState {
+	options: MaskOptions
+	tokens: MaskToken[]
+	placeholder: string
+	inputHandler: (e: Event) => void
+	focusHandler: () => void
+	blurHandler: () => void
+}
+
 const TOKEN_PATTERNS: Record<string, RegExp> = {
 	'#': /\d/,
 	A: /[A-Za-z]/,
@@ -95,57 +49,56 @@ const TOKEN_PATTERNS: Record<string, RegExp> = {
 	X: /./,
 }
 
-/**
- * Parse mask string into tokens
- */
 function parseMask(mask: string, placeholder: string): MaskToken[] {
-	const tokens: MaskToken[] = []
+	return [...mask].map(char => {
+		const pattern = TOKEN_PATTERNS[char]
 
-	for (const char of mask) {
-		if (TOKEN_PATTERNS[char]) {
-			tokens.push({
-				pattern: TOKEN_PATTERNS[char],
-				placeholder,
-			})
+		return pattern ? { pattern, placeholder, isLiteral: false } : { pattern: new RegExp(`\\${char}`), placeholder: char, isLiteral: true }
+	})
+}
+
+function normalizeOptions(binding: MaskBinding | undefined): MaskOptions {
+	if (typeof binding === 'string') return { mask: binding, placeholder: '_', showPlaceholder: true }
+	if (!binding?.mask) throw new Error('[Directix] v-mask: mask is required')
+
+	return { placeholder: '_', showPlaceholder: true, showMaskOnBlur: false, clearIncomplete: false, disabled: false, ...binding }
+}
+
+function isInput(el: HTMLElement): el is HTMLInputElement | HTMLTextAreaElement {
+	return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+}
+
+/**
+ * Format value with mask
+ */
+function formatValue(value: string, tokens: MaskToken[], placeholder: string, showPlaceholder: boolean): string {
+	let result = '',
+		valueIndex = 0
+
+	for (const token of tokens) {
+		if (valueIndex >= value.length) {
+			result += token.isLiteral ? token.placeholder : (showPlaceholder ? placeholder : '')
+			continue
+		}
+
+		const inputChar = value[valueIndex]
+
+		if (token.isLiteral) {
+			if (inputChar === token.placeholder) valueIndex++
+			result += token.placeholder
+		} else if (token.pattern.test(inputChar)) {
+			result += inputChar
+			valueIndex++
+		} else if (inputChar === placeholder) {
+			result += showPlaceholder ? placeholder : ''
+			valueIndex++
 		} else {
-			// Literal character
-			tokens.push({
-				pattern: new RegExp(`\\${char}`),
-				placeholder: char,
-			})
+			valueIndex++
+			// Re-check this token with next input char - need to decrement in loop
 		}
 	}
 
-	return tokens
-}
-
-/**
- * Normalize options
- */
-function normalizeOptions(binding: MaskBinding | undefined): MaskOptions {
-	if (typeof binding === 'string') {
-		return { mask: binding, placeholder: '_', showPlaceholder: true }
-	}
-
-	if (!binding || !binding.mask) {
-		throw new Error('[Directix] v-mask: mask is required')
-	}
-
-	return {
-		placeholder: '_',
-		showPlaceholder: true,
-		showMaskOnBlur: false,
-		clearIncomplete: false,
-		disabled: false,
-		...binding,
-	}
-}
-
-/**
- * Check if element is input or textarea
- */
-function isInput(el: HTMLElement): el is HTMLInputElement | HTMLTextAreaElement {
-	return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+	return result
 }
 
 /**
@@ -155,10 +108,8 @@ function getRawValue(value: string, tokens: MaskToken[], placeholder: string): s
 	let raw = ''
 
 	for (let i = 0; i < value.length && i < tokens.length; i++) {
-		if (tokens[i].placeholder === placeholder) {
-			if (value[i] !== placeholder) {
-				raw += value[i]
-			}
+		if (!tokens[i].isLiteral && value[i] !== placeholder) {
+			raw += value[i]
 		}
 	}
 
@@ -166,43 +117,12 @@ function getRawValue(value: string, tokens: MaskToken[], placeholder: string): s
 }
 
 /**
- * Format value with mask
- */
-function formatValue(
-	value: string,
-	tokens: MaskToken[],
-	placeholder: string,
-	showPlaceholder: boolean,
-): string {
-	let result = '',
-		valueIndex = 0
-
-	for (let i = 0; i < tokens.length; i++) {
-		const token = tokens[i]
-
-		if (valueIndex < value.length && token.pattern.test(value[valueIndex])) {
-			result += value[valueIndex]
-			valueIndex++
-		} else if (token.placeholder === placeholder) {
-			result += showPlaceholder ? placeholder : ''
-		} else {
-			// Literal character
-			result += token.placeholder
-		}
-	}
-
-	return result
-}
-
-/**
  * Check if mask is complete
  */
 function isComplete(value: string, tokens: MaskToken[], placeholder: string): boolean {
 	for (let i = 0; i < tokens.length; i++) {
-		if (tokens[i].placeholder === placeholder) {
-			if (i >= value.length || value[i] === placeholder) {
-				return false
-			}
+		if (!tokens[i].isLiteral && (i >= value.length || value[i] === placeholder)) {
+			return false
 		}
 	}
 
@@ -210,27 +130,32 @@ function isComplete(value: string, tokens: MaskToken[], placeholder: string): bo
 }
 
 /**
+ * Calculate cursor position, skipping literals
+ */
+function getCursorPos(tokens: MaskToken[], rawCursorPos: number): number {
+	let pos = rawCursorPos
+
+	while (pos < tokens.length && tokens[pos].isLiteral) {
+		pos++
+	}
+
+	return Math.min(pos, tokens.length)
+}
+
+/**
  * v-mask directive
  *
  * @example
  * ```vue
- * <template>
- *   <input v-mask="'###-##-####'" placeholder="SSN" />
- *   <input v-mask="'(###) ###-####'" placeholder="Phone" />
- *   <input v-mask="{ mask: '##/##/####', placeholder: 'dd/mm/yyyy' }" />
- * </template>
+ * <input v-mask="'###-##-####'" placeholder="SSN" />
+ * <input v-mask="'(###) ###-####'" placeholder="Phone" />
+ * <input v-mask="{ mask: '##/##/####' }" placeholder="Date" />
  * ```
  */
 export const vMask = defineDirective<MaskBinding, HTMLInputElement>({
 	name: 'mask',
 	ssr: false,
-	defaults: {
-		placeholder: '_',
-		showPlaceholder: true,
-		showMaskOnBlur: false,
-		clearIncomplete: false,
-		disabled: false,
-	},
+	defaults: { placeholder: '_', showPlaceholder: true, showMaskOnBlur: false, clearIncomplete: false, disabled: false },
 
 	mounted(el, binding) {
 		if (!isInput(el)) {
@@ -243,95 +168,69 @@ export const vMask = defineDirective<MaskBinding, HTMLInputElement>({
 
 		if (options.disabled || !isBrowser()) return
 
-		const tokens = parseMask(options.mask, options.placeholder || '_')
+		const placeholder = options.placeholder || '_'
+		const tokens = parseMask(options.mask, placeholder)
 
-		const state: MaskState = {
-			options,
-			tokens,
-			lastValue: el.value,
-			inputHandler: (e: Event) => {
-				const target = e.target as HTMLInputElement
-				const rawValue = target.value
+		const inputHandler = (e: Event) => {
+			const target = e.target as HTMLInputElement
+			const rawValue = target.value
+			const cursorPos = target.selectionStart || 0
 
-				// Format value
-				const formatted = formatValue(
-					rawValue,
-					state.tokens,
-					state.options.placeholder || '_',
-					state.options.showPlaceholder ?? true,
-				)
+			const formatted = formatValue(rawValue, tokens, placeholder, options.showPlaceholder ?? true)
 
-				// Update input value
+			if (formatted !== rawValue) {
 				target.value = formatted
+				target.setSelectionRange(getCursorPos(tokens, cursorPos), getCursorPos(tokens, cursorPos))
+				target.dispatchEvent(new Event('input', { bubbles: true }))
 
-				// Get raw value
-				const raw = getRawValue(formatted, state.tokens, state.options.placeholder || '_')
+				return
+			}
 
-				// Trigger callback
-				state.options.onChange?.(formatted, raw)
-
-				// Check if complete
-				if (isComplete(formatted, state.tokens, state.options.placeholder || '_')) {
-					state.options.onComplete?.(formatted)
-				}
-
-				state.lastValue = formatted
-			},
-			focusHandler: () => {
-				if (!el.value && state.options.showPlaceholder) {
-					el.value = formatValue('', state.tokens, state.options.placeholder || '_', true)
-				}
-			},
-			blurHandler: () => {
-				if (!state.options.showMaskOnBlur && !isComplete(el.value, state.tokens, state.options.placeholder || '_')) {
-					if (state.options.clearIncomplete) {
-						el.value = ''
-					}
-				}
-			},
+			options.onChange?.(formatted, getRawValue(formatted, tokens, placeholder))
+			if (isComplete(formatted, tokens, placeholder)) {
+				options.onComplete?.(formatted)
+			}
 		}
 
-		// Store state
-		;(el as any).__mask = state
+		const focusHandler = () => {
+			if (!el.value && options.showPlaceholder) {
+				el.value = formatValue('', tokens, placeholder, true)
+			}
+		}
 
-		// Bind events
-		on(el, 'input', state.inputHandler)
-		on(el, 'focus', state.focusHandler)
-		on(el, 'blur', state.blurHandler)
+		const blurHandler = () => {
+			if (!options.showMaskOnBlur && !isComplete(el.value, tokens, placeholder) && options.clearIncomplete) {
+				el.value = ''
+			}
+		}
 
-		// Format initial value
+		on(el, 'input', inputHandler)
+		on(el, 'focus', focusHandler)
+		on(el, 'blur', blurHandler)
+
+		;(el as any)[STATE_KEY] = { options, tokens, placeholder, inputHandler, focusHandler, blurHandler }
+
 		if (el.value) {
-			const formatted = formatValue(
-				el.value,
-				tokens,
-				options.placeholder || '_',
-				options.showPlaceholder ?? true,
-			)
-
-			el.value = formatted
+			el.value = formatValue(el.value, tokens, placeholder, options.showPlaceholder ?? true)
 		}
 	},
 
 	updated(el, binding) {
-		const state: MaskState = (el as any).__mask
+		const state: MaskState = (el as any)[STATE_KEY]
 
 		if (!state) return
-
 		state.options = normalizeOptions(binding.value)
-		state.tokens = parseMask(state.options.mask, state.options.placeholder || '_')
+		state.tokens = parseMask(state.options.mask, state.placeholder)
 	},
 
 	unmounted(el) {
-		const state: MaskState = (el as any).__mask
+		const state: MaskState = (el as any)[STATE_KEY]
 
 		if (!state) return
-
-		// Unbind events
 		off(el, 'input', state.inputHandler)
 		off(el, 'focus', state.focusHandler)
 		off(el, 'blur', state.blurHandler)
-
-		delete (el as any).__mask
+		delete (el as any)[STATE_KEY]
 	},
 })
 
