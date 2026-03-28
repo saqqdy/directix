@@ -40,12 +40,11 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			external: ['vue', 'vue-demi'],
+			external: ['vue'],
 			output: {
 				banner,
 				globals: {
-					vue: 'VueDemi',
-					'vue-demi': 'VueDemi',
+					vue: 'Vue',
 				},
 				extend: true,
 			},
