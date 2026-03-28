@@ -1,68 +1,34 @@
 import { defineDirective, isBrowser } from '@directix/core'
 import { getScrollParent, off, on } from '@directix/shared'
 
+const STATE_KEY = '__sticky' as const
+
 /**
  * Sticky directive options
  */
 export interface StickyOptions {
-	/**
-	 * Top offset when sticky
-	 * @default 0
-	 */
+	/** Top offset when sticky @default 0 */
 	top?: number | string
-
-	/**
-	 * Bottom offset when sticky
-	 */
+	/** Bottom offset when sticky */
 	bottom?: number | string
-
-	/**
-	 * Z-index when sticky
-	 * @default 100
-	 */
+	/** Z-index when sticky @default 100 */
 	zIndex?: number
-
-	/**
-	 * CSS class to add when sticky
-	 * @default 'v-sticky--fixed'
-	 */
+	/** CSS class to add when sticky @default 'v-sticky--fixed' */
 	stickyClass?: string
-
-	/**
-	 * Whether to disable
-	 * @default false
-	 */
+	/** Whether to disable @default false */
 	disabled?: boolean
-
-	/**
-	 * Callback when sticky state changes
-	 */
+	/** Callback when sticky state changes */
 	onChange?: (isSticky: boolean) => void
-
-	/**
-	 * Custom scroll container
-	 */
+	/** Custom scroll container */
 	container?: string | Element | null
 }
 
-/**
- * Directive binding value type
- */
 export type StickyBinding = boolean | number | StickyOptions
 
-/**
- * Element state storage
- */
 interface StickyState {
 	options: StickyOptions
 	placeholder: HTMLDivElement | null
-	originalStyles: {
-		position: string
-		top: string
-		bottom: string
-		zIndex: string
-		width: string
-	}
+	originalStyles: { position: string; top: string; bottom: string; zIndex: string; width: string }
 	isSticky: boolean
 	scrollHandler: () => void
 	resizeHandler: () => void
@@ -73,151 +39,52 @@ interface StickyState {
  * Normalize options
  */
 function normalizeOptions(binding: StickyBinding | undefined): StickyOptions {
-	if (binding === false) {
-		return { disabled: true, top: 0, zIndex: 100 }
-	}
+	if (binding === false) return { disabled: true, top: 0, zIndex: 100 }
+	if (typeof binding === 'number') return { top: binding, zIndex: 100 }
 
-	if (typeof binding === 'number') {
-		return { top: binding, zIndex: 100 }
-	}
-
-	const base: StickyOptions = {
+	return {
 		top: 0,
 		zIndex: 100,
 		stickyClass: 'v-sticky--fixed',
 		disabled: false,
+		...(binding && typeof binding === 'object' ? binding : {}),
 	}
-
-	return binding && typeof binding === 'object' ? { ...base, ...binding } : base
 }
 
 /**
- * Parse offset value
+ * Parse offset value to CSS string
  */
 function parseOffset(value: number | string | undefined): string {
 	if (value === undefined) return '0'
 
-	if (typeof value === 'number') {
-		return `${value}px`
-	}
-
-	return value
+	return typeof value === 'number' ? `${value}px` : value
 }
 
 /**
- * v-sticky directive
- *
- * @example
- * ```vue
- * <template>
- *   <div v-sticky>Sticky header</div>
- *   <div v-sticky="50">Sticky with 50px top offset</div>
- *   <div v-sticky="{ top: 60, zIndex: 1000, stickyClass: 'is-sticky' }">Custom sticky</div>
- * </template>
- * ```
+ * Get scroll container for element
  */
-export const vSticky = defineDirective<StickyBinding, HTMLElement>({
-	name: 'sticky',
-	ssr: false,
-	defaults: {
-		top: 0,
-		zIndex: 100,
-		stickyClass: 'v-sticky--fixed',
-		disabled: false,
-	},
-
-	mounted(el, binding) {
-		const options = normalizeOptions(binding.value)
-
-		if (options.disabled || !isBrowser()) return
-
-		// Determine scroll container
-		let container: Element | Window
-
-		if (options.container) {
-			if (typeof options.container === 'string') {
-				const found = document.querySelector(options.container)
-
-				container = found || getScrollParent(el)
-			} else {
-				container = options.container
-			}
-		} else {
-			container = getScrollParent(el)
+function getScrollContainer(el: HTMLElement, customContainer?: string | Element | null): Element | Window {
+	if (customContainer) {
+		if (typeof customContainer === 'string') {
+			return document.querySelector(customContainer) || getScrollParent(el)
 		}
 
-		// Store original styles
-		const originalStyles = {
-			position: el.style.position,
-			top: el.style.top,
-			bottom: el.style.bottom,
-			zIndex: el.style.zIndex,
-			width: el.style.width,
+		return customContainer
+	}
+
+	// Check if parent element is scrollable
+	const parent = el.parentElement
+
+	if (parent) {
+		const { overflow, overflowX, overflowY } = getComputedStyle(parent)
+
+		if (/(auto|scroll)/.test(overflow + overflowX + overflowY)) {
+			return parent
 		}
+	}
 
-		const state: StickyState = {
-			options,
-			placeholder: null,
-			originalStyles,
-			isSticky: false,
-			container,
-			scrollHandler: () => checkSticky(el, state),
-			resizeHandler: () => checkSticky(el, state),
-		}
-
-		// Add base class
-		el.classList.add('v-sticky')
-
-		// Store state
-		;(el as any).__sticky = state
-
-		// Bind events
-		on(container, 'scroll', state.scrollHandler, { passive: true })
-		on(window, 'resize', state.resizeHandler, { passive: true })
-
-		// Initial check
-		checkSticky(el, state)
-	},
-
-	updated(el, binding) {
-		const state: StickyState = (el as any).__sticky
-
-		if (!state) return
-
-		state.options = normalizeOptions(binding.value)
-
-		// Re-check sticky state
-		checkSticky(el, state)
-	},
-
-	unmounted(el) {
-		const state: StickyState = (el as any).__sticky
-
-		if (!state) return
-
-		// Remove placeholder
-		if (state.placeholder && state.placeholder.parentNode) {
-			state.placeholder.parentNode.removeChild(state.placeholder)
-		}
-
-		// Restore original styles
-		el.style.position = state.originalStyles.position
-		el.style.top = state.originalStyles.top
-		el.style.bottom = state.originalStyles.bottom
-		el.style.zIndex = state.originalStyles.zIndex
-		el.style.width = state.originalStyles.width
-
-		// Remove classes
-		el.classList.remove('v-sticky')
-		el.classList.remove(state.options.stickyClass || 'v-sticky--fixed')
-
-		// Unbind events
-		off(state.container, 'scroll', state.scrollHandler)
-		off(window, 'resize', state.resizeHandler)
-
-		delete (el as any).__sticky
-	},
-})
+	return getScrollParent(el)
+}
 
 /**
  * Check and update sticky state
@@ -229,15 +96,18 @@ function checkSticky(el: HTMLElement, state: StickyState): void {
 		return
 	}
 
-	const rect = el.getBoundingClientRect()
 	const topOffset = Number.parseFloat(parseOffset(state.options.top))
-	const bottomOffset = state.options.bottom ? Number.parseFloat(parseOffset(state.options.bottom)) : 0
+	const containerRect = state.container === window ? { top: 0 } : (state.container as Element).getBoundingClientRect()
 
-	// Check if element should be sticky
-	const shouldSticky = rect.top <= topOffset
+	// Use placeholder position when sticky, otherwise use element position
+	const referenceEl = state.placeholder || el
+	const rect = referenceEl.getBoundingClientRect()
+	const elementTopRelativeToContainer = rect.top - containerRect.top
+
+	const shouldSticky = elementTopRelativeToContainer <= topOffset
 
 	if (shouldSticky && !state.isSticky) {
-		setSticky(el, state, topOffset, bottomOffset)
+		setSticky(el, state, topOffset, containerRect.top)
 	} else if (!shouldSticky && state.isSticky) {
 		unsetSticky(el, state)
 	}
@@ -246,29 +116,22 @@ function checkSticky(el: HTMLElement, state: StickyState): void {
 /**
  * Set element as sticky
  */
-function setSticky(
-	el: HTMLElement,
-	state: StickyState,
-	_topOffset: number,
-	_bottomOffset: number,
-): void {
+function setSticky(el: HTMLElement, state: StickyState, topOffset: number, containerTop: number): void {
 	state.isSticky = true
 
 	// Create placeholder to maintain layout
 	const placeholder = document.createElement('div')
 
-	placeholder.style.cssText = `
-    width: ${el.offsetWidth}px;
-    height: ${el.offsetHeight}px;
-    display: ${getComputedStyle(el).display};
-  `
-
+	placeholder.style.cssText = `width:${el.offsetWidth}px;height:${el.offsetHeight}px`
 	el.parentNode?.insertBefore(placeholder, el)
 	state.placeholder = placeholder
 
+	// Calculate fixed top position relative to viewport
+	const fixedTop = state.container === window ? topOffset : containerTop + topOffset
+
 	// Apply sticky styles
 	el.style.position = 'fixed'
-	el.style.top = parseOffset(state.options.top)
+	el.style.top = `${fixedTop}px`
 	el.style.zIndex = String(state.options.zIndex || 100)
 	el.style.width = `${el.offsetWidth}px`
 
@@ -276,15 +139,8 @@ function setSticky(
 		el.style.bottom = parseOffset(state.options.bottom)
 	}
 
-	// Add sticky class
-	if (state.options.stickyClass) {
-		el.classList.add(state.options.stickyClass)
-	}
-
-	// Dispatch custom event
+	state.options.stickyClass && el.classList.add(state.options.stickyClass)
 	el.dispatchEvent(new CustomEvent('sticky:change', { detail: { isSticky: true } }))
-
-	// Trigger callback
 	state.options.onChange?.(true)
 }
 
@@ -297,28 +153,86 @@ function unsetSticky(el: HTMLElement, state: StickyState): void {
 	state.isSticky = false
 
 	// Remove placeholder
-	if (state.placeholder && state.placeholder.parentNode) {
-		state.placeholder.parentNode.removeChild(state.placeholder)
-		state.placeholder = null
-	}
+	state.placeholder?.parentNode?.removeChild(state.placeholder)
+	state.placeholder = null
 
 	// Restore original styles
-	el.style.position = state.originalStyles.position
-	el.style.top = state.originalStyles.top
-	el.style.bottom = state.originalStyles.bottom
-	el.style.zIndex = state.originalStyles.zIndex
-	el.style.width = state.originalStyles.width
+	Object.assign(el.style, state.originalStyles)
 
-	// Remove sticky class
-	if (state.options.stickyClass) {
-		el.classList.remove(state.options.stickyClass)
-	}
-
-	// Dispatch custom event
+	state.options.stickyClass && el.classList.remove(state.options.stickyClass)
 	el.dispatchEvent(new CustomEvent('sticky:change', { detail: { isSticky: false } }))
-
-	// Trigger callback
 	state.options.onChange?.(false)
 }
+
+/**
+ * v-sticky directive
+ *
+ * @example
+ * ```vue
+ * <div v-sticky>Sticky header</div>
+ * <div v-sticky="50">Sticky with 50px top offset</div>
+ * <div v-sticky="{ top: 60, zIndex: 1000 }">Custom sticky</div>
+ * ```
+ */
+export const vSticky = defineDirective<StickyBinding, HTMLElement>({
+	name: 'sticky',
+	ssr: false,
+	defaults: { top: 0, zIndex: 100, stickyClass: 'v-sticky--fixed', disabled: false },
+
+	mounted(el, binding) {
+		const options = normalizeOptions(binding.value)
+
+		if (options.disabled || !isBrowser()) return
+
+		const container = getScrollContainer(el, options.container)
+
+		const state: StickyState = {
+			options,
+			placeholder: null,
+			originalStyles: {
+				position: el.style.position,
+				top: el.style.top,
+				bottom: el.style.bottom,
+				zIndex: el.style.zIndex,
+				width: el.style.width,
+			},
+			isSticky: false,
+			container,
+			scrollHandler: () => checkSticky(el, state),
+			resizeHandler: () => checkSticky(el, state),
+		}
+
+		el.classList.add('v-sticky')
+		;(el as any)[STATE_KEY] = state
+
+		on(container, 'scroll', state.scrollHandler, { passive: true })
+		on(window, 'resize', state.resizeHandler, { passive: true })
+		checkSticky(el, state)
+	},
+
+	updated(el, binding) {
+		const state: StickyState = (el as any)[STATE_KEY]
+
+		if (!state) return
+		state.options = normalizeOptions(binding.value)
+		checkSticky(el, state)
+	},
+
+	unmounted(el) {
+		const state: StickyState = (el as any)[STATE_KEY]
+
+		if (!state) return
+
+		state.placeholder?.parentNode?.removeChild(state.placeholder)
+
+		Object.assign(el.style, state.originalStyles)
+		el.classList.remove('v-sticky', state.options.stickyClass || 'v-sticky--fixed')
+
+		off(state.container, 'scroll', state.scrollHandler)
+		off(window, 'resize', state.resizeHandler)
+
+		delete (el as any)[STATE_KEY]
+	},
+})
 
 export default vSticky
