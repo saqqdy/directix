@@ -4,8 +4,8 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
 	name: 'SanitizeDemo',
 	setup() {
-		const userInput1 = ref('<p>Safe paragraph</p><scr' + 'ipt>alert("xss")</scr' + 'ipt>')
-		const userInput2 = ref('<b>Bold</b> and <i>italic</i> and <scr' + 'ipt>alert("xss")</scr' + 'ipt>')
+		const userInput1 = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script>`)
+		const userInput2 = ref(`<b>Bold</b> and <i>italic</i> and <script>alert("xss")<\/script>`)
 		const userInput3 = ref('<p onclick="alert(1)">Click me</p><a href="javascript:void(0)">Link</a>')
 
 		const basicCode = `<div v-sanitize v-html="userContent"></div>`
