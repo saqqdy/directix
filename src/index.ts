@@ -1,11 +1,27 @@
 import type { App, Directive, Plugin } from 'vue'
 import type { DirectiveInstallOptions } from '@directix/core'
+import { setVueVersion } from '@directix/core'
 import {
 	vClickOutside,
 	vCopy,
 	vDebounce,
 	vFocus,
+	vHover,
+	vInfiniteScroll,
+	vIntersect,
+	vLazy,
+	vLoading,
+	vLongPress,
+	vMask,
+	vMutation,
+	vPermission,
+	vResize,
+	vRipple,
+	vSanitize,
+	vScroll,
+	vSticky,
 	vThrottle,
+	vVisible,
 } from './directives'
 
 // Export all directives
@@ -44,12 +60,58 @@ const allDirectives: Record<string, Directive> = {
 	debounce: vDebounce,
 	throttle: vThrottle,
 	focus: vFocus,
+	lazy: vLazy,
+	intersect: vIntersect,
+	visible: vVisible,
+	loading: vLoading,
+	scroll: vScroll,
+	'infinite-scroll': vInfiniteScroll,
+	sticky: vSticky,
+	'long-press': vLongPress,
+	hover: vHover,
+	ripple: vRipple,
+	mask: vMask,
+	permission: vPermission,
+	sanitize: vSanitize,
+	resize: vResize,
+	mutation: vMutation,
 }
 
 /**
  * Install all directives
  */
-const install = (app: App, options: DirectiveInstallOptions = {}): void => {
+const install = (app: App | any, options: DirectiveInstallOptions = {}): void => {
+	// Detect Vue version from app instance
+	// Vue 2: app is the Vue constructor (has version static property, has directive static method)
+	// Vue 3: app is an app instance (has config property, version on app.constructor or as _context)
+
+	let vueVersion: 2 | 3 | null = null
+
+	// Check if it's Vue 2 constructor
+	if (typeof app === 'function' && app.version?.startsWith('2')) {
+		vueVersion = 2
+	} else if (app?.config && app?.version?.startsWith('3')) {
+		// Check if it's Vue 3 app instance
+		vueVersion = 3
+	} else if (typeof app?.directive === 'function' && typeof app?.mixin === 'function' && app.version?.startsWith('2')) {
+		// Check for Vue 2 static methods (directive, component, mixin, etc.)
+		vueVersion = 2
+	} else if (typeof window !== 'undefined') {
+		// Fallback: check global Vue
+		const win = window as any
+
+		if (win.Vue?.version?.startsWith('2')) {
+			vueVersion = 2
+		} else if (win.Vue?.version?.startsWith('3')) {
+			vueVersion = 3
+		}
+	}
+
+	// Set the detected version
+	if (vueVersion) {
+		setVueVersion(vueVersion)
+	}
+
 	const { directives, all = false } = options
 
 	if (all || !directives) {

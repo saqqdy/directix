@@ -1,5 +1,5 @@
 import type { Directive } from 'vue'
-import { isSSR, isVue2 } from './env'
+import { getVueVersion, isSSR } from './env'
 import { createVue2Directive } from './adapter/vue2'
 import { createVue3Directive } from './adapter/vue3'
 import type { DirectiveBinding, DirectiveDefinition, DirectiveHooks } from './types'
@@ -18,8 +18,8 @@ export function defineDirective<T = any, B extends Element = Element>(
 	if (isSSR() && !ssr) {
 		if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'test') {
 			console.warn(
-        `[Directix] Directive "${name}" is not compatible with SSR. ` +
-        'It will be a no-op on the server side.',
+				`[Directix] Directive "${name}" is not compatible with SSR. ` +
+				'It will be a no-op on the server side.',
 			)
 		}
 
@@ -29,26 +29,58 @@ export function defineDirective<T = any, B extends Element = Element>(
 	// Wrap hooks with default values
 	const wrappedHooks: DirectiveHooks<T, B> = {
 		mounted: hooks.mounted ? (el, binding, vnode) => {
-			const mergedBinding = applyDefaults(binding, defaults)
-
-			hooks.mounted!(el, mergedBinding, vnode)
+			hooks.mounted!(el, applyDefaults(binding, defaults), vnode)
 		} : undefined,
 
 		updated: hooks.updated ? (el, binding, vnode, prevBinding, prevVnode) => {
-			const mergedBinding = applyDefaults(binding, defaults)
-
-			hooks.updated!(el, mergedBinding, vnode, prevBinding, prevVnode)
+			hooks.updated!(el, applyDefaults(binding, defaults), vnode, prevBinding, prevVnode)
 		} : undefined,
 
 		unmounted: hooks.unmounted,
 	}
 
-	// Create directive based on Vue version
-	if (isVue2()) {
-		return createVue2Directive(wrappedHooks) as Directive
+	// Create a lazy directive that determines version at runtime
+	return createLazyDirective(wrappedHooks)
+}
+
+/**
+ * Create a lazy directive that determines Vue version at first use
+ */
+function createLazyDirective<T, B extends Element>(hooks: DirectiveHooks<T, B>): Directive {
+	let cachedDirective: any = null
+
+	// Unified detection entry point
+	function getDirective(): any {
+		if (!cachedDirective) {
+			cachedDirective = getVueVersion() === 2 ? createVue2Directive(hooks) : createVue3Directive(hooks)
+		}
+
+		return cachedDirective
 	}
 
-	return createVue3Directive(wrappedHooks) as Directive
+	// Hook generator to reduce code duplication
+	function createHook(hookName: string) {
+		return function (el: B, binding: any, vnode: any, prevVnode?: any) {
+			getDirective()[hookName]?.(el, binding, vnode, prevVnode)
+		}
+	}
+
+	return {
+		// Vue 2 hooks
+		bind: createHook('bind'),
+		inserted: createHook('inserted'),
+		update: createHook('update'),
+		componentUpdated: createHook('componentUpdated'),
+		unbind: createHook('unbind'),
+		// Vue 3 hooks
+		created: createHook('created'),
+		beforeMount: createHook('beforeMount'),
+		mounted: createHook('mounted'),
+		beforeUpdate: createHook('beforeUpdate'),
+		updated: createHook('updated'),
+		beforeUnmount: createHook('beforeUnmount'),
+		unmounted: createHook('unmounted'),
+	} as Directive
 }
 
 /**

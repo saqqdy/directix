@@ -3,8 +3,12 @@ export * from './types'
 
 // Environment detection
 export {
+	type VueVersion,
 	getVueVersion,
+	setVueVersion,
+	resetVueVersion,
 	isVue2,
+	isVue27,
 	isVue3,
 	isBrowser,
 	isSSR,

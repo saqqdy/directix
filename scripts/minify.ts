@@ -2,9 +2,6 @@ import { execSync } from 'node:child_process'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -22,21 +19,14 @@ const banner =
 	` * Released under the MIT License.\n` +
 	` */`
 
-// Read vue-demi iife
-let vueDemiCode = ''
+// Process IIFE file
+let iifeContent,
+	mjsContent,
+	cjsContent
 
-try {
-	const vueDemiPath = require.resolve('vue-demi/lib/index.iife.js', { paths: [rootDir] })
-
-	vueDemiCode = readFileSync(vueDemiPath, 'utf-8')
-	console.log('✓ Loaded vue-demi/lib/index.iife.js')
-} catch (e) {
-	console.warn('Warning: vue-demi/lib/index.iife.js not found, skipping injection:', e)
-}
-
-// Process IIFE file - inject vue-demi code after banner
 const iifeFile = resolve(distDir, 'index.iife.js')
-let iifeContent = readFileSync(iifeFile, 'utf-8')
+
+iifeContent = readFileSync(iifeFile, 'utf-8')
 
 // Remove existing banner from iife content (it's added by vite)
 const bannerRegex = /^\/\*![\s\S]*?\*\//
@@ -45,8 +35,8 @@ if (bannerRegex.test(iifeContent)) {
 	iifeContent = iifeContent.replace(bannerRegex, '').trimStart()
 }
 
-// Write IIFE with banner + vue-demi code + original content
-writeFileSync(iifeFile, `${banner}\n${vueDemiCode}\n${iifeContent}`)
+// Write IIFE with banner
+writeFileSync(iifeFile, `${banner}\n${iifeContent}`)
 console.log('✓ Processed dist/index.iife.js')
 
 // Minify IIFE
@@ -63,7 +53,8 @@ console.log('✓ Generated dist/index.iife.min.js')
 
 // Process ESM and CJS files - ensure banner is at the top
 const mjsFile = resolve(distDir, 'index.mjs')
-let mjsContent = readFileSync(mjsFile, 'utf-8')
+
+mjsContent = readFileSync(mjsFile, 'utf-8')
 
 if (!mjsContent.startsWith('/*!')) {
 	// Remove existing banner if present
@@ -73,7 +64,8 @@ if (!mjsContent.startsWith('/*!')) {
 }
 
 const cjsFile = resolve(distDir, 'index.cjs')
-let cjsContent = readFileSync(cjsFile, 'utf-8')
+
+cjsContent = readFileSync(cjsFile, 'utf-8')
 
 if (!cjsContent.startsWith('/*!')) {
 	// Remove existing banner if present
