@@ -1,3 +1,4 @@
+import type { ObjectDirective } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
@@ -10,15 +11,15 @@ describe('v-trim', () => {
 		})
 
 		it('should have mounted hook', () => {
-			expect(vTrim.mounted).toBeDefined()
+			expect((vTrim as ObjectDirective).mounted).toBeDefined()
 		})
 
 		it('should have updated hook', () => {
-			expect(vTrim.updated).toBeDefined()
+			expect((vTrim as ObjectDirective).updated).toBeDefined()
 		})
 
 		it('should have unmounted hook', () => {
-			expect(vTrim.unmounted).toBeDefined()
+			expect((vTrim as ObjectDirective).unmounted).toBeDefined()
 		})
 	})
 

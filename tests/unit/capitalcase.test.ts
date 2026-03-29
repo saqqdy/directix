@@ -1,3 +1,4 @@
+import type { ObjectDirective } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
@@ -10,15 +11,15 @@ describe('v-capitalcase', () => {
 		})
 
 		it('should have mounted hook', () => {
-			expect(vCapitalcase.mounted).toBeDefined()
+			expect((vCapitalcase as ObjectDirective).mounted).toBeDefined()
 		})
 
 		it('should have updated hook', () => {
-			expect(vCapitalcase.updated).toBeDefined()
+			expect((vCapitalcase as ObjectDirective).updated).toBeDefined()
 		})
 
 		it('should have unmounted hook', () => {
-			expect(vCapitalcase.unmounted).toBeDefined()
+			expect((vCapitalcase as ObjectDirective).unmounted).toBeDefined()
 		})
 	})
 

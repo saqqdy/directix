@@ -548,9 +548,9 @@ describe('src/directives/index.ts', () => {
 
 			expect(options.first).toBeTruthy()
 
-			const binding: UppercaseBinding = 'test'
+			const binding: UppercaseBinding = true
 
-			expect(binding).toBe('test')
+			expect(binding).toBe(true)
 		})
 
 		it('should export Lowercase types', () => {
@@ -560,9 +560,9 @@ describe('src/directives/index.ts', () => {
 
 			expect(options.first).toBeTruthy()
 
-			const binding: LowercaseBinding = 'TEST'
+			const binding: LowercaseBinding = true
 
-			expect(binding).toBe('TEST')
+			expect(binding).toBe(true)
 		})
 
 		it('should export Capitalcase types', () => {
@@ -572,9 +572,9 @@ describe('src/directives/index.ts', () => {
 
 			expect(options.every).toBeTruthy()
 
-			const binding: CapitalcaseBinding = 'hello world'
+			const binding: CapitalcaseBinding = true
 
-			expect(binding).toBe('hello world')
+			expect(binding).toBe(true)
 		})
 
 		it('should export Truncate types', () => {

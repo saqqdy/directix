@@ -1,3 +1,4 @@
+import type { ObjectDirective } from 'vue'
 import { describe, expect, it } from 'vitest'
 import { vTruncate } from '../../src/directives/truncate'
 
@@ -8,15 +9,15 @@ describe('v-truncate', () => {
 		})
 
 		it('should have mounted hook', () => {
-			expect(vTruncate.mounted).toBeDefined()
+			expect((vTruncate as ObjectDirective).mounted).toBeDefined()
 		})
 
 		it('should have updated hook', () => {
-			expect(vTruncate.updated).toBeDefined()
+			expect((vTruncate as ObjectDirective).updated).toBeDefined()
 		})
 
 		it('should have unmounted hook', () => {
-			expect(vTruncate.unmounted).toBeDefined()
+			expect((vTruncate as ObjectDirective).unmounted).toBeDefined()
 		})
 	})
 })

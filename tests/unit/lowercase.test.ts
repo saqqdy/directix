@@ -1,3 +1,4 @@
+import type { ObjectDirective } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
@@ -10,15 +11,15 @@ describe('v-lowercase', () => {
 		})
 
 		it('should have mounted hook', () => {
-			expect(vLowercase.mounted).toBeDefined()
+			expect((vLowercase as ObjectDirective).mounted).toBeDefined()
 		})
 
 		it('should have updated hook', () => {
-			expect(vLowercase.updated).toBeDefined()
+			expect((vLowercase as ObjectDirective).updated).toBeDefined()
 		})
 
 		it('should have unmounted hook', () => {
-			expect(vLowercase.unmounted).toBeDefined()
+			expect((vLowercase as ObjectDirective).unmounted).toBeDefined()
 		})
 	})
 
