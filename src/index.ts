@@ -1,5 +1,5 @@
-import type { App, Directive, Plugin } from 'vue'
 import type { DirectiveInstallOptions } from '@directix/core'
+import type { App, Directive, Plugin } from 'vue'
 import { setVueVersion } from '@directix/core'
 import {
 	vCapitalcase,
@@ -43,20 +43,20 @@ export * from '@directix/core'
 
 // Export shared utilities (excluding tools with the same name as directives)
 export {
-	isString,
-	isNumber,
-	isBoolean,
-	isFunction,
-	isObject,
-	isArray,
-	isEmpty,
-	isPromise,
 	deepClone,
 	deepMerge,
-	get,
-	set,
-	parseTime,
 	generateId,
+	get,
+	isArray,
+	isBoolean,
+	isEmpty,
+	isFunction,
+	isNumber,
+	isObject,
+	isPromise,
+	isString,
+	parseTime,
+	set,
 } from '@directix/shared'
 // Export debounce and throttle utility functions separately (with aliases)
 export {

@@ -1,8 +1,8 @@
 import type { Directive } from 'vue'
-import { getVueVersion, isSSR } from './env'
+import type { DirectiveBinding, DirectiveDefinition, DirectiveHooks } from './types'
 import { createVue2Directive } from './adapter/vue2'
 import { createVue3Directive } from './adapter/vue3'
-import type { DirectiveBinding, DirectiveDefinition, DirectiveHooks } from './types'
+import { getVueVersion, isSSR } from './env'
 
 /**
  * Define a cross-version compatible directive

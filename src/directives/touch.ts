@@ -104,14 +104,14 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 
 		;(el as any).__touch = state
 
-		const clearLongPressTimer = () => {
+		const clearLongPressTimer = (): void => {
 			if (state.longPressTimer) {
 				clearTimeout(state.longPressTimer)
 				state.longPressTimer = null
 			}
 		}
 
-		const startLongPressTimer = (event: TouchEvent | MouseEvent) => {
+		const startLongPressTimer = (event: TouchEvent | MouseEvent): void => {
 			clearLongPressTimer()
 			if (state.options.enableLongPress && state.options.onLongPress) {
 				state.longPressTimer = setTimeout(() => {
@@ -126,7 +126,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 			return Math.abs(x - state.startX) > threshold || Math.abs(y - state.startY) > threshold
 		}
 
-		const handleGestureEnd = (endX: number, endY: number, event: TouchEvent | MouseEvent) => {
+		const handleGestureEnd = (endX: number, endY: number, event: TouchEvent | MouseEvent): void => {
 			if (state.isLongPress) return
 
 			const duration = Date.now() - state.startTime
@@ -146,10 +146,8 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 				if (direction === 'left') state.options.onSwipeLeft?.(event)
 				else if (direction === 'right') state.options.onSwipeRight?.(event)
 				else if (direction === 'up') state.options.onSwipeUp?.(event)
-				else if (direction === 'down') state.options.onSwipeDown?.(event)
-			}
-			// Tap detection
-			else if (
+				else state.options.onSwipeDown?.(event)
+			} else if (
 				state.options.enableTap
 				&& distance < (state.options.tapThreshold || 10)
 				&& duration < (state.options.tapTimeout || 250)
@@ -159,7 +157,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 		}
 
 		// Touch handlers
-		const handleTouchStart = (e: TouchEvent) => {
+		const handleTouchStart = (e: TouchEvent): void => {
 			// Prevent page zoom on multi-touch
 			if (e.touches.length > 1) {
 				e.preventDefault()
@@ -184,7 +182,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 			state.options.onTouchStart?.(e)
 		}
 
-		const handleTouchMove = (e: TouchEvent) => {
+		const handleTouchMove = (e: TouchEvent): void => {
 			// Prevent page scroll and zoom during gesture
 			if (e.touches.length >= 1) {
 				e.preventDefault()
@@ -219,7 +217,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 			state.options.onTouchMove?.(e)
 		}
 
-		const handleTouchEnd = (e: TouchEvent) => {
+		const handleTouchEnd = (e: TouchEvent): void => {
 			clearLongPressTimer()
 
 			if (e.touches.length === 0) {
@@ -232,7 +230,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 		}
 
 		// Mouse handlers for desktop
-		const handleMouseDown = (e: MouseEvent) => {
+		const handleMouseDown = (e: MouseEvent): void => {
 			if (!state.options.enableMouse) return
 			// Ignore simulated mouse events after touch
 			if (Date.now() - state.lastTouchEndTime < MOUSE_IGNORE_DURATION) return
@@ -248,7 +246,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 			state.options.onTouchStart?.(e)
 		}
 
-		const handleMouseMove = (e: MouseEvent) => {
+		const handleMouseMove = (e: MouseEvent): void => {
 			if (!state.isMouseDown || !state.options.enableMouse) return
 			if (state.longPressTimer && exceedsThreshold(e.clientX, e.clientY)) {
 				clearLongPressTimer()
@@ -256,7 +254,7 @@ export const vTouch = defineDirective<TouchOptions, HTMLElement>({
 			state.options.onTouchMove?.(e)
 		}
 
-		const handleMouseUp = (e: MouseEvent) => {
+		const handleMouseUp = (e: MouseEvent): void => {
 			if (!state.isMouseDown || !state.options.enableMouse) return
 
 			state.isMouseDown = false

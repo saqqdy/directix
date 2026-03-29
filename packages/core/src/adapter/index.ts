@@ -1,2 +1,2 @@
-export { createVue2Directive, addCleanup as addCleanupVue2 } from './vue2'
-export { createVue3Directive, addCleanup as addCleanupVue3 } from './vue3'
+export { addCleanup as addCleanupVue2, createVue2Directive } from './vue2'
+export { addCleanup as addCleanupVue3, createVue3Directive } from './vue3'

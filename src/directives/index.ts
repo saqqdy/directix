@@ -1,101 +1,101 @@
+export { default as capitalcase, vCapitalcase } from './capitalcase'
+export type { CapitalcaseBinding, CapitalcaseOptions } from './capitalcase'
+
 // Event directives
-export { vClickOutside, default as clickOutside } from './click-outside'
-export type { ClickOutsideOptions, ClickOutsideBinding, ClickOutsideHandler } from './click-outside'
+export { default as clickOutside, vClickOutside } from './click-outside'
+export type { ClickOutsideBinding, ClickOutsideHandler, ClickOutsideOptions } from './click-outside'
 
-export { vCopy, default as copy } from './copy'
-export type { CopyOptions, CopyBinding, CopySuccessCallback, CopyErrorCallback } from './copy'
+export { default as copy, vCopy } from './copy'
+export type { CopyBinding, CopyErrorCallback, CopyOptions, CopySuccessCallback } from './copy'
 
-export { vDebounce, default as debounce } from './debounce'
-export type { DebounceOptions, DebounceBinding, DebouncedFunction } from './debounce'
+export { default as debounce, vDebounce } from './debounce'
+export type { DebounceBinding, DebouncedFunction, DebounceOptions } from './debounce'
 
-export { vThrottle, default as throttle } from './throttle'
-export type { ThrottleOptions, ThrottleBinding, ThrottledFunction } from './throttle'
+export { default as draggable, vDraggable } from './draggable'
+export type { DraggableAxis, DraggableBinding, DraggableOptions } from './draggable'
 
-export { vFocus, default as focus } from './focus'
-export type { FocusOptions, FocusBinding } from './focus'
+export { default as focus, vFocus } from './focus'
+export type { FocusBinding, FocusOptions } from './focus'
+
+export { default as hover, vHover } from './hover'
+export type { HoverBinding, HoverHandler, HoverOptions } from './hover'
+
+export { default as imagePreview, vImagePreview } from './image-preview'
+export type { ImagePreviewBinding, ImagePreviewOptions } from './image-preview'
+
+export { default as infiniteScroll, vInfiniteScroll } from './infinite-scroll'
+export type { InfiniteScrollBinding, InfiniteScrollHandler, InfiniteScrollOptions } from './infinite-scroll'
+
+export { default as intersect, vIntersect } from './intersect'
+export type { IntersectBinding, IntersectHandler, IntersectOptions } from './intersect'
 
 // Visibility directives
-export { vLazy, default as lazy } from './lazy'
-export type { LazyOptions, LazyBinding, LazyState } from './lazy'
+export { default as lazy, vLazy } from './lazy'
+export type { LazyBinding, LazyOptions, LazyState } from './lazy'
 
-export { vIntersect, default as intersect } from './intersect'
-export type { IntersectOptions, IntersectBinding, IntersectHandler } from './intersect'
-
-export { vVisible, default as visible } from './visible'
-export type { VisibleOptions, VisibleBinding, VisibleHandler } from './visible'
-
-export { vLoading, default as loading } from './loading'
-export type { LoadingOptions, LoadingBinding } from './loading'
-
-// Scroll directives
-export { vScroll, default as scroll } from './scroll'
-export type { ScrollOptions, ScrollBinding, ScrollHandler, ScrollInfo } from './scroll'
-
-export { vInfiniteScroll, default as infiniteScroll } from './infinite-scroll'
-export type { InfiniteScrollOptions, InfiniteScrollBinding, InfiniteScrollHandler } from './infinite-scroll'
-
-export { vSticky, default as sticky } from './sticky'
-export type { StickyOptions, StickyBinding } from './sticky'
+export { default as loading, vLoading } from './loading'
+export type { LoadingBinding, LoadingOptions } from './loading'
 
 // Event interaction directives
-export { vLongPress, default as longPress } from './long-press'
-export type { LongPressOptions, LongPressBinding, LongPressHandler } from './long-press'
+export { default as longPress, vLongPress } from './long-press'
+export type { LongPressBinding, LongPressHandler, LongPressOptions } from './long-press'
 
-export { vHover, default as hover } from './hover'
-export type { HoverOptions, HoverBinding, HoverHandler } from './hover'
-
-export { vRipple, default as ripple } from './ripple'
-export type { RippleOptions, RippleBinding } from './ripple'
+export { default as lowercase, vLowercase } from './lowercase'
+export type { LowercaseBinding, LowercaseOptions } from './lowercase'
 
 // Form directives
-export { vMask, default as mask } from './mask'
-export type { MaskOptions, MaskBinding } from './mask'
+export { default as mask, vMask } from './mask'
+export type { MaskBinding, MaskOptions } from './mask'
+
+export { default as money, vMoney } from './money'
+export type { MoneyBinding, MoneyOptions } from './money'
+
+export { default as mutation, vMutation } from './mutation'
+export type { MutationBinding, MutationHandler, MutationOptions } from './mutation'
+
+export { default as number, vNumber } from './number'
+export type { NumberBinding, NumberOptions } from './number'
 
 // Security directives
-export { vPermission, default as permission, configurePermission, getPermissionConfig } from './permission'
-export type { PermissionOptions, PermissionBinding, PermissionAction, PermissionConfig } from './permission'
-
-export { vSanitize, default as sanitize } from './sanitize'
-export type { SanitizeOptions, SanitizeBinding, SanitizeHandler } from './sanitize'
+export { configurePermission, getPermissionConfig, default as permission, vPermission } from './permission'
+export type { PermissionAction, PermissionBinding, PermissionConfig, PermissionOptions } from './permission'
 
 // Observer directives
-export { vResize, default as resize } from './resize'
-export type { ResizeOptions, ResizeBinding, ResizeHandler, ResizeInfo } from './resize'
+export { default as resize, vResize } from './resize'
+export type { ResizeBinding, ResizeHandler, ResizeInfo, ResizeOptions } from './resize'
 
-export { vMutation, default as mutation } from './mutation'
-export type { MutationOptions, MutationBinding, MutationHandler } from './mutation'
+export { default as ripple, vRipple } from './ripple'
+export type { RippleBinding, RippleOptions } from './ripple'
 
-// Format directives
-export { vTruncate, default as truncate } from './truncate'
-export type { TruncateOptions, TruncateBinding, TruncatePosition } from './truncate'
+export { default as sanitize, vSanitize } from './sanitize'
+export type { SanitizeBinding, SanitizeHandler, SanitizeOptions } from './sanitize'
 
-export { vUppercase, default as uppercase } from './uppercase'
-export type { UppercaseOptions, UppercaseBinding } from './uppercase'
+// Scroll directives
+export { default as scroll, vScroll } from './scroll'
+export type { ScrollBinding, ScrollHandler, ScrollInfo, ScrollOptions } from './scroll'
 
-export { vLowercase, default as lowercase } from './lowercase'
-export type { LowercaseOptions, LowercaseBinding } from './lowercase'
+export { default as sticky, vSticky } from './sticky'
+export type { StickyBinding, StickyOptions } from './sticky'
 
-export { vCapitalcase, default as capitalcase } from './capitalcase'
-export type { CapitalcaseOptions, CapitalcaseBinding } from './capitalcase'
-
-export { vNumber, default as number } from './number'
-export type { NumberOptions, NumberBinding } from './number'
-
-export { vMoney, default as money } from './money'
-export type { MoneyOptions, MoneyBinding } from './money'
-
-export { vTrim, default as trim } from './trim'
-export type { TrimOptions, TrimBinding, TrimPosition } from './trim'
+export { default as throttle, vThrottle } from './throttle'
+export type { ThrottleBinding, ThrottledFunction, ThrottleOptions } from './throttle'
 
 // UI directives
-export { vTooltip, default as tooltip } from './tooltip'
-export type { TooltipOptions, TooltipBinding, TooltipPlacement, TooltipTrigger } from './tooltip'
+export { default as tooltip, vTooltip } from './tooltip'
+export type { TooltipBinding, TooltipOptions, TooltipPlacement, TooltipTrigger } from './tooltip'
 
-export { vDraggable, default as draggable } from './draggable'
-export type { DraggableOptions, DraggableBinding, DraggableAxis } from './draggable'
+export { default as touch, vTouch } from './touch'
+export type { SwipeDirection, TouchOptions } from './touch'
 
-export { vTouch, default as touch } from './touch'
-export type { TouchOptions, SwipeDirection } from './touch'
+export { default as trim, vTrim } from './trim'
+export type { TrimBinding, TrimOptions, TrimPosition } from './trim'
 
-export { vImagePreview, default as imagePreview } from './image-preview'
-export type { ImagePreviewOptions, ImagePreviewBinding } from './image-preview'
+// Format directives
+export { default as truncate, vTruncate } from './truncate'
+export type { TruncateBinding, TruncateOptions, TruncatePosition } from './truncate'
+
+export { default as uppercase, vUppercase } from './uppercase'
+export type { UppercaseBinding, UppercaseOptions } from './uppercase'
+
+export { default as visible, vVisible } from './visible'
+export type { VisibleBinding, VisibleHandler, VisibleOptions } from './visible'

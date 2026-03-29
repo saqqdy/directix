@@ -196,7 +196,7 @@ function createOverlay(options: ImagePreviewOptions): {
 			WebkitBackdropFilter: 'blur(10px)',
 		} as CSSStyleDeclaration)
 
-		const setBtnStyle = (bg: string, scale: string) => {
+		const setBtnStyle = (bg: string, scale: string): void => {
 			closeBtn.style.background = bg
 			closeBtn.style.transform = scale
 		}
@@ -266,8 +266,15 @@ function createOverlay(options: ImagePreviewOptions): {
 // Transform Helpers
 // ============================================================================
 
-function createTransformManager(state: PreviewState) {
-	const updateTransform = (animate = false) => {
+interface TransformManager {
+	updateTransform: (animate?: boolean) => void
+	resetTransform: () => void
+	constrainScale: (newScale: number) => number
+	constrainTranslate: (x: number, y: number) => { x: number, y: number }
+}
+
+function createTransformManager(state: PreviewState): TransformManager {
+	const updateTransform = (animate = false): void => {
 		if (!state.imageContainer) return
 
 		const { scale, translateX, translateY } = state.transform
@@ -287,7 +294,7 @@ function createTransformManager(state: PreviewState) {
 		}
 	}
 
-	const resetTransform = () => {
+	const resetTransform = (): void => {
 		state.transform = { scale: 1, translateX: 0, translateY: 0 }
 		updateTransform(true)
 	}
@@ -298,7 +305,7 @@ function createTransformManager(state: PreviewState) {
 	}
 
 	const constrainTranslate = (x: number, y: number): { x: number, y: number } => {
-		const { scale, translateX, translateY } = state.transform
+		const { scale } = state.transform
 		if (!state.image || scale <= 1) return { x: 0, y: 0 }
 
 		const rect = state.image.getBoundingClientRect()
@@ -318,14 +325,24 @@ function createTransformManager(state: PreviewState) {
 // Gesture Handlers
 // ============================================================================
 
+interface GestureHandlers {
+	handleTouchStart: (e: TouchEvent) => void
+	handleTouchMove: (e: TouchEvent) => void
+	handleTouchEnd: (e: TouchEvent) => void
+	handleMouseDown: (e: MouseEvent) => void
+	handleMouseMove: (e: MouseEvent) => void
+	handleMouseUp: () => void
+	handleWheel: (e: WheelEvent) => void
+}
+
 function createGestureHandlers(
 	state: PreviewState,
-	transformManager: ReturnType<typeof createTransformManager>,
+	transformManager: TransformManager,
 	closePreview: () => void,
-) {
+): GestureHandlers {
 	const { updateTransform, resetTransform, constrainScale, constrainTranslate } = transformManager
 
-	const handleTouchStart = (e: TouchEvent) => {
+	const handleTouchStart = (e: TouchEvent): void => {
 		if (!state.imageContainer) return
 
 		const now = Date.now()
@@ -358,7 +375,7 @@ function createGestureHandlers(
 		}
 	}
 
-	const handleTouchMove = (e: TouchEvent) => {
+	const handleTouchMove = (e: TouchEvent): void => {
 		if (!state.imageContainer) return
 		e.preventDefault()
 
@@ -385,7 +402,7 @@ function createGestureHandlers(
 		}
 	}
 
-	const handleTouchEnd = (e: TouchEvent) => {
+	const handleTouchEnd = (e: TouchEvent): void => {
 		const { gesture, transform, options } = state
 		gesture.isDragging = false
 
@@ -404,7 +421,7 @@ function createGestureHandlers(
 		}
 	}
 
-	const handleMouseDown = (e: MouseEvent) => {
+	const handleMouseDown = (e: MouseEvent): void => {
 		if (!state.imageContainer) return
 
 		state.gesture.isDragging = true
@@ -413,7 +430,7 @@ function createGestureHandlers(
 		state.imageContainer.style.cursor = 'grabbing'
 	}
 
-	const handleMouseMove = (e: MouseEvent) => {
+	const handleMouseMove = (e: MouseEvent): void => {
 		if (!state.gesture.isDragging || !state.imageContainer) return
 
 		const newX = e.clientX - state.gesture.startX
@@ -425,14 +442,14 @@ function createGestureHandlers(
 		updateTransform(false)
 	}
 
-	const handleMouseUp = () => {
+	const handleMouseUp = (): void => {
 		state.gesture.isDragging = false
 		if (state.imageContainer) {
 			state.imageContainer.style.cursor = 'grab'
 		}
 	}
 
-	const handleWheel = (e: WheelEvent) => {
+	const handleWheel = (e: WheelEvent): void => {
 		if (!state.imageContainer || state.options.enablePinchZoom === false) return
 		e.preventDefault()
 
@@ -562,7 +579,7 @@ export const vImagePreview = defineDirective<ImagePreviewBinding, HTMLElement>({
 		const transformManager = createTransformManager(state)
 
 		// Close preview
-		const closePreview = () => {
+		const closePreview = (): void => {
 			if (!state.isOpen || !state.overlay) return
 
 			state.overlay.style.opacity = '0'
@@ -597,7 +614,7 @@ export const vImagePreview = defineDirective<ImagePreviewBinding, HTMLElement>({
 		const gestureHandlers = createGestureHandlers(state, transformManager, closePreview)
 
 		// Open preview
-		const openPreview = () => {
+		const openPreview = (): void => {
 			if (state.isOpen || state.options.disabled) return
 
 			const { overlay, imageContainer, image } = createOverlay(state.options)
