@@ -4,7 +4,7 @@
 
 ## 可用指令
 
-Directix 提供 **20 个生产就绪的指令**，按以下类别组织：
+Directix 提供 **32 个生产就绪的指令**，按以下类别组织：
 
 ### 事件指令
 
@@ -16,6 +16,7 @@ Directix 提供 **20 个生产就绪的指令**，按以下类别组织：
 | [v-long-press](/zh/api/directives/long-press) | 检测长按手势 |
 | [v-hover](/zh/api/directives/hover) | 跟踪悬停状态 |
 | [v-ripple](/zh/api/directives/ripple) | Material Design 波纹效果 |
+| [v-touch](/zh/api/directives/touch) | 触摸手势检测（滑动、双指缩放、旋转、点击） |
 
 ### 可见性指令
 
@@ -25,6 +26,7 @@ Directix 提供 **20 个生产就绪的指令**，按以下类别组织：
 | [v-intersect](/zh/api/directives/intersect) | 观察元素交叉 |
 | [v-visible](/zh/api/directives/visible) | 切换元素可见性 |
 | [v-loading](/zh/api/directives/loading) | 显示加载遮罩 |
+| [v-image-preview](/zh/api/directives/image-preview) | 模态图片预览，支持手势操作 |
 
 ### 滚动指令
 
@@ -41,6 +43,20 @@ Directix 提供 **20 个生产就绪的指令**，按以下类别组织：
 | [v-copy](/zh/api/directives/copy) | 复制文本到剪贴板 |
 | [v-focus](/zh/api/directives/focus) | 自动聚焦元素 |
 | [v-mask](/zh/api/directives/mask) | 输入掩码格式化 |
+| [v-trim](/zh/api/directives/trim) | 去除输入首尾空白 |
+| [v-capitalcase](/zh/api/directives/capitalcase) | 转换为首字母大写 |
+| [v-lowercase](/zh/api/directives/lowercase) | 转换为小写 |
+| [v-uppercase](/zh/api/directives/uppercase) | 转换为大写 |
+| [v-money](/zh/api/directives/money) | 格式化为货币 |
+| [v-number](/zh/api/directives/number) | 格式化和验证数字 |
+
+### UI 指令
+
+| 指令 | 描述 |
+| ---- | ---- |
+| [v-tooltip](/zh/api/directives/tooltip) | 显示工具提示 |
+| [v-draggable](/zh/api/directives/draggable) | 使元素可拖拽 |
+| [v-truncate](/zh/api/directives/truncate) | 截断文本并添加省略号 |
 
 ### 安全指令
 
@@ -94,7 +110,19 @@ import {
   vPermission,
   vSanitize,
   vResize,
-  vMutation
+  vMutation,
+  // v1.1.0 新增
+  vTouch,
+  vImagePreview,
+  vDraggable,
+  vTooltip,
+  vTruncate,
+  vTrim,
+  vCapitalcase,
+  vLowercase,
+  vUppercase,
+  vMoney,
+  vNumber,
 } from 'directix'
 ```
 

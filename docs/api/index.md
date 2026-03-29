@@ -4,7 +4,7 @@ This section provides detailed API documentation for all available directives in
 
 ## Available Directives
 
-Directix provides **20 production-ready directives** organized into the following categories:
+Directix provides **32 production-ready directives** organized into the following categories:
 
 ### Event Directives
 
@@ -16,6 +16,7 @@ Directix provides **20 production-ready directives** organized into the followin
 | [v-long-press](/api/directives/long-press) | Detect long press gestures |
 | [v-hover](/api/directives/hover) | Track hover state with callbacks |
 | [v-ripple](/api/directives/ripple) | Material design ripple effect |
+| [v-touch](/api/directives/touch) | Touch gesture detection (swipe, pinch, rotate, tap) |
 
 ### Visibility Directives
 
@@ -25,6 +26,7 @@ Directix provides **20 production-ready directives** organized into the followin
 | [v-intersect](/api/directives/intersect) | Observe element intersection |
 | [v-visible](/api/directives/visible) | Toggle element visibility |
 | [v-loading](/api/directives/loading) | Show loading overlay |
+| [v-image-preview](/api/directives/image-preview) | Modal image preview with gestures |
 
 ### Scroll Directives
 
@@ -41,6 +43,20 @@ Directix provides **20 production-ready directives** organized into the followin
 | [v-copy](/api/directives/copy) | Copy text to clipboard |
 | [v-focus](/api/directives/focus) | Auto focus an element |
 | [v-mask](/api/directives/mask) | Input mask formatting |
+| [v-trim](/api/directives/trim) | Trim whitespace from input |
+| [v-capitalcase](/api/directives/capitalcase) | Transform to capital case |
+| [v-lowercase](/api/directives/lowercase) | Transform to lowercase |
+| [v-uppercase](/api/directives/uppercase) | Transform to uppercase |
+| [v-money](/api/directives/money) | Format as currency |
+| [v-number](/api/directives/number) | Format and validate numbers |
+
+### UI Directives
+
+| Directive | Description |
+| --------- | ----------- |
+| [v-tooltip](/api/directives/tooltip) | Display tooltips |
+| [v-draggable](/api/directives/draggable) | Make elements draggable |
+| [v-truncate](/api/directives/truncate) | Truncate text with ellipsis |
 
 ### Security Directives
 
@@ -94,7 +110,19 @@ import {
   vPermission,
   vSanitize,
   vResize,
-  vMutation
+  vMutation,
+  // New in v1.1.0
+  vTouch,
+  vImagePreview,
+  vDraggable,
+  vTooltip,
+  vTruncate,
+  vTrim,
+  vCapitalcase,
+  vLowercase,
+  vUppercase,
+  vMoney,
+  vNumber,
 } from 'directix'
 ```
 
