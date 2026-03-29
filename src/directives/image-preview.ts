@@ -141,7 +141,7 @@ function createOverlay(options: ImagePreviewOptions): {
 		transition: 'opacity 0.3s',
 		touchAction: 'none',
 		overflow: 'hidden',
-	} as CSSStyleDeclaration)
+	})
 
 	// Image container
 	const imageContainer = document.createElement('div')
@@ -150,7 +150,7 @@ function createOverlay(options: ImagePreviewOptions): {
 		transformOrigin: 'center center',
 		transition: 'transform 0.1s ease-out',
 		willChange: 'transform',
-	} as CSSStyleDeclaration)
+	})
 
 	// Image element
 	const image = document.createElement('img')
@@ -163,7 +163,7 @@ function createOverlay(options: ImagePreviewOptions): {
 		cursor: 'grab',
 		userSelect: 'none',
 		WebkitUserDrag: 'none',
-	} as CSSStyleDeclaration)
+	})
 	image.addEventListener('dragstart', e => e.preventDefault())
 
 	imageContainer.appendChild(image)
@@ -194,7 +194,7 @@ function createOverlay(options: ImagePreviewOptions): {
 			justifyContent: 'center',
 			backdropFilter: 'blur(10px)',
 			WebkitBackdropFilter: 'blur(10px)',
-		} as CSSStyleDeclaration)
+		})
 
 		const setBtnStyle = (bg: string, scale: string): void => {
 			closeBtn.style.background = bg
@@ -231,7 +231,7 @@ function createOverlay(options: ImagePreviewOptions): {
 			zIndex: String(zIndex + 1),
 			backdropFilter: 'blur(10px)',
 			WebkitBackdropFilter: 'blur(10px)',
-		} as CSSStyleDeclaration)
+		})
 
 		overlay.appendChild(zoomIndicator)
 	}
@@ -252,7 +252,7 @@ function createOverlay(options: ImagePreviewOptions): {
 		transition: 'opacity 0.5s',
 		zIndex: String(zIndex + 1),
 		pointerEvents: 'none',
-	} as CSSStyleDeclaration)
+	})
 
 	overlay.appendChild(hint)
 	setTimeout(() => (hint.style.opacity = '0'), DEFAULTS.hintDuration)

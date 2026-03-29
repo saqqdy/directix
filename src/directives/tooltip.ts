@@ -54,6 +54,7 @@ interface TooltipState {
 		show?: () => void
 		hide?: () => void
 		toggle?: () => void
+		docHide?: (e: Event) => void
 	}
 }
 
