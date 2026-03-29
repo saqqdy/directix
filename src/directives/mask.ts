@@ -171,7 +171,7 @@ export const vMask = defineDirective<MaskBinding, HTMLInputElement>({
 		const placeholder = options.placeholder || '_'
 		const tokens = parseMask(options.mask, placeholder)
 
-		const inputHandler = (e: Event) => {
+		const inputHandler = (e: Event): void => {
 			const target = e.target as HTMLInputElement
 			const rawValue = target.value
 			const cursorPos = target.selectionStart || 0
@@ -192,13 +192,13 @@ export const vMask = defineDirective<MaskBinding, HTMLInputElement>({
 			}
 		}
 
-		const focusHandler = () => {
+		const focusHandler = (): void => {
 			if (!el.value && options.showPlaceholder) {
 				el.value = formatValue('', tokens, placeholder, true)
 			}
 		}
 
-		const blurHandler = () => {
+		const blurHandler = (): void => {
 			if (!options.showMaskOnBlur && !isComplete(el.value, tokens, placeholder) && options.clearIncomplete) {
 				el.value = ''
 			}
