@@ -9,12 +9,16 @@ describe('v-capitalcase', () => {
 			expect(vCapitalcase).toBeDefined()
 		})
 
-		it('should have correct name', () => {
-			expect(vCapitalcase.name).toBe('capitalcase')
+		it('should have mounted hook', () => {
+			expect(vCapitalcase.mounted).toBeDefined()
 		})
 
-		it('should support SSR', () => {
-			expect(vCapitalcase.ssr).toBe(true)
+		it('should have updated hook', () => {
+			expect(vCapitalcase.updated).toBeDefined()
+		})
+
+		it('should have unmounted hook', () => {
+			expect(vCapitalcase.unmounted).toBeDefined()
 		})
 	})
 

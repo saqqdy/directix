@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, nextTick, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { vNumber } from '../../src/directives/number'
 
 describe('v-number', () => {

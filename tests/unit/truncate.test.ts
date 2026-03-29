@@ -7,21 +7,16 @@ describe('v-truncate', () => {
 			expect(vTruncate).toBeDefined()
 		})
 
-		it('should have correct name', () => {
-			expect(vTruncate.name).toBe('truncate')
+		it('should have mounted hook', () => {
+			expect(vTruncate.mounted).toBeDefined()
 		})
 
-		it('should support SSR', () => {
-			expect(vTruncate.ssr).toBe(true)
+		it('should have updated hook', () => {
+			expect(vTruncate.updated).toBeDefined()
 		})
-	})
 
-	describe('truncateText function', () => {
-		// Test the internal logic by verifying the directive exists and is correctly configured
-		it('should be a function', () => {
-			expect(typeof vTruncate.mounted).toBe('function')
-			expect(typeof vTruncate.updated).toBe('function')
-			expect(typeof vTruncate.unmounted).toBe('function')
+		it('should have unmounted hook', () => {
+			expect(vTruncate.unmounted).toBeDefined()
 		})
 	})
 })

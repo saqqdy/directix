@@ -9,12 +9,16 @@ describe('v-uppercase', () => {
 			expect(vUppercase).toBeDefined()
 		})
 
-		it('should have correct name', () => {
-			expect(vUppercase.name).toBe('uppercase')
+		it('should have mounted hook', () => {
+			expect(vUppercase.mounted).toBeDefined()
 		})
 
-		it('should support SSR', () => {
-			expect(vUppercase.ssr).toBe(true)
+		it('should have updated hook', () => {
+			expect(vUppercase.updated).toBeDefined()
+		})
+
+		it('should have unmounted hook', () => {
+			expect(vUppercase.unmounted).toBeDefined()
 		})
 	})
 

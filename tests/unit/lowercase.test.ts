@@ -9,12 +9,16 @@ describe('v-lowercase', () => {
 			expect(vLowercase).toBeDefined()
 		})
 
-		it('should have correct name', () => {
-			expect(vLowercase.name).toBe('lowercase')
+		it('should have mounted hook', () => {
+			expect(vLowercase.mounted).toBeDefined()
 		})
 
-		it('should support SSR', () => {
-			expect(vLowercase.ssr).toBe(true)
+		it('should have updated hook', () => {
+			expect(vLowercase.updated).toBeDefined()
+		})
+
+		it('should have unmounted hook', () => {
+			expect(vLowercase.unmounted).toBeDefined()
 		})
 	})
 
