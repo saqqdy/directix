@@ -10,11 +10,11 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 21 commonly used directives
+- 🎯 **Comprehensive** - 33 commonly used directives
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
-- 🚀 **SSR Friendly** - 7 directives support SSR out of the box
+- 🚀 **SSR Friendly** - Multiple directives support SSR out of the box
 - 📦 **Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
 - ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
 
@@ -115,60 +115,81 @@ Vue.directive('click-outside', vClickOutside)
 
 ### Event Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-click-outside` | Detect clicks outside an element | ❌ | ✅ |
-| `v-debounce` | Debounce event handlers | ✅ | ✅ |
-| `v-throttle` | Throttle event handlers | ✅ | ✅ |
-| `v-long-press` | Detect long press events | ❌ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-click-outside` | Detect clicks outside an element | ❌ |
+| `v-debounce` | Debounce event handlers | ✅ |
+| `v-throttle` | Throttle event handlers | ✅ |
+| `v-long-press` | Detect long press events | ❌ |
+| `v-hover` | Hover state detection | ❌ |
+| `v-touch` | Touch gesture detection (swipe, pinch, rotate) | ❌ |
 
 ### Form Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-copy` | Copy text to clipboard | ❌ | ✅ |
-| `v-focus` | Auto focus an element | ✅ | ✅ |
-| `v-mask` | Input masking | ❌ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-copy` | Copy text to clipboard | ❌ |
+| `v-focus` | Auto focus an element | ✅ |
+| `v-mask` | Input masking | ❌ |
+| `v-trim` | Trim input whitespace | ✅ |
+| `v-money` | Currency format input | ❌ |
+| `v-number` | Number format input | ❌ |
+
+### Format Directives
+
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-uppercase` | Convert text to uppercase | ✅ |
+| `v-lowercase` | Convert text to lowercase | ✅ |
+| `v-capitalcase` | Capitalize first letter | ✅ |
+| `v-truncate` | Truncate text with ellipsis | ✅ |
 
 ### Visibility Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-lazy` | Lazy load images | ❌ | ✅ |
-| `v-intersect` | Detect element intersection | ❌ | ✅ |
-| `v-visible` | Control element visibility | ✅ | ✅ |
-| `v-loading` | Show loading overlay | ✅ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-lazy` | Lazy load images | ❌ |
+| `v-intersect` | Detect element intersection | ❌ |
+| `v-visible` | Control element visibility | ✅ |
+| `v-loading` | Show loading overlay | ✅ |
 
 ### Scroll Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-scroll` | Scroll event handling | ❌ | ✅ |
-| `v-infinite-scroll` | Infinite scrolling | ❌ | ✅ |
-| `v-sticky` | Sticky positioning | ❌ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-scroll` | Scroll event handling | ❌ |
+| `v-infinite-scroll` | Infinite scrolling | ❌ |
+| `v-sticky` | Sticky positioning | ❌ |
 
 ### Security Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-permission` | Permission-based element control | ✅ | ✅ |
-| `v-sanitize` | Sanitize HTML content | ✅ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-permission` | Permission-based element control | ✅ |
+| `v-sanitize` | Sanitize HTML content | ✅ |
 
 ### Effect Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-hover` | Hover state detection | ❌ | ✅ |
-| `v-ripple` | Material design ripple effect | ❌ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-ripple` | Material design ripple effect | ❌ |
+| `v-draggable` | Make elements draggable | ❌ |
 
 ### Observer Directives
 
-| Directive | Description | SSR | Status |
-|-----------|-------------|-----|--------|
-| `v-resize` | Element resize observer | ❌ | ✅ |
-| `v-mutation` | DOM mutation observer | ❌ | ✅ |
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-resize` | Element resize observer | ❌ |
+| `v-mutation` | DOM mutation observer | ❌ |
 
-> ✅ = Available | ❌ = Not SSR compatible
+### UI Directives
+
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-tooltip` | Tooltip component | ❌ |
+| `v-image-preview` | Image preview with zoom | ❌ |
+
+> ✅ = SSR compatible | ❌ = Not SSR compatible
 
 ## Usage Examples
 
@@ -380,6 +401,132 @@ Sanitize HTML content to prevent XSS attacks.
 
   <!-- With custom allowed tags -->
   <div v-sanitize="{ html: userContent, allowedTags: ['b', 'i', 'u'] }"></div>
+</template>
+```
+
+### v-tooltip
+
+Display tooltips on hover or click.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <button v-tooltip="'Tooltip content'">Hover me</button>
+
+  <!-- With options -->
+  <button v-tooltip="{ content: 'Tooltip', placement: 'bottom', trigger: 'click' }">
+    Click me
+  </button>
+</template>
+```
+
+### v-image-preview
+
+Preview images with zoom and gesture support.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <img v-image-preview src="thumbnail.jpg" data-preview="full.jpg" />
+
+  <!-- With options -->
+  <img v-image-preview="{ src: 'thumbnail.jpg', previewSrc: 'full.jpg', enablePinchZoom: true }" />
+</template>
+```
+
+### v-draggable
+
+Make elements draggable.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-draggable>Drag me</div>
+
+  <!-- With constraints -->
+  <div v-draggable="{ axis: 'x', bounds: 'parent' }">Horizontal drag only</div>
+</template>
+```
+
+### v-uppercase / v-lowercase / v-capitalcase
+
+Transform text case.
+
+```vue
+<template>
+  <input v-uppercase placeholder="Auto uppercase" />
+  <input v-lowercase placeholder="Auto lowercase" />
+  <input v-capitalcase placeholder="Capitalize first letter" />
+</template>
+```
+
+### v-truncate
+
+Truncate text with ellipsis.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <p v-truncate="50">Long text here...</p>
+
+  <!-- With options -->
+  <p v-truncate="{ length: 100, suffix: '...', position: 'end' }">Long text...</p>
+</template>
+```
+
+### v-touch
+
+Detect touch gestures.
+
+```vue
+<template>
+  <div v-touch="{ onSwipe: handleSwipe, onPinch: handlePinch }">
+    Swipe or pinch here
+  </div>
+</template>
+
+<script setup>
+function handleSwipe(direction) {
+  console.log('Swiped:', direction) // 'left', 'right', 'up', 'down'
+}
+
+function handlePinch(scale) {
+  console.log('Pinched:', scale)
+}
+</script>
+```
+
+### v-trim
+
+Trim input whitespace.
+
+```vue
+<template>
+  <!-- Trim on blur (default) -->
+  <input v-trim />
+
+  <!-- Trim on input -->
+  <input v-trim="{ position: 'both', event: 'input' }" />
+</template>
+```
+
+### v-money
+
+Currency format input.
+
+```vue
+<template>
+  <input v-money="{ prefix: '$', precision: 2 }" placeholder="Enter amount" />
+</template>
+```
+
+### v-number
+
+Number format input.
+
+```vue
+<template>
+  <input v-number="{ precision: 2, min: 0, max: 100 }" placeholder="Enter number" />
 </template>
 ```
 

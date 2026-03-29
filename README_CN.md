@@ -10,11 +10,11 @@
 
 ## 特性
 
-- 🎯 **功能全面** - 提供 21 个常用指令
+- 🎯 **功能全面** - 提供 33 个常用指令
 - 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
-- 🚀 **SSR 友好** - 7 个指令开箱即用支持 SSR
+- 🚀 **SSR 友好** - 多个指令开箱即用支持 SSR
 - 📦 **多格式支持** - 提供 ESM、CJS 和 IIFE (CDN) 格式
 - ⚡ **零依赖** - 轻量级，打包体积小
 
@@ -115,60 +115,81 @@ Vue.directive('click-outside', vClickOutside)
 
 ### 事件指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-click-outside` | 检测元素外部点击 | ❌ | ✅ |
-| `v-debounce` | 防抖事件处理 | ✅ | ✅ |
-| `v-throttle` | 节流事件处理 | ✅ | ✅ |
-| `v-long-press` | 检测长按事件 | ❌ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-click-outside` | 检测元素外部点击 | ❌ |
+| `v-debounce` | 防抖事件处理 | ✅ |
+| `v-throttle` | 节流事件处理 | ✅ |
+| `v-long-press` | 检测长按事件 | ❌ |
+| `v-hover` | 悬停状态检测 | ❌ |
+| `v-touch` | 触摸手势检测（滑动、缩放、旋转） | ❌ |
 
 ### 表单指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-copy` | 复制文本到剪贴板 | ❌ | ✅ |
-| `v-focus` | 自动聚焦元素 | ✅ | ✅ |
-| `v-mask` | 输入掩码 | ❌ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-copy` | 复制文本到剪贴板 | ❌ |
+| `v-focus` | 自动聚焦元素 | ✅ |
+| `v-mask` | 输入掩码 | ❌ |
+| `v-trim` | 去除输入空白 | ✅ |
+| `v-money` | 货币格式输入 | ❌ |
+| `v-number` | 数字格式输入 | ❌ |
+
+### 格式化指令
+
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-uppercase` | 转换为大写 | ✅ |
+| `v-lowercase` | 转换为小写 | ✅ |
+| `v-capitalcase` | 首字母大写 | ✅ |
+| `v-truncate` | 文本截断 | ✅ |
 
 ### 可见性指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-lazy` | 图片懒加载 | ❌ | ✅ |
-| `v-intersect` | 检测元素交叉 | ❌ | ✅ |
-| `v-visible` | 控制元素可见性 | ✅ | ✅ |
-| `v-loading` | 显示加载遮罩 | ✅ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-lazy` | 图片懒加载 | ❌ |
+| `v-intersect` | 检测元素交叉 | ❌ |
+| `v-visible` | 控制元素可见性 | ✅ |
+| `v-loading` | 显示加载遮罩 | ✅ |
 
 ### 滚动指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-scroll` | 滚动事件处理 | ❌ | ✅ |
-| `v-infinite-scroll` | 无限滚动 | ❌ | ✅ |
-| `v-sticky` | 粘性定位 | ❌ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-scroll` | 滚动事件处理 | ❌ |
+| `v-infinite-scroll` | 无限滚动 | ❌ |
+| `v-sticky` | 粘性定位 | ❌ |
 
 ### 安全指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-permission` | 基于权限的元素控制 | ✅ | ✅ |
-| `v-sanitize` | HTML 内容消毒 | ✅ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-permission` | 基于权限的元素控制 | ✅ |
+| `v-sanitize` | HTML 内容消毒 | ✅ |
 
 ### 效果指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-hover` | 悬停状态检测 | ❌ | ✅ |
-| `v-ripple` | Material Design 波纹效果 | ❌ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-ripple` | Material Design 波纹效果 | ❌ |
+| `v-draggable` | 元素拖拽 | ❌ |
 
 ### 观察器指令
 
-| 指令 | 描述 | SSR | 状态 |
-|-----------|-------------|-----|--------|
-| `v-resize` | 元素尺寸监听 | ❌ | ✅ |
-| `v-mutation` | DOM 变化监听 | ❌ | ✅ |
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-resize` | 元素尺寸监听 | ❌ |
+| `v-mutation` | DOM 变化监听 | ❌ |
 
-> ✅ = 可用 | ❌ = 不支持 SSR
+### UI 指令
+
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-tooltip` | 工具提示 | ❌ |
+| `v-image-preview` | 图片预览（支持缩放） | ❌ |
+
+> ✅ = 支持 SSR | ❌ = 不支持 SSR
 
 ## 使用示例
 
@@ -380,6 +401,132 @@ configurePermission({
 
   <!-- 自定义允许的标签 -->
   <div v-sanitize="{ html: userContent, allowedTags: ['b', 'i', 'u'] }"></div>
+</template>
+```
+
+### v-tooltip
+
+悬停或点击显示工具提示。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <button v-tooltip="'提示内容'">悬停我</button>
+
+  <!-- 带配置 -->
+  <button v-tooltip="{ content: '提示', placement: 'bottom', trigger: 'click' }">
+    点击我
+  </button>
+</template>
+```
+
+### v-image-preview
+
+图片预览，支持缩放和手势操作。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <img v-image-preview src="thumbnail.jpg" data-preview="full.jpg" />
+
+  <!-- 带配置 -->
+  <img v-image-preview="{ src: 'thumbnail.jpg', previewSrc: 'full.jpg', enablePinchZoom: true }" />
+</template>
+```
+
+### v-draggable
+
+使元素可拖拽。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-draggable>拖拽我</div>
+
+  <!-- 带约束 -->
+  <div v-draggable="{ axis: 'x', bounds: 'parent' }">仅水平拖拽</div>
+</template>
+```
+
+### v-uppercase / v-lowercase / v-capitalcase
+
+文本大小写转换。
+
+```vue
+<template>
+  <input v-uppercase placeholder="自动大写" />
+  <input v-lowercase placeholder="自动小写" />
+  <input v-capitalcase placeholder="首字母大写" />
+</template>
+```
+
+### v-truncate
+
+文本截断显示。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <p v-truncate="50">长文本内容...</p>
+
+  <!-- 带配置 -->
+  <p v-truncate="{ length: 100, suffix: '...', position: 'end' }">长文本...</p>
+</template>
+```
+
+### v-touch
+
+触摸手势检测。
+
+```vue
+<template>
+  <div v-touch="{ onSwipe: handleSwipe, onPinch: handlePinch }">
+    在此处滑动或缩放
+  </div>
+</template>
+
+<script setup>
+function handleSwipe(direction) {
+  console.log('滑动方向:', direction) // 'left', 'right', 'up', 'down'
+}
+
+function handlePinch(scale) {
+  console.log('缩放比例:', scale)
+}
+</script>
+```
+
+### v-trim
+
+去除输入空白。
+
+```vue
+<template>
+  <!-- 失焦时去除（默认） -->
+  <input v-trim />
+
+  <!-- 输入时去除 -->
+  <input v-trim="{ position: 'both', event: 'input' }" />
+</template>
+```
+
+### v-money
+
+货币格式输入。
+
+```vue
+<template>
+  <input v-money="{ prefix: '¥', precision: 2 }" placeholder="输入金额" />
+</template>
+```
+
+### v-number
+
+数字格式输入。
+
+```vue
+<template>
+  <input v-number="{ precision: 2, min: 0, max: 100 }" placeholder="输入数字" />
 </template>
 ```
 

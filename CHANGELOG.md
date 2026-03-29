@@ -6,35 +6,39 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-#### New Directives
+#### New Directives (11 new directives, total 33)
 
-##### v-truncate
+##### Format Directives
+
+###### v-truncate
 - Truncate text to specified length
 - Support `position: 'start' | 'middle' | 'end'` options
 - Support `useCss` option for CSS-based truncation
 - Support `showTitle` option to show full text on hover
 - SSR compatible
 
-##### v-uppercase
+###### v-uppercase
 - Transform text to uppercase
 - Support `first: true` option to only capitalize first character
 - Support input elements with real-time transformation
 - SSR compatible
 
-##### v-lowercase
+###### v-lowercase
 - Transform text to lowercase
 - Support `first: true` option to only lowercase first character
 - Support input elements with real-time transformation
 - SSR compatible
 
-##### v-capitalcase
+###### v-capitalcase
 - Transform text to title case (capitalize each word)
 - Support `every: false` option to only capitalize first word
 - Support `keepLower` option for words to keep lowercase (articles, prepositions)
 - Support input elements with real-time transformation
 - SSR compatible
 
-##### v-number
+##### Form Directives
+
+###### v-number
 - Format numbers with thousands separator
 - Support `precision` option for decimal places
 - Support `prefix` and `suffix` options
@@ -42,29 +46,45 @@ All notable changes to this project will be documented in this file.
 - Support input elements with real-time formatting
 - SSR compatible
 
-##### v-money
+###### v-money
 - Format currency values
 - Support custom `symbol` and `symbolPosition` options
 - Support all v-number options (precision, separator, etc.)
 - Support `showSymbolOnFocus` option for editing
 - SSR compatible
 
-##### v-trim
+###### v-trim
 - Trim whitespace from text
 - Support `position: 'start' | 'end' | 'both'` options
 - Support `onInput` and `onBlur` trigger options
 - Support custom characters to trim
 - SSR compatible
 
-##### v-tooltip
+##### UI Directives
+
+###### v-tooltip
 - Tooltip directive with positioning
 - Support `placement: 'top' | 'bottom' | 'left' | 'right'` options
 - Support `trigger: 'hover' | 'click' | 'focus' | 'manual'` options
 - Support `delay` and `hideDelay` options
 - Support `arrow` option for tooltip arrow
 - Support `onShow` and `onHide` callbacks
+- Auto-positioning to stay within viewport
 
-##### v-draggable
+###### v-image-preview
+- Image preview modal with zoom support
+- Support click to preview images
+- Support `previewSrc` for higher resolution image
+- Support pinch zoom on mobile
+- Support double tap to zoom
+- Support swipe up to close
+- Support `closeOnClickOutside` and `closeOnEsc` options
+- Support `showCloseButton` and `showZoomIndicator` options
+- Support `onOpen` and `onClose` callbacks
+
+##### Effect Directives
+
+###### v-draggable
 - Make elements draggable
 - Support `axis: 'x' | 'y' | 'both'` constraint
 - Support `constrain` option to limit within parent
@@ -73,7 +93,9 @@ All notable changes to this project will be documented in this file.
 - Support `grid` option for snap-to-grid
 - Support `onStart`, `onDrag`, `onEnd` callbacks
 
-##### v-touch
+##### Event Directives
+
+###### v-touch
 - Touch gesture detection
 - Support swipe detection (`onSwipe`, `onSwipeLeft`, `onSwipeRight`, `onSwipeUp`, `onSwipeDown`)
 - Support pinch detection (`onPinch`)
@@ -82,23 +104,18 @@ All notable changes to this project will be documented in this file.
 - Support long press detection (`onLongPress`)
 - Configurable thresholds for all gestures
 
-##### v-image-preview
-- Image preview modal
-- Support click to preview images
-- Support `previewSrc` for higher resolution image
-- Support `closeOnClickOutside` and `closeOnEsc` options
-- Support `showCloseButton` option
-- Support `onOpen` and `onClose` callbacks
-
 ### Changed
 
-- Improved TypeScript type definitions
+- Improved TypeScript type definitions for all directives
 - Better SSR compatibility across all directives
-- Optimized bundle size
+- Optimized bundle size with better tree-shaking
+- Updated README with all 33 directives documentation
+- Added comprehensive usage examples for new directives
 
 ### Fixed
 
-- Fixed type errors in format directives
+- Fixed type errors in image-preview directive (CSSStyleDeclaration)
+- Fixed type errors in tooltip directive (docHide handler)
 - Fixed event listener cleanup in complex directives
 
 ---
@@ -363,13 +380,15 @@ None
 
 ## Roadmap
 
-### v1.2.0 (Planned)
-- `v-tooltip` - Tooltip directive with floating-ui
-- `v-draggable` - Drag and drop
-- `v-touch` - Touch gestures
-- `v-image-preview` - Image preview modal
-- `v-truncate` - Text truncation
-- `v-uppercase/lowercase` - Case transformation
-- `v-number` - Number formatting
-- `v-money` - Currency formatting
-- `v-skeleton` - Skeleton loading
+### v1.3.0 (Planned)
+- `v-skeleton` - Skeleton loading component
+- Composable API enhancements
+- Performance optimizations
+- Nuxt module
+- Better documentation site
+
+### v2.0.0 (Future)
+- Vue 3 exclusive optimizations
+- Web Components support
+- Visual configuration tool
+- Online playground
