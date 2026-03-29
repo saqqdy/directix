@@ -1,4 +1,6 @@
 import type {
+	CapitalcaseBinding,
+	CapitalcaseOptions,
 	ClickOutsideBinding,
 	ClickOutsideHandler,
 	ClickOutsideOptions,
@@ -8,10 +10,14 @@ import type {
 	CopySuccessCallback,
 	DebounceBinding,
 	DebounceOptions,
+	DraggableBinding,
+	DraggableOptions,
 	FocusBinding,
 	FocusOptions,
 	HoverBinding,
 	HoverOptions,
+	ImagePreviewBinding,
+	ImagePreviewOptions,
 	InfiniteScrollBinding,
 	InfiniteScrollOptions,
 	IntersectBinding,
@@ -22,10 +28,16 @@ import type {
 	LoadingOptions,
 	LongPressBinding,
 	LongPressOptions,
+	LowercaseBinding,
+	LowercaseOptions,
 	MaskBinding,
 	MaskOptions,
+	MoneyBinding,
+	MoneyOptions,
 	MutationBinding,
 	MutationOptions,
+	NumberBinding,
+	NumberOptions,
 	PermissionBinding,
 	PermissionConfig,
 	PermissionOptions,
@@ -39,24 +51,38 @@ import type {
 	ScrollOptions,
 	StickyBinding,
 	StickyOptions,
+	SwipeDirection,
 	ThrottleBinding,
 	ThrottleOptions,
+	TooltipBinding,
+	TooltipOptions,
+	TouchOptions,
+	TrimBinding,
+	TrimOptions,
+	TruncateBinding,
+	TruncateOptions,
+	UppercaseBinding,
+	UppercaseOptions,
 	VisibleBinding,
 	VisibleOptions,
 } from '../../src/directives'
 import { describe, expect, it } from 'vitest'
 import {
-	// Event directives
+	// Format directives
+	capitalcase,
 	clickOutside,
 	copy,
 	debounce,
+	draggable,
 	focus,
-	throttle,
+	// Event directives
 	vClickOutside,
 	vCopy,
 	vDebounce,
+	vDraggable,
 	vFocus,
 	vHover,
+	vImagePreview,
 	// Scroll directives
 	vInfiniteScroll,
 	// Visibility directives
@@ -65,9 +91,12 @@ import {
 	vLoading,
 	vLongPress,
 	// Form directives
+	vLowercase,
 	vMask,
+	vMoney,
 	// Observer directives
 	vMutation,
+	vNumber,
 	// Security directives
 	vPermission,
 	vResize,
@@ -77,7 +106,20 @@ import {
 	vScroll,
 	vSticky,
 	vThrottle,
+	vTooltip,
+	vTouch,
+	vTruncate,
+	vTrim,
+	vUppercase,
 	vVisible,
+	lowercase,
+	money,
+	number,
+	throttle,
+	tooltip,
+	truncate,
+	trim,
+	uppercase,
 } from '../../src/directives'
 
 describe('src/directives/index.ts', () => {
@@ -114,6 +156,10 @@ describe('src/directives/index.ts', () => {
 		it('should export vHover', () => {
 			expect(vHover).toBeDefined()
 		})
+
+		it('should export vTouch', () => {
+			expect(vTouch).toBeDefined()
+		})
 	})
 
 	describe('visibility directive exports', () => {
@@ -131,6 +177,10 @@ describe('src/directives/index.ts', () => {
 
 		it('should export vLoading', () => {
 			expect(vLoading).toBeDefined()
+		})
+
+		it('should export vImagePreview', () => {
+			expect(vImagePreview).toBeDefined()
 		})
 	})
 
@@ -151,6 +201,43 @@ describe('src/directives/index.ts', () => {
 	describe('form directive exports', () => {
 		it('should export vMask', () => {
 			expect(vMask).toBeDefined()
+		})
+
+		it('should export vTrim', () => {
+			expect(vTrim).toBeDefined()
+			expect(trim).toBe(vTrim)
+		})
+
+		it('should export vMoney', () => {
+			expect(vMoney).toBeDefined()
+			expect(money).toBe(vMoney)
+		})
+
+		it('should export vNumber', () => {
+			expect(vNumber).toBeDefined()
+			expect(number).toBe(vNumber)
+		})
+	})
+
+	describe('format directive exports', () => {
+		it('should export vUppercase and default alias', () => {
+			expect(vUppercase).toBeDefined()
+			expect(uppercase).toBe(vUppercase)
+		})
+
+		it('should export vLowercase and default alias', () => {
+			expect(vLowercase).toBeDefined()
+			expect(lowercase).toBe(vLowercase)
+		})
+
+		it('should export vCapitalcase and default alias', () => {
+			expect(vCapitalcase).toBeDefined()
+			expect(capitalcase).toBe(vCapitalcase)
+		})
+
+		it('should export vTruncate and default alias', () => {
+			expect(vTruncate).toBeDefined()
+			expect(truncate).toBe(vTruncate)
 		})
 	})
 
@@ -177,6 +264,18 @@ describe('src/directives/index.ts', () => {
 	describe('effect directive exports', () => {
 		it('should export vRipple', () => {
 			expect(vRipple).toBeDefined()
+		})
+
+		it('should export vDraggable', () => {
+			expect(vDraggable).toBeDefined()
+			expect(draggable).toBe(vDraggable)
+		})
+	})
+
+	describe('ui directive exports', () => {
+		it('should export vTooltip and default alias', () => {
+			expect(vTooltip).toBeDefined()
+			expect(tooltip).toBe(vTooltip)
 		})
 	})
 
@@ -438,6 +537,141 @@ describe('src/directives/index.ts', () => {
 			const binding: RippleBinding = true
 
 			expect(binding).toBeTruthy()
+		})
+
+		// New v1.2.0 types
+		it('should export Uppercase types', () => {
+			const options: UppercaseOptions = {
+				first: true,
+			}
+
+			expect(options.first).toBeTruthy()
+
+			const binding: UppercaseBinding = 'test'
+
+			expect(binding).toBe('test')
+		})
+
+		it('should export Lowercase types', () => {
+			const options: LowercaseOptions = {
+				first: true,
+			}
+
+			expect(options.first).toBeTruthy()
+
+			const binding: LowercaseBinding = 'TEST'
+
+			expect(binding).toBe('TEST')
+		})
+
+		it('should export Capitalcase types', () => {
+			const options: CapitalcaseOptions = {
+				every: true,
+			}
+
+			expect(options.every).toBeTruthy()
+
+			const binding: CapitalcaseBinding = 'hello world'
+
+			expect(binding).toBe('hello world')
+		})
+
+		it('should export Truncate types', () => {
+			const options: TruncateOptions = {
+				length: 10,
+			}
+
+			expect(options.length).toBe(10)
+
+			const binding: TruncateBinding = 10
+
+			expect(binding).toBe(10)
+		})
+
+		it('should export Trim types', () => {
+			const options: TrimOptions = {
+				position: 'both',
+			}
+
+			expect(options.position).toBe('both')
+
+			const binding: TrimBinding = true
+
+			expect(binding).toBeTruthy()
+		})
+
+		it('should export Number types', () => {
+			const options: NumberOptions = {
+				precision: 2,
+			}
+
+			expect(options.precision).toBe(2)
+
+			const binding: NumberBinding = {}
+
+			expect(binding).toBeDefined()
+		})
+
+		it('should export Money types', () => {
+			const options: MoneyOptions = {
+				symbol: '$',
+			}
+
+			expect(options.symbol).toBe('$')
+
+			const binding: MoneyBinding = {}
+
+			expect(binding).toBeDefined()
+		})
+
+		it('should export Tooltip types', () => {
+			const options: TooltipOptions = {
+				content: 'test',
+			}
+
+			expect(options.content).toBe('test')
+
+			const binding: TooltipBinding = 'test'
+
+			expect(binding).toBe('test')
+		})
+
+		it('should export Draggable types', () => {
+			const options: DraggableOptions = {
+				axis: 'x',
+			}
+
+			expect(options.axis).toBe('x')
+
+			const binding: DraggableBinding = true
+
+			expect(binding).toBeTruthy()
+		})
+
+		it('should export Touch types', () => {
+			const options: TouchOptions = {
+				onSwipe: () => {},
+			}
+
+			expect(options.onSwipe).toBeDefined()
+		})
+
+		it('should export SwipeDirection type', () => {
+			const directions: SwipeDirection[] = ['left', 'right', 'up', 'down']
+
+			expect(directions).toHaveLength(4)
+		})
+
+		it('should export ImagePreview types', () => {
+			const options: ImagePreviewOptions = {
+				src: 'test.jpg',
+			}
+
+			expect(options.src).toBe('test.jpg')
+
+			const binding: ImagePreviewBinding = 'test.jpg'
+
+			expect(binding).toBe('test.jpg')
 		})
 	})
 })
