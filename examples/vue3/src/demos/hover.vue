@@ -21,8 +21,7 @@ const handleLeave = () => {
 // Scenario 3: With delay
 const delayedHover = ref(false)
 
-// Scenario 4: With custom class
-const customClassHover = ref(false)
+// Scenario 4: With custom class (class is auto-toggled by directive)
 
 const basicCode = `<div v-hover="handleHover">
   {{ isHovering ? 'Hovering!' : 'Hover me' }}
@@ -88,7 +87,7 @@ const classCode = `<div v-hover="{ class: 'is-hovering' }">
 			<div class="demo-box">
 				<div
 					v-hover="{
-						handler: (h) => delayedHover = h,
+						handler: (h: boolean) => delayedHover = h,
 						enterDelay: 300,
 						leaveDelay: 200
 					}"

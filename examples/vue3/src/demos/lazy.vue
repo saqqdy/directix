@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 // Scenario 1: Basic usage
-const imageLoaded = ref(false)
 const basicImageUrl = 'https://picsum.photos/400/300?random=1'
 
 // Scenario 2: With placeholder and error handling
@@ -15,9 +13,6 @@ const errorImageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/s
 const handleLoad = () => {
 	// Image loaded callback
 }
-
-// Scenario 3: Background image lazy loading
-const bgImageLoaded = ref(false)
 
 const basicCode = `<img v-lazy="imageUrl" alt="Lazy loaded image" />`
 

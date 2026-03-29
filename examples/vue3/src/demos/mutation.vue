@@ -30,7 +30,6 @@ const removeChild = () => {
 // Scenario 2: Attribute observation
 const attrLog = ref<string[]>([])
 const boxClass = ref('box')
-const boxStyle = ref('')
 const handleAttrMutation = (mutations: MutationRecord[]) => {
 	mutations.forEach(mutation => {
 		if (mutation.type === 'attributes') {
@@ -56,14 +55,6 @@ const attrCode = `<div v-mutation="{
   attributeFilter: ['class', 'style']
 }">
   Observe attribute changes
-</div>`
-
-const subtreeCode = `<div v-mutation="{
-  handler: handleMutation,
-  childList: true,
-  subtree: true
-}">
-  Observe all descendants
 </div>`
 </script>
 
