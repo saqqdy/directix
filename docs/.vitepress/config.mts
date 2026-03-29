@@ -54,12 +54,57 @@ export default defineConfig({
 							collapsed: false,
 							items: [
 								{ link: '/api/directives/click-outside', text: 'v-click-outside' },
-								{ link: '/api/directives/copy', text: 'v-copy' },
 								{ link: '/api/directives/debounce', text: 'v-debounce' },
 								{ link: '/api/directives/throttle', text: 'v-throttle' },
-								{ link: '/api/directives/focus', text: 'v-focus' },
+								{ link: '/api/directives/long-press', text: 'v-long-press' },
+								{ link: '/api/directives/hover', text: 'v-hover' },
+								{ link: '/api/directives/ripple', text: 'v-ripple' },
 							],
-							text: 'Directives',
+							text: 'Event Directives',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/api/directives/lazy', text: 'v-lazy' },
+								{ link: '/api/directives/intersect', text: 'v-intersect' },
+								{ link: '/api/directives/visible', text: 'v-visible' },
+								{ link: '/api/directives/loading', text: 'v-loading' },
+							],
+							text: 'Visibility Directives',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/api/directives/scroll', text: 'v-scroll' },
+								{ link: '/api/directives/infinite-scroll', text: 'v-infinite-scroll' },
+								{ link: '/api/directives/sticky', text: 'v-sticky' },
+							],
+							text: 'Scroll Directives',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/api/directives/copy', text: 'v-copy' },
+								{ link: '/api/directives/focus', text: 'v-focus' },
+								{ link: '/api/directives/mask', text: 'v-mask' },
+							],
+							text: 'Form Directives',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/api/directives/permission', text: 'v-permission' },
+								{ link: '/api/directives/sanitize', text: 'v-sanitize' },
+							],
+							text: 'Security Directives',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/api/directives/resize', text: 'v-resize' },
+								{ link: '/api/directives/mutation', text: 'v-mutation' },
+							],
+							text: 'Observer Directives',
 						},
 					],
 					'/examples/': [
@@ -90,7 +135,11 @@ export default defineConfig({
 						{
 							items: [
 								{ link: '/guide/events', text: 'Event Directives' },
+								{ link: '/guide/visibility', text: 'Visibility Directives' },
+								{ link: '/guide/scroll', text: 'Scroll Directives' },
 								{ link: '/guide/forms', text: 'Form Directives' },
+								{ link: '/guide/security', text: 'Security Directives' },
+								{ link: '/guide/observers', text: 'Observer Directives' },
 							],
 							text: 'Categories',
 						},
@@ -147,12 +196,57 @@ export default defineConfig({
 							collapsed: false,
 							items: [
 								{ link: '/zh/api/directives/click-outside', text: 'v-click-outside' },
-								{ link: '/zh/api/directives/copy', text: 'v-copy' },
 								{ link: '/zh/api/directives/debounce', text: 'v-debounce' },
 								{ link: '/zh/api/directives/throttle', text: 'v-throttle' },
-								{ link: '/zh/api/directives/focus', text: 'v-focus' },
+								{ link: '/zh/api/directives/long-press', text: 'v-long-press' },
+								{ link: '/zh/api/directives/hover', text: 'v-hover' },
+								{ link: '/zh/api/directives/ripple', text: 'v-ripple' },
 							],
-							text: '指令',
+							text: '事件指令',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/zh/api/directives/lazy', text: 'v-lazy' },
+								{ link: '/zh/api/directives/intersect', text: 'v-intersect' },
+								{ link: '/zh/api/directives/visible', text: 'v-visible' },
+								{ link: '/zh/api/directives/loading', text: 'v-loading' },
+							],
+							text: '可见性指令',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/zh/api/directives/scroll', text: 'v-scroll' },
+								{ link: '/zh/api/directives/infinite-scroll', text: 'v-infinite-scroll' },
+								{ link: '/zh/api/directives/sticky', text: 'v-sticky' },
+							],
+							text: '滚动指令',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/zh/api/directives/copy', text: 'v-copy' },
+								{ link: '/zh/api/directives/focus', text: 'v-focus' },
+								{ link: '/zh/api/directives/mask', text: 'v-mask' },
+							],
+							text: '表单指令',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/zh/api/directives/permission', text: 'v-permission' },
+								{ link: '/zh/api/directives/sanitize', text: 'v-sanitize' },
+							],
+							text: '安全指令',
+						},
+						{
+							collapsed: false,
+							items: [
+								{ link: '/zh/api/directives/resize', text: 'v-resize' },
+								{ link: '/zh/api/directives/mutation', text: 'v-mutation' },
+							],
+							text: '观察者指令',
 						},
 					],
 					'/zh/examples/': [
@@ -183,7 +277,11 @@ export default defineConfig({
 						{
 							items: [
 								{ link: '/zh/guide/events', text: '事件指令' },
+								{ link: '/zh/guide/visibility', text: '可见性指令' },
+								{ link: '/zh/guide/scroll', text: '滚动指令' },
 								{ link: '/zh/guide/forms', text: '表单指令' },
+								{ link: '/zh/guide/security', text: '安全指令' },
+								{ link: '/zh/guide/observers', text: '观察者指令' },
 							],
 							text: '分类',
 						},

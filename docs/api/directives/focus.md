@@ -19,7 +19,18 @@ Auto focus an element when mounted.
 ```vue
 <template>
   <input v-focus="{ focus: true, refocus: true }" />
+  <input v-focus="{ onFocus: handleFocus, onBlur: handleBlur }" />
 </template>
+
+<script setup>
+function handleFocus(el) {
+  console.log('Focused:', el)
+}
+
+function handleBlur(el) {
+  console.log('Blurred:', el)
+}
+</script>
 ```
 
 ## API
@@ -30,8 +41,12 @@ Auto focus an element when mounted.
 interface FocusOptions {
   /** Focus element on mount */
   focus?: boolean
-  /** Refocus when element is shown again */
+  /** Refocus when binding value changes */
   refocus?: boolean
+  /** Callback when focused */
+  onFocus?: (el: HTMLElement) => void
+  /** Callback when blurred */
+  onBlur?: (el: HTMLElement) => void
 }
 
 type FocusBinding = boolean | FocusOptions
@@ -42,7 +57,9 @@ type FocusBinding = boolean | FocusOptions
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `focus` | `boolean` | `true` | Focus element on mount |
-| `refocus` | `boolean` | `false` | Refocus when element is shown again. **Since:** `1.0.0` |
+| `refocus` | `boolean` | `false` | Refocus when binding value changes |
+| `onFocus` | `(el: HTMLElement) => void` | - | Callback when focused |
+| `onBlur` | `(el: HTMLElement) => void` | - | Callback when blurred |
 
 ## Examples
 
@@ -138,4 +155,29 @@ function search(event) {
   console.log('Searching:', event.target.value)
 }
 </script>
+```
+
+### Focusable Elements
+
+The directive works with any focusable element:
+
+```vue
+<template>
+  <!-- Input elements -->
+  <input v-focus />
+  <textarea v-focus></textarea>
+  <select v-focus><option>Option</option></select>
+
+  <!-- Button -->
+  <button v-focus>Auto focused button</button>
+
+  <!-- Contenteditable -->
+  <div v-focus contenteditable="true">Editable content</div>
+
+  <!-- With tabindex -->
+  <div v-focus tabindex="0">Focusable div</div>
+
+  <!-- Anchor with href -->
+  <a v-focus href="#section">Skip link</a>
+</template>
 ```

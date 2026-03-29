@@ -48,14 +48,33 @@ function handleClick() {
 </template>
 ```
 
+### Event Modifiers
+
+Specify the event type using modifiers:
+
+```vue
+<template>
+  <button v-throttle.click="handleClick">Click me</button>
+  <div v-throttle.scroll="handleScroll">Scroll me</div>
+  <input v-throttle.input="handleInput" />
+</template>
+```
+
+Supported events: `click`, `input`, `change`, `submit`, `scroll`, `resize`, `mouseenter`, `mouseleave`, `mousemove`, `mousedown`, `mouseup`, `keydown`, `keyup`, `focus`, `blur`, `touchstart`, `touchmove`, `touchend`
+
 ## API
 
 ### Types
 
 ```typescript
-interface ThrottleOptions {
+interface ThrottledFunction<T extends (...args: any[]) => any> {
+  (...args: Parameters<T>): void
+  cancel: () => void
+}
+
+interface ThrottleOptions<T extends (...args: any[]) => any = any> {
   /** The function to throttle */
-  handler: (event: Event) => void
+  handler: T
   /** Wait time in milliseconds */
   wait?: number
   /** Invoke on leading edge */
@@ -64,14 +83,16 @@ interface ThrottleOptions {
   trailing?: boolean
 }
 
-type ThrottleBinding = ThrottleOptions['handler'] | ThrottleOptions
+type ThrottleBinding<T extends (...args: any[]) => any = any> =
+  | T
+  | ThrottleOptions<T>
 ```
 
 ### Options
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `handler` | `Function` | - | The function to throttle |
+| `handler` | `Function` | - | The function to throttle (required) |
 | `wait` | `number` | `300` | Wait time in milliseconds |
 | `leading` | `boolean` | `true` | Invoke on leading edge |
 | `trailing` | `boolean` | `true` | Invoke on trailing edge |
@@ -99,7 +120,7 @@ async function saveData() {
 
 ```vue
 <template>
-  <div v-throttle:100ms="handleScroll" class="scroll-container">
+  <div v-throttle:100ms.scroll="handleScroll" class="scroll-container">
     <!-- content -->
   </div>
 </template>
@@ -112,42 +133,13 @@ function handleScroll(event) {
 </script>
 ```
 
-### Resize Handler
-
-```vue
-<template>
-  <div v-throttle:200ms="handleResize">
-    Window width: {{ width }}px
-  </div>
-</template>
-
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-
-const width = ref(window.innerWidth)
-
-function handleResize() {
-  width.value = window.innerWidth
-}
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
-</script>
-```
-
 ### Mouse Move
 
 ```vue
 <template>
   <div
-    v-throttle:50ms="handleMouseMove"
+    v-throttle:50ms.mousemove="handleMouseMove"
     class="tracking-area"
-    @mousemove="handleMouseMove"
   >
     Mouse position: {{ x }}, {{ y }}
   </div>
@@ -162,6 +154,29 @@ const y = ref(0)
 function handleMouseMove(event) {
   x.value = event.clientX
   y.value = event.clientY
+}
+</script>
+```
+
+### API Call
+
+```vue
+<template>
+  <button v-throttle="{
+    handler: fetchData,
+    wait: 2000,
+    leading: true,
+    trailing: false
+  }">
+    Fetch Data
+  </button>
+</template>
+
+<script setup>
+async function fetchData() {
+  const response = await fetch('/api/data')
+  const data = await response.json()
+  console.log('Data:', data)
 }
 </script>
 ```

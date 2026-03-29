@@ -51,13 +51,20 @@ function handleError(error) {
 ### Types
 
 ```typescript
+type CopySuccessCallback = (text: string) => void
+type CopyErrorCallback = (error: Error) => void
+
 interface CopyOptions {
-  /** Text to copy */
+  /** Text to copy (required) */
   value: string
   /** Callback on successful copy */
-  onSuccess?: (text: string) => void
+  onSuccess?: CopySuccessCallback
   /** Callback on copy failure */
-  onError?: (error: Error) => void
+  onError?: CopyErrorCallback
+  /** Tooltip text for the copy button */
+  title?: string
+  /** Disable copy functionality */
+  disabled?: boolean
 }
 
 type CopyBinding = string | CopyOptions
@@ -67,9 +74,20 @@ type CopyBinding = string | CopyOptions
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `value` | `string` | - | Text to copy |
-| `onSuccess` | `Function` | - | Callback on successful copy |
-| `onError` | `Function` | - | Callback on copy failure |
+| `value` | `string` | - | Text to copy (required) |
+| `onSuccess` | `(text: string) => void` | - | Callback on successful copy |
+| `onError` | `(error: Error) => void` | - | Callback on copy failure |
+| `title` | `string` | - | Tooltip text for the button |
+| `disabled` | `boolean` | `false` | Disable copy functionality |
+
+## Events
+
+The directive dispatches custom events:
+
+| Event | Detail | Description |
+| ----- | ------ | ----------- |
+| `copy:success` | `{ text: string }` | Fired on successful copy |
+| `copy:error` | `{ error: Error }` | Fired on copy failure |
 
 ## Examples
 
@@ -126,5 +144,29 @@ const items = [
   { id: 2, text: 'Second text' },
   { id: 3, text: 'Third text' },
 ]
+</script>
+```
+
+### Listen to Events
+
+```vue
+<template>
+  <button
+    v-copy="textToCopy"
+    @copy:success="onCopySuccess"
+    @copy:error="onCopyError"
+  >
+    Copy
+  </button>
+</template>
+
+<script setup>
+function onCopySuccess(event) {
+  console.log('Copied:', event.detail.text)
+}
+
+function onCopyError(event) {
+  console.error('Error:', event.detail.error)
+}
 </script>
 ```

@@ -3523,7 +3523,7 @@ export default defineConfig({
 
 **里程碑 M1：项目基础设施完成** ✅
 
-#### 第二阶段：核心指令开发 (Week 2-3) 🚧 进行中
+#### 第二阶段：核心指令开发 (Week 2-3) ✅ 已完成
 
 | 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
 |------|---------|--------|------|------|
@@ -3532,32 +3532,32 @@ export default defineConfig({
 | v-debounce | 4h | P0 | - | ✅ 已完成 |
 | v-throttle | 4h | P0 | - | ✅ 已完成 |
 | v-focus | 2h | P0 | - | ✅ 已完成 |
-| v-lazy | 8h | P0 | IntersectionObserver | ⏳ 待开发 |
-| v-permission | 6h | P0 | - | ⏳ 待开发 |
-| v-long-press | 4h | P1 | - | ⏳ 待开发 |
-| v-hover | 4h | P1 | - | ⏳ 待开发 |
-| v-ripple | 6h | P1 | - | ⏳ 待开发 |
+| v-lazy | 8h | P0 | IntersectionObserver | ✅ 已完成 |
+| v-permission | 6h | P0 | - | ✅ 已完成 |
+| v-long-press | 4h | P1 | - | ✅ 已完成 |
+| v-hover | 4h | P1 | - | ✅ 已完成 |
+| v-ripple | 6h | P1 | - | ✅ 已完成 |
 
-**里程碑 M2：核心指令完成，可用性验证** 🚧 进行中
+**里程碑 M2：核心指令完成，可用性验证** ✅
 
-#### 第三阶段：增强指令开发 (Week 4-5)
+#### 第三阶段：增强指令开发 (Week 4-5) ✅ 已完成
 
 | 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
 |------|---------|--------|------|------|
-| v-scroll | 6h | P1 | - | ⏳ 待开发 |
-| v-resize | 4h | P1 | ResizeObserver | ⏳ 待开发 |
-| v-intersect | 4h | P1 | IntersectionObserver | ⏳ 待开发 |
-| v-infinite-scroll | 6h | P1 | v-scroll, v-intersect | ⏳ 待开发 |
-| v-sticky | 4h | P1 | v-scroll | ⏳ 待开发 |
-| v-mask | 8h | P1 | - | ⏳ 待开发 |
-| v-sanitize | 4h | P2 | DOMPurify | ⏳ 待开发 |
-| v-loading | 4h | P2 | - | ⏳ 待开发 |
-| v-visible | 4h | P2 | - | ⏳ 待开发 |
-| v-mutation | 4h | P2 | MutationObserver | ⏳ 待开发 |
+| v-scroll | 6h | P1 | - | ✅ 已完成 |
+| v-resize | 4h | P1 | ResizeObserver | ✅ 已完成 |
+| v-intersect | 4h | P1 | IntersectionObserver | ✅ 已完成 |
+| v-infinite-scroll | 6h | P1 | v-scroll, v-intersect | ✅ 已完成 |
+| v-sticky | 4h | P1 | v-scroll | ✅ 已完成 |
+| v-mask | 8h | P1 | - | ✅ 已完成 |
+| v-sanitize | 4h | P2 | DOMPurify | ✅ 已完成 |
+| v-loading | 4h | P2 | - | ✅ 已完成 |
+| v-visible | 4h | P2 | - | ✅ 已完成 |
+| v-mutation | 4h | P2 | MutationObserver | ✅ 已完成 |
 
-**里程碑 M3：增强指令完成**
+**里程碑 M3：增强指令完成** ✅
 
-#### 第四阶段：扩展指令开发 (Week 6)
+#### 第四阶段：扩展指令开发 (Week 6) ⏳ 待开发
 
 | 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
 |------|---------|--------|------|------|
@@ -3570,7 +3570,7 @@ export default defineConfig({
 | v-number | 4h | P3 | - | ⏳ 待开发 |
 | v-money | 4h | P3 | - | ⏳ 待开发 |
 
-**里程碑 M4：全部指令开发完成**
+**里程碑 M4：全部指令开发完成** ⏳
 
 #### 第五阶段：优化与发布 (Week 7)
 
@@ -3587,45 +3587,43 @@ export default defineConfig({
 
 ### 10.2 当前进度总览
 
-#### 已完成指令 (5/30+)
+#### 已完成指令 (21/30+)
 
-| 指令 | 功能描述 | 测试 | 示例 |
-|------|---------|------|------|
-| v-click-outside | 点击外部检测 | ✅ | ✅ |
-| v-copy | 复制到剪贴板 | ✅ | ✅ |
+| 指令 | 功能描述 | SSR | 示例 |
+|------|---------|-----|------|
+| v-click-outside | 点击外部检测 | ❌ | ✅ |
+| v-copy | 复制到剪贴板 | ❌ | ✅ |
 | v-debounce | 防抖指令 | ✅ | ✅ |
 | v-throttle | 节流指令 | ✅ | ✅ |
 | v-focus | 自动聚焦 | ✅ | ✅ |
+| v-lazy | 图片懒加载 | ❌ | ✅ |
+| v-permission | 权限控制 | ✅ | ✅ |
+| v-long-press | 长按事件 | ❌ | ✅ |
+| v-hover | 悬停状态 | ❌ | ✅ |
+| v-ripple | 波纹效果 | ❌ | ✅ |
+| v-scroll | 滚动监听 | ❌ | ✅ |
+| v-resize | 尺寸监听 | ❌ | ✅ |
+| v-intersect | 交叉检测 | ❌ | ✅ |
+| v-infinite-scroll | 无限滚动 | ❌ | ✅ |
+| v-sticky | 粘性定位 | ❌ | ✅ |
+| v-mask | 输入掩码 | ❌ | ✅ |
+| v-sanitize | 安全过滤 | ✅ | ✅ |
+| v-loading | 加载状态 | ✅ | ✅ |
+| v-visible | 可见性控制 | ✅ | ✅ |
+| v-mutation | DOM 监听 | ❌ | ✅ |
 
 #### 开发中
 
 暂无
 
-#### 待开发指令 (25+)
+#### 待开发指令 (9+)
 
-**P0 高优先级：**
-- v-lazy - 图片/组件懒加载
-- v-permission - 权限控制
-
-**P1 中优先级：**
-- v-long-press - 长按事件
-- v-hover - 悬停状态
-- v-ripple - 波纹效果
-- v-scroll - 滚动监听
-- v-resize - 尺寸监听
-- v-intersect - 交叉检测
-- v-infinite-scroll - 无限滚动
-- v-sticky - 粘性定位
-- v-mask - 输入掩码
-
-**P2/P3 低优先级：**
-- v-sanitize - 安全过滤
-- v-loading - 加载状态
-- v-visible - 可见性
-- v-mutation - DOM 监听
+**P2 中优先级：**
 - v-tooltip - 提示框
 - v-draggable - 拖拽
 - v-touch - 手势
+
+**P3 低优先级：**
 - v-image-preview - 图片预览
 - v-truncate - 文本截断
 - v-uppercase/lowercase - 大小写转换
@@ -3635,9 +3633,10 @@ export default defineConfig({
 
 ### 10.3 版本规划
 
-| 版本 | 时间 | 主要内容 |
-|------|------|---------|
-| v1.0.0 | Week 7 | 核心指令、基础文档 |
+| 版本 | 时间 | 主要内容 | 状态 |
+|------|------|---------|------|
+| v1.0.0 | Week 7 | 核心指令、基础文档 | ✅ 已完成 |
+| v1.1.0 | Week 9 | 增强指令、SSR 优化 | ✅ 已完成 |
 | v1.1.0 | Week 9 | 增强指令、SSR 优化 |
 | v1.2.0 | Week 11 | 扩展指令、Nuxt 模块 |
 | v1.3.0 | Week 13 | 组合式 API 增强、性能优化 |

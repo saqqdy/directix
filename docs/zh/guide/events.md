@@ -1,10 +1,10 @@
 # 事件指令
 
-事件指令帮助你更高效地管理 DOM 事件。
+事件指令帮助您更高效地管理 DOM 事件。
 
 ## v-click-outside
 
-检测元素外部的点击事件。非常适合关闭下拉菜单、弹窗和弹出框。
+检测元素外部点击。非常适合关闭下拉菜单、模态框和弹出框。
 
 ### 基本用法
 
@@ -27,14 +27,14 @@ function closeDropdown() {
 </script>
 ```
 
-### 带配置选项
+### 带选项
 
 ```vue
 <template>
   <div v-click-outside="{
     handler: closeDropdown,
-    include: ['.trigger'],
-    exclude: ['.ignore']
+    exclude: ['.ignore'],
+    events: ['click', 'touchstart']
   }">
     <!-- 内容 -->
   </div>
@@ -45,13 +45,15 @@ function closeDropdown() {
 
 | 选项 | 类型 | 默认值 | 描述 |
 | ---- | ---- | ------ | ---- |
-| `handler` | `Function` | - | 点击外部时的回调函数 |
-| `include` | `string[]` | `[]` | 包含的 CSS 选择器 |
-| `exclude` | `string[]` | `[]` | 排除的 CSS 选择器 |
+| `handler` | `Function` | - | 点击外部时的回调 |
+| `exclude` | `Array` | `[]` | 排除检测的元素 |
+| `capture` | `boolean` | `true` | 使用捕获模式 |
+| `events` | `string[]` | `['click']` | 监听的事件类型 |
+| `disabled` | `boolean` | `false` | 禁用指令 |
 
 ## v-debounce
 
-对事件处理函数进行防抖，限制执行频率。
+防抖事件处理程序，限制执行频率。
 
 ### 基本用法
 
@@ -63,7 +65,7 @@ function closeDropdown() {
   <!-- 使用修饰符自定义等待时间 -->
   <input v-debounce:500ms="handleInput" />
 
-  <!-- 使用配置对象 -->
+  <!-- 使用选项对象 -->
   <input v-debounce="{ handler: handleInput, wait: 500 }" />
 </template>
 
@@ -74,31 +76,18 @@ function handleInput(event) {
 </script>
 ```
 
-### 带配置选项
-
-```vue
-<template>
-  <input v-debounce="{
-    handler: handleInput,
-    wait: 500,
-    leading: true,
-    trailing: true
-  }" />
-</template>
-```
-
 ### API
 
 | 选项 | 类型 | 默认值 | 描述 |
 | ---- | ---- | ------ | ---- |
-| `handler` | `Function` | - | 需要防抖的函数 |
+| `handler` | `Function` | - | 要防抖的函数 |
 | `wait` | `number` | `300` | 等待时间（毫秒） |
-| `leading` | `boolean` | `false` | 是否在开始边界触发 |
-| `trailing` | `boolean` | `true` | 是否在结束边界触发 |
+| `leading` | `boolean` | `false` | 在开始边缘调用 |
+| `trailing` | `boolean` | `true` | 在结束边缘调用 |
 
 ## v-throttle
 
-对事件处理函数进行节流，限制执行频率。
+节流事件处理程序，限制执行频率。
 
 ### 基本用法
 
@@ -109,11 +98,6 @@ function handleInput(event) {
 
   <!-- 使用修饰符自定义等待时间 -->
   <button v-throttle:1s="handleClick">1秒节流</button>
-
-  <!-- 使用配置对象 -->
-  <button v-throttle="{ handler: handleClick, wait: 1000 }">
-    带配置节流
-  </button>
 </template>
 
 <script setup>
@@ -123,18 +107,89 @@ function handleClick() {
 </script>
 ```
 
-### 带配置选项
+### API
+
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `handler` | `Function` | - | 要节流的函数 |
+| `wait` | `number` | `300` | 等待时间（毫秒） |
+| `leading` | `boolean` | `true` | 在开始边缘调用 |
+| `trailing` | `boolean` | `true` | 在结束边缘调用 |
+
+## v-long-press
+
+检测元素上的长按手势。
+
+### 基本用法
 
 ```vue
 <template>
-  <button v-throttle="{
-    handler: handleClick,
-    wait: 1000,
-    leading: true,
-    trailing: false
-  }">
-    带配置节流
+  <button v-long-press="handleLongPress">长按我</button>
+  <button v-long-press="{ handler: handleLongPress, duration: 1000 }">
+    1秒长按
   </button>
+</template>
+
+<script setup>
+function handleLongPress(event) {
+  console.log('长按触发！')
+}
+</script>
+```
+
+### API
+
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `handler` | `Function` | - | 长按触发时的回调 |
+| `duration` | `number` | `500` | 持续时间（毫秒） |
+| `distance` | `number` | `10` | 取消前的最大移动距离 |
+| `onStart` | `Function` | - | 按下开始时的回调 |
+| `onCancel` | `Function` | - | 按下取消时的回调 |
+
+## v-hover
+
+跟踪悬停状态并提供回调和 CSS 类。
+
+### 基本用法
+
+```vue
+<template>
+  <div v-hover="handleHover">悬停我</div>
+  <div v-hover="{ onEnter: handleEnter, onLeave: handleLeave, class: 'is-hovering' }">
+    悬停我
+  </div>
+</template>
+
+<script setup>
+function handleHover(isHovering, event) {
+  console.log('悬停中:', isHovering)
+}
+</script>
+```
+
+### API
+
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `handler` | `Function` | - | 悬停状态改变时的回调 |
+| `onEnter` | `Function` | - | 鼠标进入时的回调 |
+| `onLeave` | `Function` | - | 鼠标离开时的回调 |
+| `class` | `string` | `'v-hover'` | 悬停时添加的 CSS 类 |
+| `enterDelay` | `number` | `0` | 进入延迟（毫秒） |
+| `leaveDelay` | `number` | `0` | 离开延迟（毫秒） |
+
+## v-ripple
+
+为元素添加 Material Design 波纹效果。
+
+### 基本用法
+
+```vue
+<template>
+  <button v-ripple>点击我</button>
+  <button v-ripple="'rgba(255, 255, 255, 0.3)'">自定义颜色</button>
+  <button v-ripple="{ color: 'red', duration: 800 }">自定义选项</button>
 </template>
 ```
 
@@ -142,7 +197,6 @@ function handleClick() {
 
 | 选项 | 类型 | 默认值 | 描述 |
 | ---- | ---- | ------ | ---- |
-| `handler` | `Function` | - | 需要节流的函数 |
-| `wait` | `number` | `300` | 等待时间（毫秒） |
-| `leading` | `boolean` | `true` | 是否在开始边界触发 |
-| `trailing` | `boolean` | `true` | 是否在结束边界触发 |
+| `color` | `string` | `'currentColor'` | 波纹颜色 |
+| `duration` | `number` | `600` | 动画持续时间（毫秒） |
+| `disabled` | `boolean` | `false` | 禁用波纹效果 |

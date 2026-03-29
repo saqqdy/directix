@@ -10,11 +10,11 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 30+ commonly used directives
-- 🔄 **Vue 2/3 Compatible** - Built on [vue-demi](https://github.com/vueuse/vue-demi), single codebase supports both versions
+- 🎯 **Comprehensive** - 21+ commonly used directives
+- 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
-- 🚀 **SSR Friendly** - Works with Nuxt and other SSR frameworks
+- 🚀 **SSR Friendly** - 7 directives support SSR out of the box
 - 📦 **Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
 
 ## Online Demo
@@ -63,7 +63,7 @@ You can also use Directix via CDN:
 <script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
 ```
 
-The CDN build includes `vue-demi` bundled internally, so it works seamlessly with both Vue 2 and Vue 3.
+The CDN build works seamlessly with both Vue 2 and Vue 3.
 
 ## Requirements
 
@@ -114,37 +114,60 @@ Vue.directive('click-outside', vClickOutside)
 
 ### Event Directives
 
-| Directive | Description | Status |
-|-----------|-------------|--------|
-| `v-click-outside` | Detect clicks outside an element | ✅ |
-| `v-debounce` | Debounce event handlers | ✅ |
-| `v-throttle` | Throttle event handlers | ✅ |
-| `v-long-press` | Detect long press events | ⏳ |
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-click-outside` | Detect clicks outside an element | ❌ | ✅ |
+| `v-debounce` | Debounce event handlers | ✅ | ✅ |
+| `v-throttle` | Throttle event handlers | ✅ | ✅ |
+| `v-long-press` | Detect long press events | ❌ | ✅ |
 
 ### Form Directives
 
-| Directive | Description | Status |
-|-----------|-------------|--------|
-| `v-copy` | Copy text to clipboard | ✅ |
-| `v-focus` | Auto focus an element | ✅ |
-| `v-mask` | Input masking | ⏳ |
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-copy` | Copy text to clipboard | ❌ | ✅ |
+| `v-focus` | Auto focus an element | ✅ | ✅ |
+| `v-mask` | Input masking | ❌ | ✅ |
 
 ### Visibility Directives
 
-| Directive | Description | Status |
-|-----------|-------------|--------|
-| `v-lazy` | Lazy load images | ⏳ |
-| `v-intersect` | Detect element intersection | ⏳ |
-| `v-visible` | Control element visibility | ⏳ |
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-lazy` | Lazy load images | ❌ | ✅ |
+| `v-intersect` | Detect element intersection | ❌ | ✅ |
+| `v-visible` | Control element visibility | ✅ | ✅ |
+| `v-loading` | Show loading overlay | ✅ | ✅ |
+
+### Scroll Directives
+
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-scroll` | Scroll event handling | ❌ | ✅ |
+| `v-infinite-scroll` | Infinite scrolling | ❌ | ✅ |
+| `v-sticky` | Sticky positioning | ❌ | ✅ |
 
 ### Security Directives
 
-| Directive | Description | Status |
-|-----------|-------------|--------|
-| `v-permission` | Permission-based element control | ⏳ |
-| `v-sanitize` | Sanitize HTML content | ⏳ |
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-permission` | Permission-based element control | ✅ | ✅ |
+| `v-sanitize` | Sanitize HTML content | ✅ | ✅ |
 
-> ✅ = Available | ⏳ = Coming soon
+### Effect Directives
+
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-hover` | Hover state detection | ❌ | ✅ |
+| `v-ripple` | Material design ripple effect | ❌ | ✅ |
+
+### Observer Directives
+
+| Directive | Description | SSR | Status |
+|-----------|-------------|-----|--------|
+| `v-resize` | Element resize observer | ❌ | ✅ |
+| `v-mutation` | DOM mutation observer | ❌ | ✅ |
+
+> ✅ = Available | ❌ = Not SSR compatible
 
 ## Usage Examples
 
@@ -258,6 +281,104 @@ Auto focus an element when mounted.
 
   <!-- With options -->
   <input v-focus="{ focus: true, refocus: true }" />
+</template>
+```
+
+### v-permission
+
+Control element visibility based on user permissions.
+
+```vue
+<template>
+  <!-- Simple permission check -->
+  <button v-permission="'admin'">Admin Only</button>
+
+  <!-- Multiple permissions (OR logic) -->
+  <button v-permission="['admin', 'editor']">Admin or Editor</button>
+
+  <!-- AND logic -->
+  <button v-permission="{ value: ['read', 'write'], mode: 'every' }">
+    Requires both permissions
+  </button>
+
+  <!-- Disable instead of remove -->
+  <button v-permission="{ value: 'admin', action: 'disable' }">
+    Disabled for non-admin
+  </button>
+</template>
+
+<script setup>
+import { configurePermission } from 'directix'
+
+configurePermission({
+  getPermissions: () => ['read', 'write'],
+  getRoles: () => ['editor'],
+  roleMap: {
+    admin: ['*'],
+    editor: ['read', 'write', 'edit']
+  }
+})
+</script>
+```
+
+### v-lazy
+
+Lazy load images when they enter the viewport.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <img v-lazy="imageUrl" />
+
+  <!-- With placeholder and error image -->
+  <img v-lazy="{ src: imageUrl, placeholder: '/placeholder.png', error: '/error.png' }" />
+</template>
+```
+
+### v-mask
+
+Input masking for formatted input.
+
+```vue
+<template>
+  <!-- Phone number -->
+  <input v-mask="'(###) ###-####'" placeholder="Phone" />
+
+  <!-- Date -->
+  <input v-mask="'##/##/####'" placeholder="MM/DD/YYYY" />
+
+  <!-- SSN -->
+  <input v-mask="{ mask: '###-##-####', placeholder: '_' }" placeholder="SSN" />
+</template>
+```
+
+### v-loading
+
+Show loading overlay on elements.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-loading="isLoading">Content</div>
+
+  <!-- With options -->
+  <div v-loading="{ value: isLoading, text: 'Loading...', lock: true }">
+    Content with locked scroll
+  </div>
+</template>
+```
+
+### v-sanitize
+
+Sanitize HTML content to prevent XSS attacks.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-sanitize="userContent"></div>
+
+  <!-- With custom allowed tags -->
+  <div v-sanitize="{ html: userContent, allowedTags: ['b', 'i', 'u'] }"></div>
 </template>
 ```
 

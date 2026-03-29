@@ -10,11 +10,11 @@
 
 ## 特性
 
-- 🎯 **功能全面** - 提供 30+ 常用指令
-- 🔄 **Vue 2/3 兼容** - 基于 [vue-demi](https://github.com/vueuse/vue-demi)，单一代码库同时支持两个版本
+- 🎯 **功能全面** - 提供 21+ 常用指令
+- 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
-- 🚀 **SSR 友好** - 支持 Nuxt 等 SSR 框架
+- 🚀 **SSR 友好** - 7 个指令开箱即用支持 SSR
 - 📦 **多格式支持** - 提供 ESM、CJS 和 IIFE (CDN) 格式
 
 ## 在线演示
@@ -63,7 +63,7 @@ Vue 2.7+ 内置了 Composition API 支持，无需额外依赖。
 <script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
 ```
 
-CDN 构建版本内置了 `vue-demi`，可以无缝支持 Vue 2 和 Vue 3。
+CDN 构建版本可以无缝支持 Vue 2 和 Vue 3。
 
 ## 环境要求
 
@@ -114,37 +114,60 @@ Vue.directive('click-outside', vClickOutside)
 
 ### 事件指令
 
-| 指令 | 描述 | 状态 |
-|-----------|-------------|--------|
-| `v-click-outside` | 检测元素外部点击 | ✅ |
-| `v-debounce` | 防抖事件处理 | ✅ |
-| `v-throttle` | 节流事件处理 | ✅ |
-| `v-long-press` | 检测长按事件 | ⏳ |
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-click-outside` | 检测元素外部点击 | ❌ | ✅ |
+| `v-debounce` | 防抖事件处理 | ✅ | ✅ |
+| `v-throttle` | 节流事件处理 | ✅ | ✅ |
+| `v-long-press` | 检测长按事件 | ❌ | ✅ |
 
 ### 表单指令
 
-| 指令 | 描述 | 状态 |
-|-----------|-------------|--------|
-| `v-copy` | 复制文本到剪贴板 | ✅ |
-| `v-focus` | 自动聚焦元素 | ✅ |
-| `v-mask` | 输入掩码 | ⏳ |
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-copy` | 复制文本到剪贴板 | ❌ | ✅ |
+| `v-focus` | 自动聚焦元素 | ✅ | ✅ |
+| `v-mask` | 输入掩码 | ❌ | ✅ |
 
 ### 可见性指令
 
-| 指令 | 描述 | 状态 |
-|-----------|-------------|--------|
-| `v-lazy` | 图片懒加载 | ⏳ |
-| `v-intersect` | 检测元素交叉 | ⏳ |
-| `v-visible` | 控制元素可见性 | ⏳ |
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-lazy` | 图片懒加载 | ❌ | ✅ |
+| `v-intersect` | 检测元素交叉 | ❌ | ✅ |
+| `v-visible` | 控制元素可见性 | ✅ | ✅ |
+| `v-loading` | 显示加载遮罩 | ✅ | ✅ |
+
+### 滚动指令
+
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-scroll` | 滚动事件处理 | ❌ | ✅ |
+| `v-infinite-scroll` | 无限滚动 | ❌ | ✅ |
+| `v-sticky` | 粘性定位 | ❌ | ✅ |
 
 ### 安全指令
 
-| 指令 | 描述 | 状态 |
-|-----------|-------------|--------|
-| `v-permission` | 基于权限的元素控制 | ⏳ |
-| `v-sanitize` | HTML 内容消毒 | ⏳ |
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-permission` | 基于权限的元素控制 | ✅ | ✅ |
+| `v-sanitize` | HTML 内容消毒 | ✅ | ✅ |
 
-> ✅ = 可用 | ⏳ = 即将推出
+### 效果指令
+
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-hover` | 悬停状态检测 | ❌ | ✅ |
+| `v-ripple` | Material Design 波纹效果 | ❌ | ✅ |
+
+### 观察器指令
+
+| 指令 | 描述 | SSR | 状态 |
+|-----------|-------------|-----|--------|
+| `v-resize` | 元素尺寸监听 | ❌ | ✅ |
+| `v-mutation` | DOM 变化监听 | ❌ | ✅ |
+
+> ✅ = 可用 | ❌ = 不支持 SSR
 
 ## 使用示例
 
@@ -258,6 +281,104 @@ function handleClick() {
 
   <!-- 带配置 -->
   <input v-focus="{ focus: true, refocus: true }" />
+</template>
+```
+
+### v-permission
+
+基于用户权限控制元素可见性。
+
+```vue
+<template>
+  <!-- 简单权限检查 -->
+  <button v-permission="'admin'">仅管理员</button>
+
+  <!-- 多个权限（OR 逻辑） -->
+  <button v-permission="['admin', 'editor']">管理员或编辑者</button>
+
+  <!-- AND 逻辑 -->
+  <button v-permission="{ value: ['read', 'write'], mode: 'every' }">
+    需要同时拥有两个权限
+  </button>
+
+  <!-- 禁用而非移除 -->
+  <button v-permission="{ value: 'admin', action: 'disable' }">
+    非管理员禁用
+  </button>
+</template>
+
+<script setup>
+import { configurePermission } from 'directix'
+
+configurePermission({
+  getPermissions: () => ['read', 'write'],
+  getRoles: () => ['editor'],
+  roleMap: {
+    admin: ['*'],
+    editor: ['read', 'write', 'edit']
+  }
+})
+</script>
+```
+
+### v-lazy
+
+图片进入视口时懒加载。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <img v-lazy="imageUrl" />
+
+  <!-- 带占位图和错误图 -->
+  <img v-lazy="{ src: imageUrl, placeholder: '/placeholder.png', error: '/error.png' }" />
+</template>
+```
+
+### v-mask
+
+输入掩码，格式化用户输入。
+
+```vue
+<template>
+  <!-- 电话号码 -->
+  <input v-mask="'(###) ###-####'" placeholder="电话号码" />
+
+  <!-- 日期 -->
+  <input v-mask="'##/##/####'" placeholder="MM/DD/YYYY" />
+
+  <!-- 社会安全号 -->
+  <input v-mask="{ mask: '###-##-####', placeholder: '_' }" placeholder="SSN" />
+</template>
+```
+
+### v-loading
+
+在元素上显示加载遮罩。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-loading="isLoading">内容</div>
+
+  <!-- 带配置 -->
+  <div v-loading="{ value: isLoading, text: '加载中...', lock: true }">
+    锁定滚动的内容
+  </div>
+</template>
+```
+
+### v-sanitize
+
+净化 HTML 内容，防止 XSS 攻击。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-sanitize="userContent"></div>
+
+  <!-- 自定义允许的标签 -->
+  <div v-sanitize="{ html: userContent, allowedTags: ['b', 'i', 'u'] }"></div>
 </template>
 ```
 

@@ -21,7 +21,7 @@ import { ref } from 'vue'
 
 const show = ref(false)
 
-function closeDropdown() {
+function closeDropdown(event) {
   show.value = false
 }
 </script>
@@ -33,11 +33,11 @@ function closeDropdown() {
 <template>
   <div v-click-outside="{
     handler: closeDropdown,
-    include: ['.trigger'],
-    exclude: ['.ignore']
+    exclude: ['.trigger', ignoreButton],
+    events: ['click', 'touchstart']
   }">
     <button class="trigger">Toggle</button>
-    <div class="ignore">This area is ignored</div>
+    <button :ref="ignoreButton">This is ignored</button>
   </div>
 </template>
 ```
@@ -47,25 +47,39 @@ function closeDropdown() {
 ### Types
 
 ```typescript
+type ClickOutsideHandler = (event: MouseEvent | TouchEvent) => void
+
 interface ClickOutsideOptions {
-  /** Callback when click outside detected */
-  handler: (event: MouseEvent) => void
-  /** CSS selectors to include in detection */
-  include?: string[]
-  /** CSS selectors to exclude from detection */
-  exclude?: string[]
+  /** Callback when clicking outside (required) */
+  handler: ClickOutsideHandler
+  /** Excluded element selectors or element references */
+  exclude?: (string | HTMLElement | (() => HTMLElement | null))[]
+  /** Whether to use capture mode */
+  capture?: boolean
+  /** Event types to listen for */
+  events?: ('click' | 'mousedown' | 'mouseup' | 'touchstart' | 'touchend')[]
+  /** Whether to disable */
+  disabled?: boolean
+  /** Stop propagation */
+  stop?: boolean
+  /** Prevent default behavior */
+  prevent?: boolean
 }
 
-type ClickOutsideBinding = ClickOutsideOptions['handler'] | ClickOutsideOptions
+type ClickOutsideBinding = ClickOutsideHandler | ClickOutsideOptions
 ```
 
 ### Options
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `handler` | `Function` | - | Callback when click outside detected |
-| `include` | `string[]` | `[]` | CSS selectors to include |
-| `exclude` | `string[]` | `[]` | CSS selectors to exclude |
+| `handler` | `Function` | - | Callback when click outside detected (required) |
+| `exclude` | `(string \| HTMLElement \| Function)[]` | `[]` | Elements to exclude from detection |
+| `capture` | `boolean` | `true` | Use capture mode |
+| `events` | `string[]` | `['click']` | Events to listen for |
+| `disabled` | `boolean` | `false` | Disable the directive |
+| `stop` | `boolean` | `false` | Stop event propagation |
+| `prevent` | `boolean` | `false` | Prevent default behavior |
 
 ## Examples
 
@@ -121,6 +135,37 @@ const showModal = ref(false)
 
 function closeModal() {
   showModal.value = false
+}
+</script>
+```
+
+### Exclude Elements
+
+```vue
+<template>
+  <div v-click-outside="{
+    handler: closeDropdown,
+    exclude: ['.toggle-btn', triggerRef]
+  }">
+    <button class="toggle-btn" @click="toggle">Toggle</button>
+    <div v-if="isOpen" class="dropdown-content">
+      Content
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const isOpen = ref(false)
+const triggerRef = ref(null)
+
+function toggle() {
+  isOpen.value = !isOpen.value
+}
+
+function closeDropdown() {
+  isOpen.value = false
 }
 </script>
 ```

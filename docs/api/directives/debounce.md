@@ -46,14 +46,34 @@ function handleInput(event) {
 </template>
 ```
 
+### Event Modifiers
+
+Specify the event type using modifiers:
+
+```vue
+<template>
+  <input v-debounce.input="handleInput" />
+  <div v-debounce.scroll="handleScroll">Scroll me</div>
+  <button v-debounce.click="handleClick">Click me</button>
+</template>
+```
+
+Supported events: `click`, `input`, `change`, `submit`, `scroll`, `resize`, `mouseenter`, `mouseleave`, `mousemove`, `mousedown`, `mouseup`, `keydown`, `keyup`, `focus`, `blur`, `touchstart`, `touchmove`, `touchend`
+
 ## API
 
 ### Types
 
 ```typescript
-interface DebounceOptions {
+interface DebouncedFunction<T extends (...args: any[]) => any> {
+  (...args: Parameters<T>): void
+  cancel: () => void
+  flush: () => void
+}
+
+interface DebounceOptions<T extends (...args: any[]) => any = any> {
   /** The function to debounce */
-  handler: (event: Event) => void
+  handler: T
   /** Wait time in milliseconds */
   wait?: number
   /** Invoke on leading edge */
@@ -62,14 +82,16 @@ interface DebounceOptions {
   trailing?: boolean
 }
 
-type DebounceBinding = DebounceOptions['handler'] | DebounceOptions
+type DebounceBinding<T extends (...args: any[]) => any = any> =
+  | T
+  | DebounceOptions<T>
 ```
 
 ### Options
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `handler` | `Function` | - | The function to debounce |
+| `handler` | `Function` | - | The function to debounce (required) |
 | `wait` | `number` | `300` | Wait time in milliseconds |
 | `leading` | `boolean` | `false` | Invoke on leading edge |
 | `trailing` | `boolean` | `true` | Invoke on trailing edge |
@@ -147,6 +169,23 @@ function validateEmail(event) {
 
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   error.value = isValid ? '' : 'Invalid email format'
+}
+</script>
+```
+
+### Scroll Handler
+
+```vue
+<template>
+  <div v-debounce:100ms.scroll="handleScroll" class="scroll-container">
+    <!-- content -->
+  </div>
+</template>
+
+<script setup>
+function handleScroll(event) {
+  const scrollTop = event.target.scrollTop
+  console.log('Scroll position:', scrollTop)
 }
 </script>
 ```

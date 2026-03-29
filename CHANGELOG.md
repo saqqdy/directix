@@ -2,6 +2,144 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-03-29
+
+### Added
+
+#### New Directives
+
+##### v-lazy
+- Lazy load images with IntersectionObserver
+- Support `src`, `placeholder`, `error` options
+- Support `preload` option for early loading
+- Support `onLoad` and `onError` callbacks
+- Support custom IntersectionObserver
+
+##### v-permission
+- Permission-based element control
+- Support single/multiple permission checks
+- Support `mode: 'some' | 'every'` for OR/AND logic
+- Support role-based permission mapping
+- Support wildcard `'*'` for full access
+- Support `action: 'remove' | 'disable' | 'hide'` when permission denied
+- Support custom `check` function
+- SSR compatible
+
+##### v-long-press
+- Detect long press events on elements
+- Support custom duration via `duration` option
+- Support `onStart`, `onEnd`, `onCancel` callbacks
+- Support mobile touch events
+
+##### v-hover
+- Detect hover state on elements
+- Support `onEnter`, `onLeave` callbacks
+- Support `delay` option for delayed trigger
+
+##### v-ripple
+- Material Design ripple effect
+- Support custom color via `color` option
+- Support `duration` option for animation duration
+- Support `disabled` option to toggle effect
+
+##### v-scroll
+- Scroll event handling with debounce support
+- Support custom scroll container detection
+- Support `onScroll` callback with scroll info
+- Support `throttle` option for performance
+
+##### v-resize
+- Element resize observer using ResizeObserver
+- Support `onResize` callback with size info
+- Support `debounce` option for performance
+- Support `box` option for border-box/content-box
+
+##### v-intersect
+- Element intersection detection using IntersectionObserver
+- Support `onEnter`, `onLeave`, `onChange` callbacks
+- Support `threshold` and `rootMargin` options
+- Support `once` option for single trigger
+
+##### v-infinite-scroll
+- Infinite scrolling for lists
+- Support custom distance threshold
+- Support `disabled` option to toggle
+- Support `immediate` option for initial check
+- Support custom scroll container
+
+##### v-sticky
+- Sticky positioning with fallback
+- Support `offsetTop` option
+- Support custom scroll container detection
+- Support `onStick` callback
+
+##### v-mask
+- Input masking for formatted input
+- Support tokens: `#` (digit), `A` (letter), `N` (alphanumeric), `X` (any)
+- Support `placeholder` option
+- Support `onComplete` and `onChange` callbacks
+- Support `clearIncomplete` option
+
+##### v-sanitize
+- Sanitize HTML content to prevent XSS
+- Built-in DOMPurify integration
+- Support custom `allowedTags` option
+- Support custom `allowedAttributes` option
+- SSR compatible
+
+##### v-loading
+- Loading overlay for elements
+- Support custom loading text
+- Support custom spinner HTML
+- Support `lock` option to prevent scrolling
+- Support `background` option
+- SSR compatible
+
+##### v-visible
+- Control element visibility with animation support
+- Support `useHidden` option for `visibility: hidden`
+- Support transition end events
+- Support `handler` callback for visibility changes
+- SSR compatible
+
+##### v-mutation
+- DOM mutation observer using MutationObserver
+- Support `onMutate` callback with mutation records
+- Support `options` for MutationObserver config
+- Support `debounce` option for performance
+
+#### SSR Support
+
+The following directives now support SSR:
+- `v-permission` - Permission checks work on server
+- `v-sanitize` - HTML sanitization works on server
+- `v-focus` - Safely skips focus on server
+- `v-visible` - Safely skips visibility on server
+- `v-loading` - Safely skips DOM manipulation on server
+- `v-debounce` - Safely skips event binding on server
+- `v-throttle` - Safely skips event binding on server
+
+#### Examples
+
+- Added comprehensive demo pages for all new directives
+- Vue 2 and Vue 3 example projects updated with all directives
+- Interactive demos with code snippets
+
+### Changed
+
+- Improved `defineDirective` SSR handling
+- Better error messages for directive configuration
+- Optimized directive performance
+
+### Fixed
+
+- Fixed v-intersect observer cleanup on unmount
+- Fixed v-sticky scroll container detection
+- Fixed v-mask cursor position on input
+- Fixed v-permission wildcard handling
+
+---
+
 ## [1.0.0] - 2026-03-27
 
 ### Added
@@ -124,19 +262,13 @@ None
 
 ## Roadmap
 
-### v1.1.0 (Planned)
-- `v-lazy` - Lazy load images with IntersectionObserver
-- `v-permission` - Permission-based element control
-- `v-long-press` - Long press events
-
 ### v1.2.0 (Planned)
-- `v-scroll` - Scroll event handling
-- `v-resize` - Element resize observer
-- `v-intersect` - Intersection observer
-- `v-infinite-scroll` - Infinite scrolling
-
-### v1.3.0 (Planned)
-- `v-mask` - Input masking
-- `v-tooltip` - Tooltip directive
+- `v-tooltip` - Tooltip directive with floating-ui
 - `v-draggable` - Drag and drop
 - `v-touch` - Touch gestures
+- `v-image-preview` - Image preview modal
+- `v-truncate` - Text truncation
+- `v-uppercase/lowercase` - Case transformation
+- `v-number` - Number formatting
+- `v-money` - Currency formatting
+- `v-skeleton` - Skeleton loading
