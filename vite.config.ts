@@ -1,17 +1,17 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
-import { readFileSync } from 'fs'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 
-const banner =
-	`/*!\n` +
-	` * ${pkg.name} v${pkg.version}\n` +
-	` * ${pkg.description}\n` +
-	` * (c) 2021-present saqqdy <https://github.com/saqqdy>\n` +
-	` * Released under the MIT License.\n` +
-	` */`
+const banner
+	= `/*!\n`
+		+ ` * ${pkg.name} v${pkg.version}\n`
+		+ ` * ${pkg.description}\n`
+		+ ` * (c) 2021-present saqqdy <https://github.com/saqqdy>\n`
+		+ ` * Released under the MIT License.\n`
+		+ ` */`
 
 export default defineConfig({
 	plugins: [
@@ -25,8 +25,8 @@ export default defineConfig({
 	build: {
 		target: 'es2015',
 		lib: {
-			entry: resolve(__dirname, 'src/index.ts'),
 			name: 'Directix',
+			entry: resolve(__dirname, 'src/index.ts'),
 			formats: ['es', 'cjs', 'iife'],
 			fileName: format => {
 				const map: Record<string, string> = {

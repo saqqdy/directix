@@ -2,7 +2,7 @@
 	"name": "directix",
 	"description": "A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3",
 	"type": "module",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"packageManager": "pnpm@9.15.9",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
@@ -45,7 +45,7 @@
 		"example:build": "pnpm --dir examples/vue3 build"
 	},
 	"devDependencies": {
-		"@eslint-sets/eslint-config": "^6.2.0",
+		"@eslint-sets/eslint-config": "^6.3.1",
 		"@types/node": "^22.19.15",
 		"@vitejs/plugin-vue": "^5.2.4",
 		"@vitest/coverage-v8": "^3.2.4",
