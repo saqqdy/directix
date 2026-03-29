@@ -2,6 +2,107 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-29
+
+### Added
+
+#### New Directives
+
+##### v-truncate
+- Truncate text to specified length
+- Support `position: 'start' | 'middle' | 'end'` options
+- Support `useCss` option for CSS-based truncation
+- Support `showTitle` option to show full text on hover
+- SSR compatible
+
+##### v-uppercase
+- Transform text to uppercase
+- Support `first: true` option to only capitalize first character
+- Support input elements with real-time transformation
+- SSR compatible
+
+##### v-lowercase
+- Transform text to lowercase
+- Support `first: true` option to only lowercase first character
+- Support input elements with real-time transformation
+- SSR compatible
+
+##### v-capitalcase
+- Transform text to title case (capitalize each word)
+- Support `every: false` option to only capitalize first word
+- Support `keepLower` option for words to keep lowercase (articles, prepositions)
+- Support input elements with real-time transformation
+- SSR compatible
+
+##### v-number
+- Format numbers with thousands separator
+- Support `precision` option for decimal places
+- Support `prefix` and `suffix` options
+- Support `min` and `max` value constraints
+- Support input elements with real-time formatting
+- SSR compatible
+
+##### v-money
+- Format currency values
+- Support custom `symbol` and `symbolPosition` options
+- Support all v-number options (precision, separator, etc.)
+- Support `showSymbolOnFocus` option for editing
+- SSR compatible
+
+##### v-trim
+- Trim whitespace from text
+- Support `position: 'start' | 'end' | 'both'` options
+- Support `onInput` and `onBlur` trigger options
+- Support custom characters to trim
+- SSR compatible
+
+##### v-tooltip
+- Tooltip directive with positioning
+- Support `placement: 'top' | 'bottom' | 'left' | 'right'` options
+- Support `trigger: 'hover' | 'click' | 'focus' | 'manual'` options
+- Support `delay` and `hideDelay` options
+- Support `arrow` option for tooltip arrow
+- Support `onShow` and `onHide` callbacks
+
+##### v-draggable
+- Make elements draggable
+- Support `axis: 'x' | 'y' | 'both'` constraint
+- Support `constrain` option to limit within parent
+- Support `boundary` option for custom boundary
+- Support `handle` option for drag handle
+- Support `grid` option for snap-to-grid
+- Support `onStart`, `onDrag`, `onEnd` callbacks
+
+##### v-touch
+- Touch gesture detection
+- Support swipe detection (`onSwipe`, `onSwipeLeft`, `onSwipeRight`, `onSwipeUp`, `onSwipeDown`)
+- Support pinch detection (`onPinch`)
+- Support rotate detection (`onRotate`)
+- Support tap detection (`onTap`)
+- Support long press detection (`onLongPress`)
+- Configurable thresholds for all gestures
+
+##### v-image-preview
+- Image preview modal
+- Support click to preview images
+- Support `previewSrc` for higher resolution image
+- Support `closeOnClickOutside` and `closeOnEsc` options
+- Support `showCloseButton` option
+- Support `onOpen` and `onClose` callbacks
+
+### Changed
+
+- Improved TypeScript type definitions
+- Better SSR compatibility across all directives
+- Optimized bundle size
+
+### Fixed
+
+- Fixed type errors in format directives
+- Fixed event listener cleanup in complex directives
+
+---
+
 ## [1.1.0] - 2026-03-29
 
 ### Added

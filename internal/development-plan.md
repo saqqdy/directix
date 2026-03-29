@@ -3557,20 +3557,22 @@ export default defineConfig({
 
 **里程碑 M3：增强指令完成** ✅
 
-#### 第四阶段：扩展指令开发 (Week 6) ⏳ 待开发
+#### 第四阶段：扩展指令开发 (Week 6) ✅ 已完成
 
 | 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
 |------|---------|--------|------|------|
-| v-tooltip | 8h | P2 | floating-ui | ⏳ 待开发 |
-| v-draggable | 8h | P2 | - | ⏳ 待开发 |
-| v-touch | 8h | P2 | - | ⏳ 待开发 |
-| v-image-preview | 6h | P3 | - | ⏳ 待开发 |
-| v-truncate | 2h | P3 | - | ⏳ 待开发 |
-| v-uppercase/lowercase | 2h | P3 | - | ⏳ 待开发 |
-| v-number | 4h | P3 | - | ⏳ 待开发 |
-| v-money | 4h | P3 | - | ⏳ 待开发 |
+| v-tooltip | 8h | P2 | floating-ui | ✅ 已完成 |
+| v-draggable | 8h | P2 | - | ✅ 已完成 |
+| v-touch | 8h | P2 | - | ✅ 已完成 |
+| v-image-preview | 6h | P3 | - | ✅ 已完成 |
+| v-truncate | 2h | P3 | - | ✅ 已完成 |
+| v-uppercase/lowercase | 2h | P3 | - | ✅ 已完成 |
+| v-capitalcase | 2h | P3 | - | ✅ 已完成 |
+| v-number | 4h | P3 | - | ✅ 已完成 |
+| v-money | 4h | P3 | - | ✅ 已完成 |
+| v-trim | 2h | P3 | - | ✅ 已完成 |
 
-**里程碑 M4：全部指令开发完成** ⏳
+**里程碑 M4：全部指令开发完成** ✅
 
 #### 第五阶段：优化与发布 (Week 7)
 
@@ -3587,7 +3589,7 @@ export default defineConfig({
 
 ### 10.2 当前进度总览
 
-#### 已完成指令 (21/30+)
+#### 已完成指令 (30/30+)
 
 | 指令 | 功能描述 | SSR | 示例 |
 |------|---------|-----|------|
@@ -3611,24 +3613,25 @@ export default defineConfig({
 | v-loading | 加载状态 | ✅ | ✅ |
 | v-visible | 可见性控制 | ✅ | ✅ |
 | v-mutation | DOM 监听 | ❌ | ✅ |
+| v-truncate | 文本截断 | ✅ | ✅ |
+| v-uppercase | 大写转换 | ✅ | ✅ |
+| v-lowercase | 小写转换 | ✅ | ✅ |
+| v-capitalcase | 首字母大写 | ✅ | ✅ |
+| v-number | 数字格式化 | ✅ | ✅ |
+| v-money | 金额格式化 | ✅ | ✅ |
+| v-trim | 去空格 | ✅ | ✅ |
+| v-tooltip | 提示框 | ❌ | ✅ |
+| v-draggable | 拖拽 | ❌ | ✅ |
+| v-touch | 手势 | ❌ | ✅ |
+| v-image-preview | 图片预览 | ❌ | ✅ |
 
 #### 开发中
 
 暂无
 
-#### 待开发指令 (9+)
-
-**P2 中优先级：**
-- v-tooltip - 提示框
-- v-draggable - 拖拽
-- v-touch - 手势
+#### 待开发指令 (1+)
 
 **P3 低优先级：**
-- v-image-preview - 图片预览
-- v-truncate - 文本截断
-- v-uppercase/lowercase - 大小写转换
-- v-number - 数字格式化
-- v-money - 金额格式化
 - v-skeleton - 骨架屏
 
 ### 10.3 版本规划
@@ -3637,8 +3640,7 @@ export default defineConfig({
 |------|------|---------|------|
 | v1.0.0 | Week 7 | 核心指令、基础文档 | ✅ 已完成 |
 | v1.1.0 | Week 9 | 增强指令、SSR 优化 | ✅ 已完成 |
-| v1.1.0 | Week 9 | 增强指令、SSR 优化 |
-| v1.2.0 | Week 11 | 扩展指令、Nuxt 模块 |
+| v1.2.0 | Week 11 | 扩展指令、Nuxt 模块 | ✅ 已完成 |
 | v1.3.0 | Week 13 | 组合式 API 增强、性能优化 |
 | v2.0.0 | Q2 | Vue 3 专属优化、Web Components |
 

@@ -4,7 +4,7 @@ export default defineConfig({
 	base: '/directix/',
 	head: [
 		['link', { href: '/directix/logo.svg', rel: 'icon' }],
-		['meta', { content: '#42b883', name: 'theme-color' }],
+		['meta', { name: 'theme-color', content: '#42b883' }],
 	],
 
 	locales: {
