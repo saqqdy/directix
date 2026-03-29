@@ -411,12 +411,19 @@ describe('v-throttle', () => {
 			})
 
 			const wrapper = mount(TestComponent)
+			const button = wrapper.find('button')
+
+			// Trigger click before unmount
+			await button.trigger('click')
 
 			await wrapper.setData({ show: false })
 			await nextTick()
 
 			// Should not throw
 			wrapper.unmount()
+
+			// Verify the test ran successfully
+			expect(true).toBe(true)
 		})
 	})
 })

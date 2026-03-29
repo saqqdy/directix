@@ -11,44 +11,44 @@ export type ClickOutsideHandler = (event: MouseEvent | TouchEvent) => void
  */
 export interface ClickOutsideOptions {
 	/**
-   * Callback when clicking outside
-   * @required
-   */
+	 * Callback when clicking outside
+	 * @required
+	 */
 	handler: ClickOutsideHandler
 
 	/**
-   * Excluded element selectors or element references
-   */
+	 * Excluded element selectors or element references
+	 */
 	exclude?: (string | HTMLElement | (() => HTMLElement | null))[]
 
 	/**
-   * Whether to use capture mode
-   * @default true
-   */
+	 * Whether to use capture mode
+	 * @default true
+	 */
 	capture?: boolean
 
 	/**
-   * Event types to listen for
-   * @default ['click']
-   */
+	 * Event types to listen for
+	 * @default ['click']
+	 */
 	events?: ('click' | 'mousedown' | 'mouseup' | 'touchstart' | 'touchend')[]
 
 	/**
-   * Whether to disable
-   * @default false
-   */
+	 * Whether to disable
+	 * @default false
+	 */
 	disabled?: boolean
 
 	/**
-   * Stop propagation
-   * @default false
-   */
+	 * Stop propagation
+	 * @default false
+	 */
 	stop?: boolean
 
 	/**
-   * Prevent default behavior
-   * @default false
-   */
+	 * Prevent default behavior
+	 * @default false
+	 */
 	prevent?: boolean
 }
 

@@ -15,30 +15,30 @@ export type CopyErrorCallback = (error: Error) => void
  */
 export interface CopyOptions {
 	/**
-   * Text to copy
-   * @required
-   */
+	 * Text to copy
+	 * @required
+	 */
 	value: string
 
 	/**
-   * Callback on copy success
-   */
+	 * Callback on copy success
+	 */
 	onSuccess?: CopySuccessCallback
 
 	/**
-   * Callback on copy error
-   */
+	 * Callback on copy error
+	 */
 	onError?: CopyErrorCallback
 
 	/**
-   * Tooltip text for the copy button
-   */
+	 * Tooltip text for the copy button
+	 */
 	title?: string
 
 	/**
-   * Whether to disable
-   * @default false
-   */
+	 * Whether to disable
+	 * @default false
+	 */
 	disabled?: boolean
 }
 

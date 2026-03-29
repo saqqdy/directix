@@ -151,10 +151,10 @@ export const vIntersect = defineDirective<IntersectBinding, HTMLElement>({
 		if (!state) return
 
 		const newOptions = normalizeOptions(binding.value)
-		const observerOptionsChanged =
-			newOptions.root !== state.options.root ||
-			newOptions.rootMargin !== state.options.rootMargin ||
-			newOptions.threshold !== state.options.threshold
+		const observerOptionsChanged
+			= newOptions.root !== state.options.root
+				|| newOptions.rootMargin !== state.options.rootMargin
+				|| newOptions.threshold !== state.options.threshold
 
 		// Handle disabled state change
 		if (newOptions.disabled !== state.options.disabled) {

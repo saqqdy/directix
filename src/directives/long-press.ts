@@ -81,7 +81,7 @@ interface LongPressState {
 	timerId: ReturnType<typeof setTimeout> | null
 	tickTimerId: ReturnType<typeof setInterval> | null
 	startTime: number
-	startPos: { x: number; y: number }
+	startPos: { x: number, y: number }
 	startHandler: (e: Event) => void
 	endHandler: (e: Event) => void
 	moveHandler: (e: Event) => void
@@ -113,7 +113,7 @@ function normalizeOptions(binding: LongPressBinding | undefined): LongPressOptio
 /**
  * Calculate distance between two points
  */
-function getDistance(p1: { x: number; y: number }, p2: { x: number; y: number }): number {
+function getDistance(p1: { x: number, y: number }, p2: { x: number, y: number }): number {
 	return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
 }
 

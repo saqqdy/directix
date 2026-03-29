@@ -201,10 +201,10 @@ export const vMutation = defineDirective<MutationBinding, HTMLElement>({
 		} else if (!newOptions.disabled) {
 			// If options changed, reconnect with new options
 			if (
-				newOptions.attributes !== state.options.attributes ||
-				newOptions.childList !== state.options.childList ||
-				newOptions.subtree !== state.options.subtree ||
-				newOptions.characterData !== state.options.characterData
+				newOptions.attributes !== state.options.attributes
+				|| newOptions.childList !== state.options.childList
+				|| newOptions.subtree !== state.options.subtree
+				|| newOptions.characterData !== state.options.characterData
 			) {
 				if (state.observer) {
 					state.observer.disconnect()

@@ -2,18 +2,24 @@ import type { App, Directive, Plugin } from 'vue'
 import type { DirectiveInstallOptions } from '@directix/core'
 import { setVueVersion } from '@directix/core'
 import {
+	vCapitalcase,
 	vClickOutside,
 	vCopy,
 	vDebounce,
+	vDraggable,
 	vFocus,
 	vHover,
+	vImagePreview,
 	vInfiniteScroll,
 	vIntersect,
 	vLazy,
 	vLoading,
 	vLongPress,
+	vLowercase,
 	vMask,
+	vMoney,
 	vMutation,
+	vNumber,
 	vPermission,
 	vResize,
 	vRipple,
@@ -21,6 +27,11 @@ import {
 	vScroll,
 	vSticky,
 	vThrottle,
+	vTooltip,
+	vTouch,
+	vTrim,
+	vTruncate,
+	vUppercase,
 	vVisible,
 } from './directives'
 
@@ -75,6 +86,17 @@ const allDirectives: Record<string, Directive> = {
 	sanitize: vSanitize,
 	resize: vResize,
 	mutation: vMutation,
+	truncate: vTruncate,
+	uppercase: vUppercase,
+	lowercase: vLowercase,
+	capitalcase: vCapitalcase,
+	number: vNumber,
+	money: vMoney,
+	trim: vTrim,
+	tooltip: vTooltip,
+	draggable: vDraggable,
+	touch: vTouch,
+	'image-preview': vImagePreview,
 }
 
 /**

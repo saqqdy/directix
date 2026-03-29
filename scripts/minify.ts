@@ -11,13 +11,13 @@ const distDir = resolve(rootDir, 'dist')
 
 const pkg = JSON.parse(readFileSync(resolve(rootDir, 'package.json'), 'utf-8'))
 
-const banner =
-	`/*!\n` +
-	` * ${pkg.name} v${pkg.version}\n` +
-	` * ${pkg.description}\n` +
-	` * (c) 2021-present saqqdy <https://github.com/saqqdy>\n` +
-	` * Released under the MIT License.\n` +
-	` */`
+const banner
+	= `/*!\n`
+		+ ` * ${pkg.name} v${pkg.version}\n`
+		+ ` * ${pkg.description}\n`
+		+ ` * (c) 2021-present saqqdy <https://github.com/saqqdy>\n`
+		+ ` * Released under the MIT License.\n`
+		+ ` */`
 
 // Process IIFE file
 let iifeContent,

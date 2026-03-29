@@ -64,3 +64,38 @@ export type { ResizeOptions, ResizeBinding, ResizeHandler, ResizeInfo } from './
 
 export { vMutation, default as mutation } from './mutation'
 export type { MutationOptions, MutationBinding, MutationHandler } from './mutation'
+
+// Format directives
+export { vTruncate, default as truncate } from './truncate'
+export type { TruncateOptions, TruncateBinding, TruncatePosition } from './truncate'
+
+export { vUppercase, default as uppercase } from './uppercase'
+export type { UppercaseOptions, UppercaseBinding } from './uppercase'
+
+export { vLowercase, default as lowercase } from './lowercase'
+export type { LowercaseOptions, LowercaseBinding } from './lowercase'
+
+export { vCapitalcase, default as capitalcase } from './capitalcase'
+export type { CapitalcaseOptions, CapitalcaseBinding } from './capitalcase'
+
+export { vNumber, default as number } from './number'
+export type { NumberOptions, NumberBinding } from './number'
+
+export { vMoney, default as money } from './money'
+export type { MoneyOptions, MoneyBinding } from './money'
+
+export { vTrim, default as trim } from './trim'
+export type { TrimOptions, TrimBinding, TrimPosition } from './trim'
+
+// UI directives
+export { vTooltip, default as tooltip } from './tooltip'
+export type { TooltipOptions, TooltipBinding, TooltipPlacement, TooltipTrigger } from './tooltip'
+
+export { vDraggable, default as draggable } from './draggable'
+export type { DraggableOptions, DraggableBinding, DraggableAxis } from './draggable'
+
+export { vTouch, default as touch } from './touch'
+export type { TouchOptions, SwipeDirection } from './touch'
+
+export { vImagePreview, default as imagePreview } from './image-preview'
+export type { ImagePreviewOptions, ImagePreviewBinding } from './image-preview'

@@ -28,7 +28,7 @@ export type StickyBinding = boolean | number | StickyOptions
 interface StickyState {
 	options: StickyOptions
 	placeholder: HTMLDivElement | null
-	originalStyles: { position: string; top: string; bottom: string; zIndex: string; width: string }
+	originalStyles: { position: string, top: string, bottom: string, zIndex: string, width: string }
 	isSticky: boolean
 	scrollHandler: () => void
 	resizeHandler: () => void
@@ -96,7 +96,7 @@ function checkSticky(el: HTMLElement, state: StickyState): void {
 		return
 	}
 
-	const topOffset = Number.parseFloat(parseOffset(state.options.top))
+	const topOffset = parseFloat(parseOffset(state.options.top))
 	const containerRect = state.container === window ? { top: 0 } : (state.container as Element).getBoundingClientRect()
 
 	// Use placeholder position when sticky, otherwise use element position

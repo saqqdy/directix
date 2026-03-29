@@ -94,7 +94,7 @@ export function setStyles(el: HTMLElement, styles: Record<string, string | numbe
 /**
  * Get element offset position
  */
-export function getOffset(el: Element): { top: number; left: number } {
+export function getOffset(el: Element): { top: number, left: number } {
 	if (!isBrowser()) return { top: 0, left: 0 }
 	const rect = el.getBoundingClientRect()
 
@@ -107,7 +107,7 @@ export function getOffset(el: Element): { top: number; left: number } {
 /**
  * Get element size
  */
-export function getSize(el: Element): { width: number; height: number } {
+export function getSize(el: Element): { width: number, height: number } {
 	const rect = el.getBoundingClientRect()
 
 	return {
@@ -124,10 +124,10 @@ export function isInViewport(el: Element): boolean {
 	const rect = el.getBoundingClientRect()
 
 	return (
-		rect.top >= 0 &&
-		rect.left >= 0 &&
-		rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+		rect.top >= 0
+		&& rect.left >= 0
+		&& rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+		&& rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 	)
 }
 

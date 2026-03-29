@@ -18,8 +18,8 @@ export function defineDirective<T = any, B extends Element = Element>(
 	if (isSSR() && !ssr) {
 		if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'test') {
 			console.warn(
-				`[Directix] Directive "${name}" is not compatible with SSR. ` +
-				'It will be a no-op on the server side.',
+				`[Directix] Directive "${name}" is not compatible with SSR. `
+				+ 'It will be a no-op on the server side.',
 			)
 		}
 
@@ -92,8 +92,8 @@ function applyDefaults<T>(
 ): DirectiveBinding<T> {
 	if (!defaults) return binding
 
-	const value =
-		typeof binding.value === 'object' && binding.value !== null ? { ...defaults, ...binding.value } : binding.value
+	const value
+		= typeof binding.value === 'object' && binding.value !== null ? { ...defaults, ...binding.value } : binding.value
 
 	return { ...binding, value: value as T }
 }
@@ -115,7 +115,7 @@ function createNoOpDirective(): Directive {
 export function defineDirectiveGroup(
 	name: string,
 	directives: Record<string, any>,
-): { name: string; directives: Record<string, any>; install: (app: any) => void } {
+): { name: string, directives: Record<string, any>, install: (app: any) => void } {
 	return {
 		name,
 		directives,

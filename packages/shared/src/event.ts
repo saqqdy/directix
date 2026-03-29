@@ -48,7 +48,7 @@ export function emit(target: EventTarget, event: string, detail?: any): boolean 
 /**
  * Normalize event options
  */
-function normalizeOptions(options: boolean | EventOptions): boolean | { capture: boolean; passive: boolean; once: boolean } {
+function normalizeOptions(options: boolean | EventOptions): boolean | { capture: boolean, passive: boolean, once: boolean } {
 	if (typeof options === 'boolean') {
 		return options
 	}
@@ -127,7 +127,7 @@ export function getCurrentTarget<T extends EventTarget = EventTarget>(e: Event):
  */
 export function getEventPosition(
 	e: MouseEvent | TouchEvent,
-): { x: number; y: number; clientX: number; clientY: number } {
+): { x: number, y: number, clientX: number, clientY: number } {
 	let clientX = 0,
 		clientY = 0
 

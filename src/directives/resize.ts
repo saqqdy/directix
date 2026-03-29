@@ -117,7 +117,7 @@ function normalizeOptions(binding: ResizeBinding | undefined): ResizeOptions {
 function createFallbackResize(
 	el: HTMLElement,
 	callback: () => void,
-): { iframe: HTMLIFrameElement; cleanup: () => void } {
+): { iframe: HTMLIFrameElement, cleanup: () => void } {
 	// Create an invisible iframe for resize detection
 	const iframe = document.createElement('iframe')
 

@@ -120,8 +120,8 @@ export function getVueVersion(): VueVersion {
 	if (_vueVersion === null) {
 		if (typeof window !== 'undefined') {
 			console.warn(
-				'[Directix] Unable to detect Vue version, defaulting to Vue 3. ' +
-				'Set DIRECTIX_VUE_VERSION=2 or call setVueVersion(2) if using Vue 2.',
+				'[Directix] Unable to detect Vue version, defaulting to Vue 3. '
+				+ 'Set DIRECTIX_VUE_VERSION=2 or call setVueVersion(2) if using Vue 2.',
 			)
 		}
 		_vueVersion = 3

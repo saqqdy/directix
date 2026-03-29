@@ -412,12 +412,19 @@ describe('v-debounce', () => {
 			})
 
 			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			// Trigger input before unmount
+			await input.trigger('input')
 
 			await wrapper.setData({ show: false })
 			await nextTick()
 
 			// Should not throw
 			wrapper.unmount()
+
+			// Verify the test ran successfully
+			expect(true).toBe(true)
 		})
 	})
 

@@ -9,7 +9,7 @@ export function isString(value: unknown): value is string {
  * Check if value is a number
  */
 export function isNumber(value: unknown): value is number {
-	return typeof value === 'number' && !Number.isNaN(value)
+	return typeof value === 'number' && !isNaN(value)
 }
 
 /**
@@ -156,8 +156,8 @@ export function set(obj: Record<string, any>, path: string, value: any): void {
 export function debounce<T extends (...args: any[]) => any>(
 	func: T,
 	wait: number = 300,
-	options: { leading?: boolean; trailing?: boolean } = {},
-): ((...args: Parameters<T>) => void) & { cancel: () => void; flush: () => void } {
+	options: { leading?: boolean, trailing?: boolean } = {},
+): ((...args: Parameters<T>) => void) & { cancel: () => void, flush: () => void } {
 	let timerId: ReturnType<typeof setTimeout> | null = null,
 		lastArgs: Parameters<T> | null = null,
 		lastThis: any = null
@@ -191,7 +191,7 @@ export function debounce<T extends (...args: any[]) => any>(
 			}
 			timerId = null
 		}, wait)
-	} as ((...args: Parameters<T>) => void) & { cancel: () => void; flush: () => void }
+	} as ((...args: Parameters<T>) => void) & { cancel: () => void, flush: () => void }
 
 	debounced.cancel = () => {
 		if (timerId) {
@@ -219,7 +219,7 @@ export function debounce<T extends (...args: any[]) => any>(
 export function throttle<T extends (...args: any[]) => any>(
 	func: T,
 	wait: number = 300,
-	options: { leading?: boolean; trailing?: boolean } = {},
+	options: { leading?: boolean, trailing?: boolean } = {},
 ): ((...args: Parameters<T>) => void) & { cancel: () => void } {
 	let timerId: ReturnType<typeof setTimeout> | null = null,
 		lastArgs: Parameters<T> | null = null,
@@ -286,16 +286,16 @@ export function parseTime(arg?: string): number | null {
 	if (!arg) return null
 
 	if (arg.endsWith('ms')) {
-		return Number.parseInt(arg, 10)
+		return parseInt(arg, 10)
 	}
 
 	if (arg.endsWith('s')) {
-		return Number.parseFloat(arg) * 1000
+		return parseFloat(arg) * 1000
 	}
 
-	const num = Number.parseInt(arg, 10)
+	const num = parseInt(arg, 10)
 
-	return Number.isNaN(num) ? null : num
+	return isNaN(num) ? null : num
 }
 
 /**
