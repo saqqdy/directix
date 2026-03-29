@@ -112,6 +112,63 @@ const routes = [
 		name: 'Mutation',
 		component: () => import('@/demos/mutation.vue'),
 	},
+	// Format directives
+	{
+		path: '/truncate',
+		name: 'Truncate',
+		component: () => import('@/demos/truncate.vue'),
+	},
+	{
+		path: '/uppercase',
+		name: 'Uppercase',
+		component: () => import('@/demos/uppercase.vue'),
+	},
+	{
+		path: '/lowercase',
+		name: 'Lowercase',
+		component: () => import('@/demos/lowercase.vue'),
+	},
+	{
+		path: '/capitalcase',
+		name: 'Capitalcase',
+		component: () => import('@/demos/capitalcase.vue'),
+	},
+	{
+		path: '/number',
+		name: 'Number',
+		component: () => import('@/demos/number.vue'),
+	},
+	{
+		path: '/money',
+		name: 'Money',
+		component: () => import('@/demos/money.vue'),
+	},
+	{
+		path: '/trim',
+		name: 'Trim',
+		component: () => import('@/demos/trim.vue'),
+	},
+	// UI directives
+	{
+		path: '/tooltip',
+		name: 'Tooltip',
+		component: () => import('@/demos/tooltip.vue'),
+	},
+	{
+		path: '/draggable',
+		name: 'Draggable',
+		component: () => import('@/demos/draggable.vue'),
+	},
+	{
+		path: '/touch',
+		name: 'Touch',
+		component: () => import('@/demos/touch.vue'),
+	},
+	{
+		path: '/image-preview',
+		name: 'ImagePreview',
+		component: () => import('@/demos/image-preview.vue'),
+	},
 ]
 
 const router = createRouter({

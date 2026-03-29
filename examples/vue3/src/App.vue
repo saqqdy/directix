@@ -33,6 +33,19 @@ const demos = [
 	// Observer directives
 	{ path: '/resize', name: 'v-resize', desc: 'Resize observer' },
 	{ path: '/mutation', name: 'v-mutation', desc: 'Mutation observer' },
+	// Format directives
+	{ path: '/truncate', name: 'v-truncate', desc: 'Text truncation' },
+	{ path: '/uppercase', name: 'v-uppercase', desc: 'Uppercase transform' },
+	{ path: '/lowercase', name: 'v-lowercase', desc: 'Lowercase transform' },
+	{ path: '/capitalcase', name: 'v-capitalcase', desc: 'Title case' },
+	{ path: '/number', name: 'v-number', desc: 'Number formatting' },
+	{ path: '/money', name: 'v-money', desc: 'Currency formatting' },
+	{ path: '/trim', name: 'v-trim', desc: 'Whitespace trimming' },
+	// UI directives
+	{ path: '/tooltip', name: 'v-tooltip', desc: 'Tooltip directive' },
+	{ path: '/draggable', name: 'v-draggable', desc: 'Drag and drop' },
+	{ path: '/touch', name: 'v-touch', desc: 'Touch gestures' },
+	{ path: '/image-preview', name: 'v-image-preview', desc: 'Image preview modal' },
 ]
 </script>
 
@@ -109,6 +122,8 @@ body {
 .sidebar {
 	width: 220px;
 	flex-shrink: 0;
+	max-height: calc(100vh - 150px);
+	overflow-y: auto;
 }
 
 .nav-item {
