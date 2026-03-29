@@ -5,7 +5,7 @@
 ## Why Directix?
 
 - **🎯 Comprehensive** - 30+ commonly used directives for everyday development
-- **🔄 Vue 2/3 Compatible** - Built on vue-demi, single codebase supports both versions seamlessly
+- **🔄 Vue 2/3 Compatible** - Single codebase supports both versions seamlessly
 - **📦 Tree-shakable** - Import only what you need, minimal bundle size
 - **🔒 TypeScript** - Full TypeScript support with complete type definitions
 - **🚀 SSR Friendly** - Works with Nuxt and other SSR frameworks

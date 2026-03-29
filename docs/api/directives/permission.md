@@ -2,7 +2,7 @@
 
 Permission-based element control for access management.
 
-> **Since:** `1.0.0`
+> **Since:** `1.1.0`
 
 ## Usage
 

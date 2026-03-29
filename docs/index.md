@@ -27,7 +27,7 @@ features:
     details: 30+ commonly used directives for events, forms, visibility, security and more.
   - icon: 🔄
     title: Vue 2/3 Compatible
-    details: Built on vue-demi, single codebase supports both Vue 2 and Vue 3. No need for separate packages.
+    details: Single codebase supports both Vue 2 and Vue 3. No need for separate packages.
   - icon: 📦
     title: Tree-shakable
     details: Import only what you need. Keep your bundle size minimal.

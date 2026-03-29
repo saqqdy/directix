@@ -2,7 +2,7 @@
 
 Observe DOM mutations using MutationObserver.
 
-> **Since:** `1.0.0`
+> **Since:** `1.1.0`
 
 ## Usage
 

@@ -10,12 +10,13 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 21+ commonly used directives
+- 🎯 **Comprehensive** - 21 commonly used directives
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
 - 🚀 **SSR Friendly** - 7 directives support SSR out of the box
 - 📦 **Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
+- ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
 
 ## Online Demo
 

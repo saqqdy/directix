@@ -2,7 +2,7 @@
 
 Lazy load images when they enter the viewport.
 
-> **Since:** `1.0.0`
+> **Since:** `1.1.0`
 
 ## Usage
 

@@ -2,7 +2,7 @@
 
 Make elements sticky when scrolling.
 
-> **Since:** `1.0.0`
+> **Since:** `1.1.0`
 
 ## Usage
 

@@ -2,7 +2,7 @@
 
 Observe element intersection with the viewport using IntersectionObserver.
 
-> **Since:** `1.0.0`
+> **Since:** `1.1.0`
 
 ## Usage
 

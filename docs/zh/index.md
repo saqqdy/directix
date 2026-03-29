@@ -27,7 +27,7 @@ features:
     details: 提供 30+ 常用指令，涵盖事件、表单、可见性、安全等多个场景。
   - icon: 🔄
     title: Vue 2/3 兼容
-    details: 基于 vue-demi，单一代码库同时支持 Vue 2 和 Vue 3，无需单独安装不同包。
+    details: 单一代码库同时支持 Vue 2 和 Vue 3，无需单独安装不同包。
   - icon: 📦
     title: Tree-shakable
     details: 按需引入，只打包你使用的指令，保持最小体积。
