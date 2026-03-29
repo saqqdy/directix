@@ -1,45 +1,31 @@
 import { defineDirective } from '@directix/core'
 import type { DirectiveBinding } from '@directix/core'
 
+// ============ Types ============
+
 /**
  * Permission action mode
  */
 export type PermissionAction = 'remove' | 'disable' | 'hide'
 
 /**
+ * Permission check mode
+ */
+export type PermissionMode = 'some' | 'every'
+
+/**
  * Permission directive options
  */
 export interface PermissionOptions {
-	/**
-	 * Permission value(s) to check
-	 */
+	/** Permission value(s) to check */
 	value: string | string[]
-
-	/**
-	 * Logic for multiple permissions
-	 * - 'some': any one permission is enough (OR)
-	 * - 'every': all permissions are required (AND)
-	 * @default 'some'
-	 */
-	mode?: 'some' | 'every'
-
-	/**
-	 * Action when permission is denied
-	 * - 'remove': remove element from DOM
-	 * - 'disable': disable element
-	 * - 'hide': hide element
-	 * @default 'remove'
-	 */
+	/** Logic for multiple permissions: 'some' (OR) or 'every' (AND). Default: 'some' */
+	mode?: PermissionMode
+	/** Action when permission denied. Default: 'remove' */
 	action?: PermissionAction
-
-	/**
-	 * Custom permission check function
-	 */
-	check?: (permission: string | string[], mode: 'some' | 'every') => boolean
-
-	/**
-	 * Callback when permission changes
-	 */
+	/** Custom permission check function */
+	check?: (permission: string | string[], mode: PermissionMode) => boolean
+	/** Callback when permission state changes */
 	onChange?: (hasPermission: boolean) => void
 }
 
@@ -52,26 +38,22 @@ export type PermissionBinding = string | string[] | PermissionOptions
  * Permission configuration
  */
 export interface PermissionConfig {
-	/**
-	 * Get current user's permissions
-	 */
+	/** Get current user's permissions */
 	getPermissions: () => string[]
-
-	/**
-	 * Get current user's roles
-	 */
+	/** Get current user's roles */
 	getRoles?: () => string[]
-
-	/**
-	 * Role to permission mapping
-	 */
+	/** Role to permission mapping */
 	roleMap?: Record<string, string[]>
 }
 
-/**
- * Element state storage
- */
-interface PermissionState {
+// ============ Constants ============
+
+const STATE_KEY = '__permission' as const
+const WILDCARD = '*' as const
+
+// ============ State ============
+
+interface ElementState {
 	options: PermissionOptions
 	originalDisplay: string
 	originalDisabled: boolean | string
@@ -81,6 +63,8 @@ interface PermissionState {
 
 // Global configuration
 let globalConfig: PermissionConfig | null = null
+
+// ============ Configuration ============
 
 /**
  * Configure permission directive
@@ -96,8 +80,10 @@ export function getPermissionConfig(): PermissionConfig | null {
 	return globalConfig
 }
 
+// ============ Helpers ============
+
 /**
- * Normalize options
+ * Normalize binding value to options object
  */
 function normalizeOptions(binding: PermissionBinding | undefined): PermissionOptions {
 	if (!binding) {
@@ -116,7 +102,14 @@ function normalizeOptions(binding: PermissionBinding | undefined): PermissionOpt
 }
 
 /**
- * Verify permission
+ * Check if a permission is granted (supports wildcard)
+ */
+function hasPermission(required: string, permissions: string[]): boolean {
+	return permissions.includes(WILDCARD) || permissions.includes(required)
+}
+
+/**
+ * Verify permission against configuration
  */
 function verifyPermission(options: PermissionOptions): boolean {
 	// Custom check function takes priority
@@ -124,7 +117,7 @@ function verifyPermission(options: PermissionOptions): boolean {
 		return options.check(options.value, options.mode || 'some')
 	}
 
-	// Use global configuration
+	// Require global configuration
 	if (!globalConfig) {
 		console.warn('[Directix] v-permission: No permission config provided')
 
@@ -132,36 +125,46 @@ function verifyPermission(options: PermissionOptions): boolean {
 	}
 
 	const permissions = globalConfig.getPermissions()
+	const roles = globalConfig.getRoles?.() || []
+	const roleMap = globalConfig.roleMap || {}
 	const required = Array.isArray(options.value) ? options.value : [options.value]
 	const mode = options.mode || 'some'
 
-	// Check permissions
-	const result =
-		mode === 'every' ? required.every(p => permissions.includes(p)) : required.some(p => permissions.includes(p))
-
-	// If failed and has role mapping, check roles too
-	if (!result && globalConfig.getRoles && globalConfig.roleMap) {
-		const roles = globalConfig.getRoles()
-
-		for (const role of roles) {
-			const rolePermissions = globalConfig.roleMap[role] || []
-			const roleResult =
-				mode === 'every' ? required.every(p => rolePermissions.includes(p)) : required.some(p => rolePermissions.includes(p))
-
-			if (roleResult) return true
+	/**
+	 * Check a single value - can be a role name or permission
+	 */
+	function checkSingle(value: string): boolean {
+		// If value is a role name in roleMap, check if user has that role
+		if (value in roleMap) {
+			return roles.includes(value)
 		}
+
+		// Check direct permission
+		if (hasPermission(value, permissions)) {
+			return true
+		}
+
+		// Check if any of user's roles grant this permission
+		for (const role of roles) {
+			const rolePermissions = roleMap[role] || []
+
+			if (hasPermission(value, rolePermissions)) {
+				return true
+			}
+		}
+
+		return false
 	}
 
-	return result
+	return mode === 'every' ? required.every(checkSingle) : required.some(checkSingle)
 }
 
 /**
- * Handle no permission state
+ * Handle element when permission is denied
  */
-function handleNoPermission(el: HTMLElement, action: PermissionAction, state: PermissionState): void {
+function handleDenied(el: HTMLElement, action: PermissionAction, state: ElementState): void {
 	switch (action) {
 		case 'remove':
-			// Store parent and create placeholder
 			state.parentNode = el.parentNode
 			state.placeholder = document.createComment('v-permission')
 			el.parentNode?.insertBefore(state.placeholder, el)
@@ -181,12 +184,11 @@ function handleNoPermission(el: HTMLElement, action: PermissionAction, state: Pe
 }
 
 /**
- * Restore element
+ * Restore element when permission is granted
  */
-function restoreElement(el: HTMLElement, action: PermissionAction, state: PermissionState): void {
+function handleGranted(el: HTMLElement, action: PermissionAction, state: ElementState): void {
 	switch (action) {
 		case 'remove':
-			// Re-insert element if it was removed
 			if (state.placeholder && state.parentNode) {
 				state.parentNode.insertBefore(el, state.placeholder)
 				state.parentNode.removeChild(state.placeholder)
@@ -209,51 +211,71 @@ function restoreElement(el: HTMLElement, action: PermissionAction, state: Permis
 }
 
 /**
- * Check permission and update element
+ * Get or create element state
  */
-function checkPermission(el: HTMLElement, binding: DirectiveBinding<PermissionBinding>): void {
-	let state: PermissionState = (el as any).__permission
-
-	// Initialize state on first call
-	if (!state) {
-		state = {
-			options: normalizeOptions(binding.value),
+function getState(el: HTMLElement): ElementState {
+	if (!(el as any)[STATE_KEY]) {
+		;(el as any)[STATE_KEY] = {
+			options: { value: '' },
 			originalDisplay: '',
 			originalDisabled: false,
 			parentNode: null,
 			placeholder: null,
-		}
-		;(el as any).__permission = state
-	} else {
-		state.options = normalizeOptions(binding.value)
+		} as ElementState
 	}
 
-	const hasPermission = verifyPermission(state.options)
+	return (el as any)[STATE_KEY]
+}
+
+/**
+ * Check permission and update element state
+ */
+function checkPermission(el: HTMLElement, binding: DirectiveBinding<PermissionBinding>): void {
+	const state = getState(el)
+
+	state.options = normalizeOptions(binding.value)
+
+	const granted = verifyPermission(state.options)
 
 	// Trigger change callback
-	if (state.options.onChange) {
-		state.options.onChange(hasPermission)
-	}
+	state.options.onChange?.(granted)
 
 	const action = state.options.action || 'remove'
 
-	// Handle element based on permission
-	if (!hasPermission) {
-		handleNoPermission(el, action, state)
+	if (granted) {
+		handleGranted(el, action, state)
 	} else {
-		restoreElement(el, action, state)
+		handleDenied(el, action, state)
 	}
 }
 
 /**
+ * Cleanup element state
+ */
+function cleanup(el: HTMLElement): void {
+	const state: ElementState = (el as any)[STATE_KEY]
+
+	if (state?.placeholder && state.parentNode) {
+		state.parentNode.removeChild(state.placeholder)
+	}
+
+	delete (el as any)[STATE_KEY]
+}
+
+// ============ Directive ============
+
+/**
  * v-permission directive
+ *
+ * Controls element visibility and state based on user permissions.
+ * Supports role-based and permission-based access control with wildcard support.
  *
  * @example
  * ```vue
  * <template>
  *   <button v-permission="'admin'">Admin Only</button>
  *   <button v-permission="['admin', 'editor']">Admin or Editor</button>
- *   <button v-permission="{ value: ['admin', 'editor'], mode: 'every' }">Admin and Editor</button>
+ *   <button v-permission="{ value: ['read', 'write'], mode: 'every' }">Read & Write</button>
  *   <button v-permission="{ value: 'admin', action: 'disable' }">Disabled for non-admin</button>
  * </template>
  *
@@ -270,7 +292,7 @@ function checkPermission(el: HTMLElement, binding: DirectiveBinding<PermissionBi
  */
 export const vPermission = defineDirective<PermissionBinding, HTMLElement>({
 	name: 'permission',
-	ssr: true, // SSR compatible
+	ssr: true,
 
 	mounted(el, binding) {
 		checkPermission(el, binding)
@@ -281,13 +303,7 @@ export const vPermission = defineDirective<PermissionBinding, HTMLElement>({
 	},
 
 	unmounted(el) {
-		const state: PermissionState = (el as any).__permission
-
-		if (state?.placeholder && state.parentNode) {
-			state.parentNode.removeChild(state.placeholder)
-		}
-
-		delete (el as any).__permission
+		cleanup(el)
 	},
 })
 

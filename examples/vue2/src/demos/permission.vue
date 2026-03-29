@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import { configurePermission } from 'directix'
 
 export default defineComponent({
@@ -21,6 +21,9 @@ export default defineComponent({
 				}
 			})
 		})
+
+		// Force re-render key when permissions change
+		const permissionKey = computed(() => `${userRoles.value.join(',')}:${userPermissions.value.join(',')}`)
 
 		const toggleRole = (role: string) => {
 			const index = userRoles.value.indexOf(role)
@@ -48,6 +51,13 @@ export default defineComponent({
   Admin or Editor
 </button>`
 
+		const modeCode = `<button v-permission="{
+  value: ['read', 'write'],
+  mode: 'every'
+}">
+  Requires both permissions
+</button>`
+
 		const actionCode = `<button v-permission="{
   value: 'admin',
   action: 'disable'
@@ -60,10 +70,12 @@ export default defineComponent({
 			userPermissions,
 			availableRoles,
 			availablePermissions,
+			permissionKey,
 			toggleRole,
 			togglePermission,
 			basicCode,
 			multipleCode,
+			modeCode,
 			actionCode
 		}
 	}
@@ -74,14 +86,14 @@ export default defineComponent({
 	<div class="demo-page">
 		<h1>v-permission</h1>
 		<p class="intro">
-			A directive for controlling element visibility and state based on user permissions.
+			A directive for controlling element visibility and state based on user permissions. Supports role-based and permission-based access control.
 		</p>
 
 		<!-- Permission Controls -->
 		<div class="demo-section">
 			<h2>Configure Permissions</h2>
 			<p class="description">Toggle roles and permissions to test</p>
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="control-section">
 					<h4>Roles:</h4>
 					<div class="toggle-group">
@@ -115,7 +127,7 @@ export default defineComponent({
 		<div class="demo-section">
 			<h2>Single Permission</h2>
 			<p class="description">Show only for users with permission</p>
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="button-row">
 					<button v-permission="'admin'" class="demo-btn admin">
 						Admin Only
@@ -138,7 +150,7 @@ export default defineComponent({
 		<div class="demo-section">
 			<h2>Multiple Permissions</h2>
 			<p class="description">Any one permission is enough (OR logic)</p>
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="button-row">
 					<button v-permission="['admin', 'editor']" class="demo-btn primary">
 						Admin OR Editor
@@ -153,11 +165,36 @@ export default defineComponent({
 			</div>
 		</div>
 
-		<!-- Scenario 3: Different actions -->
+		<!-- Scenario 3: Mode 'every' -->
+		<div class="demo-section">
+			<h2>All Permissions Required</h2>
+			<p class="description">All permissions required (AND logic)</p>
+			<div class="demo-box" :key="permissionKey">
+				<div class="button-row">
+					<button
+						v-permission="{ value: ['read', 'write'], mode: 'every' }"
+						class="demo-btn warning"
+					>
+						Read AND Write
+					</button>
+					<button
+						v-permission="{ value: ['read', 'delete'], mode: 'every' }"
+						class="demo-btn danger"
+					>
+						Read AND Delete
+					</button>
+				</div>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ modeCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Scenario 4: Different actions -->
 		<div class="demo-section">
 			<h2>Different Actions</h2>
 			<p class="description">Remove, disable, or hide elements</p>
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="action-grid">
 					<div class="action-item">
 						<span class="label">action: 'remove'</span>
@@ -220,6 +257,12 @@ export default defineComponent({
 						<td>Function</td>
 						<td>-</td>
 						<td>Custom permission check function</td>
+					</tr>
+					<tr>
+						<td>onChange</td>
+						<td>Function</td>
+						<td>-</td>
+						<td>Callback on permission change</td>
 					</tr>
 				</tbody>
 			</table>
@@ -327,6 +370,11 @@ h1 {
 
 .demo-btn.success {
 	background: linear-gradient(135deg, #48bb78, #38a169);
+	color: white;
+}
+
+.demo-btn.warning {
+	background: linear-gradient(135deg, #ed8936, #dd6b20);
 	color: white;
 }
 

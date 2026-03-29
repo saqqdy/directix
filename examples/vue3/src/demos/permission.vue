@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { configurePermission } from 'directix'
 
-// Setup permission config
+// User state
+const userRoles = ref<string[]>(['editor'])
+const userPermissions = ref<string[]>(['read', 'write', 'edit'])
+const availableRoles = ['admin', 'editor', 'viewer']
+const availablePermissions = ['read', 'write', 'edit', 'delete', 'manage']
+
+// Setup permission config - use computed to make it reactive
 onMounted(() => {
 	configurePermission({
 		getPermissions: () => userPermissions.value,
@@ -17,11 +23,8 @@ onMounted(() => {
 	})
 })
 
-// User state
-const userRoles = ref<string[]>(['editor'])
-const userPermissions = ref<string[]>(['read', 'write', 'edit'])
-const availableRoles = ['admin', 'editor', 'viewer']
-const availablePermissions = ['read', 'write', 'edit', 'delete', 'manage']
+// Force re-render key when permissions change
+const permissionKey = computed(() => `${userRoles.value.join(',')}:${userPermissions.value.join(',')}`)
 
 const toggleRole = (role: string) => {
 	const index = userRoles.value.indexOf(role)
@@ -105,7 +108,7 @@ const actionCode = `<button v-permission="{
 
 		<!-- Scenario 1: Single permission -->
 		<DemoSection title="Single Permission" description="Show only for users with permission">
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="button-row">
 					<button v-permission="'admin'" class="demo-btn admin">
 						Admin Only
@@ -124,7 +127,7 @@ const actionCode = `<button v-permission="{
 
 		<!-- Scenario 2: Multiple permissions -->
 		<DemoSection title="Multiple Permissions" description="Any one permission is enough (OR logic)">
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="button-row">
 					<button v-permission="['admin', 'editor']" class="demo-btn primary">
 						Admin OR Editor
@@ -139,7 +142,7 @@ const actionCode = `<button v-permission="{
 
 		<!-- Scenario 3: Mode 'every' -->
 		<DemoSection title="All Permissions Required" description="All permissions required (AND logic)">
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="button-row">
 					<button
 						v-permission="{ value: ['read', 'write'], mode: 'every' }"
@@ -160,7 +163,7 @@ const actionCode = `<button v-permission="{
 
 		<!-- Scenario 4: Different actions -->
 		<DemoSection title="Different Actions" description="Remove, disable, or hide elements">
-			<div class="demo-box">
+			<div class="demo-box" :key="permissionKey">
 				<div class="action-grid">
 					<div class="action-item">
 						<span class="label">action: 'remove'</span>
