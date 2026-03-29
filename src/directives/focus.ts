@@ -73,13 +73,15 @@ function isEqual(a: unknown, b: unknown): boolean {
  */
 export const vFocus = defineDirective<FocusBinding, HTMLElement>({
 	name: 'focus',
-	ssr: false,
+	ssr: true, // SSR safe - will skip focus on server
 	defaults: {
 		focus: true,
 		refocus: false,
 	},
 
 	mounted(el, binding) {
+		if (!isBrowser()) return
+
 		const options = normalizeOptions(binding.value)
 
 		if (!options.focus || !isFocusable(el)) {

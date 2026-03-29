@@ -71,7 +71,7 @@ interface DebounceState {
  */
 export const vDebounce = defineDirective<DebounceBinding, HTMLElement>({
 	name: 'debounce',
-	ssr: false,
+	ssr: true, // SSR safe - event binding is skipped on server
 	defaults: {
 		wait: 300,
 		leading: false,

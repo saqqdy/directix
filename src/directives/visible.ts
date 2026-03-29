@@ -80,7 +80,7 @@ function normalizeOptions(binding: VisibleBinding | undefined): VisibleOptions {
  */
 export const vVisible = defineDirective<VisibleBinding, HTMLElement>({
 	name: 'visible',
-	ssr: false,
+	ssr: true, // SSR safe - will set initial visibility on server
 	defaults: {
 		initial: true,
 		disabled: false,

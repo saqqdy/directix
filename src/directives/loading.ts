@@ -156,7 +156,7 @@ function createLoadingOverlay(options: LoadingOptions): HTMLDivElement {
  */
 export const vLoading = defineDirective<LoadingBinding, HTMLElement>({
 	name: 'loading',
-	ssr: false,
+	ssr: true, // SSR safe - will skip DOM manipulation on server
 	defaults: {
 		value: true,
 		loadingClass: 'v-loading',
