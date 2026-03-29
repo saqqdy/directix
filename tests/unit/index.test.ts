@@ -1,9 +1,9 @@
+import * as coreExports from '@directix/core'
+import * as sharedExports from '@directix/shared'
 import { describe, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
 import { Directix } from '../../src'
 import * as directives from '../../src/directives'
-import * as coreExports from '@directix/core'
-import * as sharedExports from '@directix/shared'
 
 describe('src/index.ts', () => {
 	describe('Directix plugin', () => {

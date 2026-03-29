@@ -1,38 +1,3 @@
-import { describe, expect, it } from 'vitest'
-import {
-	// Event directives
-	clickOutside,
-	copy,
-	debounce,
-	focus,
-	throttle,
-	vClickOutside,
-	vCopy,
-	vDebounce,
-	vFocus,
-	vHover,
-	// Scroll directives
-	vInfiniteScroll,
-	// Visibility directives
-	vIntersect,
-	vLazy,
-	vLoading,
-	vLongPress,
-	// Form directives
-	vMask,
-	// Observer directives
-	vMutation,
-	// Security directives
-	vPermission,
-	vResize,
-	// Effect directives
-	vRipple,
-	vSanitize,
-	vScroll,
-	vSticky,
-	vThrottle,
-	vVisible,
-} from '../../src/directives'
 import type {
 	ClickOutsideBinding,
 	ClickOutsideHandler,
@@ -78,6 +43,41 @@ import type {
 	ThrottleOptions,
 	VisibleBinding,
 	VisibleOptions,
+} from '../../src/directives'
+import { describe, expect, it } from 'vitest'
+import {
+	// Event directives
+	clickOutside,
+	copy,
+	debounce,
+	focus,
+	throttle,
+	vClickOutside,
+	vCopy,
+	vDebounce,
+	vFocus,
+	vHover,
+	// Scroll directives
+	vInfiniteScroll,
+	// Visibility directives
+	vIntersect,
+	vLazy,
+	vLoading,
+	vLongPress,
+	// Form directives
+	vMask,
+	// Observer directives
+	vMutation,
+	// Security directives
+	vPermission,
+	vResize,
+	// Effect directives
+	vRipple,
+	vSanitize,
+	vScroll,
+	vSticky,
+	vThrottle,
+	vVisible,
 } from '../../src/directives'
 
 describe('src/directives/index.ts', () => {
