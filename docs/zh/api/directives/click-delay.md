@@ -1,0 +1,93 @@
+# v-click-delay
+
+Prevent repeated clicks within a specified time period. Perfect for preventing double submissions and spam clicks.
+
+> **Since:** `1.3.0`
+
+## Usage
+
+### Basic
+
+```vue
+<template>
+  <button v-click-delay="handleClick">Click Me</button>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+function handleClick(event) {
+  console.log('Button clicked!')
+}
+</script>
+```
+
+### With Delay Time
+
+```vue
+<template>
+  <!-- Using argument syntax for delay time -->
+  <button v-click-delay:500="handleClick">500ms delay</button>
+  <button v-click-delay:1s="handleClick">1s delay</button>
+</template>
+```
+
+### With Options
+
+```vue
+<template>
+  <button v-click-delay="{
+    handler: handleClick,
+    delay: 1000,
+    feedback: true
+  }">
+    Submit
+  </button>
+</template>
+```
+
+## API
+
+### Types
+
+```typescript
+type ClickDelayHandler = (event: MouseEvent | TouchEvent) => void
+
+interface ClickDelayOptions {
+  handler: ClickDelayHandler
+  delay?: number // default: 300
+  disabled?: boolean // default: false
+  pendingClass?: string // default: 'v-click-delay--pending'
+  feedback?: boolean // default: true
+}
+
+type ClickDelayBinding = ClickDelayHandler | ClickDelayOptions
+```
+
+### Options
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `(event: MouseEvent \| TouchEvent) => void` | - | Click handler (required) |
+| `delay` | `number` | `300` | Delay time in milliseconds |
+| `disabled` | `boolean` | `false` | Disable the delay behavior |
+| `pendingClass` | `string` | `'v-click-delay--pending'` | CSS class added during delay |
+| `feedback` | `boolean` | `true` | Whether to add visual feedback |
+
+### CSS Classes
+
+- `v-click-delay--pending` - Added to element during the delay period (customizable via `pendingClass`)
+
+## Examples
+
+### Form Submission
+
+```vue
+<template>
+  <form @submit.prevent="submit">
+    <button type="submit" v-click-delay="{ handler: submit, delay: 2000 }">
+      {{ submitting ? 'Submitting...' : 'Submit' }}
+    </button>
+  </form>
+</template>
+```

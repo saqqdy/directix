@@ -2,7 +2,7 @@
 
 Transform input text to capital case (first letter of each word capitalized).
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

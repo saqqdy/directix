@@ -2,7 +2,7 @@
 
 Format and validate numeric input with customizable options.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

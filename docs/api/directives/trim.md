@@ -2,7 +2,7 @@
 
 Trim whitespace from input values with configurable position.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

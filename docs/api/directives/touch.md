@@ -2,7 +2,7 @@
 
 Touch gesture detection directive supporting swipe, pinch, rotate, tap, and long press.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

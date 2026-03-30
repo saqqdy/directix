@@ -2,7 +2,7 @@
 
 Display tooltips on hover, focus, or click with customizable positioning and styling.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

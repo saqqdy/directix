@@ -2,7 +2,7 @@
 
 Create a modal image preview with mobile-optimized gestures including pinch zoom, double tap, and swipe.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 

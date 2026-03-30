@@ -2,7 +2,7 @@
 
 Transform input text to uppercase.
 
-> **Since:** `1.1.0`
+> **Since:** `1.2.0`
 
 ## Usage
 
