@@ -3,12 +3,24 @@ import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
+// Basic Usage
 const swipeDirection = ref('')
 const swipeCount = ref(0)
-
 const handleSwipe = (direction: string) => {
 	swipeDirection.value = direction
 	swipeCount.value++
+}
+
+// Direction Callbacks
+const directionSwipe = ref('')
+const handleDirectionSwipe = (direction: string) => {
+	directionSwipe.value = direction
+}
+
+// Horizontal Only
+const horizontalSwipe = ref('')
+const handleHorizontalSwipe = (direction: string) => {
+	horizontalSwipe.value = direction
 }
 
 const basicCode = `<div v-swipe="handleSwipe">
@@ -17,8 +29,7 @@ const basicCode = `<div v-swipe="handleSwipe">
 
 const directionCode = `<div v-swipe="{
   onLeft: () => prevSlide(),
-  onRight: () => nextSlide(),
-  threshold: 100
+  onRight: () => nextSlide()
 }">
   Swipe left/right only
 </div>`
@@ -64,11 +75,11 @@ const horizontalCode = `<div v-swipe="{
 			<div class="demo-box">
 				<div
 					v-swipe="{
-						onLeft: () => handleSwipe('left'),
-						onRight: () => handleSwipe('right'),
-						onUp: () => handleSwipe('up'),
-						onDown: () => handleSwipe('down'),
-						threshold: 50
+						onLeft: () => handleDirectionSwipe('left'),
+						onRight: () => handleDirectionSwipe('right'),
+						onUp: () => handleDirectionSwipe('up'),
+						onDown: () => handleDirectionSwipe('down'),
+						threshold: 30
 					}"
 					class="swipe-area"
 				>
@@ -78,6 +89,10 @@ const horizontalCode = `<div v-swipe="{
 						<span>←  →</span>
 						<span>↓</span>
 					</div>
+					<p class="result" v-if="directionSwipe">
+						Last swipe: <strong>{{ directionSwipe }}</strong>
+					</p>
+					<p class="hint" v-else>Swipe to see direction</p>
 				</div>
 			</div>
 			<CodeBlock :code="directionCode" />
@@ -87,13 +102,17 @@ const horizontalCode = `<div v-swipe="{
 			<div class="demo-box">
 				<div
 					v-swipe="{
-						handler: (dir) => handleSwipe(dir),
+						handler: (dir) => handleHorizontalSwipe(dir),
 						directions: ['left', 'right'],
-						threshold: 80
+						threshold: 30
 					}"
 					class="swipe-area horizontal"
 				>
 					<p>← Swipe left or right only →</p>
+					<p class="result" v-if="horizontalSwipe">
+						Last swipe: <strong>{{ horizontalSwipe }}</strong>
+					</p>
+					<p class="hint" v-else>Swipe horizontally</p>
 				</div>
 			</div>
 			<CodeBlock :code="horizontalCode" />
@@ -119,20 +138,14 @@ const horizontalCode = `<div v-swipe="{
 					<tr>
 						<td>threshold</td>
 						<td>Number</td>
-						<td>50</td>
+						<td>30</td>
 						<td>Minimum distance to trigger (px)</td>
 					</tr>
 					<tr>
 						<td>maxTime</td>
 						<td>Number</td>
-						<td>300</td>
+						<td>500</td>
 						<td>Maximum swipe duration (ms)</td>
-					</tr>
-					<tr>
-						<td>minVelocity</td>
-						<td>Number</td>
-						<td>0.3</td>
-						<td>Minimum velocity (px/ms)</td>
 					</tr>
 					<tr>
 						<td>directions</td>
@@ -145,6 +158,12 @@ const horizontalCode = `<div v-swipe="{
 						<td>Function</td>
 						<td>-</td>
 						<td>Direction-specific callbacks</td>
+					</tr>
+					<tr>
+						<td>mouse</td>
+						<td>Boolean</td>
+						<td>true</td>
+						<td>Enable mouse support</td>
 					</tr>
 				</tbody>
 			</table>
@@ -179,7 +198,6 @@ h1 {
 	padding: 40px;
 	border-radius: 12px;
 	text-align: center;
-	touch-action: pan-y;
 	user-select: none;
 }
 
@@ -219,6 +237,11 @@ h1 {
 	font-size: 13px;
 	color: #888;
 	margin-top: 12px;
+}
+
+.swipe-area .hint {
+	color: rgba(255, 255, 255, 0.7);
+	margin-top: 8px;
 }
 
 .api-table {

@@ -1,100 +1,44 @@
 import { defineDirective } from '@directix/core'
 
-/**
- * Swipe direction
- */
 export type SwipeDirection = 'left' | 'right' | 'up' | 'down'
 
-/**
- * Swipe handler
- */
-export type SwipeHandler = (direction: SwipeDirection, event: TouchEvent) => void
+export type SwipeHandler = (direction: SwipeDirection, event: Event) => void
 
-/**
- * Swipe options
- */
 export interface SwipeOptions {
-	/**
-	 * Handler to call on swipe
-	 */
 	handler?: SwipeHandler
-
-	/**
-	 * Minimum distance to trigger swipe (in pixels)
-	 * @default 50
-	 */
 	threshold?: number
-
-	/**
-	 * Maximum time for swipe (in ms)
-	 * @default 300
-	 */
 	maxTime?: number
-
-	/**
-	 * Minimum velocity (pixels per ms)
-	 * @default 0.3
-	 */
-	minVelocity?: number
-
-	/**
-	 * Allowed directions
-	 * @default ['left', 'right', 'up', 'down']
-	 */
 	directions?: SwipeDirection[]
-
-	/**
-	 * Whether to prevent default scroll on swipe
-	 * @default true
-	 */
 	preventScrollOnSwipe?: boolean
-
-	/**
-	 * Whether to disable
-	 * @default false
-	 */
 	disabled?: boolean
-
-	/**
-	 * Callback on swipe left
-	 */
+	mouse?: boolean
 	onLeft?: () => void
-
-	/**
-	 * Callback on swipe right
-	 */
 	onRight?: () => void
-
-	/**
-	 * Callback on swipe up
-	 */
 	onUp?: () => void
-
-	/**
-	 * Callback on swipe down
-	 */
 	onDown?: () => void
 }
 
-/**
- * Directive binding value type
- */
 export type SwipeBinding = SwipeHandler | SwipeOptions
 
-/**
- * Element state storage
- */
 interface SwipeState {
 	options: SwipeOptions
 	startX: number
 	startY: number
 	startTime: number
-	handler: (e: TouchEvent) => void
+	isActive: boolean
+	handlers: {
+		touchStart: (e: TouchEvent) => void
+		touchMove: (e: TouchEvent) => void
+		touchEnd: (e: TouchEvent) => void
+		mouseDown: (e: MouseEvent) => void
+		mouseUp: (e: MouseEvent) => void
+	}
 }
 
-/**
- * Get swipe direction from deltas
- */
+const DEFAULT_THRESHOLD = 30
+const DEFAULT_MAX_TIME = 500
+const DEFAULT_DIRECTIONS: SwipeDirection[] = ['left', 'right', 'up', 'down']
+
 function getSwipeDirection(
 	deltaX: number,
 	deltaY: number,
@@ -103,40 +47,26 @@ function getSwipeDirection(
 	const absX = Math.abs(deltaX)
 	const absY = Math.abs(deltaY)
 
-	// Determine primary direction
 	if (absX > absY) {
-		// Horizontal swipe
 		const direction = deltaX > 0 ? 'right' : 'left'
-		if (allowedDirections.includes(direction)) {
-			return direction
-		}
+		return allowedDirections.includes(direction) ? direction : null
 	} else {
-		// Vertical swipe
 		const direction = deltaY > 0 ? 'down' : 'up'
-		if (allowedDirections.includes(direction)) {
-			return direction
-		}
+		return allowedDirections.includes(direction) ? direction : null
 	}
-
-	return null
 }
 
-/**
- * Normalize options
- */
 function normalizeOptions(binding: SwipeBinding): SwipeOptions {
-	if (typeof binding === 'function') {
-		return { handler: binding }
-	}
+	if (typeof binding === 'function') return { handler: binding }
 
 	return {
 		handler: binding.handler,
-		threshold: binding.threshold ?? 50,
-		maxTime: binding.maxTime ?? 300,
-		minVelocity: binding.minVelocity ?? 0.3,
-		directions: binding.directions ?? ['left', 'right', 'up', 'down'],
+		threshold: binding.threshold ?? DEFAULT_THRESHOLD,
+		maxTime: binding.maxTime ?? DEFAULT_MAX_TIME,
+		directions: binding.directions ?? [...DEFAULT_DIRECTIONS],
 		preventScrollOnSwipe: binding.preventScrollOnSwipe ?? true,
 		disabled: binding.disabled ?? false,
+		mouse: binding.mouse ?? true,
 		onLeft: binding.onLeft,
 		onRight: binding.onRight,
 		onUp: binding.onUp,
@@ -144,188 +74,207 @@ function normalizeOptions(binding: SwipeBinding): SwipeOptions {
 	}
 }
 
-/**
- * v-swipe directive
- *
- * Detects swipe gestures on an element.
- *
- * @example
- * ```vue
- * <template>
- *   <!-- Basic usage -->
- *   <div v-swipe="handleSwipe">Swipe me</div>
- *
- *   <!-- With direction callbacks -->
- *   <div v-swipe="{
- *     onLeft: () => prevSlide(),
- *     onRight: () => nextSlide(),
- *     threshold: 100
- *   }">
- *     Swipe left/right
- *   </div>
- *
- *   <!-- Only horizontal swipes -->
- *   <div v-swipe="{
- *     handler: handleSwipe,
- *     directions: ['left', 'right']
- *   }">
- *     Horizontal only
- *   </div>
- * </template>
- * ```
- */
+function triggerSwipe(
+	state: SwipeState,
+	deltaX: number,
+	deltaY: number,
+	deltaTime: number,
+	event: Event,
+	el: HTMLElement,
+) {
+	const { options } = state
+
+	// Check time
+	if (deltaTime > (options.maxTime ?? DEFAULT_MAX_TIME)) return
+
+	// Check distance
+	const distance = Math.max(Math.abs(deltaX), Math.abs(deltaY))
+	if (distance < (options.threshold ?? DEFAULT_THRESHOLD)) return
+
+	// Get direction
+	const direction = getSwipeDirection(deltaX, deltaY, options.directions ?? DEFAULT_DIRECTIONS)
+	if (!direction) return
+
+	// Prevent scroll
+	if (options.preventScrollOnSwipe && event.cancelable) {
+		event.preventDefault()
+	}
+
+	// Call handlers
+	options.handler?.(direction, event)
+
+	// Direction-specific callbacks
+	const callbacks: Record<SwipeDirection, (() => void) | undefined> = {
+		left: options.onLeft,
+		right: options.onRight,
+		up: options.onUp,
+		down: options.onDown,
+	}
+	callbacks[direction]?.()
+
+	// Dispatch custom event
+	el.dispatchEvent(new CustomEvent('swipe', { detail: { direction, deltaX, deltaY, deltaTime } }))
+}
+
+function createSwipeHandler(
+	el: HTMLElement,
+	state: SwipeState,
+): (clientX: number, clientY: number, event: Event) => void {
+	return (clientX, clientY, event) => {
+		const deltaX = clientX - state.startX
+		const deltaY = clientY - state.startY
+		const deltaTime = Date.now() - state.startTime
+		triggerSwipe(state, deltaX, deltaY, deltaTime, event, el)
+	}
+}
+
+function setupState(el: HTMLElement, options: SwipeOptions): SwipeState | null {
+	if (options.disabled) return null
+
+	el.style.touchAction = 'none'
+	el.style.userSelect = 'none'
+
+	const state: SwipeState = {
+		options,
+		startX: 0,
+		startY: 0,
+		startTime: 0,
+		isActive: false,
+		handlers: null as any,
+	}
+
+	const handleSwipe = createSwipeHandler(el, state)
+
+	state.handlers = {
+		touchStart: (e: TouchEvent) => {
+			if (state.options.disabled) return
+			state.startX = e.touches[0].clientX
+			state.startY = e.touches[0].clientY
+			state.startTime = Date.now()
+			state.isActive = true
+		},
+
+		touchMove: (e: TouchEvent) => {
+			if (!state.isActive || state.options.disabled) return
+			if (state.options.preventScrollOnSwipe) {
+				e.preventDefault()
+			}
+		},
+
+		touchEnd: (e: TouchEvent) => {
+			if (!state.isActive || state.options.disabled) return
+			state.isActive = false
+			const touch = e.changedTouches[0]
+			handleSwipe(touch.clientX, touch.clientY, e)
+		},
+
+		mouseDown: (e: MouseEvent) => {
+			if (state.options.disabled) return
+			state.startX = e.clientX
+			state.startY = e.clientY
+			state.startTime = Date.now()
+			state.isActive = true
+		},
+
+		mouseUp: (e: MouseEvent) => {
+			if (!state.isActive || state.options.disabled) return
+			state.isActive = false
+			handleSwipe(e.clientX, e.clientY, e)
+		},
+	}
+
+	return state
+}
+
+function bindEvents(el: HTMLElement, state: SwipeState) {
+	const { handlers } = state
+	const enableMouse = state.options.mouse ?? true
+
+	el.addEventListener('touchstart', handlers.touchStart, { passive: true })
+	el.addEventListener('touchmove', handlers.touchMove, { passive: false })
+	el.addEventListener('touchend', handlers.touchEnd)
+	el.addEventListener('touchcancel', handlers.touchEnd)
+
+	if (enableMouse) {
+		el.addEventListener('mousedown', handlers.mouseDown)
+		el.addEventListener('mouseup', handlers.mouseUp)
+		el.addEventListener('mouseleave', handlers.mouseUp)
+	}
+}
+
+function unbindEvents(el: HTMLElement, state: SwipeState) {
+	const { handlers } = state
+	const enableMouse = state.options.mouse ?? true
+
+	el.removeEventListener('touchstart', handlers.touchStart)
+	el.removeEventListener('touchmove', handlers.touchMove)
+	el.removeEventListener('touchend', handlers.touchEnd)
+	el.removeEventListener('touchcancel', handlers.touchEnd)
+
+	if (enableMouse) {
+		el.removeEventListener('mousedown', handlers.mouseDown)
+		el.removeEventListener('mouseup', handlers.mouseUp)
+		el.removeEventListener('mouseleave', handlers.mouseUp)
+	}
+}
+
 export const vSwipe = defineDirective<SwipeBinding, HTMLElement>({
 	name: 'swipe',
 	ssr: false,
 
 	mounted(el, binding) {
 		const options = normalizeOptions(binding.value)
-
-		if (options.disabled) return
-
-		// Setup touch styles
-		el.style.touchAction = 'pan-y'
-
-		const state: SwipeState = {
-			options,
-			startX: 0,
-			startY: 0,
-			startTime: 0,
-			handler: createSwipeHandler(el, options),
-		}
+		const state = setupState(el, options)
+		if (!state) return
 
 		;(el as any).__swipe = state
-
-		el.addEventListener('touchstart', handleTouchStart, { passive: true })
-		el.addEventListener('touchend', state.handler)
+		bindEvents(el, state)
 	},
 
 	updated(el, binding) {
 		const state: SwipeState | undefined = (el as any).__swipe
-
 		const newOptions = normalizeOptions(binding.value)
 
 		if (!state) {
-			if (!newOptions.disabled) {
-				const newState: SwipeState = {
-					options: newOptions,
-					startX: 0,
-					startY: 0,
-					startTime: 0,
-					handler: createSwipeHandler(el, newOptions),
-				}
+			const newState = setupState(el, newOptions)
+			if (newState) {
 				;(el as any).__swipe = newState
-				el.addEventListener('touchstart', handleTouchStart, { passive: true })
-				el.addEventListener('touchend', newState.handler)
+				bindEvents(el, newState)
 			}
 			return
 		}
 
-		state.options = newOptions
-		state.handler = createSwipeHandler(el, newOptions)
+		const wasDisabled = state.options.disabled
+		const wasMouseEnabled = state.options.mouse ?? true
+		const nowMouseEnabled = newOptions.mouse ?? true
 
-		// Handle disabled state
-		if (newOptions.disabled && !state.options.disabled) {
-			el.removeEventListener('touchstart', handleTouchStart)
-			el.removeEventListener('touchend', state.handler)
-		} else if (!newOptions.disabled && state.options.disabled) {
-			el.addEventListener('touchstart', handleTouchStart, { passive: true })
-			el.addEventListener('touchend', state.handler)
+		state.options = newOptions
+
+		if (newOptions.disabled && !wasDisabled) {
+			unbindEvents(el, state)
+		} else if (!newOptions.disabled && wasDisabled) {
+			bindEvents(el, state)
+		} else if (wasMouseEnabled !== nowMouseEnabled) {
+			if (wasMouseEnabled) {
+				el.removeEventListener('mousedown', state.handlers.mouseDown)
+				el.removeEventListener('mouseup', state.handlers.mouseUp)
+				el.removeEventListener('mouseleave', state.handlers.mouseUp)
+			}
+			if (nowMouseEnabled) {
+				el.addEventListener('mousedown', state.handlers.mouseDown)
+				el.addEventListener('mouseup', state.handlers.mouseUp)
+				el.addEventListener('mouseleave', state.handlers.mouseUp)
+			}
 		}
 	},
 
 	unmounted(el) {
 		const state: SwipeState | undefined = (el as any).__swipe
-
 		if (!state) return
 
-		el.removeEventListener('touchstart', handleTouchStart)
-		el.removeEventListener('touchend', state.handler)
-
+		unbindEvents(el, state)
 		delete (el as any).__swipe
 	},
 })
-
-/**
- * Touch start handler
- */
-function handleTouchStart(e: TouchEvent): void {
-	const state: SwipeState | undefined = (e.currentTarget as any).__swipe
-	if (!state) return
-
-	state.startX = e.touches[0].clientX
-	state.startY = e.touches[0].clientY
-	state.startTime = Date.now()
-}
-
-/**
- * Create swipe handler
- */
-function createSwipeHandler(el: HTMLElement, options: SwipeOptions): (e: TouchEvent) => void {
-	return (e: TouchEvent) => {
-		const state: SwipeState | undefined = (el as any).__swipe
-		if (!state || options.disabled) return
-
-		const touch = e.changedTouches[0]
-		const deltaX = touch.clientX - state.startX
-		const deltaY = touch.clientY - state.startY
-		const deltaTime = Date.now() - state.startTime
-		const absX = Math.abs(deltaX)
-		const absY = Math.abs(deltaY)
-
-		// Check time threshold
-		if (deltaTime > (options.maxTime || 300)) return
-
-		// Check distance threshold
-		const distance = Math.max(absX, absY)
-		if (distance < (options.threshold || 50)) return
-
-		// Check velocity
-		const velocity = distance / deltaTime
-		if (velocity < (options.minVelocity || 0.3)) return
-
-		// Get direction
-		const direction = getSwipeDirection(
-			deltaX,
-			deltaY,
-			options.directions || ['left', 'right', 'up', 'down'],
-		)
-
-		if (!direction) return
-
-		// Prevent scroll on swipe
-		if (options.preventScrollOnSwipe) {
-			e.preventDefault()
-		}
-
-		// Call handlers
-		if (options.handler) {
-			options.handler(direction, e)
-		}
-
-		// Direction-specific callbacks
-		switch (direction) {
-			case 'left':
-				options.onLeft?.()
-				break
-			case 'right':
-				options.onRight?.()
-				break
-			case 'up':
-				options.onUp?.()
-				break
-			case 'down':
-				options.onDown?.()
-				break
-		}
-
-		// Dispatch custom event
-		el.dispatchEvent(
-			new CustomEvent('swipe', {
-				detail: { direction, deltaX, deltaY, deltaTime },
-			}),
-		)
-	}
-}
 
 export default vSwipe

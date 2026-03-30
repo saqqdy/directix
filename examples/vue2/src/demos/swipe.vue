@@ -10,6 +10,8 @@ export default defineComponent({
 		return {
 			swipeDirection: '',
 			swipeCount: 0,
+			directionSwipe: '',
+			horizontalSwipe: '',
 			basicCode: `<div v-swipe="handleSwipe">
   Swipe in any direction
 </div>`,
@@ -31,6 +33,12 @@ export default defineComponent({
 		handleSwipe(direction: string) {
 			this.swipeDirection = direction
 			this.swipeCount++
+		},
+		handleDirectionSwipe(direction: string) {
+			this.directionSwipe = direction
+		},
+		handleHorizontalSwipe(direction: string) {
+			this.horizontalSwipe = direction
 		}
 	}
 })
@@ -69,11 +77,11 @@ export default defineComponent({
 			<div class="demo-box">
 				<div
 					v-swipe="{
-						onLeft: () => handleSwipe('left'),
-						onRight: () => handleSwipe('right'),
-						onUp: () => handleSwipe('up'),
-						onDown: () => handleSwipe('down'),
-						threshold: 50
+						onLeft: () => handleDirectionSwipe('left'),
+						onRight: () => handleDirectionSwipe('right'),
+						onUp: () => handleDirectionSwipe('up'),
+						onDown: () => handleDirectionSwipe('down'),
+						threshold: 30
 					}"
 					class="swipe-area"
 				>
@@ -83,6 +91,10 @@ export default defineComponent({
 						<span>←  →</span>
 						<span>↓</span>
 					</div>
+					<p class="result" v-if="directionSwipe">
+						Last swipe: <strong>{{ directionSwipe }}</strong>
+					</p>
+					<p class="hint" v-else>Swipe to see direction</p>
 				</div>
 			</div>
 			<CodeBlock :code="directionCode" />
@@ -92,13 +104,17 @@ export default defineComponent({
 			<div class="demo-box">
 				<div
 					v-swipe="{
-						handler: (dir) => handleSwipe(dir),
+						handler: (dir) => handleHorizontalSwipe(dir),
 						directions: ['left', 'right'],
-						threshold: 80
+						threshold: 30
 					}"
 					class="swipe-area horizontal"
 				>
 					<p>← Swipe left or right only →</p>
+					<p class="result" v-if="horizontalSwipe">
+						Last swipe: <strong>{{ horizontalSwipe }}</strong>
+					</p>
+					<p class="hint" v-else>Swipe horizontally</p>
 				</div>
 			</div>
 			<CodeBlock :code="horizontalCode" />
@@ -124,13 +140,13 @@ export default defineComponent({
 					<tr>
 						<td>threshold</td>
 						<td>Number</td>
-						<td>50</td>
+						<td>30</td>
 						<td>Minimum distance to trigger (px)</td>
 					</tr>
 					<tr>
 						<td>maxTime</td>
 						<td>Number</td>
-						<td>300</td>
+						<td>500</td>
 						<td>Maximum swipe duration (ms)</td>
 					</tr>
 					<tr>
@@ -144,6 +160,12 @@ export default defineComponent({
 						<td>Function</td>
 						<td>-</td>
 						<td>Direction-specific callbacks</td>
+					</tr>
+					<tr>
+						<td>mouse</td>
+						<td>Boolean</td>
+						<td>true</td>
+						<td>Enable mouse support</td>
 					</tr>
 				</tbody>
 			</table>
@@ -178,7 +200,6 @@ h1 {
 	padding: 40px;
 	border-radius: 12px;
 	text-align: center;
-	touch-action: pan-y;
 	user-select: none;
 }
 
@@ -218,6 +239,11 @@ h1 {
 	font-size: 13px;
 	color: #888;
 	margin-top: 12px;
+}
+
+.swipe-area .hint {
+	color: rgba(255, 255, 255, 0.7);
+	margin-top: 8px;
 }
 
 .api-table {
