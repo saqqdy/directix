@@ -13,10 +13,20 @@ const targetCode = `<button v-print="{ target: '#print-content' }">
 </div>`
 
 const styledCode = `<button v-print="{
-  title: 'My Document',
-  styles: 'body { font-size: 12px }'
+  target: '#styled-content',
+  title: 'Invoice',
+  styles: \`
+    body { font-size: 12px; color: #333 }
+    .invoice { max-width: 600px; margin: 0 auto }
+    .invoice-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 16px }
+    .invoice-title { color: #1a1a1a; margin: 0 }
+    .invoice-table { width: 100%; border-collapse: collapse; margin-top: 16px }
+    .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: left }
+    .invoice-table th { background: #f5f5f5 }
+    .invoice-total { text-align: right; margin-top: 16px; font-size: 16px; font-weight: bold }
+  \`
 }">
-  Print with Custom Styles
+  Print Invoice
 </button>`
 </script>
 
@@ -59,13 +69,61 @@ const styledCode = `<button v-print="{
 			<div class="demo-box">
 				<button
 					v-print="{
-						title: 'Custom Document',
-						styles: 'body { font-size: 14px; color: #333 } h3 { color: #667eea }'
+						target: '#styled-content',
+						title: 'Invoice',
+						styles: `
+							body { font-size: 12px; color: #333 }
+							.invoice { max-width: 600px; margin: 0 auto }
+							.invoice-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 16px }
+							.invoice-title { color: #1a1a1a; margin: 0 }
+							.invoice-table { width: 100%; border-collapse: collapse; margin-top: 16px }
+							.invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: left }
+							.invoice-table th { background: #f5f5f5 }
+							.invoice-total { text-align: right; margin-top: 16px; font-size: 16px; font-weight: bold }
+						`
 					}"
 					class="print-btn"
 				>
-					Print with Custom Styles
+					Print Invoice
 				</button>
+				<div id="styled-content" class="invoice">
+					<div class="invoice-header">
+						<h2 class="invoice-title">INVOICE</h2>
+						<p>#INV-2024-001</p>
+						<p>Date: 2024-01-15</p>
+					</div>
+					<table class="invoice-table">
+						<thead>
+							<tr>
+								<th>Description</th>
+								<th>Qty</th>
+								<th>Price</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Web Development</td>
+								<td>1</td>
+								<td>$1,200.00</td>
+								<td>$1,200.00</td>
+							</tr>
+							<tr>
+								<td>UI Design</td>
+								<td>1</td>
+								<td>$800.00</td>
+								<td>$800.00</td>
+							</tr>
+							<tr>
+								<td>Hosting (1 year)</td>
+								<td>1</td>
+								<td>$120.00</td>
+								<td>$120.00</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="invoice-total">Total: $2,120.00</p>
+				</div>
 			</div>
 			<CodeBlock :code="styledCode" />
 		</DemoSection>
@@ -198,6 +256,59 @@ h1 {
 
 .print-content li {
 	margin-bottom: 4px;
+}
+
+/* Invoice styles */
+.invoice {
+	margin-top: 16px;
+	padding: 24px;
+	background: white;
+	border: 2px dashed #667eea;
+	border-radius: 8px;
+}
+
+.invoice-header {
+	text-align: center;
+	border-bottom: 2px solid #667eea;
+	padding-bottom: 16px;
+	margin-bottom: 16px;
+}
+
+.invoice-title {
+	color: #667eea;
+	margin: 0 0 8px 0;
+}
+
+.invoice-header p {
+	margin: 4px 0;
+	color: #666;
+	font-size: 14px;
+}
+
+.invoice-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 16px;
+}
+
+.invoice-table th,
+.invoice-table td {
+	border: 1px solid #e0e0e0;
+	padding: 10px 12px;
+	text-align: left;
+}
+
+.invoice-table th {
+	background: #f5f5f5;
+	font-weight: 600;
+}
+
+.invoice-total {
+	text-align: right;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	color: #667eea;
 }
 
 .api-table {

@@ -3,24 +3,44 @@ import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-const items = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'])
-const refreshState = ref('')
-let counter = 5
+// Basic Usage
+const basicItems = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8'])
+const basicState = ref('')
+let basicCounter = 8
 
-const handleRefresh = async () => {
-	refreshState.value = 'Refreshing...'
+const handleBasicRefresh = async () => {
+	basicState.value = 'Refreshing...'
 	await new Promise(resolve => setTimeout(resolve, 1500))
-	counter++
-	items.value.unshift(`Item ${counter}`)
-	items.value.pop()
-	refreshState.value = 'Done!'
+	basicCounter++
+	basicItems.value.unshift(`Item ${basicCounter}`)
+	basicItems.value.pop()
+	basicState.value = 'Done!'
 	setTimeout(() => {
-		refreshState.value = ''
+		basicState.value = ''
 	}, 1000)
 }
 
-const basicCode = `<div v-pull-refresh="handleRefresh">
-  Pull down to refresh content
+// Custom Options
+const customItems = ref(['Item A', 'Item B', 'Item C', 'Item D', 'Item E', 'Item F', 'Item G', 'Item H'])
+const customState = ref('')
+let customCounter = 8
+
+const handleCustomRefresh = async () => {
+	customState.value = 'Refreshing...'
+	await new Promise(resolve => setTimeout(resolve, 1500))
+	customCounter++
+	customItems.value.unshift(`Item ${String.fromCharCode(64 + customCounter)}`)
+	customItems.value.pop()
+	customState.value = 'Done!'
+	setTimeout(() => {
+		customState.value = ''
+	}, 1000)
+}
+
+const basicCode = `<div v-pull-refresh="handleRefresh" class="container">
+  <div v-for="item in items" :key="item" class="item">
+    {{ item }}
+  </div>
 </div>`
 
 const optionsCode = `<div v-pull-refresh="{
@@ -48,17 +68,15 @@ const optionsCode = `<div v-pull-refresh="{
 		<DemoSection title="Basic Usage" description="Pull down to trigger refresh">
 			<div class="demo-box">
 				<div
-					v-pull-refresh="handleRefresh"
+					v-pull-refresh="handleBasicRefresh"
 					class="refresh-container"
 				>
-					<div class="refresh-content">
-						<p v-for="(item, index) in items" :key="index" class="list-item">
-							{{ item }}
-						</p>
-					</div>
+					<p v-for="(item, index) in basicItems" :key="index" class="list-item">
+						{{ item }}
+					</p>
 				</div>
-				<p class="status" v-if="refreshState">{{ refreshState }}</p>
-				<p class="hint">Pull down on touch device to refresh</p>
+				<p class="status" v-if="basicState">{{ basicState }}</p>
+				<p class="hint">Pull down on touch device to refresh (scroll to top first)</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
@@ -67,18 +85,17 @@ const optionsCode = `<div v-pull-refresh="{
 			<div class="demo-box">
 				<div
 					v-pull-refresh="{
-						handler: handleRefresh,
+						handler: handleCustomRefresh,
 						distance: 80,
 						successDuration: 800
 					}"
 					class="refresh-container"
 				>
-					<div class="refresh-content">
-						<p v-for="(item, index) in items" :key="index" class="list-item">
-							{{ item }}
-						</p>
-					</div>
+					<p v-for="(item, index) in customItems" :key="index" class="list-item">
+						{{ item }}
+					</p>
 				</div>
+				<p class="status" v-if="customState">{{ customState }}</p>
 			</div>
 			<CodeBlock :code="optionsCode" />
 		</DemoSection>
@@ -183,20 +200,16 @@ h1 {
 	border: 2px solid #e0e0e0;
 	border-radius: 8px;
 	background: white;
-	overflow: hidden;
-}
-
-.refresh-content {
-	padding: 20px;
-	overflow-y: auto;
-	height: 100%;
 }
 
 .list-item {
-	padding: 12px;
+	padding: 12px 16px;
 	background: #f8f9fa;
-	border-radius: 6px;
-	margin-bottom: 8px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.list-item:last-child {
+	border-bottom: none;
 }
 
 .status {

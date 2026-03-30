@@ -10,7 +10,7 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 33 commonly used directives
+- 🎯 **Comprehensive** - 42 commonly used directives
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
@@ -118,11 +118,14 @@ Vue.directive('click-outside', vClickOutside)
 | Directive | Description | SSR |
 |-----------|-------------|-----|
 | `v-click-outside` | Detect clicks outside an element | ❌ |
+| `v-click-delay` | Delay click execution to prevent double clicks | ✅ |
 | `v-debounce` | Debounce event handlers | ✅ |
 | `v-throttle` | Throttle event handlers | ✅ |
 | `v-long-press` | Detect long press events | ❌ |
 | `v-hover` | Hover state detection | ❌ |
+| `v-hotkey` | Keyboard shortcut binding | ✅ |
 | `v-touch` | Touch gesture detection (swipe, pinch, rotate) | ❌ |
+| `v-swipe` | Swipe gesture detection with mouse support | ❌ |
 
 ### Form Directives
 
@@ -134,6 +137,7 @@ Vue.directive('click-outside', vClickOutside)
 | `v-trim` | Trim input whitespace | ✅ |
 | `v-money` | Currency format input | ❌ |
 | `v-number` | Number format input | ❌ |
+| `v-ellipsis` | Text ellipsis overflow | ✅ |
 
 ### Format Directives
 
@@ -160,6 +164,8 @@ Vue.directive('click-outside', vClickOutside)
 | `v-scroll` | Scroll event handling | ❌ |
 | `v-infinite-scroll` | Infinite scrolling | ❌ |
 | `v-sticky` | Sticky positioning | ❌ |
+| `v-pull-refresh` | Pull to refresh functionality | ❌ |
+| `v-virtual-list` | Virtual list for large datasets | ❌ |
 
 ### Security Directives
 
@@ -188,6 +194,9 @@ Vue.directive('click-outside', vClickOutside)
 |-----------|-------------|-----|
 | `v-tooltip` | Tooltip component | ❌ |
 | `v-image-preview` | Image preview with zoom | ❌ |
+| `v-countdown` | Countdown timer display | ✅ |
+| `v-print` | Print element content | ❌ |
+| `v-watermark` | Watermark overlay | ✅ |
 
 > ✅ = SSR compatible | ❌ = Not SSR compatible
 
@@ -527,6 +536,191 @@ Number format input.
 ```vue
 <template>
   <input v-number="{ precision: 2, min: 0, max: 100 }" placeholder="Enter number" />
+</template>
+```
+
+### v-click-delay
+
+Delay click execution to prevent double clicks.
+
+```vue
+<template>
+  <!-- Default: 300ms delay -->
+  <button v-click-delay="handleClick">Click me</button>
+
+  <!-- Custom delay time -->
+  <button v-click-delay="{ handler: handleClick, delay: 500 }">500ms delay</button>
+</template>
+
+<script setup>
+function handleClick() {
+  console.log('Clicked (delayed)')
+}
+</script>
+```
+
+### v-countdown
+
+Countdown timer display.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <span v-countdown="{ time: 60 }"></span>
+
+  <!-- With callbacks -->
+  <span v-countdown="{ time: 60, onTick: handleTick, onComplete: handleComplete }"></span>
+
+  <!-- Custom format -->
+  <span v-countdown="{ time: 3600, format: 'mm:ss' }"></span>
+</template>
+
+<script setup>
+function handleTick(remaining) {
+  console.log('Remaining:', remaining)
+}
+
+function handleComplete() {
+  console.log('Countdown complete!')
+}
+</script>
+```
+
+### v-ellipsis
+
+Text ellipsis overflow with tooltip.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-ellipsis style="width: 200px;">Long text that will be truncated</div>
+
+  <!-- With custom lines -->
+  <div v-ellipsis="{ lines: 2 }">Multi-line text with ellipsis</div>
+</template>
+```
+
+### v-hotkey
+
+Keyboard shortcut binding.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-hotkey="{ 'ctrl+s': handleSave, 'ctrl+c': handleCopy }">
+    Press Ctrl+S to save
+  </div>
+
+  <!-- With modifiers -->
+  <input v-hotkey="{ 'enter': submit, 'escape': cancel }" />
+</template>
+
+<script setup>
+function handleSave() {
+  console.log('Saving...')
+}
+
+function handleCopy() {
+  console.log('Copying...')
+}
+</script>
+```
+
+### v-print
+
+Print element content.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <button v-print="printRef">Print</button>
+  <div ref="printRef">Content to print</div>
+
+  <!-- Print self -->
+  <div v-print="{ self: true }">Click to print this content</div>
+</template>
+```
+
+### v-pull-refresh
+
+Pull to refresh functionality.
+
+```vue
+<template>
+  <div v-pull-refresh="handleRefresh" style="height: 400px; overflow: auto;">
+    Pull down to refresh
+  </div>
+
+  <!-- With options -->
+  <div v-pull-refresh="{ handler: handleRefresh, threshold: 80, disabled: false }">
+    Content
+  </div>
+</template>
+
+<script setup>
+async function handleRefresh() {
+  // Fetch new data
+  await fetchData()
+}
+</script>
+```
+
+### v-swipe
+
+Swipe gesture detection with mouse support.
+
+```vue
+<template>
+  <div v-swipe="handleSwipe" style="height: 200px;">
+    Swipe in any direction
+  </div>
+
+  <!-- With options -->
+  <div v-swipe="{ onSwipe: handleSwipe, threshold: 50, enableMouse: true }">
+    Swipe or drag with mouse
+  </div>
+</template>
+
+<script setup>
+function handleSwipe(direction) {
+  console.log('Swiped:', direction) // 'left', 'right', 'up', 'down'
+}
+</script>
+```
+
+### v-virtual-list
+
+Virtual list for rendering large datasets efficiently.
+
+```vue
+<template>
+  <div v-virtual-list="{ items: list, itemSize: 50 }" style="height: 500px;">
+    <template #default="{ item, index }">
+      <div :key="index">{{ item.name }}</div>
+    </template>
+  </div>
+</template>
+
+<script setup>
+const list = Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `Item ${i}` }))
+</script>
+```
+
+### v-watermark
+
+Watermark overlay.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <div v-watermark="'Confidential'" style="width: 100%; height: 400px;">
+    Protected content
+  </div>
+
+  <!-- With options -->
+  <div v-watermark="{ content: 'Draft', fontSize: 16, color: '#ccc', rotate: -20 }">
+    Content with watermark
+  </div>
 </template>
 ```
 

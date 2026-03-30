@@ -37,6 +37,15 @@ export default defineComponent({
 	methods: {
 		handleVisibleChange(start: number, end: number) {
 			this.visibleRange = { start, end }
+		},
+		renderCustomItem(item: { name: string; value: number }) {
+			return `<div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;"><strong>${item.name}</strong><span style="color: #42b883;">${item.value}</span></div>`
+		},
+		renderVariableItem(item: { name: string }, index: number) {
+			const isHeader = index % 10 === 0
+			const bg = isHeader ? '#f0fff4' : '#fff'
+			const headerHtml = isHeader ? '<strong>Header Item</strong><br>' : ''
+			return `<div style="padding: 10px; background: ${bg}; border-bottom: 1px solid #eee;">${headerHtml}${item.name}</div>`
 		}
 	}
 })
@@ -75,12 +84,7 @@ export default defineComponent({
 						itemSize: 60,
 						height: 350,
 						overscan: 5,
-						render: (item) => `
-							<div style='padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;'>
-								<strong>' + item.name + '</strong>
-								<span style=\"color: #42b883;\">' + item.value + '</span>
-							</div>
-						`'
+						render: renderCustomItem
 					}"
 					class="virtual-list custom"
 				></div>
@@ -95,11 +99,7 @@ export default defineComponent({
 						items: items.slice(0, 500),
 						itemSize: (index) => index % 10 === 0 ? 80 : 50,
 						height: 300,
-						render: (item, index) => `
-							<div style=\"padding: 10px; background: ' + (index % 10 === 0 ? '#f0fff4' : '#fff') + '; border-bottom: 1px solid #eee;\">
-								' + (index % 10 === 0 ? '<strong>Header Item</strong><br>' : '') + item.name + '
-							</div>
-						`'
+						render: renderVariableItem
 					}"
 					class="virtual-list"
 				></div>
@@ -177,48 +177,73 @@ h1 {
 
 .demo-box {
 	padding: 20px;
-	background: #f8f9fa;
-	border-radius: 8px;
+	background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+	border-radius: 12px;
 	margin-bottom: 12px;
 }
 
 .virtual-list {
-	border: 2px solid #e0e0e0;
-	border-radius: 8px;
+	border: 2px solid #e8e8e8;
+	border-radius: 12px;
 	background: white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+	overflow: hidden;
 }
 
 .virtual-list.custom {
 	border-color: #42b883;
+	box-shadow: 0 4px 12px rgba(66, 184, 131, 0.15);
 }
 
 .info {
-	margin-top: 12px;
+	margin-top: 16px;
 	font-size: 14px;
 	color: #666;
+	padding: 10px 16px;
+	background: white;
+	border-radius: 8px;
+	border-left: 3px solid #42b883;
+	display: inline-block;
 }
 
 .hint {
 	font-size: 13px;
 	color: #888;
-	margin-top: 12px;
+	margin-top: 16px;
+	padding: 10px 16px;
+	background: white;
+	border-radius: 8px;
+	display: inline-block;
 }
 
 .api-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 14px;
+	background: white;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .api-table th,
 .api-table td {
-	padding: 12px;
+	padding: 14px 16px;
 	text-align: left;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #f0f0f0;
 }
 
 .api-table th {
-	background: #f8f9fa;
+	background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
 	font-weight: 600;
+	color: #333;
+}
+
+.api-table tr:last-child td {
+	border-bottom: none;
+}
+
+.api-table tr:hover td {
+	background: #fafafa;
 }
 </style>

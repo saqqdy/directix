@@ -10,7 +10,7 @@
 
 ## 特性
 
-- 🎯 **功能全面** - 提供 33 个常用指令
+- 🎯 **功能全面** - 提供 42 个常用指令
 - 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
@@ -118,11 +118,14 @@ Vue.directive('click-outside', vClickOutside)
 | 指令 | 描述 | SSR |
 |-----------|-------------|-----|
 | `v-click-outside` | 检测元素外部点击 | ❌ |
+| `v-click-delay` | 延迟点击执行，防止双击 | ✅ |
 | `v-debounce` | 防抖事件处理 | ✅ |
 | `v-throttle` | 节流事件处理 | ✅ |
 | `v-long-press` | 检测长按事件 | ❌ |
 | `v-hover` | 悬停状态检测 | ❌ |
+| `v-hotkey` | 键盘快捷键绑定 | ✅ |
 | `v-touch` | 触摸手势检测（滑动、缩放、旋转） | ❌ |
+| `v-swipe` | 滑动手势检测（支持鼠标） | ❌ |
 
 ### 表单指令
 
@@ -134,6 +137,7 @@ Vue.directive('click-outside', vClickOutside)
 | `v-trim` | 去除输入空白 | ✅ |
 | `v-money` | 货币格式输入 | ❌ |
 | `v-number` | 数字格式输入 | ❌ |
+| `v-ellipsis` | 文本溢出省略 | ✅ |
 
 ### 格式化指令
 
@@ -160,6 +164,8 @@ Vue.directive('click-outside', vClickOutside)
 | `v-scroll` | 滚动事件处理 | ❌ |
 | `v-infinite-scroll` | 无限滚动 | ❌ |
 | `v-sticky` | 粘性定位 | ❌ |
+| `v-pull-refresh` | 下拉刷新 | ❌ |
+| `v-virtual-list` | 虚拟列表（大数据集） | ❌ |
 
 ### 安全指令
 
@@ -188,6 +194,9 @@ Vue.directive('click-outside', vClickOutside)
 |-----------|-------------|-----|
 | `v-tooltip` | 工具提示 | ❌ |
 | `v-image-preview` | 图片预览（支持缩放） | ❌ |
+| `v-countdown` | 倒计时显示 | ✅ |
+| `v-print` | 打印元素内容 | ❌ |
+| `v-watermark` | 水印遮罩 | ✅ |
 
 > ✅ = 支持 SSR | ❌ = 不支持 SSR
 
@@ -527,6 +536,191 @@ function handlePinch(scale) {
 ```vue
 <template>
   <input v-number="{ precision: 2, min: 0, max: 100 }" placeholder="输入数字" />
+</template>
+```
+
+### v-click-delay
+
+延迟点击执行，防止双击。
+
+```vue
+<template>
+  <!-- 默认: 300ms 延迟 -->
+  <button v-click-delay="handleClick">点击我</button>
+
+  <!-- 自定义延迟时间 -->
+  <button v-click-delay="{ handler: handleClick, delay: 500 }">500ms 延迟</button>
+</template>
+
+<script setup>
+function handleClick() {
+  console.log('点击了（延迟执行）')
+}
+</script>
+```
+
+### v-countdown
+
+倒计时显示。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <span v-countdown="{ time: 60 }"></span>
+
+  <!-- 带回调 -->
+  <span v-countdown="{ time: 60, onTick: handleTick, onComplete: handleComplete }"></span>
+
+  <!-- 自定义格式 -->
+  <span v-countdown="{ time: 3600, format: 'mm:ss' }"></span>
+</template>
+
+<script setup>
+function handleTick(remaining) {
+  console.log('剩余时间:', remaining)
+}
+
+function handleComplete() {
+  console.log('倒计时结束!')
+}
+</script>
+```
+
+### v-ellipsis
+
+文本溢出省略显示。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-ellipsis style="width: 200px;">超长文本将被截断显示</div>
+
+  <!-- 多行省略 -->
+  <div v-ellipsis="{ lines: 2 }">多行文本省略显示</div>
+</template>
+```
+
+### v-hotkey
+
+键盘快捷键绑定。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-hotkey="{ 'ctrl+s': handleSave, 'ctrl+c': handleCopy }">
+    按 Ctrl+S 保存
+  </div>
+
+  <!-- 带修饰键 -->
+  <input v-hotkey="{ 'enter': submit, 'escape': cancel }" />
+</template>
+
+<script setup>
+function handleSave() {
+  console.log('保存中...')
+}
+
+function handleCopy() {
+  console.log('复制中...')
+}
+</script>
+```
+
+### v-print
+
+打印元素内容。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <button v-print="printRef">打印</button>
+  <div ref="printRef">要打印的内容</div>
+
+  <!-- 打印自身 -->
+  <div v-print="{ self: true }">点击打印此内容</div>
+</template>
+```
+
+### v-pull-refresh
+
+下拉刷新功能。
+
+```vue
+<template>
+  <div v-pull-refresh="handleRefresh" style="height: 400px; overflow: auto;">
+    下拉刷新
+  </div>
+
+  <!-- 带配置 -->
+  <div v-pull-refresh="{ handler: handleRefresh, threshold: 80, disabled: false }">
+    内容区域
+  </div>
+</template>
+
+<script setup>
+async function handleRefresh() {
+  // 获取新数据
+  await fetchData()
+}
+</script>
+```
+
+### v-swipe
+
+滑动手势检测（支持鼠标）。
+
+```vue
+<template>
+  <div v-swipe="handleSwipe" style="height: 200px;">
+    向任意方向滑动
+  </div>
+
+  <!-- 带配置 -->
+  <div v-swipe="{ onSwipe: handleSwipe, threshold: 50, enableMouse: true }">
+    滑动或鼠标拖拽
+  </div>
+</template>
+
+<script setup>
+function handleSwipe(direction) {
+  console.log('滑动方向:', direction) // 'left', 'right', 'up', 'down'
+}
+</script>
+```
+
+### v-virtual-list
+
+虚拟列表，高效渲染大数据集。
+
+```vue
+<template>
+  <div v-virtual-list="{ items: list, itemSize: 50 }" style="height: 500px;">
+    <template #default="{ item, index }">
+      <div :key="index">{{ item.name }}</div>
+    </template>
+  </div>
+</template>
+
+<script setup>
+const list = Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `项目 ${i}` }))
+</script>
+```
+
+### v-watermark
+
+水印遮罩。
+
+```vue
+<template>
+  <!-- 简单用法 -->
+  <div v-watermark="'机密'" style="width: 100%; height: 400px;">
+    受保护的内容
+  </div>
+
+  <!-- 带配置 -->
+  <div v-watermark="{ content: '草稿', fontSize: 16, color: '#ccc', rotate: -20 }">
+    带水印的内容
+  </div>
 </template>
 ```
 
