@@ -1,6 +1,9 @@
 export { default as capitalcase, vCapitalcase } from './capitalcase'
 export type { CapitalcaseBinding, CapitalcaseOptions } from './capitalcase'
 
+export { default as clickDelay, vClickDelay } from './click-delay'
+export type { ClickDelayBinding, ClickDelayHandler, ClickDelayOptions } from './click-delay'
+
 // Event directives
 export { default as clickOutside, vClickOutside } from './click-outside'
 export type { ClickOutsideBinding, ClickOutsideHandler, ClickOutsideOptions } from './click-outside'
@@ -8,17 +11,33 @@ export type { ClickOutsideBinding, ClickOutsideHandler, ClickOutsideOptions } fr
 export { default as copy, vCopy } from './copy'
 export type { CopyBinding, CopyErrorCallback, CopyOptions, CopySuccessCallback } from './copy'
 
+export { default as countdown, vCountdown } from './countdown'
+export type {
+	CountdownBinding,
+	CountdownCompleteCallback,
+	CountdownFormatFunction,
+	CountdownOptions,
+	CountdownTickCallback,
+	CountdownTime,
+} from './countdown'
+
 export { default as debounce, vDebounce } from './debounce'
 export type { DebounceBinding, DebouncedFunction, DebounceOptions } from './debounce'
 
 export { default as draggable, vDraggable } from './draggable'
 export type { DraggableAxis, DraggableBinding, DraggableOptions } from './draggable'
 
+export { default as ellipsis, vEllipsis } from './ellipsis'
+export type { EllipsisBinding, EllipsisOptions } from './ellipsis'
+
 export { default as focus, vFocus } from './focus'
 export type { FocusBinding, FocusOptions } from './focus'
 
 export { default as hover, vHover } from './hover'
 export type { HoverBinding, HoverHandler, HoverOptions } from './hover'
+
+export { default as hotkey, vHotkey } from './hotkey'
+export type { HotkeyBinding, HotkeyDefinition, HotkeyHandler, ModifierKey } from './hotkey'
 
 export { default as imagePreview, vImagePreview } from './image-preview'
 export type { ImagePreviewBinding, ImagePreviewOptions } from './image-preview'
@@ -60,6 +79,17 @@ export type { NumberBinding, NumberOptions } from './number'
 export { configurePermission, getPermissionConfig, default as permission, vPermission } from './permission'
 export type { PermissionAction, PermissionBinding, PermissionConfig, PermissionOptions } from './permission'
 
+export { default as print, vPrint } from './print'
+export type { PrintBeforeCallback, PrintBinding, PrintCompleteCallback, PrintOptions } from './print'
+
+export { default as pullRefresh, vPullRefresh } from './pull-refresh'
+export type {
+	PullRefreshBinding,
+	PullRefreshHandler,
+	PullRefreshOptions,
+	PullRefreshState,
+} from './pull-refresh'
+
 // Observer directives
 export { default as resize, vResize } from './resize'
 export type { ResizeBinding, ResizeHandler, ResizeInfo, ResizeOptions } from './resize'
@@ -77,6 +107,9 @@ export type { ScrollBinding, ScrollHandler, ScrollInfo, ScrollOptions } from './
 export { default as sticky, vSticky } from './sticky'
 export type { StickyBinding, StickyOptions } from './sticky'
 
+export { default as swipe, vSwipe } from './swipe'
+export type { SwipeBinding, SwipeDirection, SwipeHandler, SwipeOptions } from './swipe'
+
 export { default as throttle, vThrottle } from './throttle'
 export type { ThrottleBinding, ThrottledFunction, ThrottleOptions } from './throttle'
 
@@ -85,7 +118,7 @@ export { default as tooltip, vTooltip } from './tooltip'
 export type { TooltipBinding, TooltipOptions, TooltipPlacement, TooltipTrigger } from './tooltip'
 
 export { default as touch, vTouch } from './touch'
-export type { SwipeDirection, TouchOptions } from './touch'
+export type { TouchOptions } from './touch'
 
 export { default as trim, vTrim } from './trim'
 export type { TrimBinding, TrimOptions, TrimPosition } from './trim'
@@ -99,3 +132,14 @@ export type { UppercaseBinding, UppercaseOptions } from './uppercase'
 
 export { default as visible, vVisible } from './visible'
 export type { VisibleBinding, VisibleHandler, VisibleOptions } from './visible'
+
+export { default as virtualList, vVirtualList } from './virtual-list'
+export type {
+	ItemSizeFunction,
+	VirtualListBinding,
+	VirtualListOptions,
+	VirtualListRenderFunction,
+} from './virtual-list'
+
+export { default as watermark, vWatermark } from './watermark'
+export type { WatermarkBinding, WatermarkOptions } from './watermark'

@@ -3,11 +3,15 @@ import type { App, Directive, Plugin } from 'vue'
 import { setVueVersion } from '@directix/core'
 import {
 	vCapitalcase,
+	vClickDelay,
 	vClickOutside,
 	vCopy,
+	vCountdown,
 	vDebounce,
 	vDraggable,
+	vEllipsis,
 	vFocus,
+	vHotkey,
 	vHover,
 	vImagePreview,
 	vInfiniteScroll,
@@ -21,18 +25,23 @@ import {
 	vMutation,
 	vNumber,
 	vPermission,
+	vPrint,
+	vPullRefresh,
 	vResize,
 	vRipple,
 	vSanitize,
 	vScroll,
 	vSticky,
+	vSwipe,
 	vThrottle,
 	vTooltip,
 	vTouch,
 	vTrim,
 	vTruncate,
 	vUppercase,
+	vVirtualList,
 	vVisible,
+	vWatermark,
 } from './directives'
 
 // Export all directives
@@ -67,10 +76,12 @@ export {
 // All directives list
 const allDirectives: Record<string, Directive> = {
 	'click-outside': vClickOutside,
+	'click-delay': vClickDelay,
 	copy: vCopy,
 	debounce: vDebounce,
 	throttle: vThrottle,
 	focus: vFocus,
+	hotkey: vHotkey,
 	lazy: vLazy,
 	intersect: vIntersect,
 	visible: vVisible,
@@ -87,6 +98,7 @@ const allDirectives: Record<string, Directive> = {
 	resize: vResize,
 	mutation: vMutation,
 	truncate: vTruncate,
+	ellipsis: vEllipsis,
 	uppercase: vUppercase,
 	lowercase: vLowercase,
 	capitalcase: vCapitalcase,
@@ -96,7 +108,13 @@ const allDirectives: Record<string, Directive> = {
 	tooltip: vTooltip,
 	draggable: vDraggable,
 	touch: vTouch,
+	swipe: vSwipe,
 	'image-preview': vImagePreview,
+	countdown: vCountdown,
+	watermark: vWatermark,
+	print: vPrint,
+	'virtual-list': vVirtualList,
+	'pull-refresh': vPullRefresh,
 }
 
 /**
