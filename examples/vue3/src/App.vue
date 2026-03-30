@@ -1,52 +1,176 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
-const currentPath = ref(router.currentRoute)
+const route = useRoute()
+const currentPath = ref(route.path)
 
-const demos = [
-	// Event directives
-	{ path: '/click-outside', name: 'v-click-outside', desc: 'Click outside detection' },
-	{ path: '/copy', name: 'v-copy', desc: 'Copy to clipboard' },
-	{ path: '/debounce', name: 'v-debounce', desc: 'Debounce directive' },
-	{ path: '/throttle', name: 'v-throttle', desc: 'Throttle directive' },
-	{ path: '/focus', name: 'v-focus', desc: 'Auto focus' },
-	// Visibility directives
-	{ path: '/lazy', name: 'v-lazy', desc: 'Lazy loading images' },
-	{ path: '/intersect', name: 'v-intersect', desc: 'Intersection observer' },
-	{ path: '/visible', name: 'v-visible', desc: 'Visibility control' },
-	{ path: '/loading', name: 'v-loading', desc: 'Loading overlay' },
-	// Scroll directives
-	{ path: '/scroll', name: 'v-scroll', desc: 'Scroll event handler' },
-	{ path: '/infinite-scroll', name: 'v-infinite-scroll', desc: 'Infinite scrolling' },
-	{ path: '/sticky', name: 'v-sticky', desc: 'Sticky positioning' },
-	// Event interaction directives
-	{ path: '/long-press', name: 'v-long-press', desc: 'Long press detection' },
-	{ path: '/hover', name: 'v-hover', desc: 'Hover state tracking' },
-	{ path: '/ripple', name: 'v-ripple', desc: 'Material ripple effect' },
-	// Form directives
-	{ path: '/mask', name: 'v-mask', desc: 'Input masking' },
-	// Security directives
-	{ path: '/permission', name: 'v-permission', desc: 'Permission control' },
-	{ path: '/sanitize', name: 'v-sanitize', desc: 'HTML sanitization' },
-	// Observer directives
-	{ path: '/resize', name: 'v-resize', desc: 'Resize observer' },
-	{ path: '/mutation', name: 'v-mutation', desc: 'Mutation observer' },
-	// Format directives
-	{ path: '/truncate', name: 'v-truncate', desc: 'Text truncation' },
-	{ path: '/uppercase', name: 'v-uppercase', desc: 'Uppercase transform' },
-	{ path: '/lowercase', name: 'v-lowercase', desc: 'Lowercase transform' },
-	{ path: '/capitalcase', name: 'v-capitalcase', desc: 'Title case' },
-	{ path: '/number', name: 'v-number', desc: 'Number formatting' },
-	{ path: '/money', name: 'v-money', desc: 'Currency formatting' },
-	{ path: '/trim', name: 'v-trim', desc: 'Whitespace trimming' },
-	// UI directives
-	{ path: '/tooltip', name: 'v-tooltip', desc: 'Tooltip directive' },
-	{ path: '/draggable', name: 'v-draggable', desc: 'Drag and drop' },
-	{ path: '/touch', name: 'v-touch', desc: 'Touch gestures' },
-	{ path: '/image-preview', name: 'v-image-preview', desc: 'Image preview modal' },
+interface Demo {
+	path: string
+	name: string
+	desc: string
+	version: string
+}
+
+interface Category {
+	name: string
+	icon: string
+	expanded: boolean
+	demos: Demo[]
+}
+
+// Category definitions (expanded will be set based on current route)
+const categoryDefinitions: Omit<Category, 'expanded'>[] = [
+	{
+		name: 'Event',
+		icon: '⚡',
+		demos: [
+			{ path: '/click-outside', name: 'v-click-outside', desc: 'Click outside detection', version: '1.0.0' },
+			{ path: '/click-delay', name: 'v-click-delay', desc: 'Prevent repeated clicks', version: '1.3.0' },
+			{ path: '/copy', name: 'v-copy', desc: 'Copy to clipboard', version: '1.0.0' },
+			{ path: '/debounce', name: 'v-debounce', desc: 'Debounce events', version: '1.0.0' },
+			{ path: '/throttle', name: 'v-throttle', desc: 'Throttle events', version: '1.0.0' },
+			{ path: '/focus', name: 'v-focus', desc: 'Auto focus', version: '1.0.0' },
+			{ path: '/hotkey', name: 'v-hotkey', desc: 'Keyboard shortcuts', version: '1.3.0' },
+		],
+	},
+	{
+		name: 'Visibility',
+		icon: '👁',
+		demos: [
+			{ path: '/lazy', name: 'v-lazy', desc: 'Lazy loading images', version: '1.1.0' },
+			{ path: '/intersect', name: 'v-intersect', desc: 'Intersection observer', version: '1.1.0' },
+			{ path: '/visible', name: 'v-visible', desc: 'Visibility control', version: '1.1.0' },
+			{ path: '/loading', name: 'v-loading', desc: 'Loading overlay', version: '1.1.0' },
+		],
+	},
+	{
+		name: 'Scroll',
+		icon: '📜',
+		demos: [
+			{ path: '/scroll', name: 'v-scroll', desc: 'Scroll event handler', version: '1.1.0' },
+			{ path: '/infinite-scroll', name: 'v-infinite-scroll', desc: 'Infinite scrolling', version: '1.1.0' },
+			{ path: '/sticky', name: 'v-sticky', desc: 'Sticky positioning', version: '1.1.0' },
+		],
+	},
+	{
+		name: 'Interaction',
+		icon: '👆',
+		demos: [
+			{ path: '/long-press', name: 'v-long-press', desc: 'Long press detection', version: '1.1.0' },
+			{ path: '/hover', name: 'v-hover', desc: 'Hover state tracking', version: '1.1.0' },
+			{ path: '/ripple', name: 'v-ripple', desc: 'Material ripple effect', version: '1.1.0' },
+		],
+	},
+	{
+		name: 'Format',
+		icon: '✏️',
+		demos: [
+			{ path: '/truncate', name: 'v-truncate', desc: 'Text truncation', version: '1.2.0' },
+			{ path: '/ellipsis', name: 'v-ellipsis', desc: 'Multi-line ellipsis', version: '1.3.0' },
+			{ path: '/uppercase', name: 'v-uppercase', desc: 'Uppercase transform', version: '1.2.0' },
+			{ path: '/lowercase', name: 'v-lowercase', desc: 'Lowercase transform', version: '1.2.0' },
+			{ path: '/capitalcase', name: 'v-capitalcase', desc: 'Title case', version: '1.2.0' },
+			{ path: '/number', name: 'v-number', desc: 'Number formatting', version: '1.2.0' },
+			{ path: '/money', name: 'v-money', desc: 'Currency formatting', version: '1.2.0' },
+			{ path: '/trim', name: 'v-trim', desc: 'Whitespace trimming', version: '1.2.0' },
+		],
+	},
+	{
+		name: 'UI',
+		icon: '🎨',
+		demos: [
+			{ path: '/tooltip', name: 'v-tooltip', desc: 'Tooltip directive', version: '1.2.0' },
+			{ path: '/draggable', name: 'v-draggable', desc: 'Drag and drop', version: '1.2.0' },
+			{ path: '/touch', name: 'v-touch', desc: 'Touch gestures', version: '1.2.0' },
+			{ path: '/swipe', name: 'v-swipe', desc: 'Swipe detection', version: '1.3.0' },
+			{ path: '/image-preview', name: 'v-image-preview', desc: 'Image preview modal', version: '1.2.0' },
+			{ path: '/countdown', name: 'v-countdown', desc: 'Countdown timer', version: '1.3.0' },
+			{ path: '/watermark', name: 'v-watermark', desc: 'Watermark overlay', version: '1.3.0' },
+			{ path: '/print', name: 'v-print', desc: 'Print element', version: '1.3.0' },
+		],
+	},
+	{
+		name: 'Form',
+		icon: '📝',
+		demos: [{ path: '/mask', name: 'v-mask', desc: 'Input masking', version: '1.1.0' }],
+	},
+	{
+		name: 'Security',
+		icon: '🔒',
+		demos: [
+			{ path: '/permission', name: 'v-permission', desc: 'Permission control', version: '1.1.0' },
+			{ path: '/sanitize', name: 'v-sanitize', desc: 'HTML sanitization', version: '1.1.0' },
+		],
+	},
+	{
+		name: 'Observer',
+		icon: '🔍',
+		demos: [
+			{ path: '/resize', name: 'v-resize', desc: 'Resize observer', version: '1.1.0' },
+			{ path: '/mutation', name: 'v-mutation', desc: 'Mutation observer', version: '1.1.0' },
+		],
+	},
+	{
+		name: 'Performance',
+		icon: '🚀',
+		demos: [
+			{ path: '/virtual-list', name: 'v-virtual-list', desc: 'Virtual list rendering', version: '1.3.0' },
+		],
+	},
+	{
+		name: 'Mobile',
+		icon: '📱',
+		demos: [
+			{ path: '/pull-refresh', name: 'v-pull-refresh', desc: 'Pull to refresh', version: '1.3.0' },
+		],
+	},
 ]
+
+// Create reactive categories with expanded state
+const categories = reactive<Category[]>(
+	categoryDefinitions.map(def => ({
+		...def,
+		expanded: false,
+	}))
+)
+
+// Find which category contains the current path
+function findCategoryByPath(path: string): string | null {
+	for (const def of categoryDefinitions) {
+		if (def.demos.some(demo => demo.path === path)) {
+			return def.name
+		}
+	}
+	return null
+}
+
+// Update expanded state based on current route
+function updateExpandedState(path: string) {
+	const activeCategoryName = findCategoryByPath(path)
+	categories.forEach(category => {
+		category.expanded = category.name === activeCategoryName
+	})
+}
+
+// Watch route changes
+watch(
+	() => route.path,
+	(newPath) => {
+		currentPath.value = newPath
+		updateExpandedState(newPath)
+	}
+)
+
+// Initialize on mount
+onMounted(() => {
+	updateExpandedState(route.path)
+})
+
+function toggleCategory(category: Category) {
+	category.expanded = !category.expanded
+}
 </script>
 
 <template>
@@ -58,16 +182,29 @@ const demos = [
 
 		<div class="container">
 			<nav class="sidebar">
-				<router-link
-					v-for="demo in demos"
-					:key="demo.path"
-					:to="demo.path"
-					class="nav-item"
-					:class="{ active: currentPath.path === demo.path }"
-				>
-					<span class="nav-name">{{ demo.name }}</span>
-					<span class="nav-desc">{{ demo.desc }}</span>
-				</router-link>
+				<div v-for="category in categories" :key="category.name" class="nav-category">
+					<div class="category-header" @click="toggleCategory(category)">
+						<span class="category-icon">{{ category.icon }}</span>
+						<span class="category-name">{{ category.name }}</span>
+						<span class="category-count">({{ category.demos.length }})</span>
+						<span class="category-toggle">{{ category.expanded ? '▼' : '▶' }}</span>
+					</div>
+					<div v-show="category.expanded" class="category-items">
+						<router-link
+							v-for="demo in category.demos"
+							:key="demo.path"
+							:to="demo.path"
+							class="nav-item"
+							:class="{ active: currentPath === demo.path }"
+						>
+							<span class="nav-name">
+								{{ demo.name }}
+								<span class="nav-version" :class="'v' + demo.version.replace(/\./g, '-')">{{ demo.version }}</span>
+							</span>
+							<span class="nav-desc">{{ demo.desc }}</span>
+						</router-link>
+					</div>
+				</div>
 			</nav>
 
 			<main class="content">
@@ -85,8 +222,15 @@ const demos = [
 }
 
 body {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-family:
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		sans-serif;
 	background: #f5f7fa;
 	color: #333;
 }
@@ -120,22 +264,69 @@ body {
 }
 
 .sidebar {
-	width: 220px;
+	width: 260px;
 	flex-shrink: 0;
 	max-height: calc(100vh - 150px);
 	overflow-y: auto;
 }
 
+.nav-category {
+	margin-bottom: 8px;
+}
+
+.category-header {
+	display: flex;
+	align-items: center;
+	padding: 10px 12px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border-radius: 8px;
+	cursor: pointer;
+	user-select: none;
+	transition: opacity 0.2s;
+}
+
+.category-header:hover {
+	opacity: 0.9;
+}
+
+.category-icon {
+	margin-right: 8px;
+	font-size: 14px;
+}
+
+.category-name {
+	flex: 1;
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.category-count {
+	font-size: 11px;
+	opacity: 0.8;
+	margin-right: 8px;
+}
+
+.category-toggle {
+	font-size: 10px;
+	opacity: 0.8;
+}
+
+.category-items {
+	padding-top: 6px;
+}
+
 .nav-item {
 	display: block;
-	padding: 12px 16px;
-	margin-bottom: 8px;
+	padding: 10px 14px;
+	margin-bottom: 4px;
 	background: white;
-	border-radius: 8px;
+	border-radius: 6px;
 	text-decoration: none;
 	color: #333;
 	transition: all 0.2s;
 	border: 2px solid transparent;
+	font-size: 13px;
 }
 
 .nav-item:hover {
@@ -147,14 +338,51 @@ body {
 	color: white;
 }
 
+.nav-item.active .nav-version {
+	background: rgba(255, 255, 255, 0.25);
+	color: #fff;
+}
+
 .nav-name {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	font-weight: 600;
-	margin-bottom: 4px;
+	margin-bottom: 2px;
+}
+
+.nav-version {
+	font-size: 10px;
+	font-weight: 500;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+/* Version colors */
+.nav-version.v1-0-0 {
+	background: #e3f2fd;
+	color: #1565c0;
+}
+
+.nav-version.v1-1-0 {
+	background: #fff3e0;
+	color: #e65100;
+}
+
+.nav-version.v1-2-0 {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.nav-version.v1-3-0 {
+	background: #fce4ec;
+	color: #c2185b;
 }
 
 .nav-desc {
-	font-size: 12px;
+	font-size: 11px;
 	opacity: 0.7;
 }
 

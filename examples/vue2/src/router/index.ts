@@ -12,6 +12,11 @@ const routes: RouteConfig[] = [
 		component: () => import('@/demos/click-outside.vue'),
 	},
 	{
+		path: '/click-delay',
+		name: 'ClickDelay',
+		component: () => import('@/demos/click-delay.vue'),
+	},
+	{
 		path: '/copy',
 		name: 'Copy',
 		component: () => import('@/demos/copy.vue'),
@@ -30,6 +35,11 @@ const routes: RouteConfig[] = [
 		path: '/focus',
 		name: 'Focus',
 		component: () => import('@/demos/focus.vue'),
+	},
+	{
+		path: '/hotkey',
+		name: 'Hotkey',
+		component: () => import('@/demos/hotkey.vue'),
 	},
 	// Visibility directives
 	{
@@ -68,7 +78,7 @@ const routes: RouteConfig[] = [
 		name: 'Sticky',
 		component: () => import('@/demos/sticky.vue'),
 	},
-	// Event interaction directives
+	// Interaction directives
 	{
 		path: '/long-press',
 		name: 'LongPress',
@@ -84,39 +94,16 @@ const routes: RouteConfig[] = [
 		name: 'Ripple',
 		component: () => import('@/demos/ripple.vue'),
 	},
-	// Form directives
-	{
-		path: '/mask',
-		name: 'Mask',
-		component: () => import('@/demos/mask.vue'),
-	},
-	// Security directives
-	{
-		path: '/permission',
-		name: 'Permission',
-		component: () => import('@/demos/permission.vue'),
-	},
-	{
-		path: '/sanitize',
-		name: 'Sanitize',
-		component: () => import('@/demos/sanitize.vue'),
-	},
-	// Observer directives
-	{
-		path: '/resize',
-		name: 'Resize',
-		component: () => import('@/demos/resize.vue'),
-	},
-	{
-		path: '/mutation',
-		name: 'Mutation',
-		component: () => import('@/demos/mutation.vue'),
-	},
 	// Format directives
 	{
 		path: '/truncate',
 		name: 'Truncate',
 		component: () => import('@/demos/truncate.vue'),
+	},
+	{
+		path: '/ellipsis',
+		name: 'Ellipsis',
+		component: () => import('@/demos/ellipsis.vue'),
 	},
 	{
 		path: '/uppercase',
@@ -165,9 +152,69 @@ const routes: RouteConfig[] = [
 		component: () => import('@/demos/touch.vue'),
 	},
 	{
+		path: '/swipe',
+		name: 'Swipe',
+		component: () => import('@/demos/swipe.vue'),
+	},
+	{
 		path: '/image-preview',
 		name: 'ImagePreview',
 		component: () => import('@/demos/image-preview.vue'),
+	},
+	{
+		path: '/countdown',
+		name: 'Countdown',
+		component: () => import('@/demos/countdown.vue'),
+	},
+	{
+		path: '/watermark',
+		name: 'Watermark',
+		component: () => import('@/demos/watermark.vue'),
+	},
+	{
+		path: '/print',
+		name: 'Print',
+		component: () => import('@/demos/print.vue'),
+	},
+	// Form directives
+	{
+		path: '/mask',
+		name: 'Mask',
+		component: () => import('@/demos/mask.vue'),
+	},
+	// Security directives
+	{
+		path: '/permission',
+		name: 'Permission',
+		component: () => import('@/demos/permission.vue'),
+	},
+	{
+		path: '/sanitize',
+		name: 'Sanitize',
+		component: () => import('@/demos/sanitize.vue'),
+	},
+	// Observer directives
+	{
+		path: '/resize',
+		name: 'Resize',
+		component: () => import('@/demos/resize.vue'),
+	},
+	{
+		path: '/mutation',
+		name: 'Mutation',
+		component: () => import('@/demos/mutation.vue'),
+	},
+	// Performance directives
+	{
+		path: '/virtual-list',
+		name: 'VirtualList',
+		component: () => import('@/demos/virtual-list.vue'),
+	},
+	// Mobile directives
+	{
+		path: '/pull-refresh',
+		name: 'PullRefresh',
+		component: () => import('@/demos/pull-refresh.vue'),
 	},
 ]
 
