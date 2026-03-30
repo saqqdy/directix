@@ -92,7 +92,7 @@ export const vEllipsis = defineDirective<EllipsisBinding, HTMLElement>({
 
 		// Handle expandable
 		if (options.expandable) {
-			const handler = () => {
+			const handler = (): void => {
 				if (state.expanded) {
 					// Collapse
 					applyEllipsis(el, options)
@@ -151,7 +151,7 @@ export const vEllipsis = defineDirective<EllipsisBinding, HTMLElement>({
 			}
 
 			if (newOptions.expandable) {
-				const handler = () => {
+				const handler = (): void => {
 					if (state.expanded) {
 						applyEllipsis(el, newOptions)
 						state.expanded = false

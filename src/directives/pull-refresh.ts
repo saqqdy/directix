@@ -10,6 +10,7 @@ export interface PullRefreshOptions {
 	maxDistance?: number
 	disabled?: boolean
 	indicator?: {
+		idle?: string
 		pulling?: string
 		ready?: string
 		loading?: string
@@ -137,7 +138,7 @@ function sleep(ms: number): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function createHandlers(internal: PullRefreshInternalState) {
+function createHandlers(internal: PullRefreshInternalState): PullRefreshInternalState['handlers'] {
 	const { contentEl, options } = internal
 
 	return {
@@ -195,13 +196,13 @@ function createHandlers(internal: PullRefreshInternalState) {
 	}
 }
 
-function bindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']) {
+function bindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']): void {
 	el.addEventListener('touchstart', handlers.touchStart, { passive: false })
 	el.addEventListener('touchmove', handlers.touchMove, { passive: false })
 	el.addEventListener('touchend', handlers.touchEnd, { passive: true })
 }
 
-function unbindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']) {
+function unbindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']): void {
 	el.removeEventListener('touchstart', handlers.touchStart)
 	el.removeEventListener('touchmove', handlers.touchMove)
 	el.removeEventListener('touchend', handlers.touchEnd)

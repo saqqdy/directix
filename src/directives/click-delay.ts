@@ -1,5 +1,5 @@
-import { defineDirective } from '@directix/core'
 import type { DirectiveBinding } from '@directix/core'
+import { defineDirective } from '@directix/core'
 
 /**
  * Click delay handler

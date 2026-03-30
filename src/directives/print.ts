@@ -122,7 +122,7 @@ export const vPrint = defineDirective<PrintBinding, HTMLElement>({
 		}
 
 		// Add click handler
-		const clickHandler = () => {
+		const clickHandler = (): void => {
 			printElement(el, state.options)
 		}
 
@@ -183,9 +183,7 @@ async function printElement(triggerEl: HTMLElement, options: PrintOptions): Prom
 	}
 
 	// Get target element
-	const targetEl = options.target
-		? document.querySelector(options.target)
-		: triggerEl
+	const targetEl = options.target ? document.querySelector(options.target) : triggerEl
 
 	if (!targetEl) {
 		console.warn('[Directix] v-print: Target element not found')
@@ -302,9 +300,7 @@ function buildPrintContent(el: HTMLElement, options: PrintOptions): string {
 
 	// Add custom styles
 	if (options.styles) {
-		const customStyles = Array.isArray(options.styles)
-			? options.styles.join('\n')
-			: options.styles
+		const customStyles = Array.isArray(options.styles) ? options.styles.join('\n') : options.styles
 		styles += `<style>${customStyles}</style>`
 	}
 

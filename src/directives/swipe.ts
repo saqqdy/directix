@@ -81,7 +81,7 @@ function triggerSwipe(
 	deltaTime: number,
 	event: Event,
 	el: HTMLElement,
-) {
+): void {
 	const { options } = state
 
 	// Check time
@@ -186,7 +186,7 @@ function setupState(el: HTMLElement, options: SwipeOptions): SwipeState | null {
 	return state
 }
 
-function bindEvents(el: HTMLElement, state: SwipeState) {
+function bindEvents(el: HTMLElement, state: SwipeState): void {
 	const { handlers } = state
 	const enableMouse = state.options.mouse ?? true
 
@@ -202,7 +202,7 @@ function bindEvents(el: HTMLElement, state: SwipeState) {
 	}
 }
 
-function unbindEvents(el: HTMLElement, state: SwipeState) {
+function unbindEvents(el: HTMLElement, state: SwipeState): void {
 	const { handlers } = state
 	const enableMouse = state.options.mouse ?? true
 

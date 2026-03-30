@@ -111,14 +111,14 @@ function calculateVisibleRange(
 	scrollTop: number,
 	containerHeight: number,
 	options: VirtualListOptions,
-): { startIndex: number; endIndex: number; offsetY: number } {
+): { startIndex: number, endIndex: number, offsetY: number } {
 	const items = options.items
 	const itemSize = options.itemSize || 50
 	const overscan = options.overscan || 3
 
-	let startIndex = 0
-	let endIndex = 0
-	let offsetY = 0
+	let startIndex = 0,
+		endIndex = 0,
+		offsetY = 0
 
 	if (typeof itemSize === 'function') {
 		// Variable size items
@@ -251,9 +251,7 @@ export const vVirtualList = defineDirective<VirtualListBinding, HTMLElement>({
 
 		// Setup container
 		el.classList.add('v-virtual-list')
-		el.style.height = typeof options.height === 'number'
-			? `${options.height}px`
-			: options.height as string
+		el.style.height = typeof options.height === 'number' ? `${options.height}px` : options.height as string
 		el.style.overflow = 'auto'
 		el.style.position = 'relative'
 
@@ -276,7 +274,7 @@ export const vVirtualList = defineDirective<VirtualListBinding, HTMLElement>({
 		const state: VirtualListState = {
 			options,
 			containerEl: el,
-			contentEl: contentEl,
+			contentEl,
 			scrollHandler: null,
 			resizeObserver: null,
 			startIndex: 0,
@@ -287,7 +285,7 @@ export const vVirtualList = defineDirective<VirtualListBinding, HTMLElement>({
 		;(el as any).__virtualList = state
 
 		// Create scroll handler
-		const scrollHandler = (_event: Event) => {
+		const scrollHandler = (_event: Event): void => {
 			const scrollTop = el.scrollTop
 			const containerHeight = el.clientHeight
 

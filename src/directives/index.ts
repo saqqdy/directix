@@ -33,11 +33,11 @@ export type { EllipsisBinding, EllipsisOptions } from './ellipsis'
 export { default as focus, vFocus } from './focus'
 export type { FocusBinding, FocusOptions } from './focus'
 
-export { default as hover, vHover } from './hover'
-export type { HoverBinding, HoverHandler, HoverOptions } from './hover'
-
 export { default as hotkey, vHotkey } from './hotkey'
 export type { HotkeyBinding, HotkeyDefinition, HotkeyHandler, ModifierKey } from './hotkey'
+
+export { default as hover, vHover } from './hover'
+export type { HoverBinding, HoverHandler, HoverOptions } from './hover'
 
 export { default as imagePreview, vImagePreview } from './image-preview'
 export type { ImagePreviewBinding, ImagePreviewOptions } from './image-preview'
@@ -130,9 +130,6 @@ export type { TruncateBinding, TruncateOptions, TruncatePosition } from './trunc
 export { default as uppercase, vUppercase } from './uppercase'
 export type { UppercaseBinding, UppercaseOptions } from './uppercase'
 
-export { default as visible, vVisible } from './visible'
-export type { VisibleBinding, VisibleHandler, VisibleOptions } from './visible'
-
 export { default as virtualList, vVirtualList } from './virtual-list'
 export type {
 	ItemSizeFunction,
@@ -141,5 +138,8 @@ export type {
 	VirtualListRenderFunction,
 } from './virtual-list'
 
-export { default as watermark, vWatermark } from './watermark'
+export { default as visible, vVisible } from './visible'
+export type { VisibleBinding, VisibleHandler, VisibleOptions } from './visible'
+
+export { vWatermark, default as watermark } from './watermark'
 export type { WatermarkBinding, WatermarkOptions } from './watermark'

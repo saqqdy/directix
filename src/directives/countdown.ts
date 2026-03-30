@@ -142,15 +142,15 @@ function formatTime(time: CountdownTime, format: string | CountdownFormatFunctio
 		return format(time)
 	}
 
-	const pad = (n: number, len = 2) => String(n).padStart(len, '0')
+	const pad = (n: number, len = 2): string => String(n).padStart(len, '0')
 
 	// Replace placeholders
-	let result = format
+	const result = format
 		.replace(/dd/gi, pad(time.days))
 		.replace(/hh/gi, pad(time.hours))
 		.replace(/mm/gi, pad(time.minutes))
 		.replace(/ss/gi, pad(time.seconds))
-		.replace(/SSS/gi, pad(time.milliseconds, 3))
+		.replace(/S{3}/gi, pad(time.milliseconds, 3))
 		.replace(/SS/gi, pad(Math.floor(time.milliseconds / 10)))
 		.replace(/S/gi, String(Math.floor(time.milliseconds / 100)))
 
@@ -279,7 +279,7 @@ export const vCountdown = defineDirective<CountdownBinding, HTMLElement>({
  * Start countdown
  */
 function startCountdown(el: HTMLElement, state: CountdownState): void {
-	const tick = () => {
+	const tick = (): void => {
 		const now = Date.now()
 		state.remaining = state.targetTime - now
 

@@ -323,7 +323,7 @@ function removeWatermark(state: WatermarkState): void {
 function setupProtection(el: HTMLElement, state: WatermarkState): void {
 	if (typeof MutationObserver === 'undefined') return
 
-	state.observer = new MutationObserver((mutations) => {
+	state.observer = new MutationObserver(mutations => {
 		// Check if watermark was removed
 		if (!state.watermarkEl || !el.contains(state.watermarkEl)) {
 			// Re-add watermark
@@ -338,9 +338,7 @@ function setupProtection(el: HTMLElement, state: WatermarkState): void {
 		for (const mutation of mutations) {
 			if (mutation.type === 'attributes' && mutation.target === state.watermarkEl) {
 				// Restore styles
-				const gap = Array.isArray(state.options.gap)
-					? state.options.gap
-					: [state.options.gap || 100, state.options.gap || 100]
+				const gap = Array.isArray(state.options.gap) ? state.options.gap : [state.options.gap || 100, state.options.gap || 100]
 
 				state.watermarkEl.style.display = 'block'
 				state.watermarkEl.style.visibility = 'visible'
