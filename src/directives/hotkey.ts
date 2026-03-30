@@ -1,66 +1,25 @@
 import { defineDirective } from '@directix/core'
 
-/**
- * Hotkey handler
- */
 export type HotkeyHandler = (event: KeyboardEvent) => void
 
-/**
- * Modifier keys
- */
 export type ModifierKey = 'ctrl' | 'alt' | 'shift' | 'meta'
 
-/**
- * Hotkey definition
- */
 export interface HotkeyDefinition {
-	/**
-	 * Key to listen for (e.g., 's', 'enter', 'escape')
-	 */
 	key: string
-
-	/**
-	 * Required modifier keys
-	 */
 	modifiers?: ModifierKey[]
-
-	/**
-	 * Handler function
-	 */
 	handler: HotkeyHandler
-
-	/**
-	 * Whether to prevent default behavior
-	 * @default true
-	 */
 	prevent?: boolean
-
-	/**
-	 * Whether to stop propagation
-	 * @default true
-	 */
 	stop?: boolean
-
-	/**
-	 * Whether to disable this hotkey
-	 * @default false
-	 */
 	disabled?: boolean
+	global?: boolean
 }
 
-/**
- * Hotkey directive options
- * Can be a single hotkey definition, an array, or a record of hotkeys
- */
-export type HotkeyBinding =
-	| HotkeyHandler
-	| HotkeyDefinition
-	| HotkeyDefinition[]
-	| Record<string, HotkeyHandler | HotkeyDefinition>
+export type HotkeyBinding
+	= | HotkeyHandler
+		| HotkeyDefinition
+		| HotkeyDefinition[]
+		| Record<string, HotkeyHandler | HotkeyDefinition>
 
-/**
- * Normalized hotkey entry
- */
 interface HotkeyEntry {
 	key: string
 	modifiers: Set<ModifierKey>
@@ -70,17 +29,11 @@ interface HotkeyEntry {
 	disabled: boolean
 }
 
-/**
- * Element state storage
- */
 interface HotkeyState {
 	entries: HotkeyEntry[]
 	handler: (event: KeyboardEvent) => void
 }
 
-/**
- * Key aliases mapping
- */
 const KEY_ALIASES: Record<string, string> = {
 	esc: 'escape',
 	space: ' ',
@@ -111,25 +64,21 @@ const KEY_ALIASES: Record<string, string> = {
 	f12: 'f12',
 }
 
-/**
- * Normalize key name
- */
+const MODIFIER_KEYS = new Set(['ctrl', 'alt', 'shift', 'meta'])
+
 function normalizeKey(key: string): string {
 	const lowerKey = key.toLowerCase()
 	return KEY_ALIASES[lowerKey] || lowerKey
 }
 
-/**
- * Parse hotkey string (e.g., 'ctrl+s', 'alt.shift.enter')
- */
-function parseHotkeyString(hotkey: string): { key: string; modifiers: ModifierKey[] } {
+function parseHotkeyString(hotkey: string): { key: string, modifiers: ModifierKey[] } {
 	const parts = hotkey.toLowerCase().split(/[+.]/)
 	const modifiers: ModifierKey[] = []
 	let key = ''
 
 	for (const part of parts) {
-		if (part === 'ctrl' || part === 'alt' || part === 'shift' || part === 'meta') {
-			modifiers.push(part)
+		if (MODIFIER_KEYS.has(part)) {
+			modifiers.push(part as ModifierKey)
 		} else {
 			key = normalizeKey(part)
 		}
@@ -138,222 +87,169 @@ function parseHotkeyString(hotkey: string): { key: string; modifiers: ModifierKe
 	return { key, modifiers }
 }
 
-/**
- * Check if keyboard event matches hotkey entry
- */
 function matchesHotkey(event: KeyboardEvent, entry: HotkeyEntry): boolean {
-	// Check key
-	if (normalizeKey(event.key) !== entry.key) {
-		return false
-	}
+	if (normalizeKey(event.key) !== entry.key) return false
 
-	// Check modifiers
 	const eventModifiers = new Set<ModifierKey>()
 	if (event.ctrlKey) eventModifiers.add('ctrl')
 	if (event.altKey) eventModifiers.add('alt')
 	if (event.shiftKey) eventModifiers.add('shift')
 	if (event.metaKey) eventModifiers.add('meta')
 
-	// Both must have same modifiers
-	if (eventModifiers.size !== entry.modifiers.size) {
-		return false
-	}
+	if (eventModifiers.size !== entry.modifiers.size) return false
 
 	for (const mod of entry.modifiers) {
-		if (!eventModifiers.has(mod)) {
-			return false
-		}
+		if (!eventModifiers.has(mod)) return false
 	}
 
 	return true
 }
 
-/**
- * Normalize binding to hotkey entries
- */
+function createEntry(
+	key: string,
+	modifiers: ModifierKey[],
+	handler: HotkeyHandler,
+	options: { prevent?: boolean, stop?: boolean, disabled?: boolean } = {},
+): HotkeyEntry {
+	return {
+		key: normalizeKey(key),
+		modifiers: new Set(modifiers),
+		handler,
+		prevent: options.prevent ?? true,
+		stop: options.stop ?? true,
+		disabled: options.disabled ?? false,
+	}
+}
+
 function normalizeBinding(
 	binding: HotkeyBinding,
 	arg: string | undefined,
 	modifiers: Record<string, boolean>,
 ): HotkeyEntry[] {
-	const entries: HotkeyEntry[] = []
-
-	// If arg is provided, it's the hotkey definition
+	// Argument syntax: v-hotkey:ctrl.s="handler" or v-hotkey:escape="handler"
 	if (arg) {
-		const { key, modifiers: parsedModifiers } = parseHotkeyString(arg)
-		const additionalModifiers: ModifierKey[] = []
+		const argLower = arg.toLowerCase()
+		const argIsModifier = MODIFIER_KEYS.has(argLower)
 
-		if (modifiers.ctrl) additionalModifiers.push('ctrl')
-		if (modifiers.alt) additionalModifiers.push('alt')
-		if (modifiers.shift) additionalModifiers.push('shift')
-		if (modifiers.meta) additionalModifiers.push('meta')
+		let key: string
+		const parsedModifiers: ModifierKey[] = []
+
+		if (argIsModifier) {
+			// v-hotkey:ctrl.s -> arg is modifier, key in directive modifiers
+			parsedModifiers.push(argLower as ModifierKey)
+			for (const mod of Object.keys(modifiers)) {
+				const modLower = mod.toLowerCase()
+				if (MODIFIER_KEYS.has(modLower)) {
+					parsedModifiers.push(modLower as ModifierKey)
+				} else {
+					key = normalizeKey(mod)
+				}
+			}
+		} else {
+			// v-hotkey:escape -> arg is the key
+			const parsed = parseHotkeyString(arg)
+			key = parsed.key
+			parsedModifiers.push(...parsed.modifiers)
+			for (const mod of Object.keys(modifiers)) {
+				const modLower = mod.toLowerCase()
+				if (MODIFIER_KEYS.has(modLower)) {
+					parsedModifiers.push(modLower as ModifierKey)
+				}
+			}
+		}
 
 		const handler = typeof binding === 'function' ? binding : (binding as HotkeyDefinition).handler
-
-		entries.push({
-			key,
-			modifiers: new Set([...parsedModifiers, ...additionalModifiers]),
-			handler,
-			prevent: true,
-			stop: true,
-			disabled: false,
-		})
-
-		return entries
+		return [createEntry(key!, parsedModifiers, handler)]
 	}
 
-	// Function handler - need arg
+	// Function without arg - invalid
 	if (typeof binding === 'function') {
-		console.warn('[Directix] v-hotkey: hotkey definition is required (use v-hotkey:ctrl.s="handler")')
-		return entries
+		console.warn('[Directix] v-hotkey: hotkey definition required (use v-hotkey:ctrl.s="handler")')
+		return []
 	}
 
-	// Array of hotkeys
+	// Array syntax: [{ key: 's', modifiers: ['ctrl'], handler }]
 	if (Array.isArray(binding)) {
-		for (const item of binding) {
-			entries.push({
-				key: normalizeKey(item.key),
-				modifiers: new Set(item.modifiers || []),
-				handler: item.handler,
-				prevent: item.prevent ?? true,
-				stop: item.stop ?? true,
-				disabled: item.disabled ?? false,
-			})
-		}
-		return entries
+		return binding.map(item =>
+			createEntry(item.key, item.modifiers || [], item.handler, {
+				prevent: item.prevent,
+				stop: item.stop,
+				disabled: item.disabled,
+			}),
+		)
 	}
 
-	// Object with hotkey definitions
+	// Object syntax
 	if (typeof binding === 'object' && binding !== null) {
-		// Check if it's a single HotkeyDefinition
+		// Single HotkeyDefinition: { key: 's', handler }
 		if ('handler' in binding && typeof binding.handler === 'function') {
 			const def = binding as HotkeyDefinition
-			entries.push({
-				key: normalizeKey(def.key),
-				modifiers: new Set(def.modifiers || []),
-				handler: def.handler,
-				prevent: def.prevent ?? true,
-				stop: def.stop ?? true,
-				disabled: def.disabled ?? false,
-			})
-			return entries
+			return [createEntry(def.key, def.modifiers || [], def.handler, def)]
 		}
 
-		// Record<string, Handler | Definition>
+		// Record syntax: { 'ctrl+s': handler }
+		const entries: HotkeyEntry[] = []
 		for (const [hotkeyStr, value] of Object.entries(binding)) {
 			const { key, modifiers: parsedModifiers } = parseHotkeyString(hotkeyStr)
 			const handler = typeof value === 'function' ? value : value.handler
-
-			entries.push({
-				key,
-				modifiers: new Set(parsedModifiers),
-				handler,
-				prevent: typeof value === 'object' ? (value.prevent ?? true) : true,
-				stop: typeof value === 'object' ? (value.stop ?? true) : true,
-				disabled: typeof value === 'object' ? (value.disabled ?? false) : false,
-			})
+			const options = typeof value === 'object' ? value : {}
+			entries.push(createEntry(key, parsedModifiers, handler, options))
 		}
+		return entries
 	}
 
-	return entries
+	return []
 }
 
-/**
- * v-hotkey directive
- *
- * Binds keyboard shortcuts to elements.
- *
- * @example
- * ```vue
- * <template>
- *   <!-- Using argument syntax -->
- *   <input v-hotkey:ctrl.s="save" />
- *   <input v-hotkey:escape="cancel" />
- *
- *   <!-- Using object syntax -->
- *   <div v-hotkey="{ 'ctrl+s': save, 'escape': cancel }">
- *     Press Ctrl+S to save
- *   </div>
- *
- *   <!-- Using array syntax -->
- *   <div v-hotkey="[
- *     { key: 's', modifiers: ['ctrl'], handler: save },
- *     { key: 'escape', handler: cancel }
- *   ]">
- *     Multiple hotkeys
- *   </div>
- * </template>
- * ```
- */
+function createKeydownHandler(state: HotkeyState) {
+	return (event: KeyboardEvent) => {
+		for (const entry of state.entries) {
+			if (entry.disabled) continue
+			if (!matchesHotkey(event, entry)) continue
+
+			if (entry.prevent) event.preventDefault()
+			if (entry.stop) event.stopPropagation()
+			entry.handler(event)
+			return
+		}
+	}
+}
+
+function setupState(el: HTMLElement, entries: HotkeyEntry[]): HotkeyState | null {
+	if (entries.length === 0) return null
+
+	const state: HotkeyState = { entries, handler: null as any }
+	state.handler = createKeydownHandler(state)
+
+	el.tabIndex = el.tabIndex || -1
+	el.addEventListener('keydown', state.handler)
+	;(el as any).__hotkey = state
+
+	return state
+}
+
 export const vHotkey = defineDirective<HotkeyBinding, HTMLElement>({
 	name: 'hotkey',
 	ssr: true,
 
 	mounted(el, binding) {
 		const entries = normalizeBinding(binding.value, binding.arg, binding.modifiers)
-
-		if (entries.length === 0) return
-
-		const handler = (event: KeyboardEvent) => {
-			for (const entry of entries) {
-				if (entry.disabled) continue
-
-				if (matchesHotkey(event, entry)) {
-					if (entry.prevent) {
-						event.preventDefault()
-					}
-					if (entry.stop) {
-						event.stopPropagation()
-					}
-					entry.handler(event)
-					return
-				}
-			}
-		}
-
-		const state: HotkeyState = {
-			entries,
-			handler,
-		}
-
-		;(el as any).__hotkey = state
-
-		// Bind to element or document based on focus
-		el.tabIndex = el.tabIndex || -1 // Make focusable
-		el.addEventListener('keydown', handler)
+		setupState(el, entries)
 	},
 
 	updated(el, binding) {
 		const state: HotkeyState | undefined = (el as any).__hotkey
-
 		const newEntries = normalizeBinding(binding.value, binding.arg, binding.modifiers)
 
 		if (state) {
 			state.entries = newEntries
-		} else if (newEntries.length > 0) {
-			// Previously no hotkeys, now has hotkeys
-			const handler = (event: KeyboardEvent) => {
-				for (const entry of newEntries) {
-					if (entry.disabled) continue
-
-					if (matchesHotkey(event, entry)) {
-						if (entry.prevent) event.preventDefault()
-						if (entry.stop) event.stopPropagation()
-						entry.handler(event)
-						return
-					}
-				}
-			}
-
-			;(el as any).__hotkey = { entries: newEntries, handler }
-			el.tabIndex = el.tabIndex || -1
-			el.addEventListener('keydown', handler)
+		} else {
+			setupState(el, newEntries)
 		}
 	},
 
 	unmounted(el) {
 		const state: HotkeyState | undefined = (el as any).__hotkey
-
 		if (!state) return
 
 		el.removeEventListener('keydown', state.handler)

@@ -132,12 +132,13 @@ const inputCode = `<input
 				<div
 					v-hotkey:ctrl.s="handleSave"
 					class="hotkey-box"
+					tabindex="0"
 				>
 					<span class="key">Ctrl + S</span>
-					<p>Press <kbd>Ctrl+S</kbd> anywhere on this page to save</p>
+					<p>Click here to focus, then press <kbd>Ctrl+S</kbd></p>
 					<p class="result">Saved: <strong>{{ saveCount }}</strong> times</p>
 				</div>
-				<p class="hint">Ctrl+S is now intercepted globally (browser save dialog is blocked)</p>
+				<p class="hint">Click the box first to focus, then press Ctrl+S</p>
 			</div>
 			<CodeBlock :code="modifierCode" />
 		</DemoSection>
