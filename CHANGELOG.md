@@ -2,6 +2,109 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2026-03-30
+
+### Added
+
+#### New Directives (9 new directives, total 42)
+
+##### Event Directives
+
+###### v-click-delay
+- Prevent repeated clicks within a specified time period
+- Support custom delay time via arg (`v-click-delay:500`)
+- Support `pendingClass` option for visual feedback during delay
+- Support `disabled` option to toggle functionality
+- Support both mouse and touch events
+- SSR compatible
+
+###### v-hotkey
+- Keyboard shortcut handling for elements
+- Support modifier keys (ctrl, alt, shift, meta)
+- Support multiple hotkey formats: arg syntax, object syntax, array syntax
+- Support key aliases (esc, space, up, down, left, right, enter, etc.)
+- Require element focus for hotkey activation
+- SSR compatible
+
+##### UI Directives
+
+###### v-countdown
+- Display countdown timer to a target time
+- Support Date object, timestamp, or ISO string as target
+- Support multiple format strings (dd:hh:mm:ss, hh:mm:ss, mm:ss, ss)
+- Support custom format function
+- Support `onComplete` and `onTick` callbacks
+- Support `autoStart` option
+- SSR compatible
+
+###### v-ellipsis
+- Single and multi-line text truncation with ellipsis
+- Support `lines` option for multi-line truncation
+- Support `expandable` option to toggle expand on click
+- Support `titleBehavior` option ('auto', 'always', 'none')
+- Use CSS `-webkit-line-clamp` for multi-line ellipsis
+- SSR compatible
+
+###### v-print
+- Print element content on click or immediately
+- Support `target` option to print specific element
+- Support custom `title` and `styles` for printed document
+- Support `newWindow` option for printing in new window
+- Support `onBeforePrint` and `onAfterPrint` callbacks
+- Auto-include existing stylesheets in print output
+- SSR compatible
+
+###### v-watermark
+- Add watermark overlay to elements
+- Support single or multi-line text content
+- Support custom font, color, rotation, and gap options
+- Support `protect` option to prevent watermark removal
+- Use MutationObserver for protection against tampering
+- SSR compatible
+
+##### Mobile Directives
+
+###### v-pull-refresh
+- Pull-to-refresh functionality for mobile
+- Support custom `distance` and `maxDistance` thresholds
+- Support custom indicator text for each state
+- Support `onStateChange` callback
+- Visual feedback during pull and refresh
+- Auto-reset after success/error
+
+###### v-swipe
+- Swipe gesture detection
+- Support all four directions (left, right, up, down)
+- Support custom `threshold` and `maxTime` options
+- Support direction-specific callbacks (`onLeft`, `onRight`, `onUp`, `onDown`)
+- Support mouse events for desktop testing
+- Support `preventScrollOnSwipe` option
+
+##### Performance Directives
+
+###### v-virtual-list
+- Virtual scrolling for large lists
+- Support fixed or variable item sizes
+- Support `overscan` option for smooth scrolling
+- Support custom render function
+- Efficient DOM reuse with calculated visibility
+- Auto-update on resize with ResizeObserver
+
+### Changed
+
+- Updated v-hotkey to require element focus (no longer global)
+- Improved v-swipe with mouse support for desktop testing
+- Refactored v-pull-refresh implementation for better state management
+- Updated documentation for all new directives
+- Added comprehensive demos for new directives
+
+### Fixed
+
+- Fixed type assertions in directive tests
+- Fixed lifecycle hook checks in tests
+
+---
+
 ## [1.2.0] - 2026-03-29
 
 ### Added
@@ -380,10 +483,9 @@ None
 
 ## Roadmap
 
-### v1.3.0 (Planned)
+### v1.4.0 (Planned)
 - `v-skeleton` - Skeleton loading component
 - Composable API enhancements
-- Performance optimizations
 - Nuxt module
 - Better documentation site
 
