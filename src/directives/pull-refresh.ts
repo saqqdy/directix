@@ -1,46 +1,14 @@
 import { defineDirective } from '@directix/core'
 
-/**
- * Pull refresh handler
- */
 export type PullRefreshHandler = () => Promise<void> | void
 
-/**
- * Pull refresh state
- */
 export type PullRefreshState = 'idle' | 'pulling' | 'ready' | 'loading' | 'success' | 'error'
 
-/**
- * Pull refresh options
- */
 export interface PullRefreshOptions {
-	/**
-	 * Handler to call when refresh is triggered
-	 * @required
-	 */
 	handler: PullRefreshHandler
-
-	/**
-	 * Distance needed to trigger refresh (in pixels)
-	 * @default 60
-	 */
 	distance?: number
-
-	/**
-	 * Maximum pull distance (in pixels)
-	 * @default 100
-	 */
 	maxDistance?: number
-
-	/**
-	 * Whether to disable pull to refresh
-	 * @default false
-	 */
 	disabled?: boolean
-
-	/**
-	 * Custom indicator slot content for different states
-	 */
 	indicator?: {
 		pulling?: string
 		ready?: string
@@ -48,47 +16,58 @@ export interface PullRefreshOptions {
 		success?: string
 		error?: string
 	}
-
-	/**
-	 * Duration to show success state (in ms)
-	 * @default 500
-	 */
 	successDuration?: number
-
-	/**
-	 * Duration to show error state (in ms)
-	 * @default 1000
-	 */
 	errorDuration?: number
-
-	/**
-	 * Callback when state changes
-	 */
 	onStateChange?: (state: PullRefreshState) => void
 }
 
-/**
- * Directive binding value type
- */
 export type PullRefreshBinding = PullRefreshHandler | PullRefreshOptions
 
-/**
- * Element state storage
- */
-interface PullRefreshStateInternal {
+interface PullRefreshInternalState {
 	options: PullRefreshOptions
 	state: PullRefreshState
 	startY: number
 	currentY: number
-	indicatorEl: HTMLDivElement | null
-	contentEl: HTMLElement | null
-	touchHandler: ((e: TouchEvent) => void) | null
+	pulling: boolean
+	indicatorEl: HTMLDivElement
+	contentEl: HTMLElement
+	handlers: {
+		touchStart: (e: TouchEvent) => void
+		touchMove: (e: TouchEvent) => void
+		touchEnd: () => void
+	}
 }
 
-/**
- * Create indicator element
- */
-function createIndicator(_options: PullRefreshOptions): HTMLDivElement {
+const DEFAULT_DISTANCE = 60
+const DEFAULT_MAX_DISTANCE = 100
+const DEFAULT_SUCCESS_DURATION = 500
+const DEFAULT_ERROR_DURATION = 1000
+
+const DEFAULT_INDICATORS: Record<PullRefreshState, string> = {
+	idle: '↓',
+	pulling: '↓ Pull',
+	ready: '↓ Release',
+	loading: '⟳ Loading...',
+	success: '✓ Done',
+	error: '✗ Failed',
+}
+
+function normalizeOptions(binding: PullRefreshBinding): PullRefreshOptions {
+	if (typeof binding === 'function') return { handler: binding }
+
+	return {
+		handler: binding.handler,
+		distance: binding.distance ?? DEFAULT_DISTANCE,
+		maxDistance: binding.maxDistance ?? DEFAULT_MAX_DISTANCE,
+		disabled: binding.disabled ?? false,
+		indicator: binding.indicator,
+		successDuration: binding.successDuration ?? DEFAULT_SUCCESS_DURATION,
+		errorDuration: binding.errorDuration ?? DEFAULT_ERROR_DURATION,
+		onStateChange: binding.onStateChange,
+	}
+}
+
+function createIndicator(): HTMLDivElement {
 	const el = document.createElement('div')
 	el.className = 'v-pull-refresh__indicator'
 	el.style.cssText = `
@@ -100,80 +79,134 @@ function createIndicator(_options: PullRefreshOptions): HTMLDivElement {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transform: translateY(-100%);
-		transition: transform 0.2s ease;
 		background: #f5f5f5;
 		font-size: 14px;
 		color: #666;
+		z-index: 10;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.2s ease;
 	`
 	return el
 }
 
-/**
- * Update indicator content
- */
 function updateIndicator(el: HTMLDivElement, state: PullRefreshState, options: PullRefreshOptions): void {
-	const indicator = options.indicator || {}
-	const defaultIcons: Record<PullRefreshState, string> = {
-		idle: '↓',
-		pulling: '↓',
-		ready: '↓ Release',
-		loading: '⟳ Loading...',
-		success: '✓ Done',
-		error: '✗ Failed',
-	}
-
-	el.textContent = (indicator as Record<string, string>)[state] || defaultIcons[state]
+	const customIndicator = options.indicator?.[state]
+	el.textContent = customIndicator || DEFAULT_INDICATORS[state]
 }
 
-/**
- * Normalize options
- */
-function normalizeOptions(binding: PullRefreshBinding): PullRefreshOptions {
-	if (typeof binding === 'function') {
-		return { handler: binding }
+function setState(internal: PullRefreshInternalState, newState: PullRefreshState): void {
+	if (internal.state === newState) return
+
+	internal.state = newState
+	updateIndicator(internal.indicatorEl, newState, internal.options)
+	internal.options.onStateChange?.(newState)
+}
+
+function applyTransform(internal: PullRefreshInternalState, distance: number, showIndicator: boolean): void {
+	internal.contentEl.style.transform = `translateY(${distance}px)`
+	internal.indicatorEl.style.opacity = showIndicator ? '1' : '0'
+	internal.indicatorEl.style.transform = `translateY(${distance}px)`
+}
+
+function resetPosition(internal: PullRefreshInternalState): void {
+	internal.contentEl.style.transform = ''
+	internal.indicatorEl.style.opacity = '0'
+	setState(internal, 'idle')
+}
+
+async function triggerRefresh(internal: PullRefreshInternalState): Promise<void> {
+	setState(internal, 'loading')
+
+	const distance = internal.options.distance!
+	applyTransform(internal, distance, true)
+
+	try {
+		await internal.options.handler()
+		setState(internal, 'success')
+		await sleep(internal.options.successDuration!)
+	} catch {
+		setState(internal, 'error')
+		await sleep(internal.options.errorDuration!)
+	} finally {
+		resetPosition(internal)
 	}
+}
+
+function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function createHandlers(internal: PullRefreshInternalState) {
+	const { contentEl, options } = internal
 
 	return {
-		handler: binding.handler,
-		distance: binding.distance ?? 60,
-		maxDistance: binding.maxDistance ?? 100,
-		disabled: binding.disabled ?? false,
-		indicator: binding.indicator,
-		successDuration: binding.successDuration ?? 500,
-		errorDuration: binding.errorDuration ?? 1000,
-		onStateChange: binding.onStateChange,
+		touchStart: (e: TouchEvent) => {
+			if (options.disabled || internal.state === 'loading') return
+			if (contentEl.scrollTop > 0) return
+
+			internal.pulling = true
+			internal.startY = e.touches[0].clientY
+			internal.currentY = internal.startY
+			setState(internal, 'idle')
+		},
+
+		touchMove: (e: TouchEvent) => {
+			if (!internal.pulling || options.disabled || internal.state === 'loading') return
+
+			internal.currentY = e.touches[0].clientY
+			const diff = internal.currentY - internal.startY
+
+			// Handle upward swipe - reset
+			if (diff <= 0) {
+				if (contentEl.style.transform) {
+					contentEl.style.transition = ''
+					resetPosition(internal)
+				}
+				return
+			}
+
+			// Prevent page scroll
+			e.preventDefault()
+
+			const distance = Math.min(diff * 0.5, options.maxDistance!)
+			const progress = distance / options.distance!
+
+			contentEl.style.transition = 'none'
+			applyTransform(internal, distance, true)
+			setState(internal, progress >= 1 ? 'ready' : 'pulling')
+		},
+
+		touchEnd: () => {
+			if (!internal.pulling || options.disabled) return
+
+			internal.pulling = false
+			const diff = internal.currentY - internal.startY
+			const distance = Math.min(diff * 0.5, options.maxDistance!)
+
+			contentEl.style.transition = ''
+
+			if (internal.state === 'ready' && distance >= options.distance!) {
+				triggerRefresh(internal)
+			} else {
+				resetPosition(internal)
+			}
+		},
 	}
 }
 
-/**
- * v-pull-refresh directive
- *
- * Enables pull-to-refresh functionality on mobile.
- *
- * @example
- * ```vue
- * <template>
- *   <div v-pull-refresh="handleRefresh">
- *     Pull down to refresh
- *   </div>
- *
- *   <div v-pull-refresh="{
- *     handler: handleRefresh,
- *     distance: 80,
- *     indicator: {
- *       pulling: 'Pull to refresh',
- *       ready: 'Release to refresh',
- *       loading: 'Refreshing...',
- *       success: 'Done!',
- *       error: 'Failed'
- *     }
- *   }">
- *     Content here
- *   </div>
- * </template>
- * ```
- */
+function bindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']) {
+	el.addEventListener('touchstart', handlers.touchStart, { passive: false })
+	el.addEventListener('touchmove', handlers.touchMove, { passive: false })
+	el.addEventListener('touchend', handlers.touchEnd, { passive: true })
+}
+
+function unbindEvents(el: HTMLElement, handlers: PullRefreshInternalState['handlers']) {
+	el.removeEventListener('touchstart', handlers.touchStart)
+	el.removeEventListener('touchmove', handlers.touchMove)
+	el.removeEventListener('touchend', handlers.touchEnd)
+}
+
 export const vPullRefresh = defineDirective<PullRefreshBinding, HTMLElement>({
 	name: 'pull-refresh',
 	ssr: false,
@@ -181,227 +214,71 @@ export const vPullRefresh = defineDirective<PullRefreshBinding, HTMLElement>({
 	mounted(el, binding) {
 		const options = normalizeOptions(binding.value)
 
-		// Setup container styles
+		// Setup container
 		el.style.position = 'relative'
 		el.style.overflow = 'hidden'
 		el.classList.add('v-pull-refresh')
 
-		// Create wrapper for content
+		// Create content wrapper
 		const contentEl = document.createElement('div')
 		contentEl.className = 'v-pull-refresh__content'
-		contentEl.style.cssText = `
-			position: relative;
-			height: 100%;
-			overflow-y: auto;
-			touch-action: pan-y;
-		`
+		contentEl.style.cssText = 'position: relative; height: 100%; overflow-y: auto;'
 
-		// Move children to content wrapper
+		// Move children to wrapper
 		while (el.firstChild) {
 			contentEl.appendChild(el.firstChild)
 		}
 		el.appendChild(contentEl)
 
 		// Create indicator
-		const indicatorEl = createIndicator(options)
+		const indicatorEl = createIndicator()
 		el.insertBefore(indicatorEl, contentEl)
 
-		const state: PullRefreshStateInternal = {
+		// Initialize state
+		const internal: PullRefreshInternalState = {
 			options,
 			state: 'idle',
 			startY: 0,
 			currentY: 0,
+			pulling: false,
 			indicatorEl,
 			contentEl,
-			touchHandler: null,
+			handlers: null as any,
 		}
 
-		;(el as any).__pullRefresh = state
+		internal.handlers = createHandlers(internal)
+		;(el as any).__pullRefresh = internal
 
 		if (!options.disabled) {
-			setupTouchHandlers(el, state)
+			bindEvents(el, internal.handlers)
 		}
 
 		updateIndicator(indicatorEl, 'idle', options)
 	},
 
 	updated(el, binding) {
-		const state: PullRefreshStateInternal = (el as any).__pullRefresh
+		const internal: PullRefreshInternalState = (el as any).__pullRefresh
+		if (!internal) return
 
-		if (!state) return
+		const wasDisabled = internal.options.disabled
+		internal.options = normalizeOptions(binding.value)
 
-		const newOptions = normalizeOptions(binding.value)
-		state.options = newOptions
+		updateIndicator(internal.indicatorEl, internal.state, internal.options)
 
-		// Update indicator content
-		if (state.indicatorEl) {
-			updateIndicator(state.indicatorEl, state.state, newOptions)
-		}
-
-		// Handle disabled state change
-		if (newOptions.disabled && !state.options.disabled) {
-			removeTouchHandlers(el, state)
-		} else if (!newOptions.disabled && state.options.disabled) {
-			setupTouchHandlers(el, state)
+		if (internal.options.disabled && !wasDisabled) {
+			unbindEvents(el, internal.handlers)
+		} else if (!internal.options.disabled && wasDisabled) {
+			bindEvents(el, internal.handlers)
 		}
 	},
 
 	unmounted(el) {
-		const state: PullRefreshStateInternal | undefined = (el as any).__pullRefresh
+		const internal: PullRefreshInternalState = (el as any).__pullRefresh
+		if (!internal) return
 
-		if (!state) return
-
-		removeTouchHandlers(el, state)
-
+		unbindEvents(el, internal.handlers)
 		delete (el as any).__pullRefresh
 	},
 })
-
-/**
- * Setup touch event handlers
- */
-function setupTouchHandlers(el: HTMLElement, state: PullRefreshStateInternal): void {
-	const contentEl = state.contentEl!
-	let pulling = false
-
-	const handleStart = (e: TouchEvent) => {
-		if (state.options.disabled || state.state === 'loading') return
-
-		const scrollTop = contentEl.scrollTop
-		if (scrollTop > 0) return
-
-		pulling = true
-		state.startY = e.touches[0].clientY
-		state.currentY = state.startY
-
-		setState(state, 'idle')
-	}
-
-	const handleMove = (e: TouchEvent) => {
-		if (!pulling || state.options.disabled || state.state === 'loading') return
-
-		state.currentY = e.touches[0].clientY
-		const diff = state.currentY - state.startY
-
-		if (diff <= 0) {
-			pulling = false
-			return
-		}
-
-		// Prevent default scroll
-		e.preventDefault()
-
-		const distance = Math.min(diff * 0.5, state.options.maxDistance!)
-		const progress = distance / state.options.distance!
-
-		// Update indicator position
-		if (state.indicatorEl) {
-			state.indicatorEl.style.transform = `translateY(${distance - 60}px)`
-		}
-
-		// Update content position
-		contentEl.style.transform = `translateY(${distance}px)`
-		contentEl.style.transition = 'none'
-
-		// Update state
-		setState(state, progress >= 1 ? 'ready' : 'pulling')
-	}
-
-	const handleEnd = async () => {
-		if (!pulling || state.options.disabled) return
-
-		pulling = false
-		const diff = state.currentY - state.startY
-		const distance = Math.min(diff * 0.5, state.options.maxDistance!)
-
-		// Reset transition
-		contentEl.style.transition = ''
-
-		if (state.state === 'ready' && distance >= state.options.distance!) {
-			// Trigger refresh
-			await triggerRefresh(el, state)
-		} else {
-			// Reset position
-			resetPosition(state)
-		}
-	}
-
-	el.addEventListener('touchstart', handleStart, { passive: true })
-	el.addEventListener('touchmove', handleMove, { passive: false })
-	el.addEventListener('touchend', handleEnd, { passive: true })
-
-	state.touchHandler = handleStart as any
-}
-
-/**
- * Remove touch event handlers
- */
-function removeTouchHandlers(_el: HTMLElement, _state: PullRefreshStateInternal): void {
-	// Note: In production, we'd store all handlers for proper cleanup
-	// For simplicity, we just reset state
-}
-
-/**
- * Set pull refresh state
- */
-function setState(state: PullRefreshStateInternal, newState: PullRefreshState): void {
-	if (state.state === newState) return
-
-	state.state = newState
-
-	if (state.indicatorEl) {
-		updateIndicator(state.indicatorEl, newState, state.options)
-	}
-
-	if (state.options.onStateChange) {
-		state.options.onStateChange(newState)
-	}
-}
-
-/**
- * Trigger refresh
- */
-async function triggerRefresh(_el: HTMLElement, state: PullRefreshStateInternal): Promise<void> {
-	setState(state, 'loading')
-
-	// Set loading position
-	if (state.indicatorEl) {
-		state.indicatorEl.style.transform = 'translateY(0)'
-	}
-	state.contentEl!.style.transform = `translateY(${state.options.distance!}px)`
-
-	try {
-		await state.options.handler()
-		setState(state, 'success')
-
-		// Show success briefly
-		await sleep(state.options.successDuration!)
-	} catch (error) {
-		setState(state, 'error')
-
-		// Show error briefly
-		await sleep(state.options.errorDuration!)
-	} finally {
-		resetPosition(state)
-	}
-}
-
-/**
- * Reset position
- */
-function resetPosition(state: PullRefreshStateInternal): void {
-	if (state.indicatorEl) {
-		state.indicatorEl.style.transform = 'translateY(-100%)'
-	}
-	state.contentEl!.style.transform = ''
-	setState(state, 'idle')
-}
-
-/**
- * Sleep helper
- */
-function sleep(ms: number): Promise<void> {
-	return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 export default vPullRefresh
