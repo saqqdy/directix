@@ -125,6 +125,41 @@ export function normalizeTimeOptions<T extends { handler?: (...args: any[]) => a
 }
 
 /**
+ * Timer manager interface
+ */
+export interface TimerManager {
+	/**
+	 * Set a timeout (tracked for cleanup)
+	 */
+	setTimeout: (fn: () => void, delay: number) => ReturnType<typeof setTimeout>
+
+	/**
+	 * Clear a specific timeout
+	 */
+	clearTimeout: (id: ReturnType<typeof setTimeout>) => void
+
+	/**
+	 * Set an interval (tracked for cleanup)
+	 */
+	setInterval: (fn: () => void, delay: number) => ReturnType<typeof setInterval>
+
+	/**
+	 * Clear a specific interval
+	 */
+	clearInterval: (id: ReturnType<typeof setInterval>) => void
+
+	/**
+	 * Clear all tracked timers
+	 */
+	clearAll: () => void
+
+	/**
+	 * Check if there are any active timers
+	 */
+	hasActive: () => boolean
+}
+
+/**
  * Timer manager for directives that use setTimeout/setInterval
  * Automatically tracks and cleans up timers
  *
@@ -199,8 +234,3 @@ export function useTimer(): TimerManager {
 		},
 	}
 }
-
-/**
- * Timer state interface
- */
-export type TimerManager = ReturnType<typeof useTimer>
