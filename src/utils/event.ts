@@ -1,56 +1,32 @@
 /**
- * Shared utilities for event-based directives
- * (debounce, throttle)
+ * Event utilities for directives
+ * Layer: Directive (depends on @directix/core)
+ *
+ * Re-exports from @directix/shared and adds directive-specific event utilities.
  */
 
-/**
- * Supported event type modifiers list
- */
-export const EVENT_MODIFIERS = [
-	'click',
-	'input',
-	'change',
-	'submit',
-	'scroll',
-	'resize',
-	'mouseenter',
-	'mouseleave',
-	'mousemove',
-	'mousedown',
-	'mouseup',
-	'keydown',
-	'keyup',
-	'focus',
-	'blur',
-	'touchstart',
-	'touchmove',
-	'touchend',
-] as const
+// Event modifiers (directive-specific)
+export {
+	EVENT_MODIFIERS,
+	getDefaultEventType,
+	getEventTypeFromModifiers,
+	type EventModifier,
+} from '../../packages/shared/src/event-modifiers'
 
-export type EventModifier = (typeof EVENT_MODIFIERS)[number]
-
-/**
- * Extract event type from modifiers
- */
-export function getEventTypeFromModifiers(modifiers: Record<string, boolean>): string | null {
-	for (const modifier of EVENT_MODIFIERS) {
-		if (modifiers[modifier]) {
-			return modifier
-		}
-	}
-
-	return null
-}
-
-/**
- * Get default event type for element
- */
-export function getDefaultEventType(el: HTMLElement): string {
-	const tagName = el.tagName.toLowerCase()
-
-	if (tagName === 'input' || tagName === 'textarea') {
-		return 'input'
-	}
-
-	return 'click'
-}
+// Re-export event utilities from shared (low-level)
+export {
+	bindEvents,
+	createKeyMatcher,
+	delegate,
+	emit,
+	getCurrentTarget,
+	getEventPosition,
+	getEventTarget,
+	off,
+	on,
+	preventDefault,
+	stopEvent,
+	stopPropagation,
+	type EventHandlerMap,
+	type EventOptions,
+} from '@directix/shared'

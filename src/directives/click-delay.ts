@@ -1,5 +1,6 @@
 import type { DirectiveBinding } from '@directix/core'
 import { defineDirective } from '@directix/core'
+import { deleteState, getState, parseTime, setState } from '@directix/shared'
 
 /**
  * Click delay handler
@@ -56,6 +57,85 @@ interface ClickDelayState {
 	timeoutId: ReturnType<typeof setTimeout> | null
 }
 
+const STATE_KEY = 'clickDelay'
+
+/**
+ * Remove pending class from element
+ */
+function removePendingClass(el: HTMLElement, options: ClickDelayOptions): void {
+	if (options.feedback && options.pendingClass) {
+		el.classList.remove(options.pendingClass)
+	}
+}
+
+/**
+ * Create click handler with delay logic
+ */
+function createClickHandler(
+	el: HTMLElement,
+	options: ClickDelayOptions,
+): (event: Event) => void {
+	return (event: Event) => {
+		const state = getState<HTMLElement, ClickDelayState>(el, STATE_KEY)
+
+		if (!state || state.isPending) {
+			event.preventDefault()
+			event.stopPropagation()
+			return
+		}
+
+		// Mark as pending
+		state.isPending = true
+
+		// Add visual feedback
+		if (options.feedback && options.pendingClass) {
+			el.classList.add(options.pendingClass)
+		}
+
+		// Call handler
+		options.handler(event as MouseEvent | TouchEvent)
+
+		// Set timeout to reset pending state
+		state.timeoutId = setTimeout(() => {
+			state.isPending = false
+			state.timeoutId = null
+			removePendingClass(el, options)
+		}, options.delay)
+	}
+}
+
+/**
+ * Normalize options
+ */
+function normalizeOptions(
+	binding: ClickDelayBinding | undefined,
+	directiveBinding: DirectiveBinding<ClickDelayBinding>,
+): ClickDelayOptions {
+	const delay = parseTime(directiveBinding.arg) || 300
+
+	if (typeof binding === 'function') {
+		return {
+			handler: binding,
+			delay,
+			disabled: false,
+			pendingClass: 'v-click-delay--pending',
+			feedback: true,
+		}
+	}
+
+	if (!binding) {
+		throw new Error('[Directix] v-click-delay: handler is required')
+	}
+
+	return {
+		handler: binding.handler,
+		delay: binding.delay ?? delay,
+		disabled: binding.disabled ?? false,
+		pendingClass: binding.pendingClass ?? 'v-click-delay--pending',
+		feedback: binding.feedback ?? true,
+	}
+}
+
 /**
  * v-click-delay directive
  *
@@ -99,7 +179,7 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 			timeoutId: null,
 		}
 
-		;(el as any).__clickDelay = state
+		setState(el, STATE_KEY, state)
 
 		// Bind click event
 		el.addEventListener('click', state.handler)
@@ -107,7 +187,7 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 	},
 
 	updated(el, binding) {
-		const state: ClickDelayState = (el as any).__clickDelay
+		const state = getState<HTMLElement, ClickDelayState>(el, STATE_KEY)
 
 		if (!state) {
 			// If previously disabled, reinitialize
@@ -119,7 +199,7 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 					isPending: false,
 					timeoutId: null,
 				}
-				;(el as any).__clickDelay = newState
+				setState(el, STATE_KEY, newState)
 				el.addEventListener('click', newState.handler)
 				el.addEventListener('touchend', newState.handler)
 			}
@@ -137,7 +217,7 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 				clearTimeout(state.timeoutId)
 			}
 			removePendingClass(el, state.options)
-			delete (el as any).__clickDelay
+			deleteState(el, STATE_KEY)
 		} else if (!newOptions.disabled && state.options.disabled) {
 			// Enable: add listeners
 			state.handler = createClickHandler(el, newOptions)
@@ -151,7 +231,7 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 	},
 
 	unmounted(el) {
-		const state: ClickDelayState = (el as any).__clickDelay
+		const state = getState<HTMLElement, ClickDelayState>(el, STATE_KEY)
 
 		if (!state) return
 
@@ -163,104 +243,8 @@ export const vClickDelay = defineDirective<ClickDelayBinding, HTMLElement>({
 		}
 
 		removePendingClass(el, state.options)
-		delete (el as any).__clickDelay
+		deleteState(el, STATE_KEY)
 	},
 })
-
-/**
- * Create click handler with delay logic
- */
-function createClickHandler(
-	el: HTMLElement,
-	options: ClickDelayOptions,
-): (event: Event) => void {
-	return (event: Event) => {
-		const state: ClickDelayState = (el as any).__clickDelay
-
-		if (!state || state.isPending) {
-			event.preventDefault()
-			event.stopPropagation()
-			return
-		}
-
-		// Mark as pending
-		state.isPending = true
-
-		// Add visual feedback
-		if (options.feedback && options.pendingClass) {
-			el.classList.add(options.pendingClass)
-		}
-
-		// Call handler
-		options.handler(event as MouseEvent | TouchEvent)
-
-		// Set timeout to reset pending state
-		state.timeoutId = setTimeout(() => {
-			state.isPending = false
-			state.timeoutId = null
-			removePendingClass(el, options)
-		}, options.delay)
-	}
-}
-
-/**
- * Remove pending class from element
- */
-function removePendingClass(el: HTMLElement, options: ClickDelayOptions): void {
-	if (options.feedback && options.pendingClass) {
-		el.classList.remove(options.pendingClass)
-	}
-}
-
-/**
- * Parse time from argument
- * Supports formats: "300" | "300ms" | "1s"
- */
-function parseTime(arg?: string): number | null {
-	if (!arg) return null
-
-	if (arg.endsWith('ms')) {
-		return parseInt(arg, 10)
-	}
-
-	if (arg.endsWith('s')) {
-		return parseFloat(arg) * 1000
-	}
-
-	const num = parseInt(arg, 10)
-	return Number.isNaN(num) ? null : num
-}
-
-/**
- * Normalize options
- */
-function normalizeOptions(
-	binding: ClickDelayBinding | undefined,
-	directiveBinding: DirectiveBinding<ClickDelayBinding>,
-): ClickDelayOptions {
-	const delay = parseTime(directiveBinding.arg) || 300
-
-	if (typeof binding === 'function') {
-		return {
-			handler: binding,
-			delay,
-			disabled: false,
-			pendingClass: 'v-click-delay--pending',
-			feedback: true,
-		}
-	}
-
-	if (!binding) {
-		throw new Error('[Directix] v-click-delay: handler is required')
-	}
-
-	return {
-		handler: binding.handler,
-		delay: binding.delay ?? delay,
-		disabled: binding.disabled ?? false,
-		pendingClass: binding.pendingClass ?? 'v-click-delay--pending',
-		feedback: binding.feedback ?? true,
-	}
-}
 
 export default vClickDelay

@@ -146,3 +146,88 @@ export function getEventPosition(
 		clientY,
 	}
 }
+
+/**
+ * Event handlers map for batch binding
+ */
+export type EventHandlerMap = Record<string, (event: Event) => void>
+
+/**
+ * Bind multiple events to a target
+ * @param target - Event target
+ * @param events - Map of event names to handlers
+ * @param options - Event options
+ * @returns Cleanup function to unbind all events
+ *
+ * @example
+ * ```ts
+ * const cleanup = bindEvents(el, {
+ *   touchstart: handleStart,
+ *   touchmove: handleMove,
+ *   touchend: handleEnd,
+ * })
+ *
+ * // Later, clean up
+ * cleanup()
+ * ```
+ */
+export function bindEvents(
+	target: EventTarget,
+	events: EventHandlerMap,
+	options: boolean | EventOptions = false,
+): () => void {
+	Object.entries(events).forEach(([event, handler]) => {
+		target.addEventListener(event, handler, typeof options === 'boolean' ? options : normalizeOptionsObject(options))
+	})
+
+	return () => {
+		Object.entries(events).forEach(([event, handler]) => {
+			target.removeEventListener(event, handler, typeof options === 'boolean' ? options : normalizeOptionsObject(options))
+		})
+	}
+}
+
+/**
+ * Normalize event options (internal use for bindEvents)
+ */
+function normalizeOptionsObject(options: EventOptions): boolean | { capture: boolean, passive: boolean, once: boolean } {
+	const { capture = false, passive = false, once = false } = options
+
+	if (supportsPassive()) {
+		return { capture, passive, once }
+	}
+
+	return capture
+}
+
+/**
+ * Create a keyboard event matcher
+ * @param key - Key to match
+ * @param modifiers - Required modifiers
+ * @returns Matcher function
+ */
+export function createKeyMatcher(
+	key: string,
+	modifiers?: { ctrl?: boolean, alt?: boolean, shift?: boolean, meta?: boolean },
+): (event: KeyboardEvent) => boolean {
+	const normalizedKey = key.toLowerCase()
+
+	return (event: KeyboardEvent): boolean => {
+		if (event.key.toLowerCase() !== normalizedKey) return false
+
+		if (modifiers) {
+			if (modifiers.ctrl && !event.ctrlKey) return false
+			if (modifiers.alt && !event.altKey) return false
+			if (modifiers.shift && !event.shiftKey) return false
+			if (modifiers.meta && !event.metaKey) return false
+
+			// Check that no extra modifiers are pressed
+			if (!modifiers.ctrl && event.ctrlKey) return false
+			if (!modifiers.alt && event.altKey) return false
+			if (!modifiers.shift && event.shiftKey) return false
+			if (!modifiers.meta && event.metaKey) return false
+		}
+
+		return true
+	}
+}
