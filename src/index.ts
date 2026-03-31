@@ -44,8 +44,53 @@ import {
 	vWatermark,
 } from './directives'
 
+// Export composables
+export * from './composables'
+
 // Export all directives
-export * from './directives'
+// Export directives (types are exported from composables to avoid duplicates)
+export {
+	vCapitalcase,
+	vClickDelay,
+	vClickOutside,
+	vCopy,
+	vCountdown,
+	vDebounce,
+	vDraggable,
+	vEllipsis,
+	vFocus,
+	vHotkey,
+	vHover,
+	vImagePreview,
+	vInfiniteScroll,
+	vIntersect,
+	vLazy,
+	vLoading,
+	vLongPress,
+	vLowercase,
+	vMask,
+	vMoney,
+	vMutation,
+	vNumber,
+	vPermission,
+	vPrint,
+	vPullRefresh,
+	vResize,
+	vRipple,
+	vSanitize,
+	vScroll,
+	vSticky,
+	vSwipe,
+	vThrottle,
+	vTooltip,
+	vTouch,
+	vTrim,
+	vTruncate,
+	vUppercase,
+	vVirtualList,
+	vVisible,
+	vWatermark,
+} from './directives'
 
 // Export core utilities
 export * from '@directix/core'
@@ -66,11 +111,6 @@ export {
 	isString,
 	parseTime,
 	set,
-} from '@directix/shared'
-// Export debounce and throttle utility functions separately (with aliases)
-export {
-	debounce as debounceFn,
-	throttle as throttleFn,
 } from '@directix/shared'
 
 // All directives list
