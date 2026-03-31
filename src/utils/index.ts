@@ -8,9 +8,6 @@
 // Directive utilities (high-level, directive-specific)
 export * from './directive'
 
-// Event utilities (re-export from shared + directive-specific extensions)
-export * from './event'
-
 // Number formatting utilities
 export * from './number'
 

@@ -1,7 +1,6 @@
 import type { DirectiveBinding } from '@directix/core'
 import { defineDirective } from '@directix/core'
-import { parseTime, throttle } from '@directix/shared'
-import { getDefaultEventType, getEventTypeFromModifiers } from '../utils/event'
+import { getDefaultEventType, getEventTypeFromModifiers, parseTime, throttle } from '@directix/shared'
 
 /**
  * Throttled function type

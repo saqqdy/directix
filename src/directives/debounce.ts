@@ -1,7 +1,6 @@
 import type { DirectiveBinding } from '@directix/core'
 import { defineDirective } from '@directix/core'
-import { debounce, parseTime } from '@directix/shared'
-import { getDefaultEventType, getEventTypeFromModifiers } from '../utils/event'
+import { debounce, getDefaultEventType, getEventTypeFromModifiers, parseTime } from '@directix/shared'
 
 /**
  * Debounced function type
