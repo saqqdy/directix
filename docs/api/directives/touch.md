@@ -231,3 +231,98 @@ function handlePinch(newScale) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useTouch` composable:
+
+```typescript
+import { useTouch } from 'directix'
+
+const { gesture, bind } = useTouch({
+  onSwipe: (event) => console.log('Swiped:', event.direction),
+  onSwipeLeft: () => nextSlide(),
+  onSwipeRight: () => prevSlide(),
+  onPinch: (event) => console.log('Pinch scale:', event.scale),
+  onRotate: (event) => console.log('Rotation:', event.rotation),
+  onTap: (event) => console.log('Tapped!'),
+  onLongPress: (event) => console.log('Long pressed!'),
+  swipeThreshold: 30,
+  longPressDuration: 500
+})
+```
+
+### UseTouchOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `onSwipe` | `(event: TouchGestureEvent) => void` | - | Callback for any swipe |
+| `onSwipeLeft` | `(event: TouchGestureEvent) => void` | - | Callback for swipe left |
+| `onSwipeRight` | `(event: TouchGestureEvent) => void` | - | Callback for swipe right |
+| `onSwipeUp` | `(event: TouchGestureEvent) => void` | - | Callback for swipe up |
+| `onSwipeDown` | `(event: TouchGestureEvent) => void` | - | Callback for swipe down |
+| `onPinch` | `(event: TouchGestureEvent) => void` | - | Callback for pinch gesture |
+| `onRotate` | `(event: TouchGestureEvent) => void` | - | Callback for rotate gesture |
+| `onTap` | `(event: TouchGestureEvent) => void` | - | Callback for tap gesture |
+| `onLongPress` | `(event: TouchGestureEvent) => void` | - | Callback for long press |
+| `swipeThreshold` | `number` | `30` | Minimum swipe distance (px) |
+| `longPressDuration` | `number` | `500` | Long press timeout (ms) |
+| `tapDuration` | `number` | `250` | Maximum tap duration (ms) |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable touch detection |
+
+### TouchGestureEvent
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `type` | `TouchGesture` | Gesture type: 'swipe', 'pinch', 'rotate', 'tap', 'longPress' |
+| `direction` | `'left' \| 'right' \| 'up' \| 'down'` | Swipe direction (for swipe gestures) |
+| `distance` | `number` | Swipe distance in pixels |
+| `angle` | `number` | Angle in degrees |
+| `scale` | `number` | Pinch scale factor |
+| `rotation` | `number` | Rotation angle in degrees |
+| `center` | `{ x: number, y: number }` | Gesture center point |
+| `event` | `TouchEvent` | Original touch event |
+
+### UseTouchReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `gesture` | `Readonly<Ref<TouchGesture \| null>>` | Current gesture being performed |
+| `bind` | `(element: HTMLElement) => () => void` | Bind touch events to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useTouch } from 'directix'
+
+const containerRef = ref(null)
+
+const { gesture, bind } = useTouch({
+  onSwipeLeft: () => nextSlide(),
+  onSwipeRight: () => prevSlide()
+})
+
+onMounted(() => {
+  if (containerRef.value) {
+    bind(containerRef.value)
+  }
+})
+
+function nextSlide() {
+  console.log('Next slide')
+}
+
+function prevSlide() {
+  console.log('Previous slide')
+}
+</script>
+
+<template>
+  <div ref="containerRef" class="swipe-container">
+    Swipe me!
+    <p>Current gesture: {{ gesture }}</p>
+  </div>
+</template>
+```

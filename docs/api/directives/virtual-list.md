@@ -117,3 +117,96 @@ const items = Array.from({ length: 10000 }, (_, i) => ({
   </div>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useVirtualList` composable:
+
+```typescript
+import { useVirtualList } from 'directix'
+
+const {
+  visibleItems,
+  totalHeight,
+  scrollTop,
+  startIndex,
+  endIndex,
+  scrollToIndex,
+  scrollTo,
+  containerRef,
+  listStyle
+} = useVirtualList({
+  items: largeList,
+  itemSize: 50,
+  height: 400,
+  overscan: 3,
+  keyField: 'id'
+})
+
+// Scroll to index
+scrollToIndex(100)
+
+// Scroll to position
+scrollTo(5000)
+```
+
+### UseVirtualListOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `items` | `Ref<T[]> \| T[]` | - | Array of items to render (required) |
+| `itemSize` | `number \| Function \| Ref` | `50` | Height of each item or function |
+| `height` | `number \| Ref<number>` | `400` | Height of the container |
+| `overscan` | `number \| Ref<number>` | `3` | Number of extra items to render |
+| `keyField` | `string` | `'id'` | Field to use as unique key |
+
+### UseVirtualListReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `visibleItems` | `Ref<VirtualListItem<T>[]>` | Currently visible items |
+| `totalHeight` | `Ref<number>` | Total height of the list |
+| `scrollTop` | `Ref<number>` | Current scroll position |
+| `startIndex` | `Ref<number>` | Start index of visible items |
+| `endIndex` | `Ref<number>` | End index of visible items |
+| `scrollToIndex` | `(index: number) => void` | Scroll to a specific index |
+| `scrollTo` | `(scrollTop: number) => void` | Scroll to a position |
+| `containerRef` | `Ref<HTMLElement \| null>` | Container ref to bind |
+| `listStyle` | `Ref<object>` | Style for the wrapper element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useVirtualList } from 'directix'
+
+const items = ref(Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `Item ${i}` })))
+
+const {
+  visibleItems,
+  totalHeight,
+  containerRef,
+  listStyle,
+  scrollToIndex
+} = useVirtualList({
+  items,
+  itemSize: 50,
+  height: 600
+})
+</script>
+
+<template>
+  <div ref="containerRef" :style="listStyle">
+    <div :style="{ height: totalHeight + 'px', position: 'relative' }">
+      <div
+        v-for="{ item, index, style } in visibleItems"
+        :key="item.id"
+        :style="style"
+      >
+        {{ item.name }}
+      </div>
+    </div>
+  </div>
+</template>
+```

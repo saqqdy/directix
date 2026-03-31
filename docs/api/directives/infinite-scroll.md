@@ -174,3 +174,77 @@ function handleError(err) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useInfiniteScroll` composable:
+
+```typescript
+import { useInfiniteScroll } from 'directix'
+
+const { loading, finished, load, bind, stop } = useInfiniteScroll({
+  onLoad: async () => {
+    const newItems = await fetchItems(page.value++)
+    items.value.push(...newItems)
+    if (newItems.length === 0) finished.value = true
+  },
+  loading: false,
+  finished: false,
+  distance: 0,
+  immediate: true,
+  disabled: false
+})
+
+// Bind to element
+onMounted(() => bind(containerRef.value))
+```
+
+### UseInfiniteScrollOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `onLoad` | `() => void \| Promise<void>` | - | Handler to load more items (required) |
+| `loading` | `boolean \| Ref<boolean>` | - | Whether loading is in progress |
+| `finished` | `boolean \| Ref<boolean>` | - | Whether all items are loaded |
+| `distance` | `number \| Ref<number>` | `0` | Distance from bottom to trigger |
+| `immediate` | `boolean` | `true` | Check immediately on mount |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable infinite scroll |
+
+### UseInfiniteScrollReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `loading` | `Readonly<Ref<boolean>>` | Whether loading is in progress |
+| `finished` | `Readonly<Ref<boolean>>` | Whether all items are loaded |
+| `load` | `() => Promise<void>` | Manually trigger load |
+| `bind` | `(element: HTMLElement) => () => void` | Bind infinite scroll to an element |
+| `stop` | `() => void` | Stop observing |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useInfiniteScroll } from 'directix'
+
+const items = ref([])
+const page = ref(1)
+
+const { bind, loading, finished } = useInfiniteScroll({
+  onLoad: async () => {
+    const newItems = await fetchItems(page.value++)
+    items.value.push(...newItems)
+    if (newItems.length === 0) finished.value = true
+  }
+})
+
+onMounted(() => bind(containerRef.value))
+</script>
+
+<template>
+  <div ref="containerRef" class="scroll-container">
+    <div v-for="item in items" :key="item.id">{{ item.name }}</div>
+    <div v-if="loading">Loading...</div>
+  </div>
+</template>
+```

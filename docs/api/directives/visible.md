@@ -133,3 +133,65 @@ function trackVisibility(isVisible) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useVisible` composable:
+
+```typescript
+import { useVisible } from 'directix'
+
+const { visible, show, hide, toggle, bind } = useVisible({
+  initial: true,
+  useHidden: false,
+  onChange: (isVisible) => console.log('Visible:', isVisible)
+})
+
+// Control visibility
+show()
+hide()
+toggle()
+
+// Bind to element
+onMounted(() => bind(modalRef.value))
+```
+
+### UseVisibleOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `initial` | `boolean \| Ref<boolean>` | `true` | Initial visibility |
+| `useHidden` | `boolean` | `false` | Use `visibility: hidden` instead of `display: none` |
+| `onChange` | `(isVisible: boolean) => void` | - | Callback when visibility changes |
+
+### UseVisibleReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `visible` | `Ref<boolean>` | Current visibility state |
+| `show` | `() => void` | Show the element |
+| `hide` | `() => void` | Hide the element |
+| `toggle` | `() => void` | Toggle visibility |
+| `bind` | `(element: HTMLElement) => () => void` | Bind visibility control to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useVisible } from 'directix'
+
+const modal = ref(null)
+const { visible, show, hide, toggle, bind } = useVisible({
+  initial: false,
+  onChange: (v) => console.log('Visible:', v)
+})
+
+onMounted(() => bind(modal.value))
+</script>
+
+<template>
+  <button @click="toggle">Toggle Modal</button>
+  <div ref="modal" v-show="visible">Modal Content</div>
+</template>
+```

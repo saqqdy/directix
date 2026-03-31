@@ -189,3 +189,70 @@ function handlePermissionChange(hasPermission) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `usePermission` composable:
+
+```typescript
+import { usePermission, createPermissionChecker } from 'directix'
+
+const { granted, recheck } = usePermission({
+  value: 'admin',
+  mode: 'some',
+  check: undefined,
+  getPermissions: () => store.getters.permissions,
+  getRoles: () => store.getters.roles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+
+// Re-check permission
+recheck()
+
+// Create a reusable permission checker
+const checkPermission = createPermissionChecker({
+  getPermissions: () => store.getters.permissions,
+  getRoles: () => store.getters.roles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+
+const isAdmin = checkPermission('admin')
+const canEdit = checkPermission(['read', 'write'], 'every')
+```
+
+### UsePermissionOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `value` | `string \| string[] \| Ref` | - | Permission value(s) to check (required) |
+| `mode` | `'some' \| 'every' \| Ref` | `'some'` | Logic for multiple permissions |
+| `check` | `(permission, mode) => boolean` | - | Custom permission check function |
+| `getPermissions` | `() => string[]` | - | Get current user's permissions |
+| `getRoles` | `() => string[]` | - | Get current user's roles |
+| `roleMap` | `Record<string, string[]>` | - | Role to permission mapping |
+
+### UsePermissionReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `granted` | `Readonly<Ref<boolean>>` | Whether the permission is granted |
+| `recheck` | `() => void` | Re-check permission |
+
+### Example
+
+```vue
+<script setup>
+import { usePermission } from 'directix'
+
+const { granted } = usePermission({
+  value: 'admin',
+  getPermissions: () => store.getters.permissions,
+  getRoles: () => store.getters.roles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+</script>
+
+<template>
+  <button v-if="granted">Admin Only Action</button>
+</template>
+```

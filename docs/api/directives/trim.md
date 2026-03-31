@@ -82,3 +82,60 @@ type TrimBinding = 'input' | 'blur' | TrimOptions
   <input v-trim="{ on: 'input' }" v-model="searchQuery" />
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useTrim` composable:
+
+```typescript
+import { useTrim, trimText, createTrimmer } from 'directix'
+
+const { trimmed, original, wasTrimmed } = useTrim({
+  text: inputText,
+  position: 'both', // 'start' | 'end' | 'both'
+  chars: undefined // Custom characters to trim
+})
+
+// Utility function
+const result = trimText('  hello world  ') // 'hello world'
+const startOnly = trimText('  hello world  ', 'start') // 'hello world  '
+const custom = trimText('**hello**', 'both', '*') // 'hello'
+
+// Create reusable trimmer
+const trimStart = createTrimmer('start')
+const trimmed = trimStart('  hello  ') // 'hello  '
+```
+
+### UseTrimOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `text` | `string \| Ref<string>` | - | The text to trim (required) |
+| `position` | `'start' \| 'end' \| 'both' \| Ref` | `'both'` | Trim position |
+| `chars` | `string \| Ref<string>` | - | Custom characters to trim |
+
+### UseTrimReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `trimmed` | `Ref<string>` | The trimmed text |
+| `original` | `Ref<string>` | Original text |
+| `wasTrimmed` | `Ref<boolean>` | Whether the text was trimmed |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useTrim } from 'directix'
+
+const text = ref('  hello world  ')
+const { trimmed, wasTrimmed } = useTrim({ text })
+// trimmed.value = 'hello world'
+// wasTrimmed.value = true
+</script>
+
+<template>
+  <p>{{ trimmed }}</p>
+</template>
+```

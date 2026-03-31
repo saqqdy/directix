@@ -97,3 +97,66 @@ type TruncateBinding = number | TruncateOptions
   </span>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useEllipsis` composable:
+
+```typescript
+import { useEllipsis, truncateText, wouldTextTruncate } from 'directix'
+
+const { truncated, isTruncated, original, calculateForWidth, wouldTruncate } = useEllipsis({
+  text: longText,
+  lines: 1,
+  ellipsis: '...',
+  maxWidth: 0 // 0 = no width limit
+})
+
+// Utility function
+const short = truncateText('Very long text here', 10) // 'Very l...'
+
+// Check if text would truncate
+if (wouldTextTruncate('Long text', 100)) {
+  console.log('Text would be truncated')
+}
+```
+
+### UseEllipsisOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `text` | `string \| Ref<string>` | - | The text to potentially truncate (required) |
+| `lines` | `number \| Ref<number>` | `1` | Number of lines before truncating |
+| `ellipsis` | `string \| Ref<string>` | `'...'` | Custom ellipsis string |
+| `maxWidth` | `number \| Ref<number>` | `0` | Maximum width in pixels (0 = no limit) |
+
+### UseEllipsisReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `truncated` | `Ref<string>` | The truncated text |
+| `isTruncated` | `Ref<boolean>` | Whether the text is truncated |
+| `original` | `Ref<string>` | Original text |
+| `calculateForWidth` | `(width: number) => string` | Calculate truncation for given width |
+| `wouldTruncate` | `(width: number) => boolean` | Check if text would truncate |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useEllipsis } from 'directix'
+
+const longText = ref('This is a very long text that needs to be truncated')
+const { truncated, isTruncated } = useEllipsis({
+  text: longText,
+  maxWidth: 200
+})
+</script>
+
+<template>
+  <span :title="isTruncated ? longText : ''">
+    {{ truncated }}
+  </span>
+</template>
+```

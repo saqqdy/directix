@@ -81,3 +81,20 @@ interface EllipsisOptions {
   </p>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useEllipsis` composable:
+
+```typescript
+import { useEllipsis, truncateText, wouldTextTruncate } from 'directix'
+
+const { truncated, isTruncated, original, calculateForWidth, wouldTruncate } = useEllipsis({
+  text: longText,
+  lines: 1,
+  ellipsis: '...',
+  maxWidth: 0
+})
+```
+
+See [v-truncate](./truncate.md#composable-api) for detailed composable API documentation.

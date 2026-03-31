@@ -139,3 +139,66 @@ type SanitizeBinding = boolean | SanitizeOptions
 const isTrusted = true // Only set true for trusted admin content
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useSanitize` composable:
+
+```typescript
+import { useSanitize } from 'directix'
+
+const { sanitize, bind } = useSanitize({
+  allowedTags: ['b', 'i', 'u', 'strong', 'em', 'br', 'p', 'span', 'div'],
+  allowedAttributes: ['title', 'alt', 'href', 'src'],
+  allowDataUrls: false,
+  allowStyles: false,
+  allowClass: false,
+  allowId: false,
+  handler: undefined
+})
+
+// Sanitize HTML string
+const safeHtml = sanitize(userInput)
+
+// Bind to element
+onMounted(() => bind(elementRef.value))
+```
+
+### UseSanitizeOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `allowedTags` | `string[]` | `['b', 'i', 'u', 'strong', 'em', 'br', 'p', 'span', 'div']` | Tags to allow (whitelist) |
+| `allowedAttributes` | `string[]` | `['title', 'alt', 'href', 'src']` | Attributes to allow (whitelist) |
+| `allowDataUrls` | `boolean` | `false` | Allow data URLs |
+| `allowStyles` | `boolean` | `false` | Allow inline styles |
+| `allowClass` | `boolean` | `false` | Allow class attribute |
+| `allowId` | `boolean` | `false` | Allow id attribute |
+| `handler` | `(html: string) => string` | - | Custom sanitize function |
+
+### UseSanitizeReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `sanitize` | `(html: string) => string` | Sanitize HTML string |
+| `bind` | `(element: HTMLElement) => () => void` | Sanitize and set to element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useSanitize } from 'directix'
+
+const { sanitize } = useSanitize({
+  allowedTags: ['b', 'i', 'p'],
+  allowedAttributes: []
+})
+
+const safeHtml = sanitize(userInput)
+</script>
+
+<template>
+  <p>{{ safeHtml }}</p>
+</template>
+```

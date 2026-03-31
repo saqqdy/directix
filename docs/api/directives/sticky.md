@@ -140,3 +140,59 @@ function handleStickyChange(sticky) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useSticky` composable:
+
+```typescript
+import { useSticky } from 'directix'
+
+const { isSticky, bind, stop } = useSticky({
+  offsetTop: 0,
+  onStick: (isSticky) => console.log('Sticky:', isSticky),
+  disabled: false
+})
+
+// Bind to element
+onMounted(() => bind(headerRef.value))
+```
+
+### UseStickyOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `offsetTop` | `number \| Ref<number>` | `0` | Offset from top in pixels |
+| `onStick` | `(isSticky: boolean) => void` | - | Callback when stick state changes |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable sticky behavior |
+
+### UseStickyReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isSticky` | `Readonly<Ref<boolean>>` | Whether the element is sticky |
+| `bind` | `(element: HTMLElement) => () => void` | Bind sticky behavior to an element |
+| `stop` | `() => void` | Stop observing |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useSticky } from 'directix'
+
+const headerRef = ref(null)
+const { isSticky, bind } = useSticky({
+  offsetTop: 60,
+  onStick: (sticky) => console.log('Sticky:', sticky)
+})
+
+onMounted(() => bind(headerRef.value))
+</script>
+
+<template>
+  <header ref="headerRef" :class="{ sticky: isSticky }">
+    Navigation
+  </header>
+</template>
+```

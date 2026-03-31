@@ -162,3 +162,66 @@ const menuItems = [
 ]
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useHover` composable:
+
+```typescript
+import { useHover } from 'directix'
+
+const { isHovering, bind } = useHover({
+  onEnter: (event) => console.log('Mouse entered'),
+  onLeave: (event) => console.log('Mouse left'),
+  class: 'is-hovering',
+  enterDelay: 100,
+  leaveDelay: 100
+})
+
+// Bind to element
+onMounted(() => {
+  const unbind = bind(buttonRef.value)
+  onUnmounted(unbind)
+})
+```
+
+### UseHoverOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `onEnter` | `(event: MouseEvent) => void` | - | Callback when mouse enters |
+| `onLeave` | `(event: MouseEvent) => void` | - | Callback when mouse leaves |
+| `class` | `string` | - | CSS class to add when hovering |
+| `enterDelay` | `number \| Ref<number>` | `0` | Delay before enter callback |
+| `leaveDelay` | `number \| Ref<number>` | `0` | Delay before leave callback |
+
+### UseHoverReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isHovering` | `Readonly<Ref<boolean>>` | Whether the element is being hovered |
+| `bind` | `(element: HTMLElement) => () => void` | Bind hover tracking to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useHover } from 'directix'
+
+const buttonRef = ref(null)
+const { isHovering, bind } = useHover({
+  onEnter: () => console.log('Mouse entered'),
+  onLeave: () => console.log('Mouse left'),
+  enterDelay: 100
+})
+
+onMounted(() => bind(buttonRef.value))
+</script>
+
+<template>
+  <button ref="buttonRef" :class="{ 'is-hovering': isHovering }">
+    Hover Me
+  </button>
+</template>
+```

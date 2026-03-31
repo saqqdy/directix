@@ -159,3 +159,79 @@ function validateDate(value) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useMask` composable:
+
+```typescript
+import { useMask } from 'directix'
+
+const { getFormattedValue, getRawValue, isComplete, bind } = useMask({
+  mask: '(###) ###-####',
+  placeholder: '_',
+  showPlaceholder: true,
+  showMaskOnBlur: false,
+  clearIncomplete: false,
+  disabled: false,
+  onChange: (value, rawValue) => console.log('Changed:', value, rawValue),
+  onComplete: (value) => console.log('Complete:', value)
+})
+
+// Format value
+const formatted = getFormattedValue('1234567890')
+
+// Get raw value
+const raw = getRawValue('(123) 456-7890')
+
+// Check if complete
+if (isComplete('(123) 456-7890')) {
+  console.log('Mask is complete')
+}
+
+// Bind to input
+onMounted(() => bind(inputRef.value))
+```
+
+### UseMaskOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `mask` | `string \| Ref<string>` | - | Mask pattern (required) |
+| `placeholder` | `string` | `'_'` | Placeholder character |
+| `showPlaceholder` | `boolean` | `true` | Show placeholder on focus |
+| `showMaskOnBlur` | `boolean` | `false` | Show mask on blur |
+| `clearIncomplete` | `boolean` | `false` | Clear incomplete on blur |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable the mask |
+| `onChange` | `(value: string, rawValue: string) => void` | - | Callback on value change |
+| `onComplete` | `(value: string) => void` | - | Callback when complete |
+
+### UseMaskReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `getFormattedValue` | `(value: string) => string` | Get formatted value |
+| `getRawValue` | `(value: string) => string` | Get raw value (without mask literals) |
+| `isComplete` | `(value: string) => boolean` | Check if mask is complete |
+| `bind` | `(element: HTMLInputElement \| HTMLTextAreaElement) => () => void` | Bind mask to an input element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useMask } from 'directix'
+
+const inputRef = ref(null)
+const { bind, getRawValue } = useMask({
+  mask: '###-##-####',
+  placeholder: '_'
+})
+
+onMounted(() => bind(inputRef.value))
+</script>
+
+<template>
+  <input ref="inputRef" type="text" />
+</template>
+```

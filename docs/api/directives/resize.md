@@ -156,3 +156,60 @@ function checkTruncation(entry) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useResize` composable:
+
+```typescript
+import { useResize } from 'directix'
+
+const { width, height, bind, stop } = useResize({
+  debounce: 0,
+  box: 'content-box',
+  onResize: (info) => console.log('Resized:', info.width, info.height)
+})
+
+// Bind to element
+onMounted(() => bind(target.value))
+```
+
+### UseResizeOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `debounce` | `number \| Ref<number>` | `0` | Debounce time in milliseconds |
+| `box` | `'content-box' \| 'border-box' \| 'device-pixel-content-box'` | `'content-box'` | Box model to observe |
+| `onResize` | `(info: ResizeInfo) => void` | - | Callback when resize occurs |
+
+### UseResizeReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `width` | `Readonly<Ref<number>>` | Current width |
+| `height` | `Readonly<Ref<number>>` | Current height |
+| `bind` | `(element: HTMLElement) => () => void` | Bind resize observer to an element |
+| `stop` | `() => void` | Stop observing |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useResize } from 'directix'
+
+const target = ref(null)
+const { width, height, bind } = useResize({
+  debounce: 100,
+  onResize: (info) => console.log('Resized:', info.width, info.height)
+})
+
+onMounted(() => bind(target.value))
+</script>
+
+<template>
+  <div ref="target">
+    Size: {{ width }} x {{ height }}
+  </div>
+</template>
+```

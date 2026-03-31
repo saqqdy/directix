@@ -189,3 +189,84 @@ function handleScroll(event) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useDebounce` composable:
+
+```typescript
+import { useDebounce, debounceFn } from 'directix'
+
+// Composable usage
+const { run, cancel, flush, pending } = useDebounce({
+  handler: (query: string) => {
+    console.log('Searching:', query)
+  },
+  wait: 500,
+  leading: false,
+  trailing: true
+})
+
+// Call the debounced function
+run('search query')
+
+// Cancel pending execution
+cancel()
+
+// Immediately invoke if pending
+flush()
+
+// Check if there's a pending execution
+if (pending()) {
+  console.log('Execution pending')
+}
+
+// Simple function wrapper
+const debouncedSave = debounceFn(saveData, 1000)
+debouncedSave(data)
+debouncedSave.cancel()
+```
+
+### UseDebounceOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `Function` | - | Function to debounce (required) |
+| `wait` | `number \| Ref<number>` | `300` | Delay time in milliseconds |
+| `leading` | `boolean \| Ref<boolean>` | `false` | Invoke on leading edge |
+| `trailing` | `boolean \| Ref<boolean>` | `true` | Invoke on trailing edge |
+
+### UseDebounceReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `run` | `(...args) => void` | Debounced function |
+| `cancel` | `() => void` | Cancel pending execution |
+| `flush` | `() => void` | Immediately invoke if pending |
+| `pending` | `() => boolean` | Check if execution is pending |
+
+### Example
+
+```vue
+<script setup>
+import { ref, watch } from 'vue'
+import { useDebounce } from 'directix'
+
+const searchQuery = ref('')
+
+const { run: debouncedSearch } = useDebounce({
+  handler: (query: string) => {
+    console.log('Searching:', query)
+  },
+  wait: 500
+})
+
+watch(searchQuery, (query) => {
+  debouncedSearch(query)
+})
+</script>
+
+<template>
+  <input v-model="searchQuery" placeholder="Search..." />
+</template>
+```

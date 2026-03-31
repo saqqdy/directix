@@ -207,3 +207,74 @@ const previewEnabled = ref(true)
   />
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useImagePreview` composable:
+
+```typescript
+import { useImagePreview } from 'directix'
+
+const { isOpen, currentSrc, open, close, bind } = useImagePreview({
+  src: 'default-image.jpg',
+  closeOnClickOutside: true,
+  closeOnEsc: true,
+  showCloseButton: true,
+  onOpen: () => console.log('Preview opened'),
+  onClose: () => console.log('Preview closed')
+})
+```
+
+### UseImagePreviewOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `src` | `string \| Ref<string>` | - | Initial image URL to preview |
+| `closeOnClickOutside` | `boolean` | `true` | Close on click outside |
+| `closeOnEsc` | `boolean` | `true` | Close on escape key |
+| `showCloseButton` | `boolean` | `true` | Show close button |
+| `onOpen` | `() => void` | - | Callback when preview opens |
+| `onClose` | `() => void` | - | Callback when preview closes |
+
+### UseImagePreviewReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isOpen` | `Readonly<Ref<boolean>>` | Whether the preview is open |
+| `currentSrc` | `Readonly<Ref<string>>` | Current image URL |
+| `open` | `(src?: string) => void` | Open preview with an image |
+| `close` | `() => void` | Close preview |
+| `bind` | `(element: HTMLImageElement) => () => void` | Bind click-to-preview to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
+
+const imageRef = ref(null)
+
+const { isOpen, open, close, bind } = useImagePreview({
+  onOpen: () => console.log('Preview opened')
+})
+
+onMounted(() => {
+  if (imageRef.value) {
+    bind(imageRef.value)
+  }
+})
+
+function openCustomImage() {
+  open('https://example.com/high-res.jpg')
+}
+</script>
+
+<template>
+  <div>
+    <img ref="imageRef" src="thumbnail.jpg" alt="Click to preview" />
+    <button @click="openCustomImage">Open Custom Image</button>
+    <p v-if="isOpen">Preview is open</p>
+  </div>
+</template>
+```

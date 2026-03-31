@@ -93,3 +93,79 @@ type MoneyBinding = boolean | MoneyOptions
   <!-- Output: "$1,234" -->
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useMoney` composable:
+
+```typescript
+import { useMoney } from 'directix'
+
+const { formatted, value, parse } = useMoney({
+  value: 1234.56,
+  symbol: '$',
+  symbolPosition: 'before',
+  precision: 2,
+  separator: ',',
+  decimal: '.'
+})
+// formatted.value = '$1,234.56'
+```
+
+### UseMoneyOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `value` | `number \| Ref<number>` | - | The numeric value (required) |
+| `symbol` | `string \| Ref<string>` | `'$'` | Currency symbol |
+| `symbolPosition` | `'before' \| 'after'` | `'before'` | Symbol position |
+| `precision` | `number \| Ref<number>` | `2` | Decimal places |
+| `separator` | `string \| Ref<string>` | `','` | Thousands separator |
+| `decimal` | `string \| Ref<string>` | `'.'` | Decimal separator |
+
+### UseMoneyReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `formatted` | `Ref<string>` | The formatted money string |
+| `value` | `Ref<number>` | The numeric value |
+| `parse` | `(formatted: string) => number` | Parse formatted string to number |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useMoney } from 'directix'
+
+const price = ref(1234.56)
+
+const { formatted } = useMoney({
+  value: price,
+  symbol: '€',
+  symbolPosition: 'after'
+})
+</script>
+
+<template>
+  <span>Price: {{ formatted }}</span>
+  <!-- Output: Price: 1,234.56€ -->
+</template>
+```
+
+### Utility Functions
+
+```typescript
+import { formatMoney, parseMoney, createMoneyFormatter } from 'directix'
+
+// Format directly
+formatMoney(1234.56) // '$1,234.56'
+formatMoney(1234.56, { symbol: '€', symbolPosition: 'after' }) // '1,234.56€'
+
+// Parse formatted string
+parseMoney('$1,234.56') // 1234.56
+
+// Create reusable formatter
+const formatEuro = createMoneyFormatter({ symbol: '€', symbolPosition: 'after' })
+formatEuro(1234.56) // '1,234.56€'
+```

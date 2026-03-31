@@ -153,3 +153,71 @@ const isVisible = ref(false)
   </button>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useTooltip` composable:
+
+```typescript
+import { useTooltip } from 'directix'
+
+const { isVisible, show, hide, toggle, bind } = useTooltip({
+  content: 'Tooltip text',
+  placement: 'top',
+  trigger: 'hover',
+  delay: 0,
+  hideDelay: 0,
+  arrow: true
+})
+```
+
+### UseTooltipOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `content` | `string \| Ref<string>` | - | Tooltip content |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Tooltip placement |
+| `trigger` | `'hover' \| 'click' \| 'focus' \| 'manual'` | `'hover'` | Trigger type |
+| `delay` | `number` | `0` | Show delay (ms) |
+| `hideDelay` | `number` | `0` | Hide delay (ms) |
+| `arrow` | `boolean` | `true` | Show arrow |
+| `class` | `string` | - | Custom CSS class |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable tooltip |
+| `onShow` | `() => void` | - | Callback when tooltip shows |
+| `onHide` | `() => void` | - | Callback when tooltip hides |
+
+### UseTooltipReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isVisible` | `Readonly<Ref<boolean>>` | Whether tooltip is visible |
+| `show` | `() => void` | Show the tooltip |
+| `hide` | `() => void` | Hide the tooltip |
+| `toggle` | `() => void` | Toggle the tooltip |
+| `bind` | `(element: HTMLElement) => () => void` | Bind tooltip to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useTooltip } from 'directix'
+
+const buttonRef = ref(null)
+
+const { isVisible, bind } = useTooltip({
+  content: 'Tooltip text',
+  placement: 'top'
+})
+
+onMounted(() => {
+  if (buttonRef.value) {
+    bind(buttonRef.value)
+  }
+})
+</script>
+
+<template>
+  <button ref="buttonRef">Hover me</button>
+</template>
+```

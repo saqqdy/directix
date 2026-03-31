@@ -205,3 +205,80 @@ function handleEdit(mutations) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useMutation` composable:
+
+```typescript
+import { useMutation } from 'directix'
+
+const { bind, stop, start } = useMutation({
+  handler: (mutations, observer) => {
+    mutations.forEach(mutation => {
+      console.log('Type:', mutation.type)
+    })
+  },
+  attributes: false,
+  attributeFilter: undefined,
+  childList: true,
+  subtree: false,
+  characterData: false,
+  attributeOldValue: false,
+  characterDataOldValue: false,
+  disabled: false
+})
+
+// Bind to element
+onMounted(() => bind(containerRef.value))
+```
+
+### UseMutationOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `MutationHandler` | - | Callback when mutations occur (required) |
+| `attributes` | `boolean` | `false` | Observe attribute changes |
+| `attributeFilter` | `string[]` | - | Specific attributes to observe |
+| `childList` | `boolean` | `true` | Observe child node changes |
+| `subtree` | `boolean` | `false` | Observe all descendants |
+| `characterData` | `boolean` | `false` | Observe character data changes |
+| `attributeOldValue` | `boolean` | `false` | Record old attribute values |
+| `characterDataOldValue` | `boolean` | `false` | Record old character data |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable the observer |
+
+### UseMutationReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `bind` | `(element: HTMLElement) => () => void` | Bind mutation observer to an element |
+| `stop` | `() => void` | Stop observing |
+| `start` | `() => void` | Start observing |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useMutation } from 'directix'
+
+const containerRef = ref(null)
+const { bind } = useMutation({
+  handler: (mutations) => {
+    mutations.forEach(mutation => {
+      console.log('Type:', mutation.type)
+    })
+  },
+  childList: true,
+  subtree: true
+})
+
+onMounted(() => bind(containerRef.value))
+</script>
+
+<template>
+  <div ref="containerRef">
+    Content to observe
+  </div>
+</template>
+```

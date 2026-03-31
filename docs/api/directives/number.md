@@ -95,3 +95,79 @@ type NumberBinding = boolean | NumberOptions
   <input v-number="{ negative: false, min: 0 }" v-model="amount" />
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useNumber` composable:
+
+```typescript
+import { useNumber } from 'directix'
+
+const { formatted, value, parse } = useNumber({
+  value: 1234567,
+  precision: 2,
+  separator: ',',
+  decimal: '.',
+  prefix: '$',
+  suffix: ' items'
+})
+// formatted.value = '$1,234,567.00 items'
+```
+
+### UseNumberOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `value` | `number \| Ref<number>` | - | The numeric value (required) |
+| `precision` | `number \| Ref<number>` | `0` | Decimal places |
+| `separator` | `string \| Ref<string>` | `','` | Thousands separator |
+| `decimal` | `string \| Ref<string>` | `'.'` | Decimal separator |
+| `prefix` | `string \| Ref<string>` | `''` | Prefix string |
+| `suffix` | `string \| Ref<string>` | `''` | Suffix string |
+
+### UseNumberReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `formatted` | `Ref<string>` | The formatted number string |
+| `value` | `Ref<number>` | The numeric value |
+| `parse` | `(formatted: string) => number` | Parse formatted string to number |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useNumber } from 'directix'
+
+const count = ref(1234567)
+
+const { formatted } = useNumber({
+  value: count,
+  precision: 2,
+  suffix: ' items'
+})
+</script>
+
+<template>
+  <span>Total: {{ formatted }}</span>
+  <!-- Output: Total: 1,234,567.00 items -->
+</template>
+```
+
+### Utility Functions
+
+```typescript
+import { formatNumber, parseNumber, createNumberFormatter } from 'directix'
+
+// Format directly
+formatNumber(1234567) // '1,234,567'
+formatNumber(1234.56, { precision: 2, suffix: '%' }) // '1,234.56%'
+
+// Parse formatted string
+parseNumber('1,234,567') // 1234567
+
+// Create reusable formatter
+const formatPercent = createNumberFormatter({ suffix: '%', precision: 1 })
+formatPercent(85.5) // '85.5%'
+```

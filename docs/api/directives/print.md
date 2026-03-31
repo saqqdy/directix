@@ -89,3 +89,76 @@ interface PrintOptions {
   </article>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `usePrint` composable:
+
+```typescript
+import { usePrint, quickPrint } from 'directix'
+
+const { isPrinting, print, printPage } = usePrint({
+  title: 'My Document',
+  styles: '@page { margin: 2cm; }',
+  cssUrls: ['/print.css'],
+  onBeforePrint: () => console.log('About to print...'),
+  onAfterPrint: () => console.log('Print complete!'),
+  newWindow: false,
+  printClass: 'print-content'
+})
+
+// Print specific element
+await print('#content')
+
+// Print current page
+await printPage()
+
+// Quick print function
+quickPrint('#content', { title: 'Quick Print' })
+```
+
+### UsePrintOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `title` | `string \| Ref<string>` | - | Title for printed document |
+| `styles` | `string \| string[] \| Ref` | - | Additional CSS styles |
+| `cssUrls` | `string[] \| Ref<string[]>` | `[]` | Additional CSS URLs |
+| `onBeforePrint` | `() => boolean \| void` | - | Callback before printing (return false to cancel) |
+| `onAfterPrint` | `() => void` | - | Callback after printing |
+| `newWindow` | `boolean \| Ref<boolean>` | `false` | Print in new window |
+| `printClass` | `string \| Ref<string>` | - | Custom class for print container |
+
+### UsePrintReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isPrinting` | `Ref<boolean>` | Whether printing is in progress |
+| `print` | `(target?: string \| HTMLElement) => Promise<void>` | Print specified element |
+| `printPage` | `() => Promise<void>` | Print current page |
+
+### Example
+
+```vue
+<script setup>
+import { usePrint } from 'directix'
+
+const { isPrinting, print } = usePrint({
+  title: 'My Document',
+  onAfterPrint: () => console.log('Print complete!')
+})
+
+async function handlePrint() {
+  await print('#content')
+}
+</script>
+
+<template>
+  <div>
+    <button @click="handlePrint" :disabled="isPrinting">
+      {{ isPrinting ? 'Printing...' : 'Print' }}
+    </button>
+    <div id="content">Content to print</div>
+  </div>
+</template>
+```

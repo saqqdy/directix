@@ -147,3 +147,75 @@ function deleteItem() {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useLongPress` composable:
+
+```typescript
+import { useLongPress } from 'directix'
+
+const { isPressing, start, stop, bind } = useLongPress({
+  duration: 500,
+  distance: 10,
+  onStart: (event) => console.log('Press started'),
+  onTrigger: (event) => console.log('Long press triggered!'),
+  onCancel: (event) => console.log('Press canceled'),
+  onTick: (remaining) => console.log('Remaining:', remaining),
+  tickInterval: 100,
+  prevent: true
+})
+
+// Bind to element
+onMounted(() => {
+  const unbind = bind(buttonRef.value)
+  onUnmounted(unbind)
+})
+```
+
+### UseLongPressOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `duration` | `number \| Ref<number>` | `500` | Duration in milliseconds to trigger |
+| `distance` | `number \| Ref<number>` | `10` | Maximum movement before canceling |
+| `onStart` | `(event: MouseEvent \| TouchEvent) => void` | - | Callback when press starts |
+| `onTrigger` | `(event: MouseEvent \| TouchEvent) => void` | - | Callback when long press triggers |
+| `onCancel` | `(event: MouseEvent \| TouchEvent) => void` | - | Callback when press is canceled |
+| `onTick` | `(remaining: number) => void` | - | Callback during press |
+| `tickInterval` | `number` | `100` | Interval for onTick callback |
+| `prevent` | `boolean` | `true` | Prevent default behavior |
+
+### UseLongPressReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isPressing` | `Readonly<Ref<boolean>>` | Whether a long press is in progress |
+| `start` | `(event: MouseEvent \| TouchEvent) => void` | Start long press detection |
+| `stop` | `(event: MouseEvent \| TouchEvent) => void` | Stop long press detection |
+| `bind` | `(element: HTMLElement) => () => void` | Bind long press detection to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useLongPress } from 'directix'
+
+const buttonRef = ref(null)
+const { isPressing, bind } = useLongPress({
+  onTrigger: (event) => {
+    console.log('Long press triggered!')
+  },
+  duration: 800
+})
+
+onMounted(() => bind(buttonRef.value))
+</script>
+
+<template>
+  <button ref="buttonRef" :class="{ pressing: isPressing }">
+    Long Press Me
+  </button>
+</template>
+```

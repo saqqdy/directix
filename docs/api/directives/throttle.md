@@ -180,3 +180,70 @@ async function fetchData() {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useThrottle` composable:
+
+```typescript
+import { useThrottle, throttleFn } from 'directix'
+
+// Composable usage
+const { run, cancel } = useThrottle({
+  handler: (event) => {
+    console.log('Scroll position:', event.target.scrollTop)
+  },
+  wait: 100,
+  leading: true,
+  trailing: true
+})
+
+// Call the throttled function
+run(event)
+
+// Cancel pending execution
+cancel()
+
+// Simple function wrapper
+const throttledUpdate = throttleFn(updateData, 1000)
+throttledUpdate(data)
+throttledUpdate.cancel()
+```
+
+### UseThrottleOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `Function` | - | Function to throttle (required) |
+| `wait` | `number \| Ref<number>` | `300` | Delay time in milliseconds |
+| `leading` | `boolean \| Ref<boolean>` | `true` | Invoke on leading edge |
+| `trailing` | `boolean \| Ref<boolean>` | `true` | Invoke on trailing edge |
+
+### UseThrottleReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `run` | `(...args) => void` | Throttled function |
+| `cancel` | `() => void` | Cancel pending execution |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useThrottle } from 'directix'
+
+const { run: throttledScroll } = useThrottle({
+  handler: (event) => {
+    console.log('Scroll position:', event.target.scrollTop)
+  },
+  wait: 100
+})
+</script>
+
+<template>
+  <div @scroll="throttledScroll($event)" class="scroll-container">
+    <!-- content -->
+  </div>
+</template>
+```

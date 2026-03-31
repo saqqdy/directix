@@ -161,3 +161,77 @@ function handleScroll(event, info) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useScroll` composable:
+
+```typescript
+import { useScroll } from 'directix'
+
+const {
+  scrollLeft,
+  scrollTop,
+  progressX,
+  progressY,
+  directionX,
+  directionY,
+  isScrolling,
+  info,
+  bind,
+  stop,
+  scrollTo
+} = useScroll({
+  throttle: 100,
+  passive: true
+})
+
+// Bind to element
+onMounted(() => bind(containerRef.value))
+
+// Scroll to position
+scrollTo({ top: 0, behavior: 'smooth' })
+```
+
+### UseScrollOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `throttle` | `number \| Ref<number>` | `0` | Throttle time in milliseconds |
+| `passive` | `boolean` | `true` | Use passive event listener |
+
+### UseScrollReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `scrollLeft` | `Readonly<Ref<number>>` | Current scroll left position |
+| `scrollTop` | `Readonly<Ref<number>>` | Current scroll top position |
+| `progressX` | `Readonly<Ref<number>>` | Horizontal scroll progress (0-1) |
+| `progressY` | `Readonly<Ref<number>>` | Vertical scroll progress (0-1) |
+| `directionX` | `Readonly<Ref<ScrollDirection>>` | Horizontal scroll direction |
+| `directionY` | `Readonly<Ref<ScrollDirection>>` | Vertical scroll direction |
+| `isScrolling` | `Readonly<Ref<boolean>>` | Whether the user is scrolling |
+| `info` | `Readonly<Ref<ScrollInfo>>` | Scroll info object |
+| `bind` | `(element?: HTMLElement \| Window) => () => void` | Bind scroll listener |
+| `stop` | `() => void` | Stop listening |
+| `scrollTo` | `(options: { top?: number, left?: number, behavior?: 'auto' \| 'smooth' }) => void` | Scroll to position |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useScroll } from 'directix'
+
+const container = ref(null)
+const { scrollTop, progressY, directionY, bind } = useScroll()
+
+onMounted(() => bind(container.value))
+</script>
+
+<template>
+  <div ref="container" class="scroll-container">
+    <div class="progress" :style="{ width: `${progressY * 100}%` }" />
+  </div>
+</template>
+```

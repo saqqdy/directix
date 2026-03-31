@@ -91,3 +91,68 @@ type ClickDelayBinding = ClickDelayHandler | ClickDelayOptions
   </form>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useClickDelay` composable:
+
+```typescript
+import { useClickDelay, createDelayedClick } from 'directix'
+
+// Composable usage
+const { isPending, click, reset, cancel } = useClickDelay({
+  handler: async (event) => {
+    await submitForm()
+  },
+  delay: 500,
+  disabled: false
+})
+
+// Call the click handler
+click(event)
+
+// Reset pending state
+reset()
+
+// Simple function wrapper
+const delayedSubmit = createDelayedClick(submitForm, 1000)
+button.onclick = delayedSubmit
+```
+
+### UseClickDelayOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `(event: MouseEvent \| TouchEvent) => void` | - | Click handler (required) |
+| `delay` | `number \| Ref<number>` | `300` | Delay time in milliseconds |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable the delay |
+
+### UseClickDelayReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isPending` | `Ref<boolean>` | Whether a click is pending |
+| `click` | `(event: MouseEvent \| TouchEvent) => void` | Trigger click with delay protection |
+| `reset` | `() => void` | Reset pending state |
+| `cancel` | `() => void` | Cancel pending timeout |
+
+### Example
+
+```vue
+<script setup>
+import { useClickDelay } from 'directix'
+
+const { click, isPending } = useClickDelay({
+  handler: async (event) => {
+    await submitForm()
+  },
+  delay: 500
+})
+</script>
+
+<template>
+  <button @click="click" :disabled="isPending">
+    {{ isPending ? 'Processing...' : 'Submit' }}
+  </button>
+</template>
+```

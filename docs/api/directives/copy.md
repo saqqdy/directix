@@ -170,3 +170,60 @@ function onCopyError(event) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useCopy` composable:
+
+```typescript
+import { useCopy } from 'directix'
+
+const { copy, copied, error, isSupported } = useCopy({
+  source: textToCopy,
+  onSuccess: (text) => console.log('Copied:', text),
+  onError: (err) => console.error('Error:', err),
+  copiedTimeout: 1500
+})
+
+// Copy text
+await copy('Custom text')
+
+// Or use the reactive source
+await copy()
+```
+
+### UseCopyOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `source` | `string \| Ref<string>` | - | Source text to copy (can be reactive) |
+| `onSuccess` | `(text: string) => void` | - | Callback on copy success |
+| `onError` | `(error: Error) => void` | - | Callback on copy error |
+| `copiedTimeout` | `number` | `1500` | Time in ms to reset copied state |
+
+### UseCopyReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `copy` | `(text?: string) => Promise<boolean>` | Copy function |
+| `copied` | `Readonly<Ref<boolean>>` | Whether the last copy was successful |
+| `error` | `Readonly<Ref<Error \| null>>` | Error from the last copy attempt |
+| `isSupported` | `boolean` | Whether clipboard API is supported |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCopy } from 'directix'
+
+const text = ref('Hello World')
+const { copy, copied, isSupported } = useCopy({ source: text })
+</script>
+
+<template>
+  <button @click="copy()" :disabled="!isSupported">
+    {{ copied ? 'Copied!' : 'Copy' }}
+  </button>
+</template>
+```

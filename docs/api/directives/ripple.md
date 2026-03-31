@@ -131,3 +131,63 @@ import { ref } from 'vue'
 const isLoading = ref(false)
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useRipple` composable:
+
+```typescript
+import { useRipple } from 'directix'
+
+const { bind, trigger } = useRipple({
+  color: 'currentColor',
+  duration: 600,
+  disabled: false,
+  initialScale: 0,
+  finalScale: 2
+})
+
+// Bind to element
+onMounted(() => bind(buttonRef.value))
+
+// Manually trigger ripple
+trigger({ x: 50, y: 50 })
+```
+
+### UseRippleOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `color` | `string \| Ref<string>` | `'currentColor'` | Ripple color |
+| `duration` | `number \| Ref<number>` | `600` | Ripple duration in milliseconds |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Whether to disable ripple |
+| `initialScale` | `number` | `0` | Initial scale of ripple |
+| `finalScale` | `number` | `2` | Final scale of ripple |
+
+### UseRippleReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `bind` | `(element: HTMLElement) => () => void` | Bind ripple effect to an element |
+| `trigger` | `(event?: { x?: number, y?: number }) => void` | Trigger ripple effect manually |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useRipple } from 'directix'
+
+const buttonRef = ref(null)
+const { bind, trigger } = useRipple({
+  color: 'rgba(255, 255, 255, 0.3)',
+  duration: 600
+})
+
+onMounted(() => bind(buttonRef.value))
+</script>
+
+<template>
+  <button ref="buttonRef">Click for ripple</button>
+</template>
+```

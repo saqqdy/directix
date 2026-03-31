@@ -145,3 +145,69 @@ const hotkeys = computed(() => ({
 }))
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useHotkey` composable:
+
+```typescript
+import { useHotkey } from 'directix'
+
+const { enabled, enable, disable, toggle, add, remove, clear } = useHotkey({
+  hotkeys: [
+    { key: 'ctrl+s', handler: (e) => save() },
+    { key: 'ctrl+z', handler: (e) => undo() },
+  ],
+  target: document,
+  enabled: true
+})
+
+// Control hotkeys
+enable()
+disable()
+toggle()
+
+// Add/remove hotkeys dynamically
+add({ key: 'esc', handler: (e) => closeModal() })
+remove('esc')
+clear()
+```
+
+### UseHotkeyOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `hotkey` | `HotkeyDefinition` | - | Single hotkey definition |
+| `hotkeys` | `HotkeyDefinition[]` | `[]` | Multiple hotkey definitions |
+| `target` | `HTMLElement \| Ref` | `document` | Target element to bind events |
+| `enabled` | `boolean \| Ref<boolean>` | `true` | Whether hotkeys are enabled |
+
+### UseHotkeyReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `enabled` | `Ref<boolean>` | Whether hotkeys are enabled |
+| `enable` | `() => void` | Enable hotkeys |
+| `disable` | `() => void` | Disable hotkeys |
+| `toggle` | `() => void` | Toggle hotkeys |
+| `add` | `(hotkey: HotkeyDefinition) => void` | Add a hotkey |
+| `remove` | `(key: string) => void` | Remove a hotkey |
+| `clear` | `() => void` | Remove all hotkeys |
+
+### Example
+
+```vue
+<script setup>
+import { useHotkey } from 'directix'
+
+const { enable, disable, add, remove } = useHotkey({
+  hotkeys: [
+    { key: 'ctrl+s', handler: (e) => save() },
+    { key: 'ctrl+z', handler: (e) => undo() },
+  ]
+})
+
+// Add dynamic hotkey
+add({ key: 'esc', handler: (e) => closeModal() })
+</script>
+```

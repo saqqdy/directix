@@ -181,3 +181,65 @@ The directive works with any focusable element:
   <a v-focus href="#section">Skip link</a>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useFocus` composable:
+
+```typescript
+import { useFocus } from 'directix'
+
+const { isFocused, focus, blur, bind } = useFocus({
+  onFocus: (event) => console.log('Focused'),
+  onBlur: (event) => console.log('Blurred')
+})
+
+// Bind to element
+onMounted(() => bind(inputRef.value))
+
+// Programmatically control focus
+focus()
+blur()
+```
+
+### UseFocusOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `onFocus` | `(event: FocusEvent) => void` | - | Callback when element is focused |
+| `onBlur` | `(event: FocusEvent) => void` | - | Callback when element loses focus |
+
+### UseFocusReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isFocused` | `Readonly<Ref<boolean>>` | Whether the element is currently focused |
+| `focus` | `() => void` | Focus the element |
+| `blur` | `() => void` | Blur the element |
+| `bind` | `(element: HTMLElement) => () => void` | Bind focus tracking to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useFocus } from 'directix'
+
+const input = ref(null)
+const { isFocused, focus, bind } = useFocus({
+  onBlur: () => validate()
+})
+
+onMounted(() => bind(input.value))
+
+function handleButtonClick() {
+  focus()
+}
+</script>
+
+<template>
+  <input ref="input" />
+  <button @click="focus">Focus Input</button>
+  <span v-if="isFocused">Input is focused</span>
+</template>
+```

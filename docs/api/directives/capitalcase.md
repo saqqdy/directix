@@ -65,3 +65,58 @@ type CapitalcaseBinding = boolean | CapitalcaseOptions
   </form>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useCapitalcase` composable:
+
+```typescript
+import { useCapitalcase, capitalizeText, capitalizeWord, createCapitalizer } from 'directix'
+
+const { capitalized, original } = useCapitalcase({
+  text: inputText,
+  every: true, // Capitalize each word
+  keepLower: ['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by']
+})
+
+// Utility functions
+const title = capitalizeText('the quick brown fox') // 'The Quick Brown Fox'
+const sentence = capitalizeText('the quick brown fox', false) // 'The quick brown fox'
+const word = capitalizeWord('hello') // 'Hello'
+
+// Create reusable capitalizer
+const titleCase = createCapitalizer({ every: true })
+const result = titleCase('the quick brown fox') // 'The Quick Brown Fox'
+```
+
+### UseCapitalcaseOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `text` | `string \| Ref<string>` | - | The text to capitalize (required) |
+| `every` | `boolean \| Ref<boolean>` | `true` | Capitalize each word |
+| `keepLower` | `string[] \| Ref<string[]>` | `['a', 'an', 'the', ...]` | Words to keep lowercase |
+
+### UseCapitalcaseReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `capitalized` | `Ref<string>` | The capitalized text |
+| `original` | `Ref<string>` | Original text |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCapitalcase } from 'directix'
+
+const title = ref('the quick brown fox')
+const { capitalized } = useCapitalcase({ text: title, every: true })
+// capitalized.value = 'The Quick Brown Fox'
+</script>
+
+<template>
+  <h1>{{ capitalized }}</h1>
+</template>
+```

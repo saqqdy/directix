@@ -169,3 +169,71 @@ function closeDropdown() {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useClickOutside` composable:
+
+```typescript
+import { useClickOutside } from 'directix'
+
+const { bind } = useClickOutside({
+  handler: (event) => {
+    console.log('Clicked outside')
+  },
+  exclude: ['.trigger', () => triggerRef.value],
+  events: ['click'],
+  capture: true,
+  stop: false,
+  prevent: false
+})
+
+// Bind to element
+onMounted(() => {
+  const unbind = bind(dropdownRef.value)
+  onUnmounted(unbind)
+})
+```
+
+### UseClickOutsideOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `(event: MouseEvent \| TouchEvent) => void` | - | Callback when clicking outside (required) |
+| `exclude` | `(string \| HTMLElement \| Function \| Ref)[]` | `[]` | Excluded element selectors or references |
+| `capture` | `boolean` | `true` | Use capture mode |
+| `events` | `string[]` | `['click']` | Event types to listen for |
+| `stop` | `boolean` | `false` | Stop event propagation |
+| `prevent` | `boolean` | `false` | Prevent default behavior |
+
+### UseClickOutsideReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `bind` | `(element: HTMLElement) => () => void` | Bind click outside detection to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useClickOutside } from 'directix'
+
+const dropdown = ref(null)
+const show = ref(false)
+
+const { bind } = useClickOutside({
+  handler: () => show.value = false,
+  exclude: [() => triggerRef.value]
+})
+
+onMounted(() => bind(dropdown.value))
+</script>
+
+<template>
+  <div ref="dropdown">
+    <button @click="show = !show">Toggle</button>
+    <div v-if="show">Dropdown content</div>
+  </div>
+</template>
+```

@@ -113,3 +113,83 @@ async function refresh(done) {
   </div>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `usePullRefresh` composable:
+
+```typescript
+import { usePullRefresh } from 'directix'
+
+const {
+  state,
+  distance,
+  isPulling,
+  events,
+  containerRef,
+  refresh
+} = usePullRefresh({
+  handler: async () => {
+    await fetchData()
+  },
+  distance: 60,
+  maxDistance: 100,
+  disabled: false,
+  successDuration: 500,
+  errorDuration: 1000
+})
+
+// Manually trigger refresh
+await refresh()
+```
+
+### UsePullRefreshOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `() => Promise<void> \| void` | - | Refresh handler (required) |
+| `distance` | `number \| Ref<number>` | `60` | Distance threshold to trigger |
+| `maxDistance` | `number \| Ref<number>` | `100` | Maximum pull distance |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable pull-to-refresh |
+| `successDuration` | `number \| Ref<number>` | `500` | Duration to show success indicator |
+| `errorDuration` | `number \| Ref<number>` | `1000` | Duration to show error indicator |
+
+### UsePullRefreshReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `state` | `Ref<PullRefreshState>` | Current state ('idle' \| 'pulling' \| 'ready' \| 'loading' \| 'success' \| 'error') |
+| `distance` | `Ref<number>` | Current pull distance |
+| `isPulling` | `Ref<boolean>` | Whether currently pulling |
+| `events` | `object` | Event handlers to bind |
+| `containerRef` | `Ref<HTMLElement \| null>` | Container ref |
+| `refresh` | `() => Promise<void>` | Manually trigger refresh |
+
+### Example
+
+```vue
+<script setup>
+import { usePullRefresh } from 'directix'
+
+const { state, distance, events, containerRef } = usePullRefresh({
+  handler: async () => {
+    await fetchData()
+  },
+  distance: 80
+})
+</script>
+
+<template>
+  <div
+    ref="containerRef"
+    @touchstart="events.touchstart"
+    @touchmove="events.touchmove"
+    @touchend="events.touchend"
+  >
+    <div class="indicator" :style="{ transform: `translateY(${distance}px)` }">
+      {{ state }}
+    </div>
+    <slot></slot>
+  </div>
+</template>
+```

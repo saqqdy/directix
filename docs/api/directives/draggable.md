@@ -205,3 +205,75 @@ import { ref } from 'vue'
 const canDrag = ref(true)
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useDraggable` composable:
+
+```typescript
+import { useDraggable } from 'directix'
+
+const { position, isDragging, reset, bind } = useDraggable({
+  axis: 'both',
+  constrain: false,
+  boundary: undefined,
+  handle: undefined,
+  grid: undefined,
+  disabled: false,
+  onStart: (pos, event) => console.log('Started:', pos),
+  onDrag: (pos, event) => console.log('Dragging:', pos),
+  onEnd: (pos, event) => console.log('Ended:', pos)
+})
+
+// Reset position
+reset()
+
+// Bind to element
+onMounted(() => bind(target.value))
+```
+
+### UseDraggableOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `axis` | `'x' \| 'y' \| 'both' \| Ref` | `'both'` | Drag axis |
+| `constrain` | `boolean \| Ref<boolean>` | `false` | Constrain to parent |
+| `boundary` | `string \| HTMLElement \| Function` | - | Boundary element |
+| `handle` | `string` | - | Handle element selector |
+| `grid` | `[number, number] \| Ref` | - | Grid snapping [x, y] |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable dragging |
+| `onStart` | `(position, event) => void` | - | Start drag callback |
+| `onDrag` | `(position, event) => void` | - | Drag callback |
+| `onEnd` | `(position, event) => void` | - | End drag callback |
+
+### UseDraggableReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `position` | `Readonly<Ref<Position>>` | Current position |
+| `isDragging` | `Readonly<Ref<boolean>>` | Whether element is being dragged |
+| `reset` | `() => void` | Reset position to origin |
+| `bind` | `(element: HTMLElement) => () => void` | Bind draggable behavior to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useDraggable } from 'directix'
+
+const target = ref(null)
+const { position, isDragging, bind } = useDraggable({
+  constrain: true,
+  onEnd: (pos) => console.log('Dropped at:', pos)
+})
+
+onMounted(() => bind(target.value))
+</script>
+
+<template>
+  <div ref="target" :class="{ dragging: isDragging }">
+    Drag me!
+  </div>
+</template>
+```

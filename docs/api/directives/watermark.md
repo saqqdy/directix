@@ -95,3 +95,82 @@ interface WatermarkOptions {
   </div>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useWatermark` composable:
+
+```typescript
+import { useWatermark, createWatermarkUrl } from 'directix'
+
+const { canvas, dataUrl, style, disabled, update, enable, disable } = useWatermark({
+  content: 'Confidential',
+  width: 300,
+  height: 200,
+  rotate: -22,
+  fontSize: 16,
+  fontFamily: 'sans-serif',
+  fontWeight: 'normal',
+  color: 'rgba(128, 128, 128, 0.15)',
+  gap: [100, 100],
+  zIndex: 9999,
+  disabled: false
+})
+
+// Control watermark
+enable()
+disable()
+update({ content: 'New Text' })
+
+// Create watermark URL
+const url = createWatermarkUrl('Draft', { fontSize: 20, color: 'rgba(255, 0, 0, 0.2)' })
+```
+
+### UseWatermarkOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `content` | `string \| string[] \| Ref` | - | Watermark text (required) |
+| `width` | `number \| Ref<number>` | `300` | Watermark canvas width |
+| `height` | `number \| Ref<number>` | `200` | Watermark canvas height |
+| `rotate` | `number \| Ref<number>` | `-22` | Rotation angle in degrees |
+| `fontSize` | `number \| Ref<number>` | `16` | Font size |
+| `fontFamily` | `string \| Ref<string>` | `'sans-serif'` | Font family |
+| `fontWeight` | `string \| number \| Ref` | `'normal'` | Font weight |
+| `color` | `string \| Ref<string>` | `'rgba(128, 128, 128, 0.15)'` | Text color |
+| `gap` | `[number, number] \| number \| Ref` | `[100, 100]` | Gap between watermarks |
+| `zIndex` | `number \| Ref<number>` | `9999` | Z-index |
+| `disabled` | `boolean \| Ref<boolean>` | `false` | Disable watermark |
+
+### UseWatermarkReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `canvas` | `Ref<HTMLCanvasElement \| null>` | Watermark canvas element |
+| `dataUrl` | `Ref<string>` | Watermark data URL |
+| `style` | `Ref<object>` | CSS style object for overlay |
+| `disabled` | `Ref<boolean>` | Whether watermark is disabled |
+| `update` | `(options: Partial<UseWatermarkOptions>) => void` | Update options |
+| `enable` | `() => void` | Enable watermark |
+| `disable` | `() => void` | Disable watermark |
+
+### Example
+
+```vue
+<script setup>
+import { useWatermark } from 'directix'
+
+const { dataUrl, style, disable, enable } = useWatermark({
+  content: 'Confidential',
+  fontSize: 20,
+  color: 'rgba(255, 0, 0, 0.2)'
+})
+</script>
+
+<template>
+  <div class="container">
+    <div :style="style"></div>
+    <slot></slot>
+  </div>
+</template>
+```

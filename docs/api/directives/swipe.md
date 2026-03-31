@@ -106,3 +106,75 @@ function handleSwipe(direction) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useSwipe` composable:
+
+```typescript
+import { useSwipe } from 'directix'
+
+const { direction, lengthX, lengthY, isSwiping, bind } = useSwipe({
+  handler: (direction, event) => console.log('Swiped:', direction),
+  threshold: 30,
+  maxTime: 500,
+  directions: ['left', 'right', 'up', 'down'],
+  preventScrollOnSwipe: true,
+  mouse: true,
+  onLeft: () => console.log('Swiped left'),
+  onRight: () => console.log('Swiped right'),
+  onUp: () => console.log('Swiped up'),
+  onDown: () => console.log('Swiped down')
+})
+
+// Bind to element
+onMounted(() => bind(container.value))
+```
+
+### UseSwipeOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `SwipeHandler` | - | Swipe handler callback |
+| `threshold` | `number \| Ref<number>` | `30` | Minimum distance to trigger |
+| `maxTime` | `number \| Ref<number>` | `500` | Maximum time for swipe |
+| `directions` | `SwipeDirection[]` | `['left', 'right', 'up', 'down']` | Allowed directions |
+| `preventScrollOnSwipe` | `boolean` | `true` | Prevent scroll on swipe |
+| `mouse` | `boolean` | `true` | Enable mouse events |
+| `onLeft` | `() => void` | - | Left swipe callback |
+| `onRight` | `() => void` | - | Right swipe callback |
+| `onUp` | `() => void` | - | Up swipe callback |
+| `onDown` | `() => void` | - | Down swipe callback |
+
+### UseSwipeReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `direction` | `Readonly<Ref<SwipeDirection \| null>>` | Current swipe direction |
+| `lengthX` | `Readonly<Ref<number>>` | Horizontal swipe length |
+| `lengthY` | `Readonly<Ref<number>>` | Vertical swipe length |
+| `isSwiping` | `Readonly<Ref<boolean>>` | Whether a swipe is in progress |
+| `bind` | `(element: HTMLElement) => () => void` | Bind swipe detection to an element |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useSwipe } from 'directix'
+
+const container = ref(null)
+const { direction, bind } = useSwipe({
+  onLeft: () => nextSlide(),
+  onRight: () => prevSlide()
+})
+
+onMounted(() => bind(container.value))
+</script>
+
+<template>
+  <div ref="container">
+    Swipe me!
+  </div>
+</template>
+```

@@ -160,3 +160,74 @@ function handleVisibilityChange(isIntersecting, entry) {
 }
 </script>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useIntersect` composable:
+
+```typescript
+import { useIntersect } from 'directix'
+
+const { isIntersecting, ratio, bind, stop } = useIntersect({
+  handler: (entry, observer) => console.log('Intersecting'),
+  onEnter: (entry, observer) => console.log('Entered'),
+  onLeave: (entry, observer) => console.log('Left'),
+  onChange: (isIntersecting, entry) => console.log('Changed'),
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.5,
+  once: false
+})
+
+// Bind to element
+onMounted(() => bind(targetRef.value))
+
+// Stop observing
+stop()
+```
+
+### UseIntersectOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `handler` | `IntersectHandler` | - | Callback when element intersects |
+| `onEnter` | `IntersectHandler` | - | Callback when element enters viewport |
+| `onLeave` | `IntersectHandler` | - | Callback when element leaves viewport |
+| `onChange` | `(isIntersecting: boolean, entry) => void` | - | Callback when intersection changes |
+| `root` | `Element \| null \| Ref` | `null` | Root element for intersection |
+| `rootMargin` | `string` | `'0px'` | Margin around the root |
+| `threshold` | `number \| number[]` | `0` | Threshold(s) to trigger |
+| `once` | `boolean` | `false` | Trigger only once |
+
+### UseIntersectReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `isIntersecting` | `Readonly<Ref<boolean>>` | Whether element is intersecting |
+| `ratio` | `Readonly<Ref<number>>` | Current intersection ratio |
+| `bind` | `(element: HTMLElement) => () => void` | Bind intersection observer |
+| `stop` | `() => void` | Stop observing |
+
+### Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useIntersect } from 'directix'
+
+const target = ref(null)
+const { isIntersecting, bind } = useIntersect({
+  threshold: 0.5,
+  onEnter: () => console.log('Entered'),
+  onLeave: () => console.log('Left')
+})
+
+onMounted(() => bind(target.value))
+</script>
+
+<template>
+  <div ref="target" :class="{ visible: isIntersecting }">
+    I'm visible!
+  </div>
+</template>
+```

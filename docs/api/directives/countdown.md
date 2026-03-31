@@ -120,3 +120,87 @@ interface CountdownTime {
   <span v-if="completed">Done!</span>
 </template>
 ```
+
+## Composable API
+
+For programmatic use, you can use the `useCountdown` composable:
+
+```typescript
+import { useCountdown, parseTargetTime, calculateTime, formatTime } from 'directix'
+
+const {
+  time,
+  formatted,
+  running,
+  paused,
+  completed,
+  start,
+  pause,
+  resume,
+  reset
+} = useCountdown({
+  target: targetDate,
+  format: 'hh:mm:ss',
+  interval: 1000,
+  autoStart: true,
+  onComplete: () => console.log('Done!'),
+  onTick: (time) => console.log('Tick:', time)
+})
+
+// Control countdown
+start()
+pause()
+resume()
+reset()
+```
+
+### UseCountdownOptions
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `target` | `Date \| number \| string \| Ref` | - | Target time (required) |
+| `format` | `string \| Function \| Ref` | `'hh:mm:ss'` | Display format or custom function |
+| `interval` | `number \| Ref<number>` | `1000` | Update interval in milliseconds |
+| `autoStart` | `boolean \| Ref<boolean>` | `true` | Auto-start countdown |
+| `onComplete` | `() => void` | - | Callback when countdown ends |
+| `onTick` | `(time: CountdownTime) => void` | - | Callback on each tick |
+| `showMilliseconds` | `boolean \| Ref<boolean>` | `false` | Show milliseconds |
+| `labels` | `object` | - | Custom labels for i18n |
+
+### UseCountdownReturn
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `time` | `Ref<CountdownTime>` | Current countdown time object |
+| `formatted` | `Ref<string>` | Formatted time string |
+| `running` | `Ref<boolean>` | Whether countdown is running |
+| `paused` | `Ref<boolean>` | Whether countdown is paused |
+| `completed` | `Ref<boolean>` | Whether countdown has completed |
+| `start` | `() => void` | Start the countdown |
+| `pause` | `() => void` | Pause the countdown |
+| `resume` | `() => void` | Resume the countdown |
+| `reset` | `() => void` | Reset the countdown |
+
+### Example
+
+```vue
+<script setup>
+import { useCountdown } from 'directix'
+
+const targetDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
+
+const { formatted, running, completed, pause, resume } = useCountdown({
+  target: targetDate,
+  format: 'hh:mm:ss',
+  onComplete: () => console.log('Done!')
+})
+</script>
+
+<template>
+  <div>
+    <p>{{ formatted }}</p>
+    <button @click="pause" v-if="running">Pause</button>
+    <button @click="resume" v-if="!running && !completed">Resume</button>
+  </div>
+</template>
+```
