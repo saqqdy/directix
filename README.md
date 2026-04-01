@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/directix.svg)](https://www.npmjs.com/package/directix)
 [![GitHub license](https://img.shields.io/github/license/saqqdy/directix)](https://github.com/saqqdy/directix/blob/master/LICENSE)
 
-**[中文文档](README_CN.md)**
+**English** | **[中文文档](README_CN.md)**
 
 A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3.
 
@@ -22,12 +22,12 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Online Demo
 
-Try it online with StackBlitz:
+Try it online with StackBlitz or CodeSandbox:
 
-| Demo | Link |
-|------|------|
-| Vue 3 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue3) |
-| Vue 2 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue2) |
+| Demo | StackBlitz | CodeSandbox |
+|------|------------|-------------|
+| Vue 3 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue3) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue3) |
+| Vue 2 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue2) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue2) |
 
 ## Installation
 
