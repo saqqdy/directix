@@ -10,13 +10,14 @@
 
 ## 特性
 
-- 🎯 **功能全面** - 提供 42 个常用指令
+- 🎯 **功能全面** - 提供 40 个常用指令和 40 个组合式函数
 - 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
 - 🚀 **SSR 友好** - 多个指令开箱即用支持 SSR
 - 📦 **多格式支持** - 提供 ESM、CJS 和 IIFE (CDN) 格式
 - ⚡ **零依赖** - 轻量级，打包体积小
+- 🎨 **组合式API** - 每个指令都有对应的组合式函数
 
 ## 在线演示
 
@@ -111,6 +112,21 @@ app.directive('copy', vCopy)
 Vue.directive('click-outside', vClickOutside)
 ```
 
+### 使用组合式API
+
+每个指令都有对应的组合式函数，可在 Composition API 中使用：
+
+```typescript
+import { useClickOutside, useCopy, useDebounce } from 'directix'
+
+// 在 setup() 或 <script setup> 中使用
+const { copy, copied } = useCopy({ source: textRef })
+const { isHovering, bind } = useHover({ onEnter: handleEnter })
+const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
+```
+
+请参阅下方的[组合式API](#组合式api)章节了解所有可用的组合式函数。
+
 ## 可用指令
 
 ### 事件指令
@@ -199,6 +215,116 @@ Vue.directive('click-outside', vClickOutside)
 | `v-watermark` | 水印遮罩 | ✅ |
 
 > ✅ = 支持 SSR | ❌ = 不支持 SSR
+
+## 组合式API
+
+每个指令都有对应的组合式函数，可在 Composition API 中使用。所有组合式函数都从 `directix` 导出：
+
+### 事件组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `useClickOutside` | 检测元素外部点击 |
+| `useClickDelay` | 延迟点击执行 |
+| `useDebounce` | 函数防抖 |
+| `useThrottle` | 函数节流 |
+| `useLongPress` | 检测长按手势 |
+| `useHover` | 追踪悬停状态 |
+| `useHotkey` | 处理键盘快捷键 |
+| `useTouch` | 检测触摸手势 |
+| `useSwipe` | 检测滑动手势 |
+
+### 表单组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `useCopy` | 复制文本到剪贴板 |
+| `useFocus` | 管理元素焦点 |
+| `useMask` | 输入掩码 |
+| `useTrim` | 去除输入空白 |
+| `useMoney` | 货币格式化 |
+| `useNumber` | 数字格式化 |
+| `useEllipsis` | 文本溢出省略 |
+
+### 格式化组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `useUppercase` | 转换为大写 |
+| `useLowercase` | 转换为小写 |
+| `useCapitalcase` | 首字母大写 |
+| `useTruncate` | 文本截断 |
+
+### 可见性组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `useLazy` | 图片懒加载 |
+| `useIntersect` | 检测元素交叉 |
+| `useVisible` | 控制元素可见性 |
+| `useLoading` | 显示加载遮罩 |
+
+### 滚动组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `useScroll` | 追踪滚动位置 |
+| `useInfiniteScroll` | 无限滚动 |
+| `useSticky` | 粘性定位 |
+| `usePullRefresh` | 下拉刷新 |
+| `useVirtualList` | 虚拟列表（大数据集） |
+
+### 其他组合式函数
+
+| 组合式函数 | 描述 |
+|------------|-------------|
+| `usePermission` | 权限检查 |
+| `useSanitize` | HTML 内容消毒 |
+| `useRipple` | Material Design 波纹效果 |
+| `useDraggable` | 元素拖拽 |
+| `useResize` | 元素尺寸监听 |
+| `useMutation` | DOM 变化监听 |
+| `useTooltip` | 工具提示控制 |
+| `useImagePreview` | 图片预览（支持缩放） |
+| `useCountdown` | 倒计时 |
+| `usePrint` | 打印内容 |
+| `useWatermark` | 水印遮罩 |
+
+### 组合式API使用示例
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCopy, useHover, useDebounce } from 'directix'
+
+// useCopy
+const text = ref('Hello World')
+const { copy, copied } = useCopy({ source: text })
+
+// useHover
+const buttonRef = ref()
+const { isHovering, bind } = useHover({
+  onEnter: () => console.log('鼠标进入'),
+  onLeave: () => console.log('鼠标离开')
+})
+
+// useDebounce
+const { run: debouncedSearch } = useDebounce({
+  handler: (query) => fetchResults(query),
+  wait: 500
+})
+</script>
+
+<template>
+  <button @click="copy()">
+    {{ copied ? '已复制!' : '复制' }}
+  </button>
+
+  <button ref="buttonRef" :class="{ active: isHovering }">
+    悬停我
+  </button>
+</template>
+```
 
 ## 使用示例
 

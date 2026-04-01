@@ -10,13 +10,14 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 42 commonly used directives
+- 🎯 **Comprehensive** - 40 commonly used directives and 40 composables
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
 - 🚀 **SSR Friendly** - Multiple directives support SSR out of the box
 - 📦 **Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
 - ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
+- 🎨 **Composables** - Every directive has a corresponding composable for Composition API
 
 ## Online Demo
 
@@ -111,6 +112,21 @@ app.directive('copy', vCopy)
 Vue.directive('click-outside', vClickOutside)
 ```
 
+### Using Composables
+
+Every directive has a corresponding composable for use with the Composition API:
+
+```typescript
+import { useClickOutside, useCopy, useDebounce } from 'directix'
+
+// In setup() or <script setup>
+const { copy, copied } = useCopy({ source: textRef })
+const { isHovering, bind } = useHover({ onEnter: handleEnter })
+const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
+```
+
+See the [Composables](#composables) section below for all available composables.
+
 ## Available Directives
 
 ### Event Directives
@@ -199,6 +215,116 @@ Vue.directive('click-outside', vClickOutside)
 | `v-watermark` | Watermark overlay | ✅ |
 
 > ✅ = SSR compatible | ❌ = Not SSR compatible
+
+## Composables
+
+Every directive has a corresponding composable function for use with the Composition API. All composables are exported from `directix`:
+
+### Event Composables
+
+| Composable | Description |
+|------------|-------------|
+| `useClickOutside` | Detect clicks outside an element |
+| `useClickDelay` | Delay click execution |
+| `useDebounce` | Debounce function calls |
+| `useThrottle` | Throttle function calls |
+| `useLongPress` | Detect long press gestures |
+| `useHover` | Track hover state |
+| `useHotkey` | Handle keyboard shortcuts |
+| `useTouch` | Detect touch gestures |
+| `useSwipe` | Detect swipe gestures |
+
+### Form Composables
+
+| Composable | Description |
+|------------|-------------|
+| `useCopy` | Copy text to clipboard |
+| `useFocus` | Manage element focus |
+| `useMask` | Input masking |
+| `useTrim` | Trim input whitespace |
+| `useMoney` | Currency formatting |
+| `useNumber` | Number formatting |
+| `useEllipsis` | Text ellipsis overflow |
+
+### Format Composables
+
+| Composable | Description |
+|------------|-------------|
+| `useUppercase` | Transform to uppercase |
+| `useLowercase` | Transform to lowercase |
+| `useCapitalcase` | Capitalize text |
+| `useTruncate` | Truncate text |
+
+### Visibility Composables
+
+| Composable | Description |
+|------------|-------------|
+| `useLazy` | Lazy load images |
+| `useIntersect` | Detect element intersection |
+| `useVisible` | Control element visibility |
+| `useLoading` | Show loading overlay |
+
+### Scroll Composables
+
+| Composable | Description |
+|------------|-------------|
+| `useScroll` | Track scroll position |
+| `useInfiniteScroll` | Infinite scrolling |
+| `useSticky` | Sticky positioning |
+| `usePullRefresh` | Pull to refresh |
+| `useVirtualList` | Virtual list for large datasets |
+
+### Other Composables
+
+| Composable | Description |
+|------------|-------------|
+| `usePermission` | Permission checking |
+| `useSanitize` | Sanitize HTML content |
+| `useRipple` | Material design ripple effect |
+| `useDraggable` | Make elements draggable |
+| `useResize` | Element resize observer |
+| `useMutation` | DOM mutation observer |
+| `useTooltip` | Tooltip control |
+| `useImagePreview` | Image preview with zoom |
+| `useCountdown` | Countdown timer |
+| `usePrint` | Print content |
+| `useWatermark` | Watermark overlay |
+
+### Composable Usage Example
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCopy, useHover, useDebounce } from 'directix'
+
+// useCopy
+const text = ref('Hello World')
+const { copy, copied } = useCopy({ source: text })
+
+// useHover
+const buttonRef = ref()
+const { isHovering, bind } = useHover({
+  onEnter: () => console.log('Entered'),
+  onLeave: () => console.log('Left')
+})
+
+// useDebounce
+const { run: debouncedSearch } = useDebounce({
+  handler: (query) => fetchResults(query),
+  wait: 500
+})
+</script>
+
+<template>
+  <button @click="copy()">
+    {{ copied ? 'Copied!' : 'Copy' }}
+  </button>
+
+  <button ref="buttonRef" :class="{ active: isHovering }">
+    Hover me
+  </button>
+</template>
+```
 
 ## Usage Examples
 

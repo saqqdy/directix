@@ -56,6 +56,10 @@ export type { HotkeyDefinition, UseHotkeyOptions, UseHotkeyReturn } from './use-
 export { useHover } from './use-hover'
 export type { UseHoverOptions, UseHoverReturn } from './use-hover'
 
+// Image preview composable
+export { useImagePreview } from './use-image-preview'
+export type { UseImagePreviewOptions, UseImagePreviewReturn } from './use-image-preview'
+
 // Intersect composable
 export { useIntersect } from './use-intersect'
 export type { IntersectHandler, UseIntersectOptions, UseIntersectReturn } from './use-intersect'
@@ -104,6 +108,10 @@ export type { SwipeDirection, SwipeHandler, UseSwipeOptions, UseSwipeReturn } fr
 export { throttleFn, useThrottle } from './use-throttle'
 export type { ComposableThrottledFunction, UseThrottleOptions, UseThrottleReturn } from './use-throttle'
 
+// Touch composable
+export { useTouch } from './use-touch'
+export type { TouchGesture, TouchGestureEvent, UseTouchOptions, UseTouchReturn } from './use-touch'
+
 // Trim composable
 export { createTrimmer, trimText, useTrim } from './use-trim'
 export type { TrimPosition, UseTrimOptions, UseTrimReturn } from './use-trim'
@@ -128,11 +136,3 @@ export type { UseVisibleOptions, UseVisibleReturn } from './use-visible'
 // Watermark composable
 export { createWatermarkUrl, useWatermark } from './use-watermark'
 export type { UseWatermarkOptions, UseWatermarkReturn } from './use-watermark'
-
-// Touch composable
-export { useTouch } from './use-touch'
-export type { TouchGesture, TouchGestureEvent, UseTouchOptions, UseTouchReturn } from './use-touch'
-
-// Image preview composable
-export { useImagePreview } from './use-image-preview'
-export type { UseImagePreviewOptions, UseImagePreviewReturn } from './use-image-preview'
