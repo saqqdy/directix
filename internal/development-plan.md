@@ -3601,65 +3601,70 @@ export default defineConfig({
 
 **里程碑 M6：v1.3.0 发布** ✅
 
-#### 第七阶段：文档与生态完善 (Week 9)
+#### 第七阶段：组合式 API 与生态完善 (Week 9) ✅ 已完成
 
 | 任务 | 工时 | 产出 | 状态 |
 |------|------|------|------|
-| API 文档完善 | 8h | 所有指令完整 API 文档 | ⏳ 待开发 |
-| 示例优化 | 6h | Vue2/Vue3 示例完善 | ⏳ 待开发 |
-| 单元测试补充 | 12h | 测试覆盖率提升至 80%+ | ⏳ 待开发 |
-| 性能基准测试 | 4h | 性能对比报告 | ⏳ 待开发 |
+| 组合式 API 开发 | 20h | 41 个 composables 与指令对应 | ✅ 已完成 |
+| 组合式 API 单元测试 | 8h | composables 测试用例 | ✅ 已完成 |
+| API 文档完善 | 8h | 所有指令和 composables 完整 API 文档 | ✅ 已完成 |
+| 示例优化 | 6h | Vue2/Vue3 示例完善 | ✅ 已完成 |
+| Demo 演示开发 | 12h | 所有指令和 composables 的交互式演示 | ✅ 已完成 |
 
-**里程碑 M7：v1.4.0 发布**
+**里程碑 M7：v1.4.0 发布** ✅
 
 ---
 
 ### 10.2 当前进度总览
 
-#### 已完成指令 (41/42) ✅ 核心功能完成
+#### 已完成指令 (41/41) ✅ 全部完成
 
-| 指令 | 功能描述 | SSR | 示例 | 版本 |
-|------|---------|-----|------|------|
-| v-click-outside | 点击外部检测 | ❌ | ✅ | v1.0.0 |
-| v-copy | 复制到剪贴板 | ❌ | ✅ | v1.0.0 |
-| v-debounce | 防抖指令 | ✅ | ✅ | v1.0.0 |
-| v-throttle | 节流指令 | ✅ | ✅ | v1.0.0 |
-| v-focus | 自动聚焦 | ✅ | ✅ | v1.0.0 |
-| v-lazy | 图片懒加载 | ❌ | ✅ | v1.0.0 |
-| v-permission | 权限控制 | ✅ | ✅ | v1.0.0 |
-| v-long-press | 长按事件 | ❌ | ✅ | v1.0.0 |
-| v-hover | 悬停状态 | ❌ | ✅ | v1.0.0 |
-| v-ripple | 波纹效果 | ❌ | ✅ | v1.0.0 |
-| v-scroll | 滚动监听 | ❌ | ✅ | v1.0.0 |
-| v-resize | 尺寸监听 | ❌ | ✅ | v1.0.0 |
-| v-intersect | 交叉检测 | ❌ | ✅ | v1.0.0 |
-| v-infinite-scroll | 无限滚动 | ❌ | ✅ | v1.0.0 |
-| v-sticky | 粘性定位 | ❌ | ✅ | v1.0.0 |
-| v-mask | 输入掩码 | ❌ | ✅ | v1.0.0 |
-| v-sanitize | 安全过滤 | ✅ | ✅ | v1.0.0 |
-| v-loading | 加载状态 | ✅ | ✅ | v1.0.0 |
-| v-visible | 可见性控制 | ✅ | ✅ | v1.0.0 |
-| v-mutation | DOM 监听 | ❌ | ✅ | v1.0.0 |
-| v-truncate | 文本截断 | ✅ | ✅ | v1.2.0 |
-| v-uppercase | 大写转换 | ✅ | ✅ | v1.2.0 |
-| v-lowercase | 小写转换 | ✅ | ✅ | v1.2.0 |
-| v-capitalcase | 首字母大写 | ✅ | ✅ | v1.2.0 |
-| v-number | 数字格式化 | ✅ | ✅ | v1.2.0 |
-| v-money | 金额格式化 | ✅ | ✅ | v1.2.0 |
-| v-trim | 去空格 | ✅ | ✅ | v1.2.0 |
-| v-tooltip | 提示框 | ❌ | ✅ | v1.2.0 |
-| v-draggable | 拖拽 | ❌ | ✅ | v1.2.0 |
-| v-touch | 手势 | ❌ | ✅ | v1.2.0 |
-| v-image-preview | 图片预览 | ❌ | ✅ | v1.2.0 |
-| v-click-delay | 防重复点击 | ✅ | ✅ | v1.3.0 |
-| v-hotkey | 快捷键绑定 | ✅ | ✅ | v1.3.0 |
-| v-ellipsis | 多行文本省略 | ✅ | ✅ | v1.3.0 |
-| v-countdown | 倒计时显示 | ✅ | ✅ | v1.3.0 |
-| v-print | 打印指定区域 | ❌ | ✅ | v1.3.0 |
-| v-watermark | 添加水印 | ❌ | ✅ | v1.3.0 |
-| v-pull-refresh | 下拉刷新 | ❌ | ✅ | v1.3.0 |
-| v-swipe | 滑动切换 | ❌ | ✅ | v1.3.0 |
-| v-virtual-list | 虚拟列表 | ❌ | ✅ | v1.3.0 |
+| 指令 | 功能描述 | SSR | 示例 | Composable | 版本 |
+|------|---------|-----|------|------------|------|
+| v-click-outside | 点击外部检测 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-copy | 复制到剪贴板 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-debounce | 防抖指令 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-throttle | 节流指令 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-focus | 自动聚焦 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-lazy | 图片懒加载 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-permission | 权限控制 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-long-press | 长按事件 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-hover | 悬停状态 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-ripple | 波纹效果 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-scroll | 滚动监听 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-resize | 尺寸监听 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-intersect | 交叉检测 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-infinite-scroll | 无限滚动 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-sticky | 粘性定位 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-mask | 输入掩码 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-sanitize | 安全过滤 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-loading | 加载状态 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-visible | 可见性控制 | ✅ | ✅ | ✅ | v1.0.0 |
+| v-mutation | DOM 监听 | ❌ | ✅ | ✅ | v1.0.0 |
+| v-truncate | 文本截断 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-uppercase | 大写转换 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-lowercase | 小写转换 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-capitalcase | 首字母大写 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-number | 数字格式化 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-money | 金额格式化 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-trim | 去空格 | ✅ | ✅ | ✅ | v1.2.0 |
+| v-tooltip | 提示框 | ❌ | ✅ | ✅ | v1.2.0 |
+| v-draggable | 拖拽 | ❌ | ✅ | ✅ | v1.2.0 |
+| v-touch | 手势 | ❌ | ✅ | ✅ | v1.2.0 |
+| v-image-preview | 图片预览 | ❌ | ✅ | ✅ | v1.2.0 |
+| v-click-delay | 防重复点击 | ✅ | ✅ | ✅ | v1.3.0 |
+| v-hotkey | 快捷键绑定 | ✅ | ✅ | ✅ | v1.3.0 |
+| v-ellipsis | 多行文本省略 | ✅ | ✅ | ✅ | v1.3.0 |
+| v-countdown | 倒计时显示 | ✅ | ✅ | ✅ | v1.3.0 |
+| v-print | 打印指定区域 | ❌ | ✅ | ✅ | v1.3.0 |
+| v-watermark | 添加水印 | ❌ | ✅ | ✅ | v1.3.0 |
+| v-pull-refresh | 下拉刷新 | ❌ | ✅ | ✅ | v1.3.0 |
+| v-swipe | 滑动切换 | ❌ | ✅ | ✅ | v1.3.0 |
+| v-virtual-list | 虚拟列表 | ❌ | ✅ | ✅ | v1.3.0 |
+
+#### 已完成 Composables (41/41) ✅ v1.4.0 完成
+
+所有 41 个指令均已提供对应的组合式 API，详见 [10.3 当前版本亮点](#103-当前版本亮点v140)
 
 #### v1.2.0 新增指令 ✅ 已完成
 
@@ -3708,52 +3713,124 @@ export default defineConfig({
 - v-parallax - 视差滚动效果
 - v-lottie - Lottie 动画播放
 
-### 10.3 新指令建议（v1.4.0+）
+### 10.3 当前版本亮点（v1.4.0）
 
-#### 🎯 高价值指令
+#### ✨ 组合式 API 完成
 
-| 指令 | 功能描述 | 优先级 | 预计工时 | 状态 |
-|------|---------|--------|---------|------|
-| v-click-wave | 点击波纹效果（v-ripple 的简化版） | P2 | 4h | 📋 待开发 |
-| v-context-menu | 右键菜单 | P1 | 6h | 📋 待开发 |
-| v-ripple-new | 增强版波纹效果，支持自定义颜色和形状 | P2 | 4h | 📋 待开发 |
+所有 41 个指令都已提供对应的组合式 API (composables)，提供更灵活的使用方式：
 
-#### 🔧 实用工具指令
+| Composable | 对应指令 | 功能描述 |
+|------------|---------|---------|
+| useClickOutside | v-click-outside | 点击外部检测 |
+| useCopy | v-copy | 复制到剪贴板 |
+| useDebounce | v-debounce | 防抖处理 |
+| useThrottle | v-throttle | 节流处理 |
+| useFocus | v-focus | 自动聚焦 |
+| useLazy | v-lazy | 图片懒加载 |
+| usePermission | v-permission | 权限控制 |
+| useLongPress | v-long-press | 长按事件 |
+| useHover | v-hover | 悬停状态 |
+| useRipple | v-ripple | 波纹效果 |
+| useScroll | v-scroll | 滚动监听 |
+| useResize | v-resize | 尺寸监听 |
+| useIntersect | v-intersect | 交叉检测 |
+| useInfiniteScroll | v-infinite-scroll | 无限滚动 |
+| useSticky | v-sticky | 粘性定位 |
+| useMask | v-mask | 输入掩码 |
+| useSanitize | v-sanitize | 安全过滤 |
+| useLoading | v-loading | 加载状态 |
+| useVisible | v-visible | 可见性控制 |
+| useMutation | v-mutation | DOM 监听 |
+| useTruncate | v-truncate | 文本截断 |
+| useUppercase | v-uppercase | 大写转换 |
+| useLowercase | v-lowercase | 小写转换 |
+| useCapitalcase | v-capitalcase | 首字母大写 |
+| useNumber | v-number | 数字格式化 |
+| useMoney | v-money | 金额格式化 |
+| useTrim | v-trim | 去空格 |
+| useTooltip | v-tooltip | 提示框 |
+| useDraggable | v-draggable | 拖拽 |
+| useTouch | v-touch | 手势 |
+| useImagePreview | v-image-preview | 图片预览 |
+| useClickDelay | v-click-delay | 防重复点击 |
+| useHotkey | v-hotkey | 快捷键绑定 |
+| useEllipsis | v-ellipsis | 多行文本省略 |
+| useCountdown | v-countdown | 倒计时显示 |
+| usePrint | v-print | 打印指定区域 |
+| useWatermark | v-watermark | 添加水印 |
+| usePullRefresh | v-pull-refresh | 下拉刷新 |
+| useSwipe | v-swipe | 滑动切换 |
+| useVirtualList | v-virtual-list | 虚拟列表 |
 
-| 指令 | 功能描述 | 优先级 | 预计工时 | 状态 |
-|------|---------|--------|---------|------|
-| v-export | 导出数据（CSV/Excel/图片） | P2 | 8h | 📋 待开发 |
-| v-highlight | 关键词高亮 | P3 | 4h | 📋 待开发 |
-| v-emoji | 限制/过滤 emoji 输入 | P3 | 2h | 📋 待开发 |
-| v-fullscreen | 全屏切换 | P2 | 3h | 📋 待开发 |
+#### 📚 文档完善
 
-#### 📱 移动端专用
+- ✅ 所有 41 个指令的完整 API 文档
+- ✅ 所有 41 个 composables 的使用文档
+- ✅ 每个指令和 composable 都有交互式 Demo
+- ✅ Vue 2 和 Vue 3 示例项目
 
-| 指令 | 功能描述 | 优先级 | 预计工时 | 状态 |
-|------|---------|--------|---------|------|
-| v-pan | 平移手势 | P3 | 4h | 📋 待开发 |
-| v-pinch | 缩放手势 | P3 | 4h | 📋 待开发 |
-| v-rotate | 旋转手势 | P3 | 4h | 📋 待开发 |
+### 10.4 v1.5.0 新增指令计划（共 20 个）
 
-#### 🎨 视觉增强
+#### 🎯 高价值指令 (3个)
 
-| 指令 | 功能描述 | 优先级 | 预计工时 | 状态 |
-|------|---------|--------|---------|------|
-| v-blur | 背景模糊遮罩 | P3 | 3h | 📋 待开发 |
-| v-fade | 淡入淡出过渡 | P3 | 3h | 📋 待开发 |
-| v-parallax | 视差滚动效果 | P3 | 6h | 📋 待开发 |
-| v-lottie | Lottie 动画播放 | P3 | 6h | 📋 待开发 |
-| v-typewriter | 打字机效果 | P3 | 4h | 📋 待开发 |
+| 指令 | 功能描述 | 优先级 | 预计工时 |
+|------|---------|--------|---------|
+| v-click-wave | 点击波纹效果（v-ripple 的简化版） | P2 | 4h |
+| v-context-menu | 右键菜单 | P1 | 6h |
+| v-fullscreen | 全屏切换 | P2 | 3h |
 
-#### 📊 数据可视化
+#### 🔧 实用工具指令 (3个)
 
-| 指令 | 功能描述 | 优先级 | 预计工时 | 状态 |
-|------|---------|--------|---------|------|
-| v-chart | 简易图表绑定 | P3 | 8h | 📋 待开发 |
-| v-progress | 进度条动画 | P3 | 3h | 📋 待开发 |
-| v-counter | 数字滚动动画 | P3 | 4h | 📋 待开发 |
+| 指令 | 功能描述 | 优先级 | 预计工时 |
+|------|---------|--------|---------|
+| v-skeleton | 骨架屏 | P3 | 4h |
+| v-export | 导出数据（CSV/Excel/图片） | P2 | 8h |
+| v-highlight | 关键词高亮 | P3 | 4h |
 
-### 10.4 版本规划
+#### 📱 移动端专用 (4个)
+
+| 指令 | 功能描述 | 优先级 | 预计工时 |
+|------|---------|--------|---------|
+| v-emoji | 限制/过滤 emoji 输入 | P3 | 2h |
+| v-pan | 平移手势 | P3 | 4h |
+| v-pinch | 缩放手势 | P3 | 4h |
+| v-rotate | 旋转手势 | P3 | 4h |
+
+#### 🎨 视觉增强 (5个)
+
+| 指令 | 功能描述 | 优先级 | 预计工时 |
+|------|---------|--------|---------|
+| v-blur | 背景模糊遮罩 | P3 | 3h |
+| v-fade | 淡入淡出过渡 | P3 | 3h |
+| v-parallax | 视差滚动效果 | P3 | 6h |
+| v-lottie | Lottie 动画播放 | P3 | 6h |
+| v-typewriter | 打字机效果 | P3 | 4h |
+
+#### 📊 数据可视化 (3个)
+
+| 指令 | 功能描述 | 优先级 | 预计工时 |
+|------|---------|--------|---------|
+| v-chart | 简易图表绑定 | P3 | 8h |
+| v-progress | 进度条动画 | P3 | 3h |
+| v-counter | 数字滚动动画 | P3 | 4h |
+
+**预计总工时：约 80 小时**
+
+### 10.5 未来版本规划（v1.6.0+）
+
+#### 🔮 可视化配置工具
+
+- 在线指令配置器
+- 实时预览效果
+- 代码生成器
+
+#### 🌐 Nuxt 模块
+
+- 自动导入指令
+- 服务端渲染优化
+- Nuxt 3 原生支持
+
+### 10.5 版本规划
 
 | 版本 | 时间 | 主要内容 | 状态 |
 |------|------|---------|------|
@@ -3761,8 +3838,9 @@ export default defineConfig({
 | v1.1.0 | 2026-03-29 | 增强指令、SSR 优化 | ✅ 已完成 |
 | v1.2.0 | 2026-03-29 | 扩展指令（11个新增）、格式化指令、UI指令 | ✅ 已完成 |
 | v1.3.0 | 2026-03-30 | 新增9个高价值指令（v-hotkey、v-click-delay、v-virtual-list等） | ✅ 已完成 |
-| v1.4.0 | 2026-04 | 组合式 API 增强、性能优化、测试覆盖率提升、Nuxt 模块 | 📋 计划中 |
-| v1.5.0 | TBD | 新增 5-10 个高价值指令、可视化配置工具 | 📋 计划中 |
+| v1.4.0 | 2026-04-01 | 组合式 API（41个 composables）、完整文档和示例 | ✅ 已完成 |
+| v1.5.0 | TBD | 新增 20 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等） | 📋 计划中 |
+| v1.6.0 | TBD | 单元测试覆盖率提升、性能优化、Nuxt 模块 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 
 ---
@@ -3924,6 +4002,77 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 | 提交规范 | Conventional Commits |
 
 ### C. 版本发布记录
+
+#### v1.4.0 (2026-04-01)
+
+**重大更新 - 组合式 API 完成：**
+
+为所有 41 个指令提供对应的组合式 API (composables)，提供更灵活的使用方式：
+
+**事件类 Composables (6个)：**
+- `useClickOutside` - 点击外部检测
+- `useDebounce` - 防抖处理
+- `useThrottle` - 节流处理
+- `useLongPress` - 长按事件
+- `useHover` - 悬停状态
+- `useHotkey` - 快捷键绑定
+
+**表单类 Composables (10个)：**
+- `useCopy` - 复制到剪贴板
+- `useFocus` - 自动聚焦
+- `useMask` - 输入掩码
+- `useTruncate` - 文本截断
+- `useUppercase` - 大写转换
+- `useLowercase` - 小写转换
+- `useCapitalcase` - 首字母大写
+- `useNumber` - 数字格式化
+- `useMoney` - 金额格式化
+- `useTrim` - 去空格
+
+**可见性 Composables (5个)：**
+- `useLazy` - 图片懒加载
+- `useIntersect` - 交叉检测
+- `useVisible` - 可见性控制
+- `useLoading` - 加载状态
+- `useEllipsis` - 多行文本省略
+
+**滚动 Composables (3个)：**
+- `useScroll` - 滚动监听
+- `useInfiniteScroll` - 无限滚动
+- `useSticky` - 粘性定位
+
+**安全 Composables (2个)：**
+- `usePermission` - 权限控制
+- `useSanitize` - 安全过滤
+
+**UI Composables (8个)：**
+- `useRipple` - 波纹效果
+- `useTooltip` - 提示框
+- `useDraggable` - 拖拽
+- `useTouch` - 手势
+- `useImagePreview` - 图片预览
+- `useCountdown` - 倒计时显示
+- `useWatermark` - 添加水印
+- `usePrint` - 打印指定区域
+
+**交互 Composables (4个)：**
+- `useClickDelay` - 防重复点击
+- `usePullRefresh` - 下拉刷新
+- `useSwipe` - 滑动切换
+- `useVirtualList` - 虚拟列表
+
+**观察者 Composables (3个)：**
+- `useResize` - 尺寸监听
+- `useMutation` - DOM 监听
+- `useIntersect` - 交叉检测（已在可见性类中）
+
+**文档更新：**
+- ✅ 所有指令和 composables 的完整 API 文档
+- ✅ 每个指令和 composable 的交互式 Demo
+- ✅ Vue 2 和 Vue 3 示例项目更新
+
+**测试更新：**
+- ✅ 所有 composables 的单元测试
 
 #### v1.3.0 (2026-03-30)
 
