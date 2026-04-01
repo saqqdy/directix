@@ -2,54 +2,71 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.5.0] - 2026-04-01
+## [1.4.0] - 2026-03-31
 
 ### Added
 
-#### Complete Composables Coverage
+#### Composables (Composition API)
 
-All 40 directives now have corresponding composable functions for use with the Composition API:
+All 40 directives now have corresponding composable functions for use with the Composition API.
 
-- `useCapitalcase` - Transform text to title case
-- `useClickDelay` - Delay click execution
-- `useClickOutside` - Detect clicks outside an element
-- `useCopy` - Copy text to clipboard
-- `useCountdown` - Countdown timer functionality
-- `useDebounce` - Debounce function calls
-- `useDraggable` - Make elements draggable
-- `useEllipsis` - Text ellipsis overflow
-- `useFocus` - Manage element focus
-- `useHotkey` - Handle keyboard shortcuts
-- `useHover` - Track hover state
-- `useImagePreview` - Image preview with zoom
-- `useInfiniteScroll` - Infinite scrolling
-- `useIntersect` - Detect element intersection
-- `useLazy` - Lazy load images
-- `useLoading` - Show loading overlay
-- `useLongPress` - Detect long press gestures
-- `useLowercase` - Transform text to lowercase
-- `useMask` - Input masking
-- `useMoney` - Currency formatting
-- `useMutation` - DOM mutation observer
-- `useNumber` - Number formatting
-- `usePermission` - Permission checking
-- `usePrint` - Print content
-- `usePullRefresh` - Pull to refresh
-- `useResize` - Element resize observer
-- `useRipple` - Material design ripple effect
-- `useSanitize` - Sanitize HTML content
-- `useScroll` - Track scroll position
+**Event Composables:**
+- `useClickOutside` - Detect clicks outside an element with `exclude`, `capture`, `stop`, `prevent` options
+- `useClickDelay` - Delay click execution to prevent repeated clicks
+- `useHotkey` - Handle keyboard shortcuts with modifier keys and key aliases support
+- `useLongPress` - Detect long press gestures with `duration`, `distance` options
+- `useSwipe` - Detect swipe gestures in all four directions with mouse support
+- `useTouch` - Detect touch gestures (swipe, pinch, rotate, tap, long press)
+
+**UI Composables:**
+- `useDraggable` - Make elements draggable with `axis`, `constrain`, `boundary`, `handle`, `grid` options
+- `useFocus` - Manage element focus with `onFocus`, `onBlur` callbacks
+- `useHover` - Track hover state with `enterDelay`, `leaveDelay` options
+- `useVisible` - Control element visibility with `useHidden` option
+- `useLoading` - Show loading overlay with custom spinner
+- `useRipple` - Material Design ripple effect
+- `useTooltip` - Tooltip control with positioning
+- `useWatermark` - Watermark overlay with protection option
+- `useEllipsis` - Text ellipsis overflow with multi-line support
+
+**Scroll & Viewport Composables:**
+- `useScroll` - Track scroll position with direction and progress detection
+- `useIntersect` - Detect element intersection with viewport
+- `useResize` - Track element resize with debounce option
+- `useInfiniteScroll` - Infinite scrolling for lists
 - `useSticky` - Sticky positioning
-- `useSwipe` - Detect swipe gestures
-- `useThrottle` - Throttle function calls
-- `useTooltip` - Tooltip control
-- `useTouch` - Detect touch gestures
-- `useTrim` - Trim whitespace
-- `useTruncate` - Truncate text
-- `useUppercase` - Transform text to uppercase
 - `useVirtualList` - Virtual list for large datasets
-- `useVisible` - Control element visibility
-- `useWatermark` - Watermark overlay
+
+**Form & Input Composables:**
+- `useCopy` - Copy text to clipboard with reactive source binding
+- `useDebounce` - Debounce function calls with `leading`, `trailing` options
+- `useThrottle` - Throttle function calls with `leading`, `trailing` options
+- `useMask` - Input masking with tokens support
+- `usePermission` - Permission checking with role-based mapping
+
+**Format Composables:**
+- `useCapitalcase` - Transform text to title case
+- `useLowercase` - Transform text to lowercase
+- `useUppercase` - Transform text to uppercase
+- `useTruncate` - Truncate text with position options
+- `useTrim` - Trim whitespace from text
+- `useNumber` - Format numbers with thousands separator
+- `useMoney` - Format currency values
+
+**Media & Content Composables:**
+- `useLazy` - Lazy load images with IntersectionObserver
+- `useImagePreview` - Image preview modal with zoom support
+- `useSanitize` - Sanitize HTML content to prevent XSS
+- `useMutation` - DOM mutation observer
+- `usePrint` - Print content with custom styles
+- `useCountdown` - Countdown timer functionality
+- `usePullRefresh` - Pull to refresh for mobile
+
+#### Utility Functions
+
+- `debounceFn` - Standalone debounce function wrapper with `cancel` and `flush` methods
+- `throttleFn` - Standalone throttle function wrapper with `cancel` method
+- `createPermissionChecker` - Create reusable permission checker with shared configuration
 
 #### Demo Updates
 
@@ -59,144 +76,9 @@ All 40 directives now have corresponding composable functions for use with the C
 
 ### Changed
 
-- Updated README.md and README_CN.md with composables documentation
-- Updated directive count from 42 to 40 (corrected count)
-
----
-
-## [1.4.0] - 2026-03-31
-
-### Added
-
-#### Composables (Composition API)
-
-New composable functions that provide directive functionality in a composable format for use within Vue setup functions:
-
-##### useClickOutside
-- Composable for detecting clicks outside an element
-- Support `exclude` option to exclude specific elements
-- Support `capture`, `stop`, `prevent` options
-- Support custom event types
-- Return `bind` method
-
-##### useCopy
-- Composable for copying text to clipboard
-- Support reactive `source` text binding
-- Support `onSuccess` and `onError` callbacks
-- Support `copiedTimeout` option for auto-reset
-- Return `copy`, `copied`, `error`, `isSupported` refs
-
-##### useDebounce
-- Composable for debouncing function calls
-- Support reactive `wait`, `leading`, `trailing` options
-- Return `run`, `cancel`, `flush`, `pending` methods
-- Auto-cleanup on component unmount
-
-##### useDraggable
-- Composable for making elements draggable
-- Support `axis` constraint (x, y, both)
-- Support `constrain` to limit within parent
-- Support `boundary` option for custom boundary
-- Support `handle` option for drag handle
-- Support `grid` option for snap-to-grid
-- Return `position`, `isDragging`, `reset`, `bind` methods
-
-##### useFocus
-- Composable for managing element focus
-- Support `onFocus` and `onBlur` callbacks
-- Return `isFocused`, `focus`, `blur`, `bind` methods
-
-##### useHover
-- Composable for tracking hover state
-- Support `enterDelay`, `leaveDelay` options
-- Support `onEnter`, `onLeave` callbacks
-- Support CSS class binding
-- Return `isHovering`, `bind` methods
-
-##### useHotkey
-- Composable for handling keyboard shortcuts
-- Support modifier keys (ctrl, alt, shift, meta)
-- Support key aliases (esc, space, up, down, left, right, enter, etc.)
-- Support multiple hotkey definitions
-- Support `prevent` and `stop` options
-- Support `keyup` option for keyup events
-- Return `enabled`, `enable`, `disable`, `toggle`, `add`, `remove`, `clear` methods
-
-##### useIntersect
-- Composable for detecting element intersection with viewport
-- Support `threshold` and `rootMargin` options
-- Support `once` option for single trigger
-- Support `onEnter`, `onLeave`, `onChange` callbacks
-- Return `isIntersecting`, `ratio`, `bind`, `stop` methods
-
-##### useLongPress
-- Composable for detecting long press gestures
-- Support `duration`, `distance` options
-- Support `onStart`, `onTrigger`, `onCancel`, `onTick` callbacks
-- Return `isPressing`, `start`, `stop`, `bind` methods
-
-##### usePermission
-- Composable for checking user permissions
-- Support wildcard `'*'` for full access
-- Support role-based permission mapping
-- Support `mode: 'some' | 'every'` for OR/AND logic
-- Support custom `check` function
-- Return `granted`, `recheck` methods
-
-##### useResize
-- Composable for tracking element resize
-- Support `debounce` option for performance
-- Support `box` option for border-box/content-box
-- Support `onResize` callback
-- Return `width`, `height`, `bind`, `stop` methods
-
-##### useScroll
-- Composable for tracking scroll position
-- Support `throttle` option for performance
-- Support scroll direction detection
-- Support scroll progress calculation
-- Return `scrollLeft`, `scrollTop`, `progressX`, `progressY`, `directionX`, `directionY`, `isScrolling`, `bind`, `stop`, `scrollTo` methods
-
-##### useSwipe
-- Composable for detecting swipe gestures
-- Support all four directions (left, right, up, down)
-- Support `threshold` and `maxTime` options
-- Support direction-specific callbacks
-- Support mouse events for desktop testing
-- Return `direction`, `lengthX`, `lengthY`, `isSwiping`, `bind` methods
-
-##### useThrottle
-- Composable for throttling function calls
-- Support reactive `wait`, `leading`, `trailing` options
-- Return `run`, `cancel` methods
-- Auto-cleanup on component unmount
-
-##### useVisible
-- Composable for controlling element visibility
-- Support `useHidden` option for `visibility: hidden`
-- Support `onChange` callback
-- Return `visible`, `show`, `hide`, `toggle`, `bind` methods
-
-#### Utility Functions
-
-##### debounceFn
-- Standalone debounce function wrapper
-- Support `leading` and `trailing` options
-- Return debounced function with `cancel` and `flush` methods
-
-##### throttleFn
-- Standalone throttle function wrapper
-- Support `leading` and `trailing` options
-- Return throttled function with `cancel` method
-
-##### createPermissionChecker
-- Create a permission checker with shared configuration
-- Reusable permission checking function
-
-### Changed
-
 - Updated main entry to export all composables
-- Removed duplicate `debounceFn` and `throttleFn` from shared exports (now provided by composables)
+- Updated README.md and README_CN.md with composables documentation
+- Corrected directive count from 42 to 40
 
 ### Fixed
 
