@@ -36,14 +36,14 @@ onMounted(() => {
 
 // Or manually open any image
 function openCustomImage() {
-  open('https://example.com/high-res.jpg')
+  open('https:\/\/example.com\/high-res.jpg')
 }
-</script>
+<\/script>
 
 <template>
-  <img ref="imageRef" src="thumbnail.jpg" />
-  <button @click="open('image.jpg')">Open Preview</button>
-</template>`
+  <img ref="imageRef" src="thumbnail.jpg" \/>
+  <button @click="open('image.jpg')">Open Preview<\/button>
+<\/template>`
 
 		return {
 			imageRef,

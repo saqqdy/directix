@@ -92,7 +92,7 @@ onMounted(() => {
     bind(containerRef.value)
   }
 })
-</script>
+<\/script>
 
 <template>
   <div ref="containerRef" class="scroll-container">

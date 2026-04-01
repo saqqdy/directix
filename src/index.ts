@@ -50,6 +50,8 @@ export * from './composables'
 // Export all directives
 // Export directives (types are exported from composables to avoid duplicates)
 export {
+	configurePermission,
+	getPermissionConfig,
 	vCapitalcase,
 	vClickDelay,
 	vClickOutside,

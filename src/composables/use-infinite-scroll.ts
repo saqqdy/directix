@@ -163,6 +163,11 @@ export function useInfiniteScroll(options: UseInfiniteScrollOptions): UseInfinit
 			sentinel.style.cssText = 'height: 1px; width: 100%; visibility: hidden;'
 			element.appendChild(sentinel)
 
+			// Get scroll parent and validate it's a valid root for IntersectionObserver
+			const parent = getScrollParent(element)
+			// IntersectionObserver root must be Element or Document, not Window or null
+			const root = parent instanceof Window ? null : (parent as Element | null)
+
 			observer = new IntersectionObserver(
 				entries => {
 					if (entries[0].isIntersecting) {
@@ -170,7 +175,7 @@ export function useInfiniteScroll(options: UseInfiniteScrollOptions): UseInfinit
 					}
 				},
 				{
-					root: getScrollParent(element) as Element,
+					root,
 					rootMargin: `${unref(distance)}px`,
 				},
 			)

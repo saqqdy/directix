@@ -61,6 +61,9 @@ function trimText(
 	position: TrimPosition = 'both',
 	chars?: string,
 ): string {
+	// Handle null/undefined/empty text
+	if (!text) return ''
+
 	// Build regex pattern for custom chars
 	const charPattern = chars ? `[\\s${escapeRegex(chars)}]` : '\\s'
 

@@ -98,7 +98,7 @@ export default defineComponent({
 import { defineComponent, ref, onMounted } from 'vue'
 import { useMutation } from 'directix'
 
-export default defineComponent({
+export \default defineComponent({
   setup() {
     const containerRef = ref<HTMLElement | null>(null)
     const log = ref<string[]>([])

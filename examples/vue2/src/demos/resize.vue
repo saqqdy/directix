@@ -25,11 +25,11 @@ export default defineComponent({
 
 		const basicCode = `<div v-resize="handleResize" class="resizable">
   Content
-</div>`
+<\/div>`
 
 		const debounceCode = `<div v-resize="{ handler: handleResize, debounce: 200 }">
   Debounced resize
-</div>`
+<\/div>`
 
 		// Composable API demo
 		const composableRef = ref<HTMLElement | null>(null)
@@ -50,7 +50,7 @@ export default defineComponent({
 import { defineComponent, ref, onMounted } from 'vue'
 import { useResize } from 'directix'
 
-export default defineComponent({
+export \default defineComponent({
   setup() {
     const targetRef = ref<HTMLElement | null>(null)
     const { width, height, bind } = useResize({
@@ -68,8 +68,8 @@ export default defineComponent({
 <template>
   <div ref="targetRef">
     Size: {{ width }} x {{ height }}
-  </div>
-</template>`
+  <\/div>
+<\/template>`
 
 		return {
 			dimensions,

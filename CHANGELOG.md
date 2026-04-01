@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2026-04-01
+
+### Fixed
+
+- `useInfiniteScroll`: Fix IntersectionObserver root parameter type error - Window is not a valid root, now correctly passes `null` when scroll parent is Window
+- `useTrim`: Add null/undefined/empty string handling to prevent runtime errors
+
+### Changed
+
+- Improved composables exports in `src/composables/index.ts` - added explicit exports for `useInfiniteScroll`, `useLazy`, `useLoading`, `useMask`, `useMutation`, `useRipple`, `useSanitize`, `useSticky`, `useTooltip`, `useTruncate`
+- Export `configurePermission` and `getPermissionConfig` functions from main entry point
+
+---
+
 ## [1.4.0] - 2026-03-31
 
 ### Added

@@ -30,7 +30,7 @@ export default defineComponent({
 import { defineComponent, ref } from 'vue'
 import { useHotkey } from 'directix'
 
-export default defineComponent({
+export \default defineComponent({
   setup() {
     const log = ref<string[]>([])
 
@@ -71,16 +71,16 @@ export default defineComponent({
 			disabledCount: 0,
 			basicCode: `<div v-hotkey:escape="handleEscape">
   Press Escape to trigger
-</div>`,
+<\/div>`,
 			modifierCode: `<!-- Ctrl + S -->
 <div v-hotkey:ctrl.s="handleSave">
   Press Ctrl+S to save
-</div>
+<\/div>
 
 <!-- Ctrl + Shift + S -->
 <div v-hotkey:ctrl.shift.s="handleSaveAs">
   Press Ctrl+Shift+S to save as
-</div>`,
+<\/div>`,
 			multipleCode: `<!-- Using array syntax -->
 <div v-hotkey="[
   { key: 'z', modifiers: ['ctrl'], handler: handleUndo },
@@ -89,7 +89,7 @@ export default defineComponent({
   { key: 'i', modifiers: ['ctrl'], handler: handleItalic }
 ]">
   Editor with multiple shortcuts
-</div>`,
+<\/div>`,
 			objectCode: `<!-- Using object syntax -->
 <div v-hotkey="{
   'ctrl+z': handleUndo,
@@ -97,7 +97,7 @@ export default defineComponent({
   'ctrl+b': handleBold
 }">
   Press Ctrl+Z, Ctrl+Y, or Ctrl+B
-</div>`,
+<\/div>`,
 			inputCode: `<input
   v-hotkey="{
     enter: handleSearch,
@@ -105,7 +105,7 @@ export default defineComponent({
   }"
   v-model="searchText"
   placeholder="Press Enter to search, Escape to clear"
-/>`
+\/>`
 		}
 	},
 	methods: {

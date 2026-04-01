@@ -60,9 +60,21 @@ export type { UseHoverOptions, UseHoverReturn } from './use-hover'
 export { useImagePreview } from './use-image-preview'
 export type { UseImagePreviewOptions, UseImagePreviewReturn } from './use-image-preview'
 
+// Infinite scroll composable
+export { useInfiniteScroll } from './use-infinite-scroll'
+export type { UseInfiniteScrollOptions, UseInfiniteScrollReturn } from './use-infinite-scroll'
+
 // Intersect composable
 export { useIntersect } from './use-intersect'
 export type { IntersectHandler, UseIntersectOptions, UseIntersectReturn } from './use-intersect'
+
+// Lazy composable
+export { useLazy } from './use-lazy'
+export type { LazyState, UseLazyOptions, UseLazyReturn } from './use-lazy'
+
+// Loading composable
+export { useLoading } from './use-loading'
+export type { UseLoadingOptions, UseLoadingReturn } from './use-loading'
 
 // Long press composable
 export { useLongPress } from './use-long-press'
@@ -72,9 +84,17 @@ export type { UseLongPressOptions, UseLongPressReturn } from './use-long-press'
 export { createLowercaser, lowercaseText, useLowercase } from './use-lowercase'
 export type { UseLowercaseOptions, UseLowercaseReturn } from './use-lowercase'
 
+// Mask composable
+export { useMask } from './use-mask'
+export type { UseMaskOptions, UseMaskReturn } from './use-mask'
+
 // Money composable
 export { createMoneyFormatter, formatMoney, parseMoney, useMoney } from './use-money'
 export type { UseMoneyOptions, UseMoneyReturn } from './use-money'
+
+// Mutation composable
+export { useMutation } from './use-mutation'
+export type { MutationHandler, UseMutationOptions, UseMutationReturn } from './use-mutation'
 
 // Number composable
 export { createNumberFormatter, formatNumber, parseNumber, useNumber } from './use-number'
@@ -96,9 +116,21 @@ export type { PullRefreshHandler, PullRefreshState, UsePullRefreshOptions, UsePu
 export { useResize } from './use-resize'
 export type { ResizeInfo, UseResizeOptions, UseResizeReturn } from './use-resize'
 
+// Ripple composable
+export { useRipple } from './use-ripple'
+export type { UseRippleOptions, UseRippleReturn } from './use-ripple'
+
+// Sanitize composable
+export { useSanitize } from './use-sanitize'
+export type { UseSanitizeOptions, UseSanitizeReturn } from './use-sanitize'
+
 // Scroll composable
 export { useScroll } from './use-scroll'
 export type { ScrollDirection, ScrollInfo, UseScrollOptions, UseScrollReturn } from './use-scroll'
+
+// Sticky composable
+export { useSticky } from './use-sticky'
+export type { UseStickyOptions, UseStickyReturn } from './use-sticky'
 
 // Swipe composable
 export { useSwipe } from './use-swipe'
@@ -108,6 +140,10 @@ export type { SwipeDirection, SwipeHandler, UseSwipeOptions, UseSwipeReturn } fr
 export { throttleFn, useThrottle } from './use-throttle'
 export type { ComposableThrottledFunction, UseThrottleOptions, UseThrottleReturn } from './use-throttle'
 
+// Tooltip composable
+export { useTooltip } from './use-tooltip'
+export type { TooltipPlacement, TooltipTrigger, UseTooltipOptions, UseTooltipReturn } from './use-tooltip'
+
 // Touch composable
 export { useTouch } from './use-touch'
 export type { TouchGesture, TouchGestureEvent, UseTouchOptions, UseTouchReturn } from './use-touch'
@@ -115,6 +151,10 @@ export type { TouchGesture, TouchGestureEvent, UseTouchOptions, UseTouchReturn }
 // Trim composable
 export { createTrimmer, trimText, useTrim } from './use-trim'
 export type { TrimPosition, UseTrimOptions, UseTrimReturn } from './use-trim'
+
+// Truncate composable
+export { useTruncate } from './use-truncate'
+export type { TruncatePosition, UseTruncateOptions, UseTruncateReturn } from './use-truncate'
 
 // Uppercase composable
 export { createUppercaser, uppercaseText, useUppercase } from './use-uppercase'

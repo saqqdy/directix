@@ -95,7 +95,7 @@ export default defineComponent({
 import { defineComponent, ref, onMounted } from 'vue'
 import { useIntersect } from 'directix'
 
-export default defineComponent({
+export \default defineComponent({
   setup() {
     const targetRef = ref<HTMLElement | null>(null)
     const { isIntersecting, ratio, bind } = useIntersect({

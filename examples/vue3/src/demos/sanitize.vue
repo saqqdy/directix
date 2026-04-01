@@ -5,7 +5,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { useSanitize } from 'directix'
 
 // Composable API demo
-const composableInput = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script><a href="javascript:void(0)">Dangerous link</a>`)
+const composableInput = ref(`<p>Safe paragraph<\/p><script>alert("xss")<\/script><a href="javascript:void(0)">Dangerous link<\/a>`)
 const { sanitize } = useSanitize({
 	allowedTags: ['p', 'b', 'i', 'strong', 'em', 'a'],
 	allowedAttributes: ['href'],
@@ -17,7 +17,7 @@ const sanitizedOutput = computed(() => sanitize(composableInput.value))
 const composableCode = `import { ref, computed } from 'vue'
 import { useSanitize } from 'directix'
 
-const userInput = ref('<p>Safe</p><script>alert("xss")</script>')
+const userInput = ref('<p>Safe<\/p><script>alert("xss")<\/script>')
 const { sanitize } = useSanitize({
 	allowedTags: ['p', 'b', 'i', 'strong', 'em', 'a'],
 	allowedAttributes: ['href'],
@@ -27,15 +27,15 @@ const { sanitize } = useSanitize({
 const safeHtml = computed(() => sanitize(userInput.value))`
 
 // Scenario 1: Basic sanitization
-const userInput1 = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script>`)
+const userInput1 = ref(`<p>Safe paragraph<\/p><script>alert("xss")<\/script>`)
 
 // Scenario 2: With allowed tags
-const userInput2 = ref(`<b>Bold</b> and <i>italic</i> and <script>alert("xss")<\/script>`)
+const userInput2 = ref(`<b>Bold<\/b> and <i>italic<\/i> and <script>alert("xss")<\/script>`)
 
 // Scenario 3: Custom handler
-const userInput3 = ref(`<p onclick="alert(1)">Click me</p><a href="javascript:void(0)">Link</a>`)
+const userInput3 = ref(`<p onclick="alert(1)">Click me<\/p><a href="javascript:void(0)">Link<\/a>`)
 
-const basicCode = `<div v-sanitize v-html="userContent"></div>`
+const basicCode = `<div v-sanitize v-html="userContent"><\/div>`
 
 const allowedTagsCode = `<div v-sanitize="{ allowedTags: ['b', 'i', 'u'] }" v-html="content">
 </div>`

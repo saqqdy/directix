@@ -18,6 +18,7 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 📦 **Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
 - ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
 - 🎨 **Composables** - Every directive has a corresponding composable for Composition API
+- 🔧 **Utility Exports** - Export `configurePermission`, `getPermissionConfig` and other utilities for advanced usage
 
 ## Online Demo
 

@@ -18,6 +18,7 @@
 - 📦 **多格式支持** - 提供 ESM、CJS 和 IIFE (CDN) 格式
 - ⚡ **零依赖** - 轻量级，打包体积小
 - 🎨 **组合式API** - 每个指令都有对应的组合式函数
+- 🔧 **工具函数导出** - 导出 `configurePermission`、`getPermissionConfig` 等工具函数供高级使用
 
 ## 在线演示
 
