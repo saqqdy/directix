@@ -1,9 +1,38 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useCapitalcase } from 'directix'
 
 const text1 = ref('')
 const text2 = ref('')
 const text3 = ref('the quick brown fox jumps over the lazy dog')
+
+// Composable API demo
+const composableText = ref('the quick brown fox jumps over the lazy dog')
+const composableEvery = ref(true)
+const { capitalized, original } = useCapitalcase({
+	text: composableText,
+	every: composableEvery,
+})
+
+const composableCode = `import { ref } from 'vue'
+import { useCapitalcase } from 'directix'
+
+const text = ref('the quick brown fox')
+const { capitalized, original } = useCapitalcase({
+	text,
+	every: true, // Capitalize each word
+})
+
+// capitalized.value = 'The Quick Brown Fox'
+
+// With every: false (capitalize first word only)
+const { capitalized: sentenceCase } = useCapitalcase({
+	text,
+	every: false,
+})
+// sentenceCase.value = 'The quick brown fox'`
 </script>
 
 <template>
@@ -68,6 +97,36 @@ const text3 = ref('the quick brown fox jumps over the lazy dog')
 
 &lt;!-- On non-input elements --&gt;
 &lt;p v-capitalcase&gt;the quick brown fox&lt;/p&gt;</code></pre>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useCapitalcase" description="Using useCapitalcase composable for programmatic text capitalization">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Input Text</strong></p>
+						<input v-model="composableText" class="input" placeholder="Type something..." />
+					</div>
+					<div class="demo-item">
+						<p><strong>Capitalize Mode</strong></p>
+						<label class="checkbox-label">
+							<input type="checkbox" v-model="composableEvery" />
+							Capitalize every word
+						</label>
+					</div>
+				</div>
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Original:</strong></p>
+						<p class="text-demo">{{ original }}</p>
+					</div>
+					<div class="demo-item">
+						<p><strong>Capitalized:</strong></p>
+						<p class="text-demo result">{{ capitalized }}</p>
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -130,6 +189,10 @@ h3 {
 	font-weight: 500;
 }
 
+.text-demo.result {
+	color: #667eea;
+}
+
 .code {
 	background: #2d3748;
 	color: #e2e8f0;
@@ -138,5 +201,27 @@ h3 {
 	overflow-x: auto;
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+.demo-box {
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	color: #444;
+}
+
+.checkbox-label input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	accent-color: #667eea;
 }
 </style>

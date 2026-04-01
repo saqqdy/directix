@@ -1,7 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useResize } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+
+// Composable API demo
+const composableRef = ref<HTMLElement | null>(null)
+const { width: composableWidth, height: composableHeight, bind: bindResize } = useResize({
+	debounce: 100,
+	onResize: (info) => {
+		console.log('Composable resize:', info.width, info.height)
+	}
+})
+
+onMounted(() => {
+	if (composableRef.value) {
+		bindResize(composableRef.value)
+	}
+})
 
 // Scenario 1: Basic resize
 const dimensions = ref({ width: 0, height: 0 })
@@ -34,6 +50,25 @@ const debounceCode = `<div v-resize="{ handler: handleResize, debounce: 200 }">
 const boxCode = `<div v-resize="{ handler: handleResize, box: 'border-box' }">
   Track border box size
 </div>`
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useResize } from 'directix'
+
+const target = ref(null)
+const { width, height, bind } = useResize({
+  debounce: 100,
+  onResize: (info) => console.log('Resized:', info.width, info.height)
+})
+
+onMounted(() => bind(target.value))
+<\/script>
+
+<template>
+  <div ref="target">
+    Size: {{ width }} x {{ height }}
+  </div>
+</template>`
 </script>
 
 <template>
@@ -101,6 +136,24 @@ const boxCode = `<div v-resize="{ handler: handleResize, box: 'border-box' }">
 				</div>
 			</div>
 			<CodeBlock :code="boxCode" />
+		</DemoSection>
+
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API (useResize)" description="Using the composable for programmatic resize tracking">
+			<div class="demo-box">
+				<div class="info-panel">
+					<div class="info-item">
+						Width: <strong>{{ Math.round(composableWidth) }}px</strong>
+					</div>
+					<div class="info-item">
+						Height: <strong>{{ Math.round(composableHeight) }}px</strong>
+					</div>
+				</div>
+				<div ref="composableRef" class="resizable-box">
+					<p>Resize tracked via useResize composable</p>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

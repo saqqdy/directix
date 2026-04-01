@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import { configurePermission } from 'directix'
+import { configurePermission, usePermission } from 'directix'
 
 // User state
 const userRoles = ref<string[]>(['editor'])
@@ -22,6 +22,64 @@ onMounted(() => {
 		}
 	})
 })
+
+// Composable API demo - check permissions programmatically
+const { granted: isAdmin } = usePermission({
+	value: 'admin',
+	getPermissions: () => userPermissions.value,
+	getRoles: () => userRoles.value,
+	roleMap: {
+		admin: ['*'],
+		editor: ['read', 'write', 'edit'],
+		viewer: ['read']
+	}
+})
+
+const { granted: canDelete } = usePermission({
+	value: 'delete',
+	getPermissions: () => userPermissions.value,
+	getRoles: () => userRoles.value,
+	roleMap: {
+		admin: ['*'],
+		editor: ['read', 'write', 'edit'],
+		viewer: ['read']
+	}
+})
+
+const { granted: canEditAndDelete } = usePermission({
+	value: ['edit', 'delete'],
+	mode: 'every',
+	getPermissions: () => userPermissions.value,
+	getRoles: () => userRoles.value,
+	roleMap: {
+		admin: ['*'],
+		editor: ['read', 'write', 'edit'],
+		viewer: ['read']
+	}
+})
+
+const composableCode = `import { usePermission } from 'directix'
+
+// Check single permission
+const { granted: isAdmin } = usePermission({
+  value: 'admin',
+  getPermissions: () => userPermissions,
+  getRoles: () => userRoles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+
+// Check multiple permissions (AND logic)
+const { granted: canEditAndDelete } = usePermission({
+  value: ['edit', 'delete'],
+  mode: 'every',
+  getPermissions: () => userPermissions,
+  getRoles: () => userRoles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+
+// Use in template
+<button v-if="isAdmin">Admin Only</button>
+<button v-if="canDelete" :disabled="!canEditAndDelete">Delete</button>`
 
 // Force re-render key when permissions change
 const permissionKey = computed(() => `${userRoles.value.join(',')}:${userPermissions.value.join(',')}`)
@@ -186,6 +244,42 @@ const actionCode = `<button v-permission="{
 				</div>
 			</div>
 			<CodeBlock :code="actionCode" />
+		</DemoSection>
+
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API - usePermission" description="Check permissions programmatically">
+			<div class="demo-box" :key="permissionKey">
+				<div class="composable-grid">
+					<div class="composable-item">
+						<span class="label">isAdmin</span>
+						<span :class="['status-badge', isAdmin ? 'granted' : 'denied']">
+							{{ isAdmin ? 'Granted' : 'Denied' }}
+						</span>
+					</div>
+					<div class="composable-item">
+						<span class="label">canDelete</span>
+						<span :class="['status-badge', canDelete ? 'granted' : 'denied']">
+							{{ canDelete ? 'Granted' : 'Denied' }}
+						</span>
+					</div>
+					<div class="composable-item">
+						<span class="label">canEditAndDelete</span>
+						<span :class="['status-badge', canEditAndDelete ? 'granted' : 'denied']">
+							{{ canEditAndDelete ? 'Granted' : 'Denied' }}
+						</span>
+					</div>
+				</div>
+				<div class="demo-buttons">
+					<button :disabled="!isAdmin" class="demo-btn admin">
+						Admin Only ({{ isAdmin ? 'Visible' : 'Hidden' }})
+					</button>
+					<button :disabled="!canDelete" class="demo-btn danger">
+						Delete ({{ canDelete ? 'Enabled' : 'Disabled' }})
+					</button>
+				</div>
+				<p class="hint">Change permissions above to see reactive updates</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -361,6 +455,61 @@ h1 {
 .action-item .demo-btn {
 	width: 100%;
 	background: #f0f0f0;
+}
+
+.composable-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.composable-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background: white;
+	border-radius: 6px;
+	border: 1px solid #e0e0e0;
+}
+
+.composable-item .label {
+	font-family: monospace;
+	font-size: 13px;
+	color: #666;
+}
+
+.status-badge {
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.status-badge.granted {
+	background: #c6f6d5;
+	color: #276749;
+}
+
+.status-badge.denied {
+	background: #fed7d7;
+	color: #c53030;
+}
+
+.demo-buttons {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.demo-buttons .demo-btn {
+	opacity: 1;
+}
+
+.demo-buttons .demo-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
 .api-table {

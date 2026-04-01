@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useDraggable } from 'directix'
 
 const position = ref({ x: 0, y: 0 })
 const axisXPosition = ref({ x: 0, y: 0 })
@@ -24,6 +27,36 @@ function handleAxisXDrag(pos: { x: number; y: number }) {
 function handleAxisYDrag(pos: { x: number; y: number }) {
 	axisYPosition.value = pos
 }
+
+// Composable API demo
+const composableDragRef = ref<HTMLElement | null>(null)
+const { position: composablePosition, isDragging: composableIsDragging, bind: bindDraggable } = useDraggable({
+	constrain: true,
+	onStart: (pos) => console.log('Drag start:', pos),
+	onDrag: (pos) => console.log('Dragging:', pos),
+	onEnd: (pos) => console.log('Drag end:', pos)
+})
+
+onMounted(() => {
+	if (composableDragRef.value) {
+		bindDraggable(composableDragRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useDraggable } from 'directix'
+
+const target = ref<HTMLElement | null>(null)
+const { position, isDragging, bind } = useDraggable({
+  constrain: true,
+  onEnd: (pos) => console.log('Dropped at:', pos)
+})
+
+onMounted(() => {
+  if (target.value) {
+    bind(target.value)
+  }
+})`
 </script>
 
 <template>
@@ -130,6 +163,25 @@ function handleAxisYDrag(pos: { x: number; y: number }) {
 
 &lt;!-- Grid snapping --&gt;
 &lt;div v-draggable="{ grid: [40, 40] }"&gt;Snap&lt;/div&gt;</code></pre>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useDraggable" description="Using useDraggable composable for programmatic control">
+			<p class="hint">Drag the box - constrained to container using composable API</p>
+			<div class="demo-container">
+				<div
+					ref="composableDragRef"
+					class="draggable-box composable-box"
+					:class="{ dragging: composableIsDragging }"
+				>
+					<span class="drag-icon">⋮⋮</span>
+					<div class="position-display">
+						<span>X: {{ Math.round(composablePosition.x) }}</span>
+						<span>Y: {{ Math.round(composablePosition.y) }}</span>
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -309,6 +361,18 @@ h3 {
 .callback-box {
 	flex-direction: column;
 	gap: 4px;
+}
+
+/* Composable Box */
+.composable-box {
+	background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+	box-shadow: 0 4px 12px rgba(159, 122, 234, 0.3);
+	flex-direction: column;
+	gap: 4px;
+}
+
+.composable-box.dragging {
+	box-shadow: 0 8px 24px rgba(159, 122, 234, 0.5);
 }
 
 .position-display {

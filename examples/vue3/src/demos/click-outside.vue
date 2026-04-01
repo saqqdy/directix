@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useClickOutside } from 'directix'
 
 // Scenario 1: Basic usage - Dropdown menu
 const showDropdown = ref(false)
@@ -64,6 +65,42 @@ const eventsCode = `<div v-click-outside="{
 }">
   Responds to click and touch events
 </div>`
+
+// Composable API demo
+const composableDropdownRef = ref<HTMLElement | null>(null)
+const composableTriggerRef = ref<HTMLElement | null>(null)
+const showComposableDropdown = ref(false)
+
+const { bind: bindClickOutside } = useClickOutside({
+	handler: () => {
+		showComposableDropdown.value = false
+	},
+	exclude: [() => composableTriggerRef.value]
+})
+
+onMounted(() => {
+	if (composableDropdownRef.value) {
+		bindClickOutside(composableDropdownRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useClickOutside } from 'directix'
+
+const dropdown = ref<HTMLElement | null>(null)
+const triggerBtn = ref<HTMLElement | null>(null)
+const show = ref(false)
+
+const { bind } = useClickOutside({
+  handler: () => show.value = false,
+  exclude: [() => triggerBtn.value]
+})
+
+onMounted(() => {
+  if (dropdown.value) {
+    bind(dropdown.value)
+  }
+})`
 </script>
 
 <template>
@@ -154,6 +191,31 @@ const eventsCode = `<div v-click-outside="{
 				<p class="hint">Listens to both click and touchstart events (mobile-friendly)</p>
 			</div>
 			<CodeBlock :code="eventsCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useClickOutside" description="Using useClickOutside composable for programmatic control">
+			<div class="demo-box">
+				<button
+					ref="composableTriggerRef"
+					class="btn"
+					@click="showComposableDropdown = !showComposableDropdown"
+				>
+					Toggle Dropdown (Composable)
+					<span class="arrow">{{ showComposableDropdown ? '▲' : '▼' }}</span>
+				</button>
+				<div
+					v-show="showComposableDropdown"
+					ref="composableDropdownRef"
+					class="dropdown standalone"
+				>
+					<div class="dropdown-item">Option 1</div>
+					<div class="dropdown-item">Option 2</div>
+					<div class="dropdown-item">Option 3</div>
+				</div>
+				<p class="hint">This uses the useClickOutside composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -287,6 +349,11 @@ h1 {
 
 .dropdown-item:hover {
 	background: #f0f0f0;
+}
+
+.dropdown.standalone {
+	position: relative;
+	margin-top: 12px;
 }
 
 .modal {

@@ -1,6 +1,51 @@
 <script setup lang="ts">
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { usePrint } from 'directix'
+
+// Composable API demo
+const { isPrinting, print, printPage } = usePrint({
+	title: 'Directix Print Demo',
+	onBeforePrint: () => {
+		console.log('Starting print...')
+		return true
+	},
+	onAfterPrint: () => {
+		console.log('Print completed!')
+	},
+})
+
+async function handlePrintPage() {
+	await printPage()
+}
+
+async function handlePrintTarget() {
+	await print('#composable-print-target')
+}
+
+const composableCode = `import { usePrint } from 'directix'
+
+const { isPrinting, print, printPage } = usePrint({
+  title: 'My Document',
+  onBeforePrint: () => {
+    console.log('Starting print...')
+    return true // return false to cancel
+  },
+  onAfterPrint: () => {
+    console.log('Print completed!')
+  },
+})
+
+// Print entire page
+await printPage()
+
+// Print specific element
+await print('#content')
+
+// Check printing state
+<button :disabled="isPrinting">
+  {{ isPrinting ? 'Printing...' : 'Print' }}
+</button>`
 
 const basicCode = `<button v-print>Print Page</button>`
 
@@ -128,6 +173,39 @@ const styledCode = `<button v-print="{
 			<CodeBlock :code="styledCode" />
 		</DemoSection>
 
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API - usePrint" description="Programmatic print control">
+			<div class="demo-box">
+				<div class="composable-controls">
+					<button
+						@click="handlePrintPage"
+						:disabled="isPrinting"
+						class="print-btn"
+					>
+						{{ isPrinting ? 'Printing...' : 'Print Page' }}
+					</button>
+					<button
+						@click="handlePrintTarget"
+						:disabled="isPrinting"
+						class="print-btn secondary"
+					>
+						{{ isPrinting ? 'Printing...' : 'Print Target' }}
+					</button>
+				</div>
+				<div id="composable-print-target" class="print-content">
+					<h3>Targeted Content</h3>
+					<p>This content will be printed when clicking "Print Target" button.</p>
+					<ul>
+						<li>Use <code>print()</code> for specific elements</li>
+						<li>Use <code>printPage()</code> for entire page</li>
+						<li>Track state with <code>isPrinting</code></li>
+					</ul>
+				</div>
+				<p class="hint">Status: {{ isPrinting ? 'Printing in progress...' : 'Ready' }}</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<DemoSection title="API">
 			<table class="api-table">
 				<thead>
@@ -230,6 +308,25 @@ h1 {
 	background: #5a6fd6;
 }
 
+.print-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.print-btn.secondary {
+	background: #48bb78;
+}
+
+.print-btn.secondary:hover {
+	background: #38a169;
+}
+
+.composable-controls {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
 .hint {
 	font-size: 13px;
 	color: #888;
@@ -256,6 +353,14 @@ h1 {
 
 .print-content li {
 	margin-bottom: 4px;
+}
+
+.print-content code {
+	background: #f0f0f0;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #667eea;
 }
 
 /* Invoice styles */

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useHover } from 'directix'
 
 // Scenario 1: Basic hover
 const isHovering = ref(false)
@@ -22,6 +23,19 @@ const handleLeave = () => {
 const delayedHover = ref(false)
 
 // Scenario 4: With custom class (class is auto-toggled by directive)
+
+// Composable API demo
+const composableHoverRef = ref<HTMLElement | null>(null)
+const { isHovering: composableIsHovering, bind: bindHover } = useHover({
+	onEnter: () => console.log('Composable: Mouse entered'),
+	onLeave: () => console.log('Composable: Mouse left'),
+})
+
+onMounted(() => {
+	if (composableHoverRef.value) {
+		bindHover(composableHoverRef.value)
+	}
+})
 
 const basicCode = `<div v-hover="handleHover">
   {{ isHovering ? 'Hovering!' : 'Hover me' }}
@@ -45,6 +59,21 @@ const delayCode = `<div v-hover="{
 const classCode = `<div v-hover="{ class: 'is-hovering' }">
   Custom hover class
 </div>`
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useHover } from 'directix'
+
+const buttonRef = ref()
+const { isHovering, bind } = useHover({
+  onEnter: () => console.log('Mouse entered'),
+  onLeave: () => console.log('Mouse left'),
+})
+
+onMounted(() => {
+  if (buttonRef.value) {
+    bind(buttonRef.value)
+  }
+})`
 </script>
 
 <template>
@@ -110,6 +139,21 @@ const classCode = `<div v-hover="{ class: 'is-hovering' }">
 				<p class="hint">Adds 'custom-hover' class when hovering</p>
 			</div>
 			<CodeBlock :code="classCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useHover" description="Using useHover composable for programmatic control">
+			<div class="demo-box">
+				<div
+					ref="composableHoverRef"
+					class="hover-box"
+					:class="{ active: composableIsHovering }"
+				>
+					{{ composableIsHovering ? 'Hovering!' : 'Hover Me (Composable)' }}
+				</div>
+				<p class="hint">This uses the useHover composable with ref binding</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
 
 const showPreview = ref(true)
 
@@ -10,6 +11,39 @@ function handleOpen() {
 function handleClose() {
 	console.log('Preview closed')
 }
+
+// Composable API demo
+const composableImageRef = ref<HTMLImageElement | null>(null)
+const { isOpen, currentSrc, open, close, bind } = useImagePreview({
+	onOpen: () => console.log('Composable: Preview opened'),
+	onClose: () => console.log('Composable: Preview closed')
+})
+
+onMounted(() => {
+	if (composableImageRef.value) {
+		bind(composableImageRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
+
+const imageRef = ref(null)
+const { isOpen, open, close, bind } = useImagePreview({
+	onOpen: () => console.log('Preview opened'),
+	onClose: () => console.log('Preview closed')
+})
+
+onMounted(() => {
+	if (imageRef.value) {
+		bind(imageRef.value)
+	}
+})
+
+// Or programmatically open any image
+function openCustomImage() {
+	open('https://example.com/high-res.jpg')
+}`
 
 // Custom options state
 const customOptions = ref({
@@ -134,6 +168,32 @@ const customOptions = ref({
 			</div>
 		</div>
 
+		<h3>Composable API (useImagePreview)</h3>
+		<div class="composable-demo">
+			<div class="demo-row">
+				<img
+					ref="composableImageRef"
+					src="https://picsum.photos/seed/composable/200/150"
+					data-preview="https://picsum.photos/seed/composable/800/600"
+					alt="Composable preview"
+					class="preview-img"
+				/>
+				<div class="composable-controls">
+					<span class="status-badge" :class="{ active: isOpen }">
+						{{ isOpen ? 'Preview Open' : 'Preview Closed' }}
+					</span>
+					<button @click="open('https://picsum.photos/seed/custom/800/600')" class="btn">
+						Open Custom Image
+					</button>
+					<button v-if="isOpen" @click="close" class="btn btn-secondary">
+						Close Preview
+					</button>
+				</div>
+			</div>
+			<p class="hint">Using useImagePreview composable for programmatic control</p>
+			<pre class="code"><code>{{ composableCode }}</code></pre>
+		</div>
+
 		<h3>Mobile Gestures</h3>
 		<div class="gestures-info">
 			<div class="gesture-item">
@@ -254,6 +314,15 @@ h3 {
 	background: #5a67d8;
 }
 
+.btn-secondary {
+	background: #e0e0e0;
+	color: #333;
+}
+
+.btn-secondary:hover {
+	background: #d0d0d0;
+}
+
 .hint {
 	color: #666;
 	font-size: 14px;
@@ -298,6 +367,34 @@ h3 {
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
+}
+
+.composable-demo {
+	background: #f8fafc;
+	border-radius: 12px;
+	padding: 16px;
+	margin-bottom: 16px;
+}
+
+.composable-controls {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.status-badge {
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 500;
+	background: #e0e0e0;
+	color: #666;
+	transition: all 0.3s;
+}
+
+.status-badge.active {
+	background: #48bb78;
+	color: white;
 }
 
 .gestures-info {

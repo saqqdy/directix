@@ -1,8 +1,66 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useInfiniteScroll } from 'directix'
 
+// ==================== Composable API ====================
+// Composable infinite scroll refs
+const composableContainerRef = ref<HTMLElement | null>(null)
+const composableItems = ref<string[]>(Array.from({ length: 10 }, (_, i) => `Composable Item ${i + 1}`))
+const composablePage = ref(1)
+
+// useInfiniteScroll composable
+const { bind: bindInfiniteScroll, loading: composableLoading, finished: composableFinished } = useInfiniteScroll({
+	onLoad: async () => {
+		await new Promise(resolve => setTimeout(resolve, 800))
+		const newItems = Array.from({ length: 5 }, (_, i) => `Composable Item ${composableItems.value.length + i + 1}`)
+		composableItems.value.push(...newItems)
+		composablePage.value++
+		if (composableItems.value.length >= 30) {
+			composableFinished.value = true
+		}
+	},
+	distance: 50,
+})
+
+onMounted(() => {
+	if (composableContainerRef.value) {
+		bindInfiniteScroll(composableContainerRef.value)
+	}
+})
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useInfiniteScroll } from 'directix'
+
+const containerRef = ref(null)
+const items = ref([])
+const page = ref(1)
+
+const { bind, loading, finished } = useInfiniteScroll({
+  onLoad: async () => {
+    const newItems = await fetchItems(page.value++)
+    items.value.push(...newItems)
+    if (newItems.length === 0) finished.value = true
+  },
+  distance: 100,
+})
+
+onMounted(() => bind(containerRef.value))
+<\/script>
+
+<template>
+  <div ref="containerRef" class="scroll-container">
+    <div v-for="item in items" :key="item.id">
+      {{ item.name }}
+    </div>
+    <div v-if="loading">Loading...</div>
+    <div v-if="finished">No more items</div>
+  </div>
+</template>`
+
+// ==================== Directive API ====================
 // Scenario 1: Basic infinite scroll
 const items1 = ref(Array.from({ length: 10 }, (_, i) => `Item ${i + 1}`))
 const loading1 = ref(false)
@@ -112,6 +170,25 @@ const disabledCode = `<div v-infinite-scroll="{ handler: loadMore, disabled: isC
 				<p class="hint">Stops loading after 30 items</p>
 			</div>
 			<CodeBlock :code="disabledCode" />
+		</DemoSection>
+
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API" description="Using useInfiniteScroll for programmatic infinite scroll">
+			<div class="demo-box">
+				<div ref="composableContainerRef" class="scroll-container composable-scroll">
+					<div v-for="item in composableItems" :key="item" class="list-item">
+						{{ item }}
+					</div>
+					<div v-if="composableLoading" class="loading-indicator">
+						Loading via composable...
+					</div>
+					<div v-if="composableFinished" class="complete-indicator">
+						All items loaded! ({{ composableItems.length }} items)
+					</div>
+				</div>
+				<p class="hint">Using useInfiniteScroll composable - stops after 30 items</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -225,6 +302,10 @@ h1 {
 	background: white;
 	border-radius: 8px;
 	border: 2px solid #e0e0e0;
+}
+
+.composable-scroll {
+	border-color: #667eea;
 }
 
 .list-item {

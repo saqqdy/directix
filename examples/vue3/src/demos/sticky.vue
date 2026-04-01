@@ -1,12 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useSticky } from 'directix'
+
+// Composable API demo
+const composableStickyRef = ref<HTMLElement | null>(null)
+const composableIsSticky = ref(false)
+const { isSticky, bind } = useSticky({
+	offsetTop: 0,
+	onStick: (sticky) => {
+		composableIsSticky.value = sticky
+	}
+})
+
+onMounted(() => {
+	if (composableStickyRef.value) {
+		bind(composableStickyRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useSticky } from 'directix'
+
+const headerRef = ref(null)
+const { isSticky, bind } = useSticky({
+	offsetTop: 60,
+	onStick: (sticky) => console.log('Sticky:', sticky)
+})
+
+onMounted(() => {
+	if (headerRef.value) {
+		bind(headerRef.value)
+	}
+})`
 
 // Scenario 3: With callback
-const isSticky = ref(false)
+const isStickyDirective = ref(false)
 const handleStickyChange = (sticky: boolean) => {
-	isSticky.value = sticky
+	isStickyDirective.value = sticky
 }
 
 const basicCode = `<nav v-sticky class="sticky-nav">
@@ -66,8 +98,8 @@ const callbackCode = `<div v-sticky="{ top: 0, onChange: handleStickyChange }">
 		<!-- Scenario 3: With callback -->
 		<DemoSection title="With Change Callback" description="Track sticky state changes">
 			<div class="demo-box">
-				<div class="status-badge" :class="{ active: isSticky }">
-					{{ isSticky ? 'Currently Sticky' : 'Normal Position' }}
+				<div class="status-badge" :class="{ active: isStickyDirective }">
+					{{ isStickyDirective ? 'Currently Sticky' : 'Normal Position' }}
 				</div>
 				<div class="scroll-container">
 					<div class="scroll-spacer">Scroll to trigger sticky</div>
@@ -83,6 +115,30 @@ const callbackCode = `<div v-sticky="{ top: 0, onChange: handleStickyChange }">
 				</div>
 			</div>
 			<CodeBlock :code="callbackCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API (useSticky)" description="Use useSticky for programmatic sticky control">
+			<div class="demo-box">
+				<div class="status-badge" :class="{ active: composableIsSticky }">
+					{{ composableIsSticky ? 'Currently Sticky' : 'Normal Position' }}
+				</div>
+				<div class="scroll-container">
+					<div class="scroll-spacer">Scroll to see composable sticky</div>
+					<div
+						ref="composableStickyRef"
+						class="sticky-box composable"
+						:class="{ 'is-sticky': composableIsSticky }"
+					>
+						useSticky Composable
+					</div>
+					<div class="scroll-content">
+						<p v-for="i in 10" :key="i">Content line {{ i }}</p>
+					</div>
+				</div>
+				<p class="hint">Using useSticky composable for manual binding and state tracking</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -228,6 +284,14 @@ h1 {
 
 .sticky-box.tracked {
 	background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.sticky-box.composable {
+	background: linear-gradient(135deg, #38b2ac, #319795);
+}
+
+.sticky-box.is-sticky {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .status-badge {

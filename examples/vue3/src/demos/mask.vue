@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useMask } from 'directix'
 
 // Scenario 1: Basic mask
 const phone = ref('')
@@ -31,6 +32,53 @@ const optionsCode = `<input
   }"
   placeholder="SSN"
 />`
+
+// Composable API demo
+const composableInputRef = ref<HTMLInputElement | null>(null)
+const composableValue = ref('')
+const composableRaw = ref('')
+const composableComplete = ref(false)
+
+const { bind, getRawValue, isComplete } = useMask({
+	mask: '(###) ###-####',
+	placeholder: '_',
+	onChange: (_value, raw) => {
+		composableRaw.value = raw
+		composableComplete.value = isComplete(composableValue.value)
+	},
+	onComplete: () => {
+		composableComplete.value = true
+	}
+})
+
+onMounted(() => {
+	if (composableInputRef.value) {
+		bind(composableInputRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useMask } from 'directix'
+
+const inputRef = ref<HTMLInputElement | null>(null)
+const value = ref('')
+
+const { bind, getRawValue, isComplete } = useMask({
+  mask: '(###) ###-####',
+  placeholder: '_',
+  onChange: (value, raw) => {
+    console.log('Raw value:', raw)
+  },
+  onComplete: (value) => {
+    console.log('Complete:', value)
+  }
+})
+
+onMounted(() => {
+  if (inputRef.value) {
+    bind(inputRef.value)
+  }
+})`
 </script>
 
 <template>
@@ -135,6 +183,30 @@ const optionsCode = `<input
 					</tr>
 				</tbody>
 			</table>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useMask" description="Using useMask composable for programmatic control">
+			<div class="demo-box">
+				<div class="input-group">
+					<label>Phone Number (Composable):</label>
+					<input
+						ref="composableInputRef"
+						v-model="composableValue"
+						placeholder="(___) ___-____"
+						class="mask-input"
+						:class="{ complete: composableComplete }"
+					/>
+				</div>
+				<div class="value-display">
+					<strong>Formatted:</strong> {{ composableValue || '(empty)' }}
+				</div>
+				<div class="value-display">
+					<strong>Raw:</strong> {{ composableRaw || '(empty)' }}
+				</div>
+				<p class="hint">This uses the useMask composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

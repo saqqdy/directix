@@ -1,9 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useUppercase } from 'directix'
 
 const text1 = ref('')
 const text2 = ref('')
 const text3 = ref('hello world')
+
+// Composable API demo
+const composableText = ref('hello world')
+const composableFirst = ref(false)
+const { transformed: uppercaseResult, original: uppercaseOriginal } = useUppercase({
+	text: composableText,
+	first: composableFirst,
+})
+
+const composableCode = `import { ref } from 'vue'
+import { useUppercase } from 'directix'
+
+const text = ref('hello world')
+const { transformed, original } = useUppercase({ text })
+// transformed.value = 'HELLO WORLD'
+
+// Uppercase first character only
+const { transformed: firstUpper } = useUppercase({
+	text,
+	first: true,
+})
+// firstUpper.value = 'Hello world'`
 </script>
 
 <template>
@@ -56,6 +81,36 @@ const text3 = ref('hello world')
 
 &lt;!-- On non-input elements --&gt;
 &lt;p v-uppercase&gt;hello world&lt;/p&gt;</code></pre>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useUppercase" description="Using useUppercase composable for programmatic text transformation">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Input Text</strong></p>
+						<input v-model="composableText" class="input" placeholder="Type something..." />
+					</div>
+					<div class="demo-item">
+						<p><strong>Transform Mode</strong></p>
+						<label class="checkbox-label">
+							<input type="checkbox" v-model="composableFirst" />
+							First character only
+						</label>
+					</div>
+				</div>
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Original:</strong></p>
+						<p class="text-demo">{{ uppercaseOriginal }}</p>
+					</div>
+					<div class="demo-item">
+						<p><strong>Transformed:</strong></p>
+						<p class="text-demo result">{{ uppercaseResult }}</p>
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -118,6 +173,10 @@ h3 {
 	font-weight: 500;
 }
 
+.text-demo.result {
+	color: #667eea;
+}
+
 .code {
 	background: #2d3748;
 	color: #e2e8f0;
@@ -126,5 +185,27 @@ h3 {
 	overflow-x: auto;
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+.demo-box {
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	color: #444;
+}
+
+.checkbox-label input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	accent-color: #667eea;
 }
 </style>

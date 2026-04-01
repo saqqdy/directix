@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useWatermark } from 'directix'
 
 const disabled = ref(false)
 
@@ -22,6 +23,41 @@ const customCode = `<div v-watermark="{
 }">
   Draft document
 </div>`
+
+// Composable API demo
+const composableDisabled = ref(false)
+const { style: watermarkStyle, disabled: watermarkDisabled, enable, disable } = useWatermark({
+	content: 'Composable Watermark',
+	fontSize: 18,
+	color: 'rgba(102, 126, 234, 0.2)',
+	disabled: composableDisabled
+})
+
+const toggleWatermark = () => {
+	if (watermarkDisabled.value) {
+		enable()
+	} else {
+		disable()
+	}
+}
+
+const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useWatermark } from 'directix'
+
+const { style, disabled, enable, disable } = useWatermark({
+  content: 'Confidential',
+  fontSize: 20,
+  color: 'rgba(255, 0, 0, 0.2)'
+})
+<\/script>
+
+<template>
+  <div class="container" style="position: relative;">
+    <div :style="style"></div>
+    <slot>Content protected by watermark</slot>
+  </div>
+</template>`
 </script>
 
 <template>
@@ -84,6 +120,22 @@ const customCode = `<div v-watermark="{
 					<span>Disable watermark</span>
 				</label>
 			</div>
+		</DemoSection>
+
+		<DemoSection title="Composable API" description="Use useWatermark for programmatic control">
+			<div class="demo-box">
+				<div class="watermark-container" style="position: relative;">
+					<div :style="watermarkStyle"></div>
+					<p>This content uses the composable API.</p>
+					<p>The watermark is applied via style binding.</p>
+				</div>
+				<div class="control-buttons">
+					<button @click="toggleWatermark" class="control-btn">
+						{{ watermarkDisabled ? 'Enable' : 'Disable' }} Watermark
+					</button>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">
@@ -195,6 +247,26 @@ h1 {
 .checkbox input {
 	width: 16px;
 	height: 16px;
+}
+
+.control-buttons {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.control-btn {
+	padding: 8px 16px;
+	background: #667eea;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.control-btn:hover {
+	background: #5a6fd6;
 }
 
 .api-table {

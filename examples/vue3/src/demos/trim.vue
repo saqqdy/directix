@@ -1,9 +1,42 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useTrim } from 'directix'
 
 const text1 = ref('')
 const text2 = ref('')
 const text3 = ref('')
+
+// Composable API demo
+const composableText = ref('   hello world   ')
+const composablePosition = ref<'start' | 'end' | 'both'>('both')
+const { trimmed, original: trimOriginal, wasTrimmed } = useTrim({
+	text: composableText,
+	position: composablePosition,
+})
+
+const composableCode = `import { ref } from 'vue'
+import { useTrim } from 'directix'
+
+const text = ref('   hello world   ')
+const { trimmed, original, wasTrimmed } = useTrim({ text })
+// trimmed.value = 'hello world'
+// wasTrimmed.value = true
+
+// Trim start only
+const { trimmed: startTrimmed } = useTrim({
+	text,
+	position: 'start',
+})
+// startTrimmed.value = 'hello world   '
+
+// Trim end only
+const { trimmed: endTrimmed } = useTrim({
+	text,
+	position: 'end',
+})
+// endTrimmed.value = '   hello world'`
 </script>
 
 <template>
@@ -84,6 +117,43 @@ const text3 = ref('')
 
 &lt;!-- On non-input elements --&gt;
 &lt;p v-trim&gt;   Text with spaces   &lt;/p&gt;</code></pre>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useTrim" description="Using useTrim composable for programmatic text trimming">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Input Text</strong></p>
+						<input v-model="composableText" class="input" placeholder="Type with spaces..." />
+					</div>
+					<div class="demo-item">
+						<p><strong>Trim Position</strong></p>
+						<div class="btn-group">
+							<button
+								v-for="pos in ['start', 'end', 'both'] as const"
+								:key="pos"
+								:class="{ active: composablePosition === pos }"
+								@click="composablePosition = pos"
+							>
+								{{ pos }}
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Original:</strong></p>
+						<p class="text-demo">"{{ trimOriginal }}"</p>
+					</div>
+					<div class="demo-item">
+						<p><strong>Trimmed:</strong></p>
+						<p class="text-demo result">"{{ trimmed }}"</p>
+					</div>
+				</div>
+				<p class="hint">Was trimmed: {{ wasTrimmed }}</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -151,6 +221,10 @@ h3 {
 	border-radius: 6px;
 }
 
+.text-demo.result {
+	color: #667eea;
+}
+
 .code {
 	background: #2d3748;
 	color: #e2e8f0;
@@ -159,5 +233,41 @@ h3 {
 	overflow-x: auto;
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+.demo-box {
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+.btn-group {
+	display: flex;
+	gap: 4px;
+}
+
+.btn-group button {
+	padding: 8px 16px;
+	border: 1px solid #ddd;
+	background: white;
+	cursor: pointer;
+	font-size: 13px;
+	transition: all 0.2s;
+	border-radius: 6px;
+}
+
+.btn-group button:first-child {
+	border-radius: 6px 0 0 6px;
+}
+
+.btn-group button:last-child {
+	border-radius: 0 6px 6px 0;
+}
+
+.btn-group button.active {
+	background: #667eea;
+	border-color: #667eea;
+	color: white;
 }
 </style>

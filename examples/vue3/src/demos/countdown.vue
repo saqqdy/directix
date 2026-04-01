@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useCountdown } from 'directix'
 
 // Target time: 2 minutes from now
 const targetTime1 = computed(() => Date.now() + 2 * 60 * 1000)
@@ -36,6 +37,56 @@ const callbackCode = `<span v-countdown="{
   }
 }">
 </span>`
+
+// Composable API demo
+const composableTarget = ref(Date.now() + 30 * 1000) // 30 seconds
+const {
+	formatted: composableFormatted,
+	running,
+	paused,
+	completed: composableCompleted,
+	pause,
+	resume,
+	reset: resetComposable
+} = useCountdown({
+	target: composableTarget,
+	format: 'mm:ss',
+	onComplete: () => console.log('Composable countdown finished!')
+})
+
+const resetComposableDemo = () => {
+	composableTarget.value = Date.now() + 30 * 1000
+}
+
+const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useCountdown } from 'directix'
+
+const targetDate = ref(Date.now() + 60 * 1000) // 1 minute
+
+const {
+  formatted,
+  running,
+  paused,
+  completed,
+  pause,
+  resume,
+  reset
+} = useCountdown({
+  target: targetDate,
+  format: 'mm:ss',
+  onComplete: () => console.log('Done!')
+})
+<\/script>
+
+<template>
+  <div>
+    <span>{{ formatted }}</span>
+    <button @click="pause" v-if="running">Pause</button>
+    <button @click="resume" v-if="paused">Resume</button>
+    <button @click="reset">Reset</button>
+  </div>
+</template>`
 </script>
 
 <template>
@@ -91,6 +142,24 @@ const callbackCode = `<span v-countdown="{
 				<button @click="resetCallback" class="reset-btn">Reset</button>
 			</div>
 			<CodeBlock :code="callbackCode" />
+		</DemoSection>
+
+		<DemoSection title="Composable API" description="Use useCountdown for programmatic control">
+			<div class="demo-box">
+				<div class="countdown-item">
+					<span class="label">30 seconds (with controls):</span>
+					<span class="countdown-value" :class="{ 'countdown-done': composableCompleted }">
+						{{ composableFormatted }}
+					</span>
+					<span v-if="composableCompleted" class="done-badge">Done!</span>
+				</div>
+				<div class="control-buttons">
+					<button @click="pause" v-if="running" class="control-btn">Pause</button>
+					<button @click="resume" v-if="paused" class="control-btn">Resume</button>
+					<button @click="resetComposable(); resetComposableDemo()" class="control-btn">Reset</button>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">
@@ -229,6 +298,26 @@ h1 {
 }
 
 .reset-btn:hover {
+	background: #5a6fd6;
+}
+
+.control-buttons {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.control-btn {
+	padding: 8px 16px;
+	background: #667eea;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.control-btn:hover {
 	background: #5a6fd6;
 }
 

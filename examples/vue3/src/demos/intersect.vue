@@ -1,7 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useIntersect } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+
+// Composable API demo
+const composableScrollRef = ref<HTMLElement | null>(null)
+const composableTargetRef = ref<HTMLElement | null>(null)
+const composableVisible = ref(false)
+
+const { isIntersecting, bind: bindIntersect } = useIntersect({
+	onEnter: () => {
+		composableVisible.value = true
+	},
+	onLeave: () => {
+		composableVisible.value = false
+	}
+})
+
+onMounted(() => {
+	if (composableTargetRef.value) {
+		bindIntersect(composableTargetRef.value)
+	}
+})
 
 // Scenario 1: Multiple items tracking
 const containerRef = ref<HTMLElement | null>(null)
@@ -63,6 +84,26 @@ const thresholdCode = `<div v-intersect="{
 }">
   Track visibility percentage
 </div>`
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useIntersect } from 'directix'
+
+const target = ref(null)
+const { isIntersecting, bind } = useIntersect({
+  threshold: 0.5,
+  onEnter: () => console.log('Entered'),
+  onLeave: () => console.log('Left')
+})
+
+onMounted(() => bind(target.value))
+<\/script>
+
+<template>
+  <div ref="target" :class="{ visible: isIntersecting }">
+    I'm visible!
+  </div>
+</template>`
 </script>
 
 <template>
@@ -210,6 +251,34 @@ const thresholdCode = `<div v-intersect="{
 				<p class="hint">Scroll horizontally to see the visibility percentage change (0% - 100%)</p>
 			</div>
 			<CodeBlock :code="thresholdCode" />
+		</DemoSection>
+
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API (useIntersect)" description="Using the composable for programmatic intersection detection">
+			<div class="demo-box">
+				<div class="status-row">
+					<span class="status-label">Status:</span>
+					<span class="status-dot" :class="{ active: composableVisible }">
+						{{ composableVisible ? 'Visible' : 'Hidden' }}
+					</span>
+				</div>
+				<div ref="composableScrollRef" class="scroll-container">
+					<div class="scroll-content tall">
+						<div class="spacer">Scroll down</div>
+						<div
+							ref="composableTargetRef"
+							class="track-item"
+							:class="{ visible: composableVisible }"
+						>
+							Track me with useIntersect
+							<span class="item-status">{{ composableVisible ? 'Visible' : 'Hidden' }}</span>
+						</div>
+						<div class="spacer">Scroll up</div>
+					</div>
+				</div>
+				<p class="hint">Scroll to see the element toggle between visible/hidden</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

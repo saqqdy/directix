@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useFocus } from 'directix'
 
 // 场景1: 基础用法
 const showInput = ref(false)
@@ -63,6 +64,49 @@ const optionsCode = `interface FocusOptions {
   onFocus?: (el: HTMLElement) => void  // 聚焦回调
   onBlur?: (el: HTMLElement) => void   // 失焦回调
 }`
+
+// Composable API demo
+const composableFocusRef = ref<HTMLElement | null>(null)
+const composableFocusCount = ref(0)
+const composableBlurCount = ref(0)
+const {
+	isFocused: composableIsFocused,
+	focus: composableFocus,
+	blur: composableBlur,
+	bind: bindFocus
+} = useFocus({
+	onFocus: () => composableFocusCount.value++,
+	onBlur: () => composableBlurCount.value++
+})
+
+onMounted(() => {
+	if (composableFocusRef.value) {
+		bindFocus(composableFocusRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useFocus } from 'directix'
+
+const input = ref(null)
+const { isFocused, focus, blur, bind } = useFocus({
+  onFocus: () => console.log('Focused!'),
+  onBlur: () => console.log('Blurred!')
+})
+
+onMounted(() => {
+  bind(input.value)
+})
+
+// Programmatically control focus
+function handleButtonClick() {
+  focus()
+}
+
+// Usage in template:
+// <input ref="input" />
+// <button @click="focus">Focus Input</button>
+// <span v-if="isFocused">Input is focused</span>`
 </script>
 
 <template>
@@ -192,6 +236,31 @@ const optionsCode = `interface FocusOptions {
 				</form>
 				<p class="hint">用户名输入框自动聚焦，提升用户体验</p>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useFocus" description="Using useFocus composable for programmatic focus control">
+			<div class="demo-box">
+				<div class="composable-demo">
+					<input
+						ref="composableFocusRef"
+						class="input"
+						type="text"
+						placeholder="Focus controlled by composable"
+					/>
+					<div class="button-group">
+						<button class="btn" @click="composableFocus">Focus</button>
+						<button class="btn secondary" @click="composableBlur">Blur</button>
+					</div>
+				</div>
+				<div class="stats">
+					<span>Status: <strong :class="{ focused: composableIsFocused }">{{ composableIsFocused ? 'Focused' : 'Not focused' }}</strong></span>
+					<span>Focus count: <strong>{{ composableFocusCount }}</strong></span>
+					<span>Blur count: <strong>{{ composableBlurCount }}</strong></span>
+				</div>
+				<p class="hint">This uses the useFocus composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API 说明 -->
@@ -340,6 +409,29 @@ h1 {
 
 .stats strong {
 	color: #667eea;
+}
+
+.stats strong.focused {
+	color: #10b981;
+}
+
+.composable-demo {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.button-group {
+	display: flex;
+	gap: 8px;
+}
+
+.btn.secondary {
+	background: #9ca3af;
+}
+
+.btn.secondary:hover {
+	background: #6b7280;
 }
 
 .refocus-demo {

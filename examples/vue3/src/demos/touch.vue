@@ -1,6 +1,99 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useTouch } from 'directix'
 
+// ==================== Composable API ====================
+// Touch composable refs
+const touchContainerRef = ref<HTMLElement | null>(null)
+const touchContainerRef2 = ref<HTMLElement | null>(null)
+const composableSwipeDirection = ref('')
+const composableTapCount = ref(0)
+const composableScale = ref(1)
+const composableAngle = ref(0)
+const composableGesture = ref<string | null>(null)
+
+// Touch composable for swipe detection
+const { gesture: swipeGesture, bind: bindSwipe } = useTouch({
+	onSwipe: (e) => {
+		composableSwipeDirection.value = e.direction || ''
+		setTimeout(() => {
+			composableSwipeDirection.value = ''
+		}, 500)
+	},
+})
+
+// Touch composable for tap and long press
+const { gesture: tapGesture, bind: bindTap } = useTouch({
+	onTap: () => {
+		composableTapCount.value++
+	},
+	onLongPress: () => {
+		composableGesture.value = 'longPress'
+		setTimeout(() => {
+			composableGesture.value = null
+		}, 800)
+	},
+})
+
+// Touch composable for pinch and rotate
+const { bind: bindPinch } = useTouch({
+	onPinch: (e) => {
+		if (e.scale) {
+			composableScale.value = Math.max(0.5, Math.min(3, Math.round(e.scale * 100) / 100))
+		}
+	},
+	onRotate: (e) => {
+		if (e.rotation) {
+			composableAngle.value = Math.round(composableAngle.value + e.rotation)
+		}
+	},
+})
+
+const composableBoxStyle = computed(() => ({
+	transform: `scale(${composableScale.value}) rotate(${composableAngle.value}deg)`,
+}))
+
+function resetComposableTransform() {
+	composableScale.value = 1
+	composableAngle.value = 0
+}
+
+onMounted(() => {
+	if (touchContainerRef.value) bindSwipe(touchContainerRef.value)
+	if (touchContainerRef2.value) {
+		bindTap(touchContainerRef2.value)
+		bindPinch(touchContainerRef2.value)
+	}
+})
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useTouch } from 'directix'
+
+const containerRef = ref(null)
+const lastDirection = ref('')
+
+const { gesture, bind } = useTouch({
+  onSwipe: (e) => {
+    lastDirection.value = e.direction
+  },
+  onTap: () => console.log('Tapped!'),
+  onLongPress: () => console.log('Long pressed!'),
+  onPinch: (e) => console.log('Pinch scale:', e.scale),
+  onRotate: (e) => console.log('Rotation:', e.rotation),
+})
+
+onMounted(() => bind(containerRef.value))
+<\/script>
+
+<template>
+  <div ref="containerRef">
+    Current gesture: {{ gesture }}
+    Swipe direction: {{ lastDirection }}
+  </div>
+</template>`
+
+// ==================== Directive API ====================
 // Swipe state
 const lastSwipe = ref('')
 const swipeCount = ref(0)
@@ -214,8 +307,57 @@ function getDirectionArrow(direction: string): string {
 			devices or Chrome DevTools device emulation.
 		</div>
 
-		<!-- Code Example -->
-		<h3>Code Example</h3>
+		<!-- Composable API Demo -->
+		<h3>Composable API</h3>
+		<p class="hint">Using useTouch composable for programmatic touch gesture detection</p>
+
+		<div class="demo-row">
+			<div ref="touchContainerRef" class="swipe-box composable-swipe">
+				<div class="swipe-content">
+					<div class="swipe-icon">👆</div>
+					<p>useTouch - Swipe</p>
+					<div class="swipe-result" v-if="composableSwipeDirection">
+						<span class="arrow">{{ getDirectionArrow(composableSwipeDirection) }}</span>
+						<span>{{ composableSwipeDirection }}</span>
+					</div>
+					<div class="gesture-info">Gesture: {{ swipeGesture || 'none' }}</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-row">
+			<div ref="touchContainerRef2" class="composable-box">
+				<div class="composable-content">
+					<div class="composable-icon">🖐️</div>
+					<p>useTouch - Multi-gesture</p>
+					<p class="composable-hint">Tap, Long Press, Pinch, Rotate</p>
+				</div>
+				<div class="composable-stats">
+					<div class="stat-item">
+						<span>Taps:</span>
+						<strong>{{ composableTapCount }}</strong>
+					</div>
+					<div class="stat-item">
+						<span>Scale:</span>
+						<strong>{{ composableScale.toFixed(2) }}x</strong>
+					</div>
+					<div class="stat-item">
+						<span>Angle:</span>
+						<strong>{{ composableAngle }}°</strong>
+					</div>
+					<div class="stat-item">
+						<span>Gesture:</span>
+						<strong>{{ composableGesture || tapGesture || 'none' }}</strong>
+					</div>
+				</div>
+				<button class="reset-btn small" @click="resetComposableTransform">Reset</button>
+			</div>
+		</div>
+
+		<pre class="code"><code>{{ composableCode }}</code></pre>
+
+		<!-- Directive Code Example -->
+		<h3>Directive Code Example</h3>
 		<pre class="code"><code>&lt;!-- Swipe detection --&gt;
 &lt;div v-touch="{ onSwipe: handleSwipe }"&gt;Swipe me&lt;/div&gt;
 
@@ -608,6 +750,82 @@ h3 {
 	font-size: 14px;
 	line-height: 1.7;
 	font-family: 'Fira Code', 'Consolas', monospace;
+}
+
+/* Composable Demo Styles */
+.composable-swipe {
+	background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.gesture-info {
+	margin-top: 8px;
+	font-size: 13px;
+	opacity: 0.8;
+}
+
+.composable-box {
+	flex: 1;
+	min-height: 200px;
+	background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	position: relative;
+	overflow: hidden;
+	user-select: none;
+	cursor: pointer;
+}
+
+.composable-content {
+	text-align: center;
+	margin-bottom: 16px;
+}
+
+.composable-icon {
+	font-size: 32px;
+	margin-bottom: 8px;
+}
+
+.composable-hint {
+	font-size: 12px;
+	opacity: 0.7;
+	margin-top: 4px;
+}
+
+.composable-stats {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+	width: 100%;
+	max-width: 280px;
+}
+
+.stat-item {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 8px 12px;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 13px;
+}
+
+.stat-item strong {
+	color: #a5b4fc;
+}
+
+.reset-btn.small {
+	padding: 6px 12px;
+	font-size: 12px;
+	margin-top: 12px;
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.reset-btn.small:hover {
+	background: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 600px) {

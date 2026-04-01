@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useScroll } from 'directix'
 
 // Scenario 1: Basic scroll tracking
 const scrollInfo = ref({
@@ -41,6 +42,41 @@ const progressCode = `<div v-scroll="handleProgress">
   <div class="progress-bar" :style="{ width: progress + '%' }"></div>
   Scrollable content
 </div>`
+
+// Composable API demo
+const composableScrollRef = ref<HTMLElement | null>(null)
+const {
+	scrollTop: composableScrollTop,
+	progressY: composableProgressY,
+	directionY: composableDirectionY,
+	isScrolling: composableIsScrolling,
+	bind: bindScroll
+} = useScroll({ throttle: 16 })
+
+onMounted(() => {
+	if (composableScrollRef.value) {
+		bindScroll(composableScrollRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useScroll } from 'directix'
+
+const container = ref(null)
+const { scrollTop, progressY, directionY, isScrolling, bind } = useScroll({
+  throttle: 16
+})
+
+onMounted(() => {
+  bind(container.value)
+})
+
+// Usage in template:
+// <div ref="container" class="scroll-container">
+//   Scroll position: {{ scrollTop }}px
+//   Progress: {{ (progressY * 100).toFixed(0) }}%
+//   Direction: {{ directionY === 1 ? 'Down' : directionY === -1 ? 'Up' : 'None' }}
+// </div>`
 </script>
 
 <template>
@@ -110,6 +146,37 @@ const progressCode = `<div v-scroll="handleProgress">
 				</div>
 			</div>
 			<CodeBlock :code="progressCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useScroll" description="Using useScroll composable for programmatic scroll tracking">
+			<div class="demo-box">
+				<div class="info-panel">
+					<div class="info-item">
+						<span class="label">Scroll Top:</span>
+						<span class="value">{{ Math.round(composableScrollTop) }}px</span>
+					</div>
+					<div class="info-item">
+						<span class="label">Progress:</span>
+						<span class="value">{{ Math.round(composableProgressY * 100) }}%</span>
+					</div>
+					<div class="info-item">
+						<span class="label">Direction:</span>
+						<span class="value">{{ composableDirectionY === 1 ? 'Down' : composableDirectionY === -1 ? 'Up' : 'None' }}</span>
+					</div>
+					<div class="info-item">
+						<span class="label">Is Scrolling:</span>
+						<span class="value">{{ composableIsScrolling ? 'Yes' : 'No' }}</span>
+					</div>
+				</div>
+				<div ref="composableScrollRef" class="scroll-container">
+					<div class="scroll-content">
+						<p v-for="i in 20" :key="i">Composable scroll line {{ i }}</p>
+					</div>
+				</div>
+				<p class="hint">This uses the useScroll composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

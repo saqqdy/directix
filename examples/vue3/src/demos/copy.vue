@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useCopy } from 'directix'
 
 // Scenario 1: Basic usage
 const basicText = ref('Hello, Directix!')
@@ -34,6 +35,10 @@ import { Directix } from 'directix'
 const app = createApp(App)
 app.use(Directix)`
 
+// Composable API demo
+const composableText = ref('Composable API demo')
+const { copy: composableCopy, copied: composableCopied } = useCopy({ source: composableText })
+
 const basicCode = `<button v-copy="{ value: text, onSuccess: onCopy }">
   {{ copied ? 'Copied!' : 'Copy' }}
 </button>`
@@ -57,6 +62,19 @@ const optionsCode = `interface CopyOptions {
   value: string                        // 要复制的文本
   onSuccess?: (text: string) => void   // 成功回调
   onError?: (err: Error) => void       // 失败回调
+}`
+
+const composableCode = `import { ref } from 'vue'
+import { useCopy } from 'directix'
+
+const text = ref('Hello World')
+const { copy, copied, isSupported } = useCopy({ source: text })
+
+// Or use inline text
+const { copy } = useCopy()
+
+async function handleCopy() {
+  await copy('Custom text')
 }`
 </script>
 
@@ -147,6 +165,24 @@ const optionsCode = `interface CopyOptions {
 					<pre class="code-content">{{ codeText }}</pre>
 				</div>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useCopy" description="Using useCopy composable for programmatic control">
+			<div class="demo-box">
+				<div class="copy-row">
+					<input v-model="composableText" class="input" />
+					<button
+						@click="composableCopy()"
+						class="btn"
+						:class="{ copied: composableCopied }"
+					>
+						{{ composableCopied ? '✓ Copied!' : 'Copy (Composable)' }}
+					</button>
+				</div>
+				<p class="hint">This uses the useCopy composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

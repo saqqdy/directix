@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useLongPress } from 'directix'
 
 // Scenario 1: Basic long press
 const pressCount = ref(0)
@@ -50,6 +51,57 @@ const callbacksCode = `<button v-long-press="{
 }">
   Press and Hold
 </button>`
+
+// Composable API demo
+const composableBtnRef = ref<HTMLElement | null>(null)
+const composableCount = ref(0)
+const composableRemaining = ref(0)
+const composableState = ref('Waiting')
+
+const { isPressing: composableIsPressing, bind: bindLongPress } = useLongPress({
+	duration: 800,
+	onStart: () => {
+		composableState.value = 'Pressing...'
+	},
+	onTrigger: () => {
+		composableCount.value++
+		composableState.value = 'Completed!'
+	},
+	onCancel: () => {
+		composableState.value = 'Cancelled'
+	},
+	onTick: (remaining) => {
+		composableRemaining.value = remaining
+	}
+})
+
+onMounted(() => {
+	if (composableBtnRef.value) {
+		bindLongPress(composableBtnRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useLongPress } from 'directix'
+
+const buttonRef = ref<HTMLElement | null>(null)
+const count = ref(0)
+
+const { isPressing, bind } = useLongPress({
+  duration: 800,
+  onTrigger: () => {
+    count.value++
+  },
+  onTick: (remaining) => {
+    console.log(\`\${remaining}ms remaining\`)
+  }
+})
+
+onMounted(() => {
+  if (buttonRef.value) {
+    bind(buttonRef.value)
+  }
+})`
 </script>
 
 <template>
@@ -115,6 +167,26 @@ const callbacksCode = `<button v-long-press="{
 				<p class="hint">Try pressing and releasing early to see cancel</p>
 			</div>
 			<CodeBlock :code="callbacksCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useLongPress" description="Using useLongPress composable for programmatic control">
+			<div class="demo-box">
+				<div class="state-display" :class="composableState.toLowerCase()">
+					State: <strong>{{ composableState }}</strong>
+					<span v-if="composableIsPressing && composableRemaining > 0" class="timer">
+						{{ composableRemaining }}ms remaining
+					</span>
+				</div>
+				<div class="result-display">
+					Long press count: <strong>{{ composableCount }}</strong>
+				</div>
+				<button ref="composableBtnRef" class="press-btn composable">
+					Composable Demo (800ms)
+				</button>
+				<p class="hint">This uses the useLongPress composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -280,6 +352,10 @@ h1 {
 
 .press-btn.callback {
 	background: linear-gradient(135deg, #48bb78, #38a169);
+}
+
+.press-btn.composable {
+	background: linear-gradient(135deg, #9f7aea, #805ad5);
 }
 
 .api-table {

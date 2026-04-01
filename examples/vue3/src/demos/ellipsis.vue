@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useEllipsis } from 'directix'
 
 const singleLineCode = `<p v-ellipsis style="width: 200px;">
   Long text that will be truncated with ellipsis...
@@ -18,6 +20,33 @@ const expandableCode = `<p v-ellipsis="{ lines: 2, expandable: true }" style="wi
 const titleCode = `<p v-ellipsis="{ lines: 2, titleBehavior: 'always' }" style="width: 280px;">
   Hover to see full text as title.
 </p>`
+
+// Composable API demo
+const composableText = ref('This is a very long text that will be truncated based on max width.')
+const composableMaxWidth = ref(200)
+const { truncated: ellipsisTruncated, isTruncated: ellipsisIsTruncated, original: ellipsisOriginal } = useEllipsis({
+	text: composableText,
+	maxWidth: composableMaxWidth,
+})
+
+const composableCode = `import { ref } from 'vue'
+import { useEllipsis } from 'directix'
+
+const text = ref('This is a very long text that needs to be truncated')
+const { truncated, isTruncated, original } = useEllipsis({
+	text,
+	maxWidth: 200,
+	ellipsis: '...',
+})
+
+// truncated.value = truncated text
+// isTruncated.value = true if text was truncated
+
+// Multi-line truncation
+const { truncated: multiLineTruncated } = useEllipsis({
+	text,
+	lines: 2,
+})`
 </script>
 
 <template>
@@ -105,6 +134,34 @@ const titleCode = `<p v-ellipsis="{ lines: 2, titleBehavior: 'always' }" style="
 				</tbody>
 			</table>
 		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useEllipsis" description="Using useEllipsis composable for programmatic text truncation">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Input Text</strong></p>
+						<input v-model="composableText" class="input" placeholder="Type something..." />
+					</div>
+					<div class="demo-item">
+						<p><strong>Max Width: {{ composableMaxWidth }}px</strong></p>
+						<input type="range" v-model.number="composableMaxWidth" min="100" max="400" step="20" />
+					</div>
+				</div>
+				<div class="demo-row">
+					<div class="demo-item">
+						<p><strong>Original:</strong></p>
+						<p class="text-demo">{{ ellipsisOriginal }}</p>
+					</div>
+					<div class="demo-item">
+						<p><strong>Truncated:</strong></p>
+						<p class="text-demo result">{{ ellipsisTruncated }}</p>
+						<p class="hint">Is truncated: {{ ellipsisIsTruncated }}</p>
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -172,5 +229,57 @@ h1 {
 .api-table th {
 	background: #f8f9fa;
 	font-weight: 600;
+}
+
+.demo-row {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.demo-item {
+	flex: 1;
+	min-width: 200px;
+}
+
+.demo-item p {
+	margin: 0 0 8px 0;
+	color: #444;
+}
+
+.demo-item p strong {
+	color: #667eea;
+}
+
+.input {
+	width: 100%;
+	padding: 10px 12px;
+	border: 2px solid #e2e8f0;
+	border-radius: 6px;
+	font-size: 14px;
+	transition: border-color 0.2s;
+}
+
+.input:focus {
+	outline: none;
+	border-color: #667eea;
+}
+
+.text-demo {
+	font-size: 14px;
+	line-height: 1.6;
+	color: #333;
+	padding: 12px;
+	background: #fff;
+	border-radius: 6px;
+	border: 1px solid #e2e8f0;
+	margin: 0;
+}
+
+.text-demo.result {
+	color: #667eea;
+	border-color: #667eea33;
+	background: #667eea08;
 }
 </style>

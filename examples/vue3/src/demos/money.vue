@@ -1,11 +1,45 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useMoney } from 'directix'
 
 const usd = ref('')
 const eur = ref('')
 const gbp = ref('')
 const tryIt = ref('')
 const displayPrice = 1234567.89
+
+// Composable API demo
+const composablePrice = ref(1234567.89)
+const { formatted: usdFormatted } = useMoney({ value: composablePrice, symbol: '$' })
+const { formatted: eurFormatted } = useMoney({ value: composablePrice, symbol: '€', symbolPosition: 'after' })
+const { formatted: jpyFormatted } = useMoney({ value: composablePrice, symbol: '¥', precision: 0 })
+
+const composableCode = `import { ref } from 'vue'
+import { useMoney } from 'directix'
+
+const price = ref(1234.56)
+
+// USD format
+const { formatted: usd } = useMoney({ value: price, symbol: '$' })
+// usd.value = '$1,234.56'
+
+// Euro format (symbol after)
+const { formatted: eur } = useMoney({
+  value: price,
+  symbol: ' €',
+  symbolPosition: 'after'
+})
+// eur.value = '1,234.56 €'
+
+// Japanese Yen (no decimals)
+const { formatted: jpy } = useMoney({
+  value: price,
+  symbol: '¥',
+  precision: 0
+})
+// jpy.value = '¥1,235'`
 </script>
 
 <template>
@@ -80,6 +114,28 @@ const displayPrice = 1234567.89
 				<p v-money="{ symbol: '¥', precision: 0 }" class="formatted-value">{{ displayPrice }}</p>
 			</div>
 		</div>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useMoney" description="Using useMoney composable for reactive money formatting">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item preview">
+						<p><strong>USD (Composable):</strong></p>
+						<p class="formatted-value">{{ usdFormatted }}</p>
+					</div>
+					<div class="demo-item preview">
+						<p><strong>EUR (Composable):</strong></p>
+						<p class="formatted-value">{{ eurFormatted }}</p>
+					</div>
+					<div class="demo-item preview">
+						<p><strong>JPY (Composable):</strong></p>
+						<p class="formatted-value">{{ jpyFormatted }}</p>
+					</div>
+				</div>
+				<p class="hint">These use the useMoney composable for reactive formatting</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage (USD) --&gt;
@@ -186,5 +242,12 @@ h3 {
 	overflow-x: auto;
 	font-size: 13px;
 	line-height: 1.7;
+}
+
+.demo-box {
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 12px;
 }
 </style>

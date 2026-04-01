@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useThrottle } from 'directix'
 
 // Scenario 1: Basic usage
 const clickCount = ref(0)
@@ -44,6 +45,15 @@ const handleSubmit = () => {
 	}, 500)
 }
 
+// Composable API demo
+const composableClickCount = ref(0)
+const { run: throttledClick } = useThrottle({
+	handler: () => {
+		composableClickCount.value++
+	},
+	wait: 500,
+})
+
 const basicCode = `<button v-throttle="handleClick">
   Click Me
 </button>
@@ -74,6 +84,22 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 
 <!-- 也支持 resize、mousemove 等事件 -->
 <Window v-throttle.resize="handleResize" />`
+
+const composableCode = `import { ref } from 'vue'
+import { useThrottle } from 'directix'
+
+const clickCount = ref(0)
+
+const { run: throttledClick, cancel } = useThrottle({
+  handler: () => {
+    clickCount.value++
+    console.log('Throttled click!')
+  },
+  wait: 500
+})
+
+// Use in template
+// <button @click="throttledClick">Click Me</button>`
 </script>
 
 <template>
@@ -208,6 +234,20 @@ const scrollCode = `<!-- 使用 .scroll 修饰符指定滚动事件 -->
 				</div>
 				<p class="hint">Click button rapidly, only one submission within 2 seconds</p>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useThrottle" description="Using useThrottle composable for programmatic control">
+			<div class="demo-box">
+				<button @click="throttledClick" class="btn">
+					Click Me (500ms throttle)
+				</button>
+				<div class="stats">
+					<span>Click count: <strong>{{ composableClickCount }}</strong></span>
+				</div>
+				<p class="hint">This uses the useThrottle composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

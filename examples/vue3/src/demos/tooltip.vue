@@ -1,7 +1,45 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useTooltip } from 'directix'
 
 const showManualTooltip = ref(false)
+
+// Composable API demo
+const composableBtnRef = ref<HTMLElement | null>(null)
+const { isVisible, bind } = useTooltip({
+	content: 'This tooltip is created via composable API!',
+	placement: 'top',
+	trigger: 'hover'
+})
+
+onMounted(() => {
+	if (composableBtnRef.value) {
+		bind(composableBtnRef.value)
+	}
+})
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useTooltip } from 'directix'
+
+const buttonRef = ref(null)
+const { isVisible, bind } = useTooltip({
+  content: 'Tooltip text',
+  placement: 'top',
+  trigger: 'hover'
+})
+
+onMounted(() => {
+  if (buttonRef.value) {
+    bind(buttonRef.value)
+  }
+})
+<\/script>
+
+<template>
+  <button ref="buttonRef">Hover me</button>
+  <p v-if="isVisible">Tooltip is visible</p>
+</template>`
 </script>
 
 <template>
@@ -64,6 +102,13 @@ const showManualTooltip = ref(false)
 
 &lt;!-- With delay --&gt;
 &lt;button v-tooltip="{ content: 'Tooltip', delay: 500 }"&gt;Delay&lt;/button&gt;</code></pre>
+
+		<h3>Composable API</h3>
+		<div class="demo-row center gap">
+			<button ref="composableBtnRef" class="btn">Hover me (Composable)</button>
+			<span v-if="isVisible" class="status-badge">Tooltip visible</span>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
 	</div>
 </template>
 
@@ -130,5 +175,14 @@ h3 {
 	overflow-x: auto;
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+.status-badge {
+	background: #28a745;
+	color: white;
+	padding: 4px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 600;
 }
 </style>

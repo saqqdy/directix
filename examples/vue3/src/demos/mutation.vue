@@ -1,7 +1,43 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useMutation } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+
+// Composable API demo
+const composableRef = ref<HTMLElement | null>(null)
+const composableLog = ref<string[]>([])
+const composableChildCount = ref(1)
+
+const { bind: bindMutation } = useMutation({
+	handler: (mutations) => {
+		mutations.forEach(mutation => {
+			if (mutation.type === 'childList') {
+				composableLog.value.push(`Children changed: +${mutation.addedNodes.length} -${mutation.removedNodes.length}`)
+			}
+		})
+		if (composableLog.value.length > 5) {
+			composableLog.value.shift()
+		}
+	},
+	childList: true
+})
+
+onMounted(() => {
+	if (composableRef.value) {
+		bindMutation(composableRef.value)
+	}
+})
+
+const addComposableChild = () => {
+	composableChildCount.value++
+}
+
+const removeComposableChild = () => {
+	if (composableChildCount.value > 0) {
+		composableChildCount.value--
+	}
+}
 
 // Scenario 1: Basic mutation observer
 const mutationLog = ref<string[]>([])
@@ -56,6 +92,31 @@ const attrCode = `<div v-mutation="{
 }">
   Observe attribute changes
 </div>`
+
+const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useMutation } from 'directix'
+
+const containerRef = ref(null)
+const { bind } = useMutation({
+  handler: (mutations) => {
+    mutations.forEach(mutation => {
+      console.log('Type:', mutation.type)
+      console.log('Target:', mutation.target)
+    })
+  },
+  childList: true,
+  subtree: true
+})
+
+onMounted(() => bind(containerRef.value))
+<\/script>
+
+<template>
+  <div ref="containerRef">
+    Content to observe
+  </div>
+</template>`
 </script>
 
 <template>
@@ -106,6 +167,25 @@ const attrCode = `<div v-mutation="{
 				</div>
 			</div>
 			<CodeBlock :code="attrCode" />
+		</DemoSection>
+
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API (useMutation)" description="Using the composable for programmatic mutation observation">
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="addComposableChild">Add Child</button>
+					<button class="btn secondary" @click="removeComposableChild">Remove Child</button>
+				</div>
+				<div class="log-panel">
+					<strong>Log:</strong> {{ composableLog.length > 0 ? composableLog.join(' | ') : 'No changes yet' }}
+				</div>
+				<div ref="composableRef" class="mutation-container">
+					<div v-for="i in composableChildCount" :key="i" class="child-item">
+						Child {{ i }}
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

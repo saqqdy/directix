@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useClickDelay } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+
+// Composable API Demo
+const composableClickCount = ref(0)
+const { click: composableClick, isPending } = useClickDelay({
+	handler: () => {
+		composableClickCount.value++
+	},
+	delay: 500
+})
 
 // Scenario 1: Basic usage
 const clickCount = ref(0)

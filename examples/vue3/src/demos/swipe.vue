@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useSwipe } from 'directix'
 
 // Basic Usage
 const swipeDirection = ref('')
@@ -40,6 +41,60 @@ const horizontalCode = `<div v-swipe="{
 }">
   Horizontal swipes only
 </div>`
+
+// Composable API demo
+const composableSwipeRef = ref<HTMLElement | null>(null)
+const composableSwipeDirection = ref('')
+const composableSwipeCount = ref(0)
+const {
+	direction: composableDirection,
+	isSwiping: composableIsSwiping,
+	bind: bindSwipe
+} = useSwipe({
+	threshold: 30,
+	onLeft: () => {
+		composableSwipeDirection.value = 'left'
+		composableSwipeCount.value++
+	},
+	onRight: () => {
+		composableSwipeDirection.value = 'right'
+		composableSwipeCount.value++
+	},
+	onUp: () => {
+		composableSwipeDirection.value = 'up'
+		composableSwipeCount.value++
+	},
+	onDown: () => {
+		composableSwipeDirection.value = 'down'
+		composableSwipeCount.value++
+	}
+})
+
+onMounted(() => {
+	if (composableSwipeRef.value) {
+		bindSwipe(composableSwipeRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useSwipe } from 'directix'
+
+const container = ref(null)
+const { direction, isSwiping, bind } = useSwipe({
+  threshold: 30,
+  onLeft: () => prevSlide(),
+  onRight: () => nextSlide()
+})
+
+onMounted(() => {
+  bind(container.value)
+})
+
+// Usage in template:
+// <div ref="container" class="swipe-area">
+//   Swipe me!
+//   Last direction: {{ direction }}
+// </div>`
 </script>
 
 <template>
@@ -116,6 +171,30 @@ const horizontalCode = `<div v-swipe="{
 				</div>
 			</div>
 			<CodeBlock :code="horizontalCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useSwipe" description="Using useSwipe composable for programmatic swipe detection">
+			<div class="demo-box">
+				<div
+					ref="composableSwipeRef"
+					class="swipe-area composable"
+				>
+					<p>Swipe in any direction (Composable)</p>
+					<div class="arrows">
+						<span>↑</span>
+						<span>←  →</span>
+						<span>↓</span>
+					</div>
+					<p class="result" v-if="composableSwipeDirection">
+						Last swipe: <strong>{{ composableSwipeDirection }}</strong>
+					</p>
+					<p class="hint" v-else>Swipe to see direction</p>
+					<p class="count">Total swipes: {{ composableSwipeCount }}</p>
+				</div>
+				<p class="hint">This uses the useSwipe composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">
@@ -242,6 +321,10 @@ h1 {
 .swipe-area .hint {
 	color: rgba(255, 255, 255, 0.7);
 	margin-top: 8px;
+}
+
+.swipe-area.composable {
+	background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .api-table {

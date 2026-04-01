@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useDebounce } from 'directix'
 
 // Scenario 1: Basic usage
 const searchText = ref('')
@@ -31,6 +32,18 @@ const resetLeadingDemo = () => {
 
 // Scenario 4: Real-time display
 const inputHistory = ref<string[]>([])
+
+// Composable API demo
+const composableSearchText = ref('')
+const composableSearchResults = ref<string[]>([])
+const { run: composableSearch, cancel: cancelSearch } = useDebounce({
+	handler: () => {
+		composableSearchResults.value = ['Apple', 'Banana', 'Orange', 'Grape'].filter(f =>
+			f.toLowerCase().includes(composableSearchText.value.toLowerCase())
+		)
+	},
+	wait: 500,
+})
 
 const basicCode = `<input
   v-model="search"
@@ -67,6 +80,23 @@ const optionsCode = `interface DebounceOptions {
   leading?: boolean      // 是否在开始时触发，默认 false
   trailing?: boolean     // 是否在结束时触发，默认 true
 }`
+
+const composableCode = `import { ref, watch } from 'vue'
+import { useDebounce } from 'directix'
+
+const searchQuery = ref('')
+
+const { run: debouncedSearch, cancel } = useDebounce({
+  handler: (query: string) => {
+    console.log('Searching:', query)
+  },
+  wait: 500
+})
+
+// Watch and debounce
+watch(searchQuery, (query) => {
+  debouncedSearch(query)
+})`
 </script>
 
 <template>
@@ -180,6 +210,29 @@ const optionsCode = `interface DebounceOptions {
 					</div>
 				</div>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useDebounce" description="Using useDebounce composable for programmatic control">
+			<div class="demo-box">
+				<input
+					v-model="composableSearchText"
+					class="input"
+					placeholder="Type to search with composable..."
+					@input="composableSearch()"
+				/>
+				<div class="stats">
+					<span>Results: {{ composableSearchResults.length }}</span>
+					<button @click="cancelSearch" class="btn-cancel">Cancel</button>
+				</div>
+				<div v-if="composableSearchResults.length" class="results">
+					<div v-for="item in composableSearchResults" :key="item" class="result-item">
+						{{ item }}
+					</div>
+				</div>
+				<p class="hint">This uses the useDebounce composable with watch for reactive debouncing</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

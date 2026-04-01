@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useNumber } from 'directix'
 
 const basic = ref('1234567')
 const precision2 = ref('12345.67')
@@ -14,6 +17,36 @@ const number2 = 1234567.89
 const number3 = -9876543.21
 const number4 = 42
 const number5 = 1000000
+
+// Composable API demo
+const composableNumber = ref(1234567)
+const { formatted: integerFormatted } = useNumber({ value: composableNumber })
+const { formatted: decimalFormatted } = useNumber({ value: composableNumber, precision: 2 })
+const { formatted: percentFormatted } = useNumber({ value: composableNumber, precision: 1, suffix: '%' })
+
+const composableCode = `import { ref } from 'vue'
+import { useNumber } from 'directix'
+
+const count = ref(1234567)
+
+// Integer format (default)
+const { formatted: integer } = useNumber({ value: count })
+// integer.value = '1,234,567'
+
+// With decimal precision
+const { formatted: decimal } = useNumber({
+  value: count,
+  precision: 2
+})
+// decimal.value = '1,234,567.00'
+
+// With suffix (percentage)
+const { formatted: percent } = useNumber({
+  value: count,
+  precision: 1,
+  suffix: '%'
+})
+// percent.value = '1,234,567.0%'`
 </script>
 
 <template>
@@ -131,6 +164,28 @@ const number5 = 1000000
 				<p v-number="{ precision: 0, separator: ',' }" class="formatted-value">{{ number1 }}</p>
 			</div>
 		</div>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useNumber" description="Using useNumber composable for reactive number formatting">
+			<div class="demo-box">
+				<div class="demo-row">
+					<div class="demo-item preview">
+						<p><strong>Integer (Composable):</strong></p>
+						<p class="formatted-value">{{ integerFormatted }}</p>
+					</div>
+					<div class="demo-item preview">
+						<p><strong>2 Decimals (Composable):</strong></p>
+						<p class="formatted-value">{{ decimalFormatted }}</p>
+					</div>
+					<div class="demo-item preview">
+						<p><strong>Percentage (Composable):</strong></p>
+						<p class="formatted-value">{{ percentFormatted }}</p>
+					</div>
+				</div>
+				<p class="hint">These use the useNumber composable for reactive formatting</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage --&gt;
@@ -259,5 +314,12 @@ h4 {
 	overflow-x: auto;
 	font-size: 13px;
 	line-height: 1.7;
+}
+
+.demo-box {
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 12px;
 }
 </style>

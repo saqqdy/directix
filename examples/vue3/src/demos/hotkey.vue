@@ -2,6 +2,52 @@
 import { ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useHotkey } from 'directix'
+
+// Composable API demo
+const composableLog = ref<string[]>([])
+const hotkeyEnabled = ref(true)
+
+const { enabled, enable, disable, toggle, add, remove } = useHotkey({
+	hotkeys: [
+		{ key: 'ctrl+shift+1', handler: () => handleComposableAction('Ctrl+Shift+1 pressed') },
+		{ key: 'ctrl+shift+2', handler: () => handleComposableAction('Ctrl+Shift+2 pressed') },
+		{ key: 'ctrl+shift+3', handler: () => handleComposableAction('Ctrl+Shift+3 pressed') },
+	],
+	enabled: hotkeyEnabled,
+})
+
+function handleComposableAction(action: string) {
+	composableLog.value.unshift(action)
+	if (composableLog.value.length > 5) composableLog.value.pop()
+}
+
+function handleAddHotkey() {
+	add({ key: 'ctrl+shift+4', handler: () => handleComposableAction('Ctrl+Shift+4 (dynamic)') })
+}
+
+function handleRemoveHotkey() {
+	remove('ctrl+shift+4')
+}
+
+const composableCode = `import { useHotkey } from 'directix'
+
+const { enabled, enable, disable, toggle, add, remove } = useHotkey({
+  hotkeys: [
+    { key: 'ctrl+s', handler: (e) => save() },
+    { key: 'ctrl+z', handler: (e) => undo() },
+  ],
+  enabled: true,
+})
+
+// Control hotkeys dynamically
+enable()   // Enable all hotkeys
+disable()  // Disable all hotkeys
+toggle()   // Toggle on/off
+
+// Add/remove hotkeys at runtime
+add({ key: 'esc', handler: (e) => closeModal() })
+remove('esc')`
 
 // Scenario 1: Basic usage - single hotkey
 const escapeCount = ref(0)
@@ -249,6 +295,41 @@ const inputCode = `<input
 			</div>
 		</DemoSection>
 
+		<!-- Composable API Demo -->
+		<DemoSection title="Composable API - useHotkey" description="Use the composable for programmatic control">
+			<div class="demo-box">
+				<div class="hotkey-box">
+					<div class="key-row">
+						<span class="key">Ctrl+Shift+1</span>
+						<span class="key">Ctrl+Shift+2</span>
+						<span class="key">Ctrl+Shift+3</span>
+					</div>
+					<p>Press shortcuts anywhere on this page</p>
+					<div class="log">
+						<div v-for="(log, i) in composableLog" :key="i" class="log-item">
+							{{ log }}
+						</div>
+						<div v-if="composableLog.length === 0" class="log-empty">
+							No actions yet
+						</div>
+					</div>
+				</div>
+				<div class="control-row">
+					<button @click="toggle" class="control-btn">
+						{{ enabled ? 'Disable' : 'Enable' }} Hotkeys
+					</button>
+					<button @click="handleAddHotkey" class="control-btn">
+						Add Ctrl+Shift+4
+					</button>
+					<button @click="handleRemoveHotkey" class="control-btn">
+						Remove Ctrl+Shift+4
+					</button>
+				</div>
+				<p class="hint">Status: {{ enabled ? 'Enabled' : 'Disabled' }}</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<!-- API Reference -->
 		<DemoSection title="API">
 			<h4>HotkeyOptions</h4>
@@ -459,6 +540,28 @@ kbd {
 .checkbox input {
 	width: 16px;
 	height: 16px;
+}
+
+.control-row {
+	display: flex;
+	gap: 8px;
+	margin-top: 16px;
+	flex-wrap: wrap;
+}
+
+.control-btn {
+	padding: 8px 16px;
+	background: #667eea;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 13px;
+	transition: all 0.2s;
+}
+
+.control-btn:hover {
+	background: #5a6fd6;
 }
 
 .api-table {

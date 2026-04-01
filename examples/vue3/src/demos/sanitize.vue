@@ -1,7 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useSanitize } from 'directix'
+
+// Composable API demo
+const composableInput = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script><a href="javascript:void(0)">Dangerous link</a>`)
+const { sanitize } = useSanitize({
+	allowedTags: ['p', 'b', 'i', 'strong', 'em', 'a'],
+	allowedAttributes: ['href'],
+	allowClass: false
+})
+
+const sanitizedOutput = computed(() => sanitize(composableInput.value))
+
+const composableCode = `import { ref, computed } from 'vue'
+import { useSanitize } from 'directix'
+
+const userInput = ref('<p>Safe</p><script>alert("xss")</script>')
+const { sanitize } = useSanitize({
+	allowedTags: ['p', 'b', 'i', 'strong', 'em', 'a'],
+	allowedAttributes: ['href'],
+	allowClass: false
+})
+
+const safeHtml = computed(() => sanitize(userInput.value))`
 
 // Scenario 1: Basic sanitization
 const userInput1 = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script>`)
@@ -85,6 +108,26 @@ const optionsCode = `<div v-sanitize="{
 				<p class="hint">Dangerous attributes like onclick are removed</p>
 			</div>
 			<CodeBlock :code="optionsCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API (useSanitize)" description="Use useSanitize for programmatic HTML sanitization">
+			<div class="demo-box">
+				<div class="input-group">
+					<label>Input HTML:</label>
+					<textarea v-model="composableInput" class="html-input" rows="3"></textarea>
+				</div>
+				<div class="result-section">
+					<div class="result-label">Sanitized Output (reactive):</div>
+					<div v-html="sanitizedOutput" class="html-output"></div>
+				</div>
+				<div class="result-section">
+					<div class="result-label">Raw Sanitized HTML:</div>
+					<pre class="raw-output">{{ sanitizedOutput }}</pre>
+				</div>
+				<p class="hint">Using useSanitize composable for reactive sanitization</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- Dangerous tags reference -->
@@ -232,6 +275,18 @@ h1 {
 	border-radius: 8px;
 	border: 2px solid #48bb78;
 	min-height: 40px;
+}
+
+.raw-output {
+	padding: 12px;
+	background: #2d3748;
+	color: #e2e8f0;
+	border-radius: 8px;
+	font-family: monospace;
+	font-size: 12px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	word-break: break-all;
 }
 
 .dangerous-tags {

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useVisible } from 'directix'
 
 // Scenario 1: Basic toggle
 const showElement = ref(true)
@@ -44,6 +45,39 @@ const animatedCode = `<div
 >
   Animated visibility
 </div>`
+
+// Composable API demo
+const composableVisibleRef = ref<HTMLElement | null>(null)
+const {
+	visible: composableVisible,
+	show: composableShow,
+	hide: composableHide,
+	toggle: composableToggle,
+	bind: bindVisible
+} = useVisible({ initial: true })
+
+onMounted(() => {
+	if (composableVisibleRef.value) {
+		bindVisible(composableVisibleRef.value)
+	}
+})
+
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useVisible } from 'directix'
+
+const element = ref(null)
+const { visible, show, hide, toggle, bind } = useVisible({
+  initial: false,
+  onChange: (v) => console.log('Visibility:', v)
+})
+
+onMounted(() => {
+  bind(element.value)
+})
+
+// Usage in template:
+// <button @click="toggle">Toggle</button>
+// <div ref="element">Controlled by composable</div>`
 </script>
 
 <template>
@@ -127,6 +161,27 @@ const animatedCode = `<div
 				</div>
 			</div>
 			<CodeBlock :code="animatedCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useVisible" description="Using useVisible composable for programmatic visibility control">
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="composableShow">Show</button>
+					<button class="btn secondary" @click="composableHide">Hide</button>
+					<button class="btn" @click="composableToggle">Toggle</button>
+				</div>
+				<div
+					ref="composableVisibleRef"
+					class="visible-box composable"
+				>
+					Controlled by useVisible composable
+					<br />
+					Visible: {{ composableVisible }}
+				</div>
+				<p class="hint">This uses the useVisible composable instead of the directive</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -216,6 +271,14 @@ h1 {
 	background: #5a6fd6;
 }
 
+.btn.secondary {
+	background: #9ca3af;
+}
+
+.btn.secondary:hover {
+	background: #6b7280;
+}
+
 .visible-box {
 	padding: 30px;
 	background: #667eea;
@@ -227,6 +290,10 @@ h1 {
 
 .visible-box.colored {
 	background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.visible-box.composable {
+	background: linear-gradient(135deg, #11998e, #38ef7d);
 }
 
 .visible-box.small {

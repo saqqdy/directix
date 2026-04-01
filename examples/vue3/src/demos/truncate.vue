@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import DemoSection from '@/components/DemoSection.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import { useTruncate } from 'directix'
 
 const customLength = ref(30)
 const customPosition = ref<'start' | 'middle' | 'end'>('end')
@@ -28,6 +31,43 @@ const truncatedText = computed(() => {
 			return text.slice(0, length - ellipsis.length) + ellipsis
 	}
 })
+
+// Composable API demo
+const composableText = ref('The quick brown fox jumps over the lazy dog. This is a long text.')
+const composableLength = ref(40)
+const composableTruncatePosition = ref<'start' | 'middle' | 'end'>('end')
+const { truncated, isTruncated, originalLength } = useTruncate({
+	text: composableText,
+	length: composableLength,
+	position: composableTruncatePosition,
+})
+
+const composableCode = `import { ref } from 'vue'
+import { useTruncate } from 'directix'
+
+const text = ref('This is a very long text that needs to be truncated')
+const { truncated, isTruncated, originalLength } = useTruncate({
+	text,
+	length: 20,
+	position: 'end',
+})
+// truncated.value = 'This is a very lo...'
+
+// Truncate from middle
+const { truncated: middleTruncated } = useTruncate({
+	text,
+	length: 20,
+	position: 'middle',
+})
+// middleTruncated.value = 'This is a ...truncated'
+
+// Truncate from start
+const { truncated: startTruncated } = useTruncate({
+	text,
+	length: 20,
+	position: 'start',
+})
+// startTruncated.value = '...eds to be truncated'`
 </script>
 
 <template>
@@ -38,7 +78,7 @@ const truncatedText = computed(() => {
 		</p>
 
 		<!-- Interactive Demo -->
-		<h3>🎮 Interactive Demo</h3>
+		<h3>Interactive Demo</h3>
 		<div class="interactive-demo">
 			<div class="controls">
 				<div class="control-group">
@@ -70,13 +110,13 @@ const truncatedText = computed(() => {
 				</div>
 				<div class="preview-info">
 					<span>Original: {{ sampleText.length }} chars</span>
-					<span>→ Truncated: {{ truncatedText.length }} chars</span>
+					<span>Truncated: {{ truncatedText.length }} chars</span>
 				</div>
 			</div>
 		</div>
 
 		<!-- Position Comparison -->
-		<h3>📍 Truncation Position Comparison</h3>
+		<h3>Truncation Position Comparison</h3>
 		<div class="comparison-grid">
 			<div class="comparison-item">
 				<div class="position-badge end">end</div>
@@ -102,7 +142,7 @@ const truncatedText = computed(() => {
 		</div>
 
 		<!-- Custom Ellipsis -->
-		<h3>✨ Custom Ellipsis Styles</h3>
+		<h3>Custom Ellipsis Styles</h3>
 		<div class="ellipsis-grid">
 			<div class="ellipsis-item">
 				<span class="ellipsis-preview">...</span>
@@ -120,28 +160,22 @@ const truncatedText = computed(() => {
 				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: '[...]' }">{{ sampleText }}</div>
 			</div>
 			<div class="ellipsis-item">
-				<span class="ellipsis-preview"> →</span>
+				<span class="ellipsis-preview">-></span>
 				<span class="ellipsis-label">Arrow</span>
-				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: ' →' }">{{ sampleText }}</div>
+				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: ' ->' }">{{ sampleText }}</div>
 			</div>
 			<div class="ellipsis-item">
-				<span class="ellipsis-preview"> …</span>
+				<span class="ellipsis-preview">...</span>
 				<span class="ellipsis-label">Read More</span>
-				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: '…' }">{{ sampleText }}</div>
-			</div>
-			<div class="ellipsis-item">
-				<span class="ellipsis-preview"> 📖</span>
-				<span class="ellipsis-label">Emoji</span>
-				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: ' 📖' }">{{ sampleText }}</div>
+				<div class="ellipsis-text" v-truncate="{ length: 40, ellipsis: '...' }">{{ sampleText }}</div>
 			</div>
 		</div>
 
 		<!-- CSS vs JS Truncation -->
-		<h3>⚖️ CSS vs JavaScript Truncation</h3>
+		<h3>CSS vs JavaScript Truncation</h3>
 		<div class="comparison-row">
 			<div class="method-card">
 				<div class="method-header">
-					<span class="method-icon">🎨</span>
 					<span class="method-title">CSS Truncation</span>
 					<span class="method-badge">useCss: true</span>
 				</div>
@@ -149,14 +183,13 @@ const truncatedText = computed(() => {
 					{{ sampleText }} This text will be truncated based on container width using CSS text-overflow property.
 				</div>
 				<ul class="method-features">
-					<li>✓ Responsive to container width</li>
-					<li>✓ Better performance</li>
-					<li>✗ No position options</li>
+					<li>Responsive to container width</li>
+					<li>Better performance</li>
+					<li>No position options</li>
 				</ul>
 			</div>
 			<div class="method-card">
 				<div class="method-header">
-					<span class="method-icon">⚡</span>
 					<span class="method-title">JavaScript Truncation</span>
 					<span class="method-badge">default</span>
 				</div>
@@ -164,15 +197,15 @@ const truncatedText = computed(() => {
 					{{ sampleText }} This text will be truncated using JavaScript with precise character control.
 				</div>
 				<ul class="method-features">
-					<li>✓ Precise character control</li>
-					<li>✓ Position options (start/middle/end)</li>
-					<li>✓ Custom ellipsis</li>
+					<li>Precise character control</li>
+					<li>Position options (start/middle/end)</li>
+					<li>Custom ellipsis</li>
 				</ul>
 			</div>
 		</div>
 
 		<!-- Hover Tooltip Feature -->
-		<h3>🔍 Hover to Show Full Text</h3>
+		<h3>Hover to Show Full Text</h3>
 		<div class="hover-demo">
 			<div class="hover-item">
 				<div class="hover-label">showTitle: true (hover me)</div>
@@ -189,7 +222,7 @@ const truncatedText = computed(() => {
 		</div>
 
 		<!-- Code Example -->
-		<h3>💻 Code Example</h3>
+		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage: truncate to 30 characters --&gt;
 &lt;p v-truncate="30"&gt;Long text here...&lt;/p&gt;
 
@@ -205,6 +238,41 @@ const truncatedText = computed(() => {
 
 &lt;!-- Show full text on hover --&gt;
 &lt;p v-truncate="{ length: 40, showTitle: true }"&gt;Hover to see more...&lt;/p&gt;</code></pre>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useTruncate" description="Using useTruncate composable for programmatic text truncation">
+			<div class="interactive-demo">
+				<div class="controls">
+					<div class="control-group">
+						<label>Length: {{ composableLength }}</label>
+						<input type="range" v-model.number="composableLength" min="10" max="100" step="5" />
+					</div>
+					<div class="control-group">
+						<label>Position:</label>
+						<div class="btn-group">
+							<button
+								v-for="pos in ['start', 'middle', 'end'] as const"
+								:key="pos"
+								:class="{ active: composableTruncatePosition === pos }"
+								@click="composableTruncatePosition = pos"
+							>
+								{{ pos }}
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="preview-box">
+					<div class="preview-label">Preview:</div>
+					<div class="preview-text">{{ truncated }}</div>
+					<div class="preview-info">
+						<span>Original: {{ originalLength }} chars</span>
+						<span>Truncated: {{ truncated.length }} chars</span>
+						<span>Is truncated: {{ isTruncated }}</span>
+					</div>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
 	</div>
 </template>
 
@@ -214,9 +282,6 @@ h3 {
 	margin-bottom: 16px;
 	color: #333;
 	font-size: 18px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
 }
 
 .desc {
@@ -461,10 +526,6 @@ h3 {
 	padding: 14px 16px;
 	background: #f8f9fa;
 	border-bottom: 1px solid #e2e8f0;
-}
-
-.method-icon {
-	font-size: 20px;
 }
 
 .method-title {
