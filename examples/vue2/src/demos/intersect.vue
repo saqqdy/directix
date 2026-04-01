@@ -1,6 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import Vue from 'vue'
+import { useIntersect } from 'directix'
 
 export default defineComponent({
 	name: 'IntersectDemo',
@@ -68,6 +69,54 @@ export default defineComponent({
   Track visibility percentage
 </div>`
 
+		// Composable API demo
+		const composableContainerRef = ref<HTMLElement | null>(null)
+		const composableTargetRef = ref<HTMLElement | null>(null)
+		const composableIsVisible = ref(false)
+		const composableRatio = ref(0)
+
+		const { isIntersecting, ratio, bind } = useIntersect({
+			threshold: 0.5,
+			onEnter: () => {
+				composableIsVisible.value = true
+			},
+			onLeave: () => {
+				composableIsVisible.value = false
+			}
+		})
+
+		onMounted(() => {
+			if (composableTargetRef.value) {
+				bind(composableTargetRef.value)
+			}
+		})
+
+		const composableCode = `<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useIntersect } from 'directix'
+
+export default defineComponent({
+  setup() {
+    const targetRef = ref<HTMLElement | null>(null)
+    const { isIntersecting, ratio, bind } = useIntersect({
+      threshold: 0.5,
+      onEnter: () => console.log('Entered'),
+      onLeave: () => console.log('Left')
+    })
+
+    onMounted(() => bind(targetRef.value))
+
+    return { targetRef, isIntersecting, ratio }
+  }
+})
+<\/script>
+
+<template>
+  <div ref="targetRef" :class="{ visible: isIntersecting }">
+    Visibility: {{ Math.round(ratio * 100) }}%
+  </div>
+</template>`
+
 		return {
 			containerRef1,
 			itemStates,
@@ -83,7 +132,15 @@ export default defineComponent({
 			handleVisibilityChange,
 			basicCode,
 			onceCode,
-			thresholdCode
+			thresholdCode,
+			// Composable API
+			composableContainerRef,
+			composableTargetRef,
+			composableIsVisible,
+			composableRatio,
+			isIntersecting,
+			ratio,
+			composableCode
 		}
 	}
 })
@@ -246,6 +303,39 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ thresholdCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API - useIntersect</h2>
+			<p class="description">Programmatically detect element intersection using the composable</p>
+			<div class="demo-box">
+				<div class="status-row">
+					<span class="status-label">Status:</span>
+					<span class="status-dot" :class="{ active: composableIsVisible }">
+						{{ composableIsVisible ? 'Visible' : 'Hidden' }}
+					</span>
+					<span class="status-label">Ratio: {{ Math.round(ratio * 100) }}%</span>
+				</div>
+				<div ref="composableContainerRef" class="scroll-container">
+					<div class="scroll-content tall">
+						<div class="spacer">Scroll down</div>
+						<div
+							ref="composableTargetRef"
+							class="track-item"
+							:class="{ visible: composableIsVisible }"
+						>
+							Track my visibility
+							<span class="item-status">{{ composableIsVisible ? 'Visible' : 'Hidden' }}</span>
+						</div>
+						<div class="spacer">Scroll up</div>
+					</div>
+				</div>
+				<p class="hint">Scroll to see the composable track intersection state</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

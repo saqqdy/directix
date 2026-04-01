@@ -1,73 +1,152 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useTouch } from 'directix'
 
 export default defineComponent({
 	name: 'TouchDemo',
-	data() {
-		return {
-			lastSwipe: '',
-			swipeCount: 0,
-			swipeDirection: '',
-			activeDirection: '',
-			directionCounts: { left: 0, right: 0, up: 0, down: 0 },
-			tapCount: 0,
-			showTapEffect: false,
-			isLongPressing: false,
-			longPressCount: 0,
-			scale: 1,
-			angle: 0,
-		}
-	},
-	computed: {
-		boxStyle(): Record<string, string> {
-			return { transform: `scale(${this.scale}) rotate(${this.angle}deg)` }
-		},
-	},
-	methods: {
-		handleSwipe(direction: string) {
-			this.lastSwipe = direction
-			this.swipeCount++
-			this.swipeDirection = direction
+	setup() {
+		// Directive demo state
+		const lastSwipe = ref('')
+		const swipeCount = ref(0)
+		const swipeDirection = ref('')
+		const activeDirection = ref('')
+		const directionCounts = ref({ left: 0, right: 0, up: 0, down: 0 })
+		const tapCount = ref(0)
+		const showTapEffect = ref(false)
+		const isLongPressing = ref(false)
+		const longPressCount = ref(0)
+		const scale = ref(1)
+		const angle = ref(0)
+
+		const boxStyle = computed(() => ({
+			transform: `scale(${scale.value}) rotate(${angle.value}deg)`
+		}))
+
+		const handleSwipe = (direction: string) => {
+			lastSwipe.value = direction
+			swipeCount.value++
+			swipeDirection.value = direction
 			setTimeout(() => {
-				this.swipeDirection = ''
+				swipeDirection.value = ''
 			}, 500)
-		},
-		handleDirectionSwipe(direction: 'left' | 'right' | 'up' | 'down') {
-			this.activeDirection = direction
-			this.directionCounts[direction]++
+		}
+
+		const handleDirectionSwipe = (direction: 'left' | 'right' | 'up' | 'down') => {
+			activeDirection.value = direction
+			directionCounts.value[direction]++
 			setTimeout(() => {
-				this.activeDirection = ''
+				activeDirection.value = ''
 			}, 300)
-		},
-		handleTap() {
-			this.tapCount++
-			this.showTapEffect = true
+		}
+
+		const handleTap = () => {
+			tapCount.value++
+			showTapEffect.value = true
 			setTimeout(() => {
-				this.showTapEffect = false
+				showTapEffect.value = false
 			}, 300)
-		},
-		handleLongPress() {
-			this.isLongPressing = true
-			this.longPressCount++
+		}
+
+		const handleLongPress = () => {
+			isLongPressing.value = true
+			longPressCount.value++
 			setTimeout(() => {
-				this.isLongPressing = false
+				isLongPressing.value = false
 			}, 800)
-		},
-		handlePinch(s: number) {
-			this.scale = Math.max(0.5, Math.min(3, Math.round(s * 100) / 100))
-		},
-		handleRotate(a: number) {
-			this.angle = Math.round(a)
-		},
-		resetTransform() {
-			this.scale = 1
-			this.angle = 0
-		},
-		getDirectionArrow(direction: string): string {
+		}
+
+		const handlePinch = (s: number) => {
+			scale.value = Math.max(0.5, Math.min(3, Math.round(s * 100) / 100))
+		}
+
+		const handleRotate = (a: number) => {
+			angle.value = Math.round(a)
+		}
+
+		const resetTransform = () => {
+			scale.value = 1
+			angle.value = 0
+		}
+
+		const getDirectionArrow = (direction: string): string => {
 			const arrows: Record<string, string> = { left: '←', right: '→', up: '↑', down: '↓' }
 			return arrows[direction] || ''
-		},
-	},
+		}
+
+		// Composable API demo
+		const composableRef = ref<HTMLElement | null>(null)
+		const composableSwipeCount = ref(0)
+		const composableLastDirection = ref('')
+
+		const { gesture, bind } = useTouch({
+			onSwipe: (event) => {
+				composableSwipeCount.value++
+				composableLastDirection.value = event.direction || ''
+				setTimeout(() => {
+					composableLastDirection.value = ''
+				}, 500)
+			}
+		})
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useTouch } from 'directix'
+
+const containerRef = ref(null)
+const swipeCount = ref(0)
+
+const { gesture, bind } = useTouch({
+  onSwipeLeft: () => nextSlide(),
+  onSwipeRight: () => prevSlide(),
+  onTap: () => handleTap(),
+  onLongPress: () => showContextMenu()
+})
+
+onMounted(() => bind(containerRef.value))
+<\/script>
+
+<template>
+  <div ref="containerRef">
+    Swipe me!
+  </div>
+</template>`
+
+		return {
+			// Directive demo
+			lastSwipe,
+			swipeCount,
+			swipeDirection,
+			activeDirection,
+			directionCounts,
+			tapCount,
+			showTapEffect,
+			isLongPressing,
+			longPressCount,
+			scale,
+			angle,
+			boxStyle,
+			handleSwipe,
+			handleDirectionSwipe,
+			handleTap,
+			handleLongPress,
+			handlePinch,
+			handleRotate,
+			resetTransform,
+			getDirectionArrow,
+			// Composable API
+			composableRef,
+			gesture,
+			composableSwipeCount,
+			composableLastDirection,
+			composableCode
+		}
+	}
 })
 </script>
 
@@ -200,6 +279,25 @@ export default defineComponent({
 			devices or Chrome DevTools device emulation.
 		</div>
 
+		<!-- Composable API -->
+		<h3>Composable API</h3>
+		<p class="hint">Use useTouch for programmatic gesture detection</p>
+		<div class="demo-row">
+			<div ref="composableRef" class="swipe-box" :class="{ 'swipe-active': composableLastDirection }">
+				<div class="swipe-content">
+					<div class="swipe-icon">👆</div>
+					<p>Composable API Demo</p>
+					<div class="swipe-result" v-if="composableLastDirection">
+						<span class="arrow">{{ getDirectionArrow(composableLastDirection) }}</span>
+						<span>{{ composableLastDirection }}</span>
+					</div>
+				</div>
+				<div class="swipe-count">Total swipes: {{ composableSwipeCount }}</div>
+				<div class="gesture-info" v-if="gesture">Current gesture: {{ gesture }}</div>
+			</div>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
+
 		<!-- Code Example -->
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Swipe detection --&gt;
@@ -314,6 +412,16 @@ h3 {
 	bottom: 12px;
 	font-size: 13px;
 	opacity: 0.8;
+}
+
+.gesture-info {
+	position: absolute;
+	bottom: 32px;
+	font-size: 12px;
+	opacity: 0.7;
+	background: rgba(255, 255, 255, 0.1);
+	padding: 4px 12px;
+	border-radius: 12px;
 }
 
 /* Tap Box */

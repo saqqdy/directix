@@ -1,11 +1,64 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useSwipe } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'SwipeDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableElement = ref<HTMLElement | null>(null)
+		const composableDirection = ref<string | null>(null)
+		const composableCount = ref(0)
+
+		const { direction, isSwiping, bind } = useSwipe({
+			onLeft: () => {
+				composableDirection.value = 'left'
+				composableCount.value++
+			},
+			onRight: () => {
+				composableDirection.value = 'right'
+				composableCount.value++
+			},
+			onUp: () => {
+				composableDirection.value = 'up'
+				composableCount.value++
+			},
+			onDown: () => {
+				composableDirection.value = 'down'
+				composableCount.value++
+			},
+		})
+
+		onMounted(() => {
+			if (composableElement.value) {
+				bind(composableElement.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useSwipe } from 'directix'
+
+const container = ref(null)
+const { direction, isSwiping, bind } = useSwipe({
+  onLeft: () => prevSlide(),
+  onRight: () => nextSlide(),
+  threshold: 30
+})
+
+onMounted(() => bind(container.value))`
+
+		return {
+			composableElement,
+			direction,
+			isSwiping,
+			composableDirection,
+			composableCount,
+			composableCode,
+		}
+	},
 	data() {
 		return {
 			swipeDirection: '',
@@ -13,20 +66,20 @@ export default defineComponent({
 			directionSwipe: '',
 			horizontalSwipe: '',
 			basicCode: `<div v-swipe="handleSwipe">
-  Swipe in any direction
-</div>`,
+	  Swipe in any direction
+	</div>`,
 			directionCode: `<div v-swipe="{
-  onLeft: () => prevSlide(),
-  onRight: () => nextSlide()
-}">
-  Swipe left/right only
-</div>`,
+	  onLeft: () => prevSlide(),
+	  onRight: () => nextSlide()
+	}">
+	  Swipe left/right only
+	</div>`,
 			horizontalCode: `<div v-swipe="{
-  handler: handleSwipe,
-  directions: ['left', 'right']
-}">
-  Horizontal swipes only
-</div>`
+	  handler: handleSwipe,
+	  directions: ['left', 'right']
+	}">
+	  Horizontal swipes only
+	</div>`
 		}
 	},
 	methods: {
@@ -120,6 +173,30 @@ export default defineComponent({
 			<CodeBlock :code="horizontalCode" />
 		</DemoSection>
 
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="使用 useSwipe composable 编程式检测滑动手势">
+			<div class="demo-box">
+				<div
+					ref="composableElement"
+					class="swipe-area composable"
+				>
+					<p>Swipe in any direction</p>
+					<div class="arrows">
+						<span>↑</span>
+						<span>←  →</span>
+						<span>↓</span>
+					</div>
+					<p class="result" v-if="composableDirection">
+						Last swipe: <strong>{{ composableDirection }}</strong>
+					</p>
+					<p class="count">Total swipes: {{ composableCount }}</p>
+					<p class="status" v-if="isSwiping">Swiping...</p>
+				</div>
+				<p class="hint">使用 composable 可以编程式检测滑动手势并获取实时状态</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<DemoSection title="API">
 			<table class="api-table">
 				<thead>
@@ -207,6 +284,10 @@ h1 {
 	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
+.swipe-area.composable {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
 .arrows {
 	display: flex;
 	flex-direction: column;
@@ -233,6 +314,18 @@ h1 {
 .count {
 	font-size: 14px;
 	opacity: 0.8;
+}
+
+.status {
+	margin-top: 8px;
+	font-size: 14px;
+	color: #ffd700;
+	animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.5; }
 }
 
 .hint {

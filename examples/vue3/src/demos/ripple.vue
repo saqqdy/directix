@@ -1,6 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRipple } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+
+// Composable API
+const composableButtonRef = ref<HTMLElement | null>(null)
+useRipple(composableButtonRef, {
+	color: 'rgba(255, 255, 255, 0.5)',
+	duration: 600
+})
 
 const basicCode = `<button v-ripple>
   Click for Ripple
@@ -21,6 +30,17 @@ const optionsCode = `<button v-ripple="{
 const disabledCode = `<button v-ripple="false">
   No Ripple
 </button>`
+
+const composableCode = `import { ref } from 'vue'
+import { useRipple } from 'directix'
+
+const buttonRef = ref<HTMLElement | null>(null)
+useRipple(buttonRef, {
+  color: 'rgba(255, 255, 255, 0.5)',
+  duration: 600
+})
+
+// In template: <button ref="buttonRef">Click me</button>`
 </script>
 
 <template>
@@ -103,6 +123,19 @@ const disabledCode = `<button v-ripple="false">
 				</div>
 			</div>
 			<CodeBlock :code="disabledCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use useRipple for programmatic ripple effect">
+			<div class="demo-box">
+				<div class="button-row">
+					<button ref="composableButtonRef" class="ripple-btn primary">
+						Composable Ripple
+					</button>
+				</div>
+				<p class="hint">Using useRipple composable for programmatic ripple</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

@@ -1,11 +1,48 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useClickDelay } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'ClickDelayDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableCount = ref(0)
+
+		const { click: composableClick, isPending, reset } = useClickDelay({
+			handler: () => {
+				composableCount.value++
+			},
+			delay: 500,
+		})
+
+		const composableCode = `import { ref } from 'vue'
+import { useClickDelay } from 'directix'
+
+const count = ref(0)
+
+const { click, isPending, reset } = useClickDelay({
+  handler: () => {
+    count.value++
+  },
+  delay: 500
+})
+
+// Use in template
+// <button @click="click" :disabled="isPending">
+//   {{ isPending ? 'Processing...' : 'Click Me' }}
+// </button>`
+
+		return {
+			composableCount,
+			composableClick,
+			isPending,
+			reset,
+			composableCode,
+		}
+	},
 	data() {
 		return {
 			clickCount: 0,
@@ -16,37 +53,37 @@ export default defineComponent({
 			submitCount: 0,
 			isSubmitting: false,
 			basicCode: `<button v-click-delay="handleClick">
-  Click Me (300ms delay)
-</button>`,
+	  Click Me (300ms delay)
+	</button>`,
 			customDelayCode: `<button v-click-delay:500="handleClick">
-  Click Me (500ms delay)
-</button>
+	  Click Me (500ms delay)
+	</button>
 
-<button v-click-delay:1s="handleClick">
-  Click Me (1s delay)
-</button>`,
+	<button v-click-delay:1s="handleClick">
+	  Click Me (1s delay)
+	</button>`,
 			disabledCode: `<button v-click-delay="{ handler: handleClick, disabled: isDisabled }">
-  Conditional Click Delay
-</button>
+	  Conditional Click Delay
+	</button>
 
-<label>
-  <input type="checkbox" v-model="disabled" />
-  Disable click delay
-</label>`,
+	<label>
+	  <input type="checkbox" v-model="disabled" />
+	  Disable click delay
+	</label>`,
 			optionsCode: `<button v-click-delay="{
-  handler: handleClick,
-  delay: 500,
-  feedback: false
-}">
-  No Visual Feedback
-</button>`,
+	  handler: handleClick,
+	  delay: 500,
+	  feedback: false
+	}">
+	  No Visual Feedback
+	</button>`,
 			formCode: `<button v-click-delay="{
-  handler: submitForm,
-  delay: 1000,
-  pendingClass: 'is-submitting'
-}">
-  {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-</button>`
+	  handler: submitForm,
+	  delay: 1000,
+	  pendingClass: 'is-submitting'
+	}">
+	  {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+	</button>`
 		}
 	},
 	methods: {
@@ -160,6 +197,29 @@ export default defineComponent({
 			<CodeBlock :code="formCode" />
 		</DemoSection>
 
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="使用 useClickDelay composable 编程式控制点击延迟">
+			<div class="demo-box">
+				<div class="button-group">
+					<button
+						class="btn"
+						:class="{ 'btn-pending': isPending }"
+						:disabled="isPending"
+						@click="composableClick"
+					>
+						{{ isPending ? 'Processing...' : 'Click Me (500ms)' }}
+					</button>
+					<button class="btn btn-secondary" @click="reset">
+						Reset
+					</button>
+				</div>
+				<p class="result">Click count: <strong>{{ composableCount }}</strong></p>
+				<p class="status" v-if="isPending">Pending state active - clicks blocked</p>
+				<p class="hint">使用 composable 可以编程式控制点击延迟并追踪 pending 状态</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<!-- API Reference -->
 		<DemoSection title="API">
 			<table class="api-table">
@@ -253,6 +313,13 @@ h1 {
 	font-size: 18px;
 }
 
+.status {
+	margin-top: 8px;
+	font-size: 13px;
+	color: #e67e22;
+	font-weight: 500;
+}
+
 .btn {
 	padding: 10px 20px;
 	background: #42b883;
@@ -279,6 +346,18 @@ h1 {
 
 .btn-primary:hover {
 	background: #218838;
+}
+
+.btn-secondary {
+	background: #6c757d;
+}
+
+.btn-secondary:hover {
+	background: #5a6268;
+}
+
+.btn-pending {
+	background: #e67e22;
 }
 
 .btn-disabled {

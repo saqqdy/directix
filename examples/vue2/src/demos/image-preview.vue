@@ -1,8 +1,59 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
 
 export default defineComponent({
 	name: 'ImagePreviewDemo',
+	setup() {
+		// Composable API
+		const imageRef = ref<HTMLImageElement | null>(null)
+		const { isOpen, currentSrc, open, close, bind } = useImagePreview({
+			onOpen: () => console.log('Composable preview opened'),
+			onClose: () => console.log('Composable preview closed'),
+		})
+
+		onMounted(() => {
+			if (imageRef.value) {
+				bind(imageRef.value)
+			}
+		})
+
+		const composableCode = `<script lang="ts">
+import { ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
+
+const imageRef = ref<HTMLImageElement | null>(null)
+const { isOpen, open, close, bind } = useImagePreview({
+  onOpen: () => console.log('Preview opened'),
+  onClose: () => console.log('Preview closed'),
+})
+
+onMounted(() => {
+  if (imageRef.value) {
+    bind(imageRef.value)
+  }
+})
+
+// Or manually open any image
+function openCustomImage() {
+  open('https://example.com/high-res.jpg')
+}
+</script>
+
+<template>
+  <img ref="imageRef" src="thumbnail.jpg" />
+  <button @click="open('image.jpg')">Open Preview</button>
+</template>`
+
+		return {
+			imageRef,
+			isOpen,
+			currentSrc,
+			open,
+			close,
+			composableCode,
+		}
+	},
 	data() {
 		return {
 			showPreview: true,
@@ -158,6 +209,25 @@ export default defineComponent({
 				<span class="gesture-text"><strong>Desktop</strong> - Scroll wheel to zoom, drag to pan</span>
 			</div>
 		</div>
+
+		<!-- Composable API -->
+		<h3>Composable API</h3>
+		<p class="desc">
+			For programmatic control, use the <code>useImagePreview</code> composable.
+		</p>
+		<div class="demo-row">
+			<img
+				ref="imageRef"
+				src="https://picsum.photos/seed/composable/200/150"
+				alt="Composable demo"
+				class="preview-img"
+			/>
+			<button @click="open('https://picsum.photos/seed/composable/1200/900')" class="btn">
+				Open via Composable
+			</button>
+			<span v-if="isOpen" class="status-badge">Preview Open</span>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
 
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage with data-preview --&gt;
@@ -333,5 +403,15 @@ h3 {
 .gesture-text {
 	color: #4a5568;
 	font-size: 14px;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 6px 12px;
+	background: #48bb78;
+	color: white;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 500;
 }
 </style>

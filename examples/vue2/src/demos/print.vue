@@ -1,11 +1,59 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { usePrint } from 'directix'
 
 export default defineComponent({
 	name: 'PrintDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const { isPrinting, print, printPage } = usePrint({
+			title: 'Demo Document',
+			onBeforePrint: () => {
+				console.log('About to print...')
+				return true
+			},
+			onAfterPrint: () => {
+				console.log('Print complete!')
+			}
+		})
+
+		const handlePrintPage = async () => {
+			await printPage()
+		}
+
+		const handlePrintTarget = async () => {
+			await print('#composable-print-target')
+		}
+
+		const composableCode = `import { usePrint } from 'directix'
+
+const { isPrinting, print, printPage } = usePrint({
+  title: 'My Document',
+  onBeforePrint: () => {
+    console.log('About to print...')
+    return true
+  },
+  onAfterPrint: () => {
+    console.log('Print complete!')
+  }
+})
+
+// Print entire page
+await printPage()
+
+// Print specific element
+await print('#content')`
+
+		return {
+			isPrinting,
+			handlePrintPage,
+			handlePrintTarget,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			basicCode: `<button v-print>Print Page</button>`,
@@ -129,6 +177,37 @@ export default defineComponent({
 				</div>
 			</div>
 			<CodeBlock :code="styledCode" />
+		</DemoSection>
+
+		<DemoSection title="Composable API - usePrint" description="Use the composable for programmatic printing">
+			<div class="demo-box">
+				<div class="composable-controls">
+					<button
+						@click="handlePrintPage"
+						:disabled="isPrinting"
+						class="print-btn"
+					>
+						{{ isPrinting ? 'Printing...' : 'Print Page (Composable)' }}
+					</button>
+					<button
+						@click="handlePrintTarget"
+						:disabled="isPrinting"
+						class="print-btn secondary"
+					>
+						Print Target Element
+					</button>
+				</div>
+				<div id="composable-print-target" class="print-content">
+					<h3>Composable Print Target</h3>
+					<p>This content will be printed using the usePrint composable.</p>
+					<ul>
+						<li>Programmatic control</li>
+						<li>Async/await support</li>
+						<li>Loading state included</li>
+					</ul>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">
@@ -318,5 +397,25 @@ h1 {
 .api-table th {
 	background: #f8f9fa;
 	font-weight: 600;
+}
+
+/* Composable API styles */
+.composable-controls {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.print-btn.secondary {
+	background: #667eea;
+}
+
+.print-btn.secondary:hover {
+	background: #5a67d8;
+}
+
+.print-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 </style>

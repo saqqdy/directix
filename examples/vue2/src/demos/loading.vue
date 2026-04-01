@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useLoading } from 'directix'
 
 export default defineComponent({
 	name: 'LoadingDemo',
@@ -57,6 +58,51 @@ export default defineComponent({
   Content is locked while loading
 </div>`
 
+		// Composable API demo
+		const composableRef = ref<HTMLElement | null>(null)
+		const { loading, start, stop, bind } = useLoading({
+			text: 'Processing...',
+			lock: true
+		})
+
+		const toggleComposableLoading = () => {
+			start()
+			setTimeout(() => {
+				stop()
+			}, 2000)
+		}
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useLoading } from 'directix'
+
+const containerRef = ref(null)
+const { loading, start, stop, bind } = useLoading({
+  text: 'Loading...',
+  lock: true
+})
+
+onMounted(() => bind(containerRef.value))
+
+async function fetchData() {
+  start()
+  await api.getData()
+  stop()
+}
+<\/script>
+
+<template>
+  <div ref="containerRef">
+    <button @click="fetchData">Fetch Data</button>
+  </div>
+</template>`
+
 		return {
 			isLoading1,
 			toggleLoading1,
@@ -69,7 +115,12 @@ export default defineComponent({
 			basicCode,
 			textCode,
 			fullscreenCode,
-			lockCode
+			lockCode,
+			// Composable API
+			composableRef,
+			loading,
+			toggleComposableLoading,
+			composableCode
 		}
 	}
 })
@@ -155,6 +206,27 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ lockCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use useLoading for programmatic control</p>
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="toggleComposableLoading" :disabled="loading">
+						{{ loading ? 'Loading...' : 'Start Loading (Composable)' }}
+					</button>
+				</div>
+				<div ref="composableRef" class="loading-container">
+					<p>This container uses the composable API</p>
+					<p>The loading state is managed programmatically</p>
+				</div>
+				<p class="hint">Loading state: {{ loading ? 'Active' : 'Inactive' }}</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

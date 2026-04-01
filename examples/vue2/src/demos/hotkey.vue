@@ -1,11 +1,64 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useHotkey } from 'directix'
 
 export default defineComponent({
 	name: 'HotkeyDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableLog = ref<string[]>([])
+		const composableEnabled = ref(true)
+
+		const { enabled, enable, disable, toggle } = useHotkey({
+			hotkeys: [
+				{ key: 'ctrl+shift+z', handler: () => {
+					composableLog.value.unshift('Undo (Ctrl+Shift+Z)')
+					if (composableLog.value.length > 5) composableLog.value.pop()
+				}},
+				{ key: 'ctrl+shift+y', handler: () => {
+					composableLog.value.unshift('Redo (Ctrl+Shift+Y)')
+					if (composableLog.value.length > 5) composableLog.value.pop()
+				}}
+			],
+			enabled: composableEnabled
+		})
+
+		const composableCode = `<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { useHotkey } from 'directix'
+
+export default defineComponent({
+  setup() {
+    const log = ref<string[]>([])
+
+    const { enabled, enable, disable, add, remove } = useHotkey({
+      hotkeys: [
+        { key: 'ctrl+s', handler: () => save() },
+        { key: 'ctrl+z', handler: () => undo() }
+      ]
+    })
+
+    // Add dynamic hotkey
+    add({ key: 'esc', handler: () => closeModal() })
+
+    return { log, enabled, enable, disable }
+  }
+})
+<\/script>`
+
+		return {
+			composableLog,
+			composableEnabled,
+			enabled,
+			enable,
+			disable,
+			toggle,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			escapeCount: 0,
@@ -243,6 +296,32 @@ export default defineComponent({
 			</div>
 		</DemoSection>
 
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useHotkey" description="Programmatically handle keyboard shortcuts using the composable">
+			<div class="demo-box">
+				<div class="key-row">
+					<span class="key">Ctrl+Shift+Z</span>
+					<span class="key">Ctrl+Shift+Y</span>
+				</div>
+				<p>Press shortcuts anywhere on this page (composable)</p>
+				<div class="log">
+					<div v-for="(log, i) in composableLog" :key="i" class="log-item">
+						{{ log }}
+					</div>
+					<div v-if="composableLog.length === 0" class="log-empty">
+						No actions yet
+					</div>
+				</div>
+				<div class="controls-row">
+					<label class="checkbox">
+						<input type="checkbox" :checked="enabled" @change="toggle" />
+						<span>Hotkeys enabled: {{ enabled ? 'Yes' : 'No' }}</span>
+					</label>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<!-- API Reference -->
 		<DemoSection title="API">
 			<h4>HotkeyOptions</h4>
@@ -453,6 +532,12 @@ kbd {
 .checkbox input {
 	width: 16px;
 	height: 16px;
+}
+
+.controls-row {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #e0e0e0;
 }
 
 .api-table {

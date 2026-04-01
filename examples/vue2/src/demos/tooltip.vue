@@ -1,8 +1,56 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useTooltip } from 'directix'
 
 export default defineComponent({
 	name: 'TooltipDemo',
+	setup() {
+		// Composable API demo
+		const composableBtnRef = ref<HTMLElement | null>(null)
+		const composableContent = ref('Composable tooltip')
+		const composablePlacement = ref<'top' | 'bottom' | 'left' | 'right'>('top')
+		const composableDisabled = ref(false)
+
+		const { isVisible, show, hide, bind } = useTooltip({
+			content: composableContent,
+			placement: composablePlacement,
+			trigger: 'hover',
+			disabled: composableDisabled
+		})
+
+		onMounted(() => {
+			if (composableBtnRef.value) {
+				bind(composableBtnRef.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useTooltip } from 'directix'
+
+const buttonRef = ref(null)
+const { isVisible, show, hide, bind } = useTooltip({
+  content: 'Tooltip text',
+  placement: 'top',
+  trigger: 'hover'
+})
+
+onMounted(() => {
+  if (buttonRef.value) {
+    bind(buttonRef.value)
+  }
+})`
+
+		return {
+			composableBtnRef,
+			composableContent,
+			composablePlacement,
+			composableDisabled,
+			isVisible,
+			show,
+			hide,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			showManualTooltip: false,
@@ -58,6 +106,32 @@ export default defineComponent({
 				{{ showManualTooltip ? 'Hide' : 'Show' }} Tooltip
 			</button>
 		</div>
+
+		<h3>Composable API - useTooltip</h3>
+		<div class="demo-row">
+			<div class="composable-controls">
+				<label>
+					Content:
+					<input type="text" v-model="composableContent" class="text-input" />
+				</label>
+				<label>
+					Placement:
+					<select v-model="composablePlacement" class="select-input">
+						<option value="top">Top</option>
+						<option value="bottom">Bottom</option>
+						<option value="left">Left</option>
+						<option value="right">Right</option>
+					</select>
+				</label>
+			</div>
+			<div class="composable-demo">
+				<button ref="composableBtnRef" class="btn">
+					Hover me (Composable)
+				</button>
+				<span class="status">Visible: {{ isVisible }}</span>
+			</div>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
 
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage --&gt;
@@ -137,5 +211,52 @@ h3 {
 	overflow-x: auto;
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+/* Composable API styles */
+.composable-controls {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	margin-bottom: 16px;
+	flex-wrap: wrap;
+}
+
+.composable-controls label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	color: #333;
+}
+
+.text-input {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+	width: 180px;
+}
+
+.select-input {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.composable-demo {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.status {
+	font-family: monospace;
+	font-size: 13px;
+	color: #666;
+	background: #e2e8f0;
+	padding: 4px 8px;
+	border-radius: 4px;
 }
 </style>

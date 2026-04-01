@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useResize } from 'directix'
 
 export default defineComponent({
 	name: 'ResizeDemo',
@@ -30,6 +31,46 @@ export default defineComponent({
   Debounced resize
 </div>`
 
+		// Composable API demo
+		const composableRef = ref<HTMLElement | null>(null)
+		const { width: composableWidth, height: composableHeight, bind } = useResize({
+			debounce: 100,
+			onResize: (info) => {
+				console.log('Composable resize:', info.width, info.height)
+			}
+		})
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useResize } from 'directix'
+
+export default defineComponent({
+  setup() {
+    const targetRef = ref<HTMLElement | null>(null)
+    const { width, height, bind } = useResize({
+      debounce: 100,
+      onResize: (info) => console.log('Resized:', info)
+    })
+
+    onMounted(() => bind(targetRef.value))
+
+    return { targetRef, width, height }
+  }
+})
+<\/script>
+
+<template>
+  <div ref="targetRef">
+    Size: {{ width }} x {{ height }}
+  </div>
+</template>`
+
 		return {
 			dimensions,
 			handleResize,
@@ -37,7 +78,12 @@ export default defineComponent({
 			resizeCount,
 			handleDebouncedResize,
 			basicCode,
-			debounceCode
+			debounceCode,
+			// Composable API
+			composableRef,
+			composableWidth,
+			composableHeight,
+			composableCode
 		}
 	}
 })
@@ -94,6 +140,28 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ debounceCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API - useResize</h2>
+			<p class="description">Programmatically track element resize using the composable</p>
+			<div class="demo-box">
+				<div class="info-panel">
+					<div class="info-item">
+						Width: <strong>{{ Math.round(composableWidth) }}px</strong>
+					</div>
+					<div class="info-item">
+						Height: <strong>{{ Math.round(composableHeight) }}px</strong>
+					</div>
+				</div>
+				<div ref="composableRef" class="resizable-box">
+					<p>Resize the window or container to see changes (debounced at 100ms)</p>
+				</div>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

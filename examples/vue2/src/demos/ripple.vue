@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRipple } from 'directix'
 
 export default defineComponent({
 	name: 'RippleDemo',
@@ -24,11 +25,45 @@ export default defineComponent({
   No Ripple
 </button>`
 
+		// Composable API demo
+		const composableRef = ref<HTMLElement | null>(null)
+		const { bind, trigger } = useRipple({
+			color: 'rgba(255, 255, 255, 0.4)',
+			duration: 600
+		})
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useRipple } from 'directix'
+
+const buttonRef = ref(null)
+const { bind, trigger } = useRipple({
+  color: 'rgba(255, 255, 255, 0.3)',
+  duration: 600
+})
+
+onMounted(() => bind(buttonRef.value))
+<\/script>
+
+<template>
+  <button ref="buttonRef">Click for ripple</button>
+</template>`
+
 		return {
 			basicCode,
 			colorCode,
 			optionsCode,
-			disabledCode
+			disabledCode,
+			// Composable API
+			composableRef,
+			trigger,
+			composableCode
 		}
 	}
 })
@@ -129,6 +164,26 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ disabledCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use useRipple for programmatic ripple control</p>
+			<div class="demo-box">
+				<div class="button-row">
+					<button ref="composableRef" class="ripple-btn primary">
+						Click for Ripple (Composable)
+					</button>
+					<button @click="trigger()" class="ripple-btn secondary">
+						Trigger Programmatically
+					</button>
+				</div>
+				<p class="hint">The left button uses the composable API, the right button triggers ripple programmatically</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

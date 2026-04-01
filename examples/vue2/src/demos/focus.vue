@@ -1,11 +1,57 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useFocus } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'FocusDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		const composableInput = ref<HTMLInputElement | null>(null)
+		const composableFocusCount = ref(0)
+		const composableBlurCount = ref(0)
+
+		const { isFocused, focus, blur, bind } = useFocus({
+			onFocus: () => {
+				composableFocusCount.value++
+			},
+			onBlur: () => {
+				composableBlurCount.value++
+			},
+		})
+
+		onMounted(() => {
+			if (composableInput.value) {
+				bind(composableInput.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useFocus } from 'directix'
+
+const input = ref(null)
+const { isFocused, focus, blur, bind } = useFocus({
+  onFocus: () => console.log('Focused!'),
+  onBlur: () => console.log('Blurred!')
+})
+
+onMounted(() => bind(input.value))
+
+// Programmatically focus/blur
+focus()
+blur()`
+
+		return {
+			composableInput,
+			isFocused,
+			focus,
+			blur,
+			composableFocusCount,
+			composableBlurCount,
+			composableCode,
+		}
+	},
 	data() {
 		return {
 			showInput: false,
@@ -15,32 +61,32 @@ export default defineComponent({
 			refocusValue: 'Hello',
 			refocusTrigger: 0,
 			basicCode: `<!-- 自动聚焦 -->
-<input v-focus />
+	<input v-focus />
 
-<!-- 条件聚焦 -->
-<input v-focus="shouldFocus" />`,
+	<!-- 条件聚焦 -->
+	<input v-focus="shouldFocus" />`,
 			callbackCode: `<input v-focus="{
-  focus: true,
-  onFocus: (el) => {
-    console.log('Focused!', el)
-  },
-  onBlur: (el) => {
-    console.log('Blurred!', el)
-  }
-}" />`,
+	  focus: true,
+	  onFocus: (el) => {
+	    console.log('Focused!', el)
+	  },
+	  onBlur: (el) => {
+	    console.log('Blurred!', el)
+	  }
+	}" />`,
 			refocusCode: `<!-- refocus: true 时，当指令绑定值变化会重新聚焦 -->
-<input
-  v-focus="{ focus: true, refocus: true, trigger: count }"
-/>
+	<input
+	  v-focus="{ focus: true, refocus: true, trigger: count }"
+	/>
 
-<!-- 点击按钮改变 trigger 值，焦点会自动回到输入框 -->
-<button @click="count++">Trigger Refocus</button>`,
+	<!-- 点击按钮改变 trigger 值，焦点会自动回到输入框 -->
+	<button @click="count++">Trigger Refocus</button>`,
 			optionsCode: `interface FocusOptions {
-  focus?: boolean      // 是否自动聚焦，默认 true
-  refocus?: boolean    // 是否在绑定值变化时重新聚焦，默认 false
-  onFocus?: (el: HTMLElement) => void  // 聚焦回调
-  onBlur?: (el: HTMLElement) => void   // 失焦回调
-}`,
+	  focus?: boolean      // 是否自动聚焦，默认 true
+	  refocus?: boolean    // 是否在绑定值变化时重新聚焦，默认 false
+	  onFocus?: (el: HTMLElement) => void  // 聚焦回调
+	  onBlur?: (el: HTMLElement) => void   // 失焦回调
+	}`,
 		}
 	},
 	methods: {
@@ -187,6 +233,33 @@ export default defineComponent({
 				</form>
 				<p class="hint">用户名输入框自动聚焦，提升用户体验</p>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="使用 useFocus composable 编程式管理焦点">
+			<div class="demo-box">
+				<div class="composable-demo">
+					<div class="input-group">
+						<label>Focus state: <strong>{{ isFocused ? 'Focused' : 'Blurred' }}</strong></label>
+						<input
+							ref="composableInput"
+							class="input"
+							type="text"
+							placeholder="Use buttons to control focus"
+						/>
+					</div>
+					<div class="button-group">
+						<button class="btn" @click="focus">Focus</button>
+						<button class="btn" @click="blur">Blur</button>
+					</div>
+					<div class="stats">
+						<span>Focus count: <strong>{{ composableFocusCount }}</strong></span>
+						<span>Blur count: <strong>{{ composableBlurCount }}</strong></span>
+					</div>
+				</div>
+				<p class="hint">使用 composable 可以编程式控制焦点并追踪焦点状态</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API 说明 -->
@@ -367,6 +440,17 @@ h1 {
 	margin-bottom: 6px;
 	font-size: 14px;
 	font-weight: 500;
+}
+
+.composable-demo {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.button-group {
+	display: flex;
+	gap: 12px;
 }
 
 .api-table {

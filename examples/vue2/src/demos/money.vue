@@ -1,8 +1,53 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useMoney } from 'directix'
 
 export default defineComponent({
 	name: 'MoneyDemo',
+	setup() {
+		// Composable API
+		const composablePrice = ref(1234567.89)
+		const composablePriceEur = ref(987654.32)
+
+		const { formatted: formattedUsd } = useMoney({
+			value: composablePrice,
+			symbol: '$',
+			precision: 2
+		})
+
+		const { formatted: formattedEur } = useMoney({
+			value: composablePriceEur,
+			symbol: '€',
+			symbolPosition: 'after',
+			precision: 2
+		})
+
+		const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useMoney } from 'directix'
+
+const price = ref(1234.56)
+
+const { formatted } = useMoney({
+  value: price,
+  symbol: '$',
+  precision: 2
+})
+// formatted.value = '$1,234.56'
+<\/script>
+
+<template>
+  <span>{{ formatted }}</span>
+</template>`
+
+		return {
+			composablePrice,
+			composablePriceEur,
+			formattedUsd,
+			formattedEur,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			usd: '',
@@ -88,7 +133,23 @@ export default defineComponent({
 			</div>
 		</div>
 
-		<h3>Code Example</h3>
+		<h3>Composable API (useMoney)</h3>
+			<p class="section-desc">Format numbers as currency programmatically with reactive values.</p>
+			<div class="demo-row">
+				<div class="demo-item preview">
+					<p><strong>USD (reactive):</strong></p>
+					<p class="formatted-value">{{ formattedUsd }}</p>
+					<p class="hint">Raw: {{ composablePrice }}</p>
+				</div>
+				<div class="demo-item preview">
+					<p><strong>EUR (symbol after):</strong></p>
+					<p class="formatted-value">{{ formattedEur }}</p>
+					<p class="hint">Raw: {{ composablePriceEur }}</p>
+				</div>
+			</div>
+			<pre class="code"><code>{{ composableCode }}</code></pre>
+
+			<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage (USD) --&gt;
 &lt;input v-money v-model="price" /&gt;
 
@@ -116,6 +177,12 @@ h3 {
 .desc {
 	color: #666;
 	margin-bottom: 20px;
+	line-height: 1.6;
+}
+
+.section-desc {
+	color: #666;
+	margin-bottom: 16px;
 	line-height: 1.6;
 }
 

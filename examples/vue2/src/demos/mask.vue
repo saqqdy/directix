@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useMask } from 'directix'
 
 export default defineComponent({
 	name: 'MaskDemo',
@@ -8,6 +9,29 @@ export default defineComponent({
 		const date = ref('')
 		const ssn = ref('')
 		const ssnComplete = ref(false)
+
+		// Composable API refs
+		const composableInputRef = ref<HTMLInputElement | null>(null)
+		const composableRawValue = ref('')
+		const composableIsComplete = ref(false)
+
+		const { bind, getRawValue, isComplete } = useMask({
+			mask: '(###) ###-####',
+			placeholder: '_',
+			onChange: (_value, raw) => {
+				composableRawValue.value = raw
+				composableIsComplete.value = isComplete(_value)
+			},
+			onComplete: () => {
+				composableIsComplete.value = true
+			}
+		})
+
+		onMounted(() => {
+			if (composableInputRef.value) {
+				bind(composableInputRef.value)
+			}
+		})
 
 		const handleSSNComplete = () => {
 			ssnComplete.value = true
@@ -30,6 +54,33 @@ export default defineComponent({
   placeholder="SSN"
 />`
 
+		const composableCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { useMask } from 'directix'
+
+const inputRef = ref(null)
+const rawValue = ref('')
+
+const { bind, getRawValue, isComplete } = useMask({
+  mask: '(###) ###-####',
+  placeholder: '_',
+  onChange: (_value, raw) => {
+    rawValue.value = raw
+  }
+})
+
+onMounted(() => {
+  if (inputRef.value) {
+    bind(inputRef.value)
+  }
+})
+<\/script>
+
+<template>
+  <input ref="inputRef" type="text" />
+  <p>Raw value: {{ rawValue }}</p>
+</template>`
+
 		return {
 			phone,
 			date,
@@ -39,7 +90,12 @@ export default defineComponent({
 			handleSSNChange,
 			basicCode,
 			dateCode,
-			optionsCode
+			optionsCode,
+			// Composable API
+			composableInputRef,
+			composableRawValue,
+			composableIsComplete,
+			composableCode
 		}
 	}
 })
@@ -118,6 +174,26 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ optionsCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API (useMask)</h2>
+			<p class="description">Programmatically bind mask to input elements and get raw values</p>
+			<div class="demo-box">
+				<div class="input-group">
+					<label>Phone (with useMask composable):</label>
+					<input ref="composableInputRef" type="text" placeholder="(___) ___-____" class="mask-input" :class="{ complete: composableIsComplete }" />
+				</div>
+				<div class="value-display">
+					<strong>Raw Value:</strong> {{ composableRawValue || '(empty)' }}
+					<span v-if="composableIsComplete" class="badge">Complete!</span>
+				</div>
+				<p class="hint">Using useMask() composable with bind(), getRawValue(), and isComplete()</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

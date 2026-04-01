@@ -1,11 +1,46 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useDebounce } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'DebounceDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API
+		const composableSearchText = ref('')
+		const composableSearchResults = ref<string[]>([])
+		const composableSearchCount = ref(0)
+
+		const handleComposableSearch = useDebounce(() => {
+			composableSearchCount.value++
+			const fruits = ['Apple', 'Banana', 'Orange', 'Grape']
+			composableSearchResults.value = fruits.filter(f =>
+				f.toLowerCase().includes(composableSearchText.value.toLowerCase())
+			)
+		}, 300)
+
+		const composableCode = `import { ref } from 'vue'
+import { useDebounce } from 'directix'
+
+const searchText = ref('')
+const searchResults = ref<string[]>([])
+
+const handleSearch = useDebounce(() => {
+  searchResults.value = filterItems(searchText.value)
+}, 300)
+
+// In template: @input="handleSearch"`
+
+		return {
+			composableSearchText,
+			composableSearchResults,
+			composableSearchCount,
+			handleComposableSearch,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			searchText: '',
@@ -178,6 +213,29 @@ export default defineComponent({
 					</div>
 				</div>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use useDebounce for programmatic debounce">
+			<div class="demo-box">
+				<input
+					v-model="composableSearchText"
+					@input="handleComposableSearch"
+					class="input"
+					placeholder="Type to search (composable)..."
+				/>
+				<div class="stats">
+					<span>API calls: <strong>{{ composableSearchCount }}</strong></span>
+					<span>Results: {{ composableSearchResults.length }}</span>
+				</div>
+				<div v-if="composableSearchResults.length" class="results">
+					<div v-for="item in composableSearchResults" :key="item" class="result-item">
+						{{ item }}
+					</div>
+				</div>
+				<p class="hint">Using useDebounce composable for programmatic debouncing</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

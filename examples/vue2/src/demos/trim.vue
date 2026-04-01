@@ -1,8 +1,14 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useTrim } from 'directix'
 
 export default defineComponent({
 	name: 'TrimDemo',
+	setup() {
+		const composableInput = ref('')
+		const { transformed } = useTrim({ source: composableInput })
+		return { composableInput, transformed }
+	},
 	data() {
 		return {
 			text1: '',
@@ -81,16 +87,37 @@ export default defineComponent({
 			</div>
 		</div>
 
+		<h3>Composable API</h3>
+		<div class="demo-row">
+			<div class="demo-item">
+				<p><strong>useTrim - reactive transformation</strong></p>
+				<input v-model="composableInput" placeholder="Type with spaces..." class="input" />
+				<p class="hint">Transformed: "{{ transformed }}"</p>
+			</div>
+		</div>
+		<pre class="code"><code>&lt;script&gt;
+import { ref } from 'vue'
+import { useTrim } from 'directix'
+
+const input = ref('')
+const { transformed } = useTrim({ source: input })
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;input v-model="input" /&gt;
+  &lt;p&gt;{{ transformed }}&lt;/p&gt;
+&lt;/template&gt;</code></pre>
+
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage --&gt;
-&lt;input v-trim v-model="text" /&gt;
+	&lt;input v-trim v-model="text" /&gt;
 
-&lt;!-- Trim position --&gt;
-&lt;input v-trim="{ position: 'start' }" v-model="text" /&gt;
-&lt;input v-trim="{ position: 'end' }" v-model="text" /&gt;
+	&lt;!-- Trim position --&gt;
+	&lt;input v-trim="{ position: 'start' }" v-model="text" /&gt;
+	&lt;input v-trim="{ position: 'end' }" v-model="text" /&gt;
 
-&lt;!-- On non-input elements --&gt;
-&lt;p v-trim&gt;   Text with spaces   &lt;/p&gt;</code></pre>
+	&lt;!-- On non-input elements --&gt;
+	&lt;p v-trim&gt;   Text with spaces   &lt;/p&gt;</code></pre>
 	</div>
 </template>
 

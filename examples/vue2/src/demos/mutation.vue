@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useMutation } from 'directix'
 
 export default defineComponent({
 	name: 'MutationDemo',
@@ -58,6 +59,75 @@ export default defineComponent({
   Observe attribute changes
 </div>`
 
+		// Composable API demo
+		const composableRef = ref<HTMLElement | null>(null)
+		const composableLog = ref<string[]>([])
+		const composableChildCount = ref(1)
+
+		const { bind: bindMutation } = useMutation({
+			handler: (mutations) => {
+				mutations.forEach(mutation => {
+					if (mutation.type === 'childList') {
+						composableLog.value.push(`Children changed: +${mutation.addedNodes.length} -${mutation.removedNodes.length}`)
+					}
+				})
+				if (composableLog.value.length > 5) {
+					composableLog.value.shift()
+				}
+			},
+			childList: true
+		})
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bindMutation(composableRef.value)
+			}
+		})
+
+		const addComposableChild = () => {
+			composableChildCount.value++
+		}
+
+		const removeComposableChild = () => {
+			if (composableChildCount.value > 0) {
+				composableChildCount.value--
+			}
+		}
+
+		const composableCode = `<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useMutation } from 'directix'
+
+export default defineComponent({
+  setup() {
+    const containerRef = ref<HTMLElement | null>(null)
+    const log = ref<string[]>([])
+
+    const { bind } = useMutation({
+      handler: (mutations) => {
+        mutations.forEach(mutation => {
+          if (mutation.type === 'childList') {
+            log.value.push('Children changed')
+          }
+        })
+      },
+      childList: true,
+      subtree: true
+    })
+
+    onMounted(() => bind(containerRef.value))
+
+    return { containerRef, log }
+  }
+})
+<\/script>
+
+<template>
+  <div ref="containerRef">
+    Content to observe
+  </div>
+</template>`
+
 		return {
 			mutationLog,
 			childCount,
@@ -69,7 +139,14 @@ export default defineComponent({
 			handleAttrMutation,
 			toggleClass,
 			basicCode,
-			attrCode
+			attrCode,
+			// Composable API
+			composableRef,
+			composableLog,
+			composableChildCount,
+			addComposableChild,
+			removeComposableChild,
+			composableCode
 		}
 	}
 })
@@ -130,6 +207,29 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ attrCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API - useMutation</h2>
+			<p class="description">Programmatically observe DOM mutations using the composable</p>
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="addComposableChild">Add Child</button>
+					<button class="btn secondary" @click="removeComposableChild">Remove Child</button>
+				</div>
+				<div class="log-panel">
+					<strong>Log:</strong> {{ composableLog.length > 0 ? composableLog.join(' | ') : 'No changes yet' }}
+				</div>
+				<div ref="composableRef" class="mutation-container">
+					<div v-for="i in composableChildCount" :key="i" class="child-item">
+						Child {{ i }}
+					</div>
+				</div>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { configurePermission } from 'directix'
+import { configurePermission, usePermission } from 'directix'
 
 export default defineComponent({
 	name: 'PermissionDemo',
@@ -43,6 +43,22 @@ export default defineComponent({
 			}
 		}
 
+		// Composable API demo
+		const composableValue = ref<string>('admin')
+		const composableMode = ref<'some' | 'every'>('some')
+
+		const { granted, recheck } = usePermission({
+			value: composableValue,
+			mode: composableMode,
+			getPermissions: () => userPermissions.value,
+			getRoles: () => userRoles.value,
+			roleMap: {
+				admin: ['*'],
+				editor: ['read', 'write', 'edit'],
+				viewer: ['read']
+			}
+		})
+
 		const basicCode = `<button v-permission="'admin'">
   Admin Only
 </button>`
@@ -65,6 +81,21 @@ export default defineComponent({
   Disabled for non-admin
 </button>`
 
+		const composableCode = `import { usePermission } from 'directix'
+
+const { granted, recheck } = usePermission({
+  value: 'admin',
+  getPermissions: () => userPermissions,
+  getRoles: () => userRoles,
+  roleMap: {
+    admin: ['*'],
+    editor: ['read', 'write', 'edit']
+  }
+})
+
+// granted.value is true if user has permission
+// recheck() to manually re-check permissions`
+
 		return {
 			userRoles,
 			userPermissions,
@@ -73,10 +104,16 @@ export default defineComponent({
 			permissionKey,
 			toggleRole,
 			togglePermission,
+			// Composable API
+			composableValue,
+			composableMode,
+			granted,
+			recheck,
 			basicCode,
 			multipleCode,
 			modeCode,
-			actionCode
+			actionCode,
+			composableCode
 		}
 	}
 })
@@ -218,6 +255,44 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ actionCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API - usePermission</h2>
+			<p class="description">Use the composable for programmatic permission checks</p>
+			<div class="demo-box">
+				<div class="composable-controls">
+					<label>
+						Check permission:
+						<select v-model="composableValue">
+							<option value="admin">admin</option>
+							<option value="editor">editor</option>
+							<option value="viewer">viewer</option>
+							<option value="read">read</option>
+							<option value="write">write</option>
+							<option value="delete">delete</option>
+						</select>
+					</label>
+					<label>
+						Mode:
+						<select v-model="composableMode">
+							<option value="some">some (OR)</option>
+							<option value="every">every (AND)</option>
+						</select>
+					</label>
+					<button @click="recheck" class="demo-btn small">Recheck</button>
+				</div>
+				<div class="result-box">
+					<span class="result-label">granted:</span>
+					<span :class="['result-value', granted ? 'granted' : 'denied']">
+						{{ granted }}
+					</span>
+				</div>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 
@@ -443,5 +518,61 @@ h1 {
 .api-table th {
 	background: #f8f9fa;
 	font-weight: 600;
+}
+
+/* Composable API styles */
+.composable-controls {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.composable-controls label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+}
+
+.composable-controls select {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.demo-btn.small {
+	padding: 6px 12px;
+	font-size: 13px;
+}
+
+.result-box {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.result-label {
+	font-family: monospace;
+	color: #666;
+}
+
+.result-value {
+	font-family: monospace;
+	font-weight: bold;
+	padding: 4px 12px;
+	border-radius: 4px;
+}
+
+.result-value.granted {
+	background: #d4edda;
+	color: #155724;
+}
+
+.result-value.denied {
+	background: #f8d7da;
+	color: #721c24;
 }
 </style>

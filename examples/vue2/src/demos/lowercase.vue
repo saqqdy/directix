@@ -1,8 +1,14 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useLowercase } from 'directix'
 
 export default defineComponent({
 	name: 'LowercaseDemo',
+	setup() {
+		const composableInput = ref('')
+		const { transformed } = useLowercase({ source: composableInput })
+		return { composableInput, transformed }
+	},
 	data() {
 		return {
 			text1: '',
@@ -54,15 +60,36 @@ export default defineComponent({
 			</div>
 		</div>
 
+		<h3>Composable API</h3>
+		<div class="demo-row">
+			<div class="demo-item">
+				<p><strong>useLowercase - reactive transformation</strong></p>
+				<input v-model="composableInput" placeholder="Type to see lowercase..." class="input" />
+				<p class="hint">Transformed: {{ transformed }}</p>
+			</div>
+		</div>
+		<pre class="code"><code>&lt;script&gt;
+import { ref } from 'vue'
+import { useLowercase } from 'directix'
+
+const input = ref('')
+const { transformed } = useLowercase({ source: input })
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;input v-model="input" /&gt;
+  &lt;p&gt;{{ transformed }}&lt;/p&gt;
+&lt;/template&gt;</code></pre>
+
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Transform all characters --&gt;
-&lt;input v-lowercase v-model="text" /&gt;
+	&lt;input v-lowercase v-model="text" /&gt;
 
-&lt;!-- Transform first character only --&gt;
-&lt;input v-lowercase="{ first: true }" v-model="text" /&gt;
+	&lt;!-- Transform first character only --&gt;
+	&lt;input v-lowercase="{ first: true }" v-model="text" /&gt;
 
-&lt;!-- On non-input elements --&gt;
-&lt;p v-lowercase&gt;HELLO WORLD&lt;/p&gt;</code></pre>
+	&lt;!-- On non-input elements --&gt;
+	&lt;p v-lowercase&gt;HELLO WORLD&lt;/p&gt;</code></pre>
 	</div>
 </template>
 

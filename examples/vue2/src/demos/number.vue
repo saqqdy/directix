@@ -1,8 +1,59 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useNumber } from 'directix'
 
 export default defineComponent({
 	name: 'NumberDemo',
+	setup() {
+		// Composable API
+		const composableCount = ref(1234567)
+		const composablePercentage = ref(85.5)
+
+		const { formatted: formattedCount } = useNumber({
+			value: composableCount,
+			precision: 0
+		})
+
+		const { formatted: formattedPercentage } = useNumber({
+			value: composablePercentage,
+			precision: 1,
+			suffix: '%'
+		})
+
+		const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useNumber } from 'directix'
+
+const count = ref(1234567)
+const percentage = ref(85.5)
+
+const { formatted: formattedCount } = useNumber({
+  value: count,
+  precision: 0
+})
+// formattedCount.value = '1,234,567'
+
+const { formatted: formattedPercent } = useNumber({
+  value: percentage,
+  precision: 1,
+  suffix: '%'
+})
+// formattedPercent.value = '85.5%'
+<\/script>
+
+<template>
+  <span>{{ formattedCount }}</span>
+  <span>{{ formattedPercent }}</span>
+</template>`
+
+		return {
+			composableCount,
+			composablePercentage,
+			formattedCount,
+			formattedPercentage,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			basic: '1234567',
@@ -138,7 +189,23 @@ export default defineComponent({
 			</div>
 		</div>
 
-		<h3>Code Example</h3>
+		<h3>Composable API (useNumber)</h3>
+			<p class="section-desc">Format numbers programmatically with reactive values.</p>
+			<div class="demo-row">
+				<div class="demo-item preview">
+					<p><strong>Integer with separator:</strong></p>
+					<p class="formatted-value">{{ formattedCount }}</p>
+					<p class="hint">Raw: {{ composableCount }}</p>
+				</div>
+				<div class="demo-item preview">
+					<p><strong>Percentage:</strong></p>
+					<p class="formatted-value">{{ formattedPercentage }}</p>
+					<p class="hint">Raw: {{ composablePercentage }}</p>
+				</div>
+			</div>
+			<pre class="code"><code>{{ composableCode }}</code></pre>
+
+			<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage --&gt;
 &lt;input v-number v-model="value" /&gt;
 

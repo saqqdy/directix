@@ -1,11 +1,50 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useClickOutside } from 'directix'
 
 export default defineComponent({
 	name: 'ClickOutsideDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableRef = ref<HTMLElement>()
+		const composableShow = ref(false)
+		const composableCount = ref(0)
+		const { bind } = useClickOutside({
+			handler: () => {
+				composableShow.value = false
+				composableCount.value++
+			}
+		})
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useClickOutside } from 'directix'
+
+const dropdown = ref()
+const show = ref(false)
+
+const { bind } = useClickOutside({
+  handler: () => show.value = false
+})
+
+onMounted(() => {
+  if (dropdown.value) bind(dropdown.value)
+})`
+
+		return {
+			composableRef,
+			composableShow,
+			composableCount,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			showDropdown: false,
@@ -19,10 +58,10 @@ export default defineComponent({
     Dropdown Content
   </div>
 </div>`,
-			excludeCode: `<!-- 触发按钮只负责打开 -->
+			excludeCode: `<!-- Trigger button only opens -->
 <button ref="triggerBtn" @click="openModal">Open Modal</button>
 
-<!-- modal 使用 exclude 排除触发按钮 -->
+<!-- modal uses exclude to exclude trigger button -->
 <div v-if="showModal" v-click-outside="{
   handler: closeModal,
   exclude: [triggerBtn]
@@ -64,6 +103,9 @@ export default defineComponent({
 		},
 		handleTouchClickOutside() {
 			this.touchCount++
+		},
+		toggleComposableDropdown() {
+			this.composableShow = !this.composableShow
 		}
 	}
 })
@@ -157,6 +199,28 @@ export default defineComponent({
 				<p class="hint">Listens to both click and touchstart events (mobile-friendly)</p>
 			</div>
 			<CodeBlock :code="eventsCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Using useClickOutside composable for programmatic control">
+			<div class="demo-box">
+				<div ref="composableRef" class="dropdown-container">
+					<button class="btn composable" @click="toggleComposableDropdown">
+						Composable Dropdown
+						<span class="arrow">{{ composableShow ? '▲' : '▼' }}</span>
+					</button>
+					<div v-show="composableShow" class="dropdown">
+						<div class="dropdown-item">Option A</div>
+						<div class="dropdown-item">Option B</div>
+						<div class="dropdown-item">Option C</div>
+					</div>
+				</div>
+				<p class="hint">
+					This dropdown uses the useClickOutside composable.
+					Close count: <strong>{{ composableCount }}</strong>
+				</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -258,6 +322,10 @@ h1 {
 
 .btn:hover {
 	background: #5a6fd6;
+}
+
+.btn.composable {
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 .arrow {

@@ -1,11 +1,35 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useThrottle } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'ThrottleDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API
+		const composableClickCount = ref(0)
+		const handleComposableClick = useThrottle(() => {
+			composableClickCount.value++
+		}, 300)
+
+		const composableCode = `import { ref } from 'vue'
+import { useThrottle } from 'directix'
+
+const clickCount = ref(0)
+const handleClick = useThrottle(() => {
+  clickCount.value++
+}, 300)
+
+// In template: @click="handleClick"`
+
+		return {
+			composableClickCount,
+			handleComposableClick,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			clickCount: 0,
@@ -202,6 +226,20 @@ const handleClick = () => {
 				</div>
 				<p class="hint">Click button rapidly, only one submission within 2 seconds</p>
 			</div>
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use useThrottle for programmatic throttling">
+			<div class="demo-box">
+				<button @click="handleComposableClick" class="btn">
+					Click Me (Composable)
+				</button>
+				<div class="stats">
+					<span>Click count: <strong>{{ composableClickCount }}</strong></span>
+				</div>
+				<p class="hint">Using useThrottle composable for programmatic throttling</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

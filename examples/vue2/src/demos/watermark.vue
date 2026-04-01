@@ -1,11 +1,61 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useWatermark } from 'directix'
 
 export default defineComponent({
 	name: 'WatermarkDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableContent = ref('Composable')
+		const composableDisabled = ref(false)
+
+		const { dataUrl, style, enable, disable } = useWatermark({
+			content: composableContent,
+			fontSize: 16,
+			color: 'rgba(128, 128, 128, 0.15)',
+			disabled: composableDisabled
+		})
+
+		const toggleComposableWatermark = () => {
+			if (composableDisabled.value) {
+				enable()
+				composableDisabled.value = false
+			} else {
+				disable()
+				composableDisabled.value = true
+			}
+		}
+
+		const composableCode = `import { useWatermark } from 'directix'
+
+const { dataUrl, style, enable, disable } = useWatermark({
+  content: 'Confidential',
+  fontSize: 20,
+  color: 'rgba(255, 0, 0, 0.2)'
+})
+
+// Use in template:
+// <div class="container">
+//   <div :style="style"></div>
+//   <slot></slot>
+// </div>
+
+// Control watermark
+enable()  // Show watermark
+disable() // Hide watermark`
+
+		return {
+			composableContent,
+			composableDisabled,
+			dataUrl,
+			style,
+			toggleComposableWatermark,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			disabled: false,
@@ -88,6 +138,26 @@ export default defineComponent({
 					<span>Disable watermark</span>
 				</label>
 			</div>
+		</DemoSection>
+
+		<DemoSection title="Composable API - useWatermark" description="Use the composable for programmatic watermark control">
+			<div class="demo-box">
+				<div class="composable-controls">
+					<label>
+						Content:
+						<input type="text" v-model="composableContent" class="text-input" />
+					</label>
+					<button @click="toggleComposableWatermark" class="toggle-btn">
+						{{ composableDisabled ? 'Enable' : 'Disable' }} Watermark
+					</button>
+				</div>
+				<div class="watermark-container composable-demo">
+					<div :style="style"></div>
+					<p>This watermark is rendered using the useWatermark composable.</p>
+					<p>The watermark layer is positioned absolutely over this content.</p>
+				</div>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">
@@ -205,5 +275,48 @@ h1 {
 .api-table th {
 	background: #f8f9fa;
 	font-weight: 600;
+}
+
+/* Composable API styles */
+.composable-controls {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	margin-bottom: 16px;
+	flex-wrap: wrap;
+}
+
+.composable-controls label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+}
+
+.text-input {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+	width: 150px;
+}
+
+.toggle-btn {
+	padding: 8px 16px;
+	background: #42b883;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background 0.2s;
+}
+
+.toggle-btn:hover {
+	background: #3aa876;
+}
+
+.composable-demo {
+	position: relative;
 }
 </style>

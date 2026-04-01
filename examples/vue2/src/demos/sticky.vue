@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useSticky } from 'directix'
 
 export default defineComponent({
 	name: 'StickyDemo',
@@ -8,6 +9,10 @@ export default defineComponent({
 		const handleStickyChange = (sticky: boolean) => {
 			isSticky.value = sticky
 		}
+
+		// Composable API
+		const composableStickyRef = ref<HTMLElement | null>(null)
+		const { isSticky: composableIsSticky } = useSticky(composableStickyRef)
 
 		const basicCode = `<nav v-sticky class="sticky-nav">
   Navigation Content
@@ -21,12 +26,23 @@ export default defineComponent({
   {{ isSticky ? 'Sticky!' : 'Normal' }}
 </div>`
 
+		const composableCode = `import { ref } from 'vue'
+import { useSticky } from 'directix'
+
+const elementRef = ref<HTMLElement | null>(null)
+const { isSticky } = useSticky(elementRef)
+
+// In template: <div ref="elementRef">Sticky content</div>`
+
 		return {
 			isSticky,
 			handleStickyChange,
+			composableStickyRef,
+			composableIsSticky,
 			basicCode,
 			offsetCode,
-			callbackCode
+			callbackCode,
+			composableCode
 		}
 	}
 })
@@ -104,6 +120,29 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ callbackCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use useSticky for programmatic sticky tracking</p>
+			<div class="demo-box">
+				<div class="status-badge" :class="{ active: composableIsSticky }">
+					{{ composableIsSticky ? 'Currently Sticky' : 'Normal Position' }}
+				</div>
+				<div class="scroll-container">
+					<div class="scroll-spacer">Scroll to trigger sticky</div>
+					<div ref="composableStickyRef" class="sticky-box tracked">
+						Sticky Element (Composable)
+					</div>
+					<div class="scroll-content">
+						<p v-for="i in 10" :key="i">Content line {{ i }}</p>
+					</div>
+				</div>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

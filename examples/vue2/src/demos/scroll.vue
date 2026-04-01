@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useScroll } from 'directix'
 
 export default defineComponent({
 	name: 'ScrollDemo',
@@ -27,6 +28,18 @@ export default defineComponent({
 			progressWidth.value = info.progressY * 100
 		}
 
+		// Composable API demo
+		const composableRef = ref<HTMLElement>()
+		const composableScrollTop = ref(0)
+		const composableProgressY = ref(0)
+		const composableDirectionY = ref< -1 | 0 | 1>(0)
+		const { scrollTop, progressY, directionY, bind } = useScroll()
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
 		const basicCode = `<div v-scroll="handleScroll" class="scroll-container">
   <div class="content">Scrollable content</div>
 </div>`
@@ -34,6 +47,16 @@ export default defineComponent({
 		const throttledCode = `<div v-scroll="{ handler: handleScroll, throttle: 200 }">
   Throttled scroll events
 </div>`
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useScroll } from 'directix'
+
+const container = ref()
+const { scrollTop, progressY, directionY, bind } = useScroll()
+
+onMounted(() => {
+  if (container.value) bind(container.value)
+})`
 
 		return {
 			scrollInfo,
@@ -43,7 +66,16 @@ export default defineComponent({
 			progressWidth,
 			handleProgressScroll,
 			basicCode,
-			throttledCode
+			throttledCode,
+			// Composable API
+			composableRef,
+			composableScrollTop,
+			composableProgressY,
+			composableDirectionY,
+			scrollTop,
+			progressY,
+			directionY,
+			composableCode
 		}
 	}
 })
@@ -124,6 +156,37 @@ export default defineComponent({
 						<p v-for="i in 30" :key="i">Content line {{ i }}</p>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Using useScroll composable for programmatic scroll tracking</p>
+			<div class="demo-box">
+				<div class="info-panel">
+					<div class="info-item composable">
+						<span class="label">Scroll Top:</span>
+						<span class="value">{{ Math.round(scrollTop) }}px</span>
+					</div>
+					<div class="info-item composable">
+						<span class="label">Progress:</span>
+						<span class="value">{{ Math.round(progressY * 100) }}%</span>
+					</div>
+					<div class="info-item composable">
+						<span class="label">Direction:</span>
+						<span class="value">{{ directionY === 1 ? '↓ Down' : directionY === -1 ? '↑ Up' : '- None' }}</span>
+					</div>
+				</div>
+				<div ref="composableRef" class="scroll-container composable">
+					<div class="scroll-content">
+						<p v-for="i in 20" :key="i">Composable scroll line {{ i }}</p>
+					</div>
+				</div>
+				<p class="hint">This container uses the useScroll composable instead of the directive</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 
@@ -279,12 +342,24 @@ h1 {
 	color: #42b883;
 }
 
+.info-item.composable {
+	border: 2px solid #f093fb;
+}
+
+.info-item.composable .value {
+	color: #f5576c;
+}
+
 .scroll-container {
 	height: 200px;
 	overflow-y: auto;
 	background: white;
 	border-radius: 8px;
 	border: 2px solid #e0e0e0;
+}
+
+.scroll-container.composable {
+	border-color: #f093fb;
 }
 
 .scroll-content {
@@ -311,6 +386,12 @@ h1 {
 	background: linear-gradient(90deg, #42b883, #35495e);
 	border-radius: 3px;
 	transition: width 0.1s;
+}
+
+.hint {
+	font-size: 13px;
+	color: #888;
+	margin-top: 12px;
 }
 
 .code-block {

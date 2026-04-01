@@ -1,11 +1,55 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { usePullRefresh } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'PullRefreshDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API
+		const composableContainerRef = ref<HTMLElement | null>(null)
+		const composableItems = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'])
+		const composableCounter = ref(5)
+		const composableState = ref('')
+
+		const handleComposableRefresh = async () => {
+			composableState.value = 'Refreshing...'
+			await new Promise(resolve => setTimeout(resolve, 1500))
+			composableCounter.value++
+			composableItems.value.unshift(`Item ${composableCounter.value}`)
+			composableItems.value.pop()
+			composableState.value = 'Done!'
+			setTimeout(() => {
+				composableState.value = ''
+			}, 1000)
+		}
+
+		usePullRefresh(composableContainerRef, handleComposableRefresh)
+
+		const composableCode = `import { ref } from 'vue'
+import { usePullRefresh } from 'directix'
+
+const containerRef = ref<HTMLElement | null>(null)
+const items = ref(['Item 1', 'Item 2', 'Item 3'])
+
+const handleRefresh = async () => {
+  await fetchData()
+  items.value = newItems
+}
+
+usePullRefresh(containerRef, handleRefresh)
+
+// In template: <div ref="containerRef">...</div>`
+
+		return {
+			composableContainerRef,
+			composableItems,
+			composableState,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			// Basic Usage
@@ -105,6 +149,20 @@ export default defineComponent({
 				<p class="status" v-if="customState">{{ customState }}</p>
 			</div>
 			<CodeBlock :code="optionsCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use usePullRefresh for programmatic pull-to-refresh">
+			<div class="demo-box">
+				<div ref="composableContainerRef" class="refresh-container">
+					<p v-for="(item, index) in composableItems" :key="index" class="list-item">
+						{{ item }}
+					</p>
+				</div>
+				<p class="status" v-if="composableState">{{ composableState }}</p>
+				<p class="hint">Using usePullRefresh composable for programmatic pull-to-refresh</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<DemoSection title="API">

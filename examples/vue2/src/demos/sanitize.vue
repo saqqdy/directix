@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useSanitize } from 'directix'
 
 export default defineComponent({
 	name: 'SanitizeDemo',
@@ -7,6 +8,10 @@ export default defineComponent({
 		const userInput1 = ref(`<p>Safe paragraph</p><script>alert("xss")<\/script>`)
 		const userInput2 = ref(`<b>Bold</b> and <i>italic</i> and <script>alert("xss")<\/script>`)
 		const userInput3 = ref('<p onclick="alert(1)">Click me</p><a href="javascript:void(0)">Link</a>')
+
+		// Composable API
+		const composableInput = ref('<p>Safe</p><script>alert("xss")<\/script>')
+		const sanitizedOutput = useSanitize(composableInput, { allowedTags: ['p', 'b', 'i'] })
 
 		const basicCode = `<div v-sanitize v-html="userContent"></div>`
 
@@ -20,13 +25,26 @@ export default defineComponent({
 }" v-html="content">
 </div>`
 
+		const composableCode = `import { ref } from 'vue'
+import { useSanitize } from 'directix'
+
+const userInput = ref('<p>Safe</p><script>alert("xss")<\/script>')
+const sanitized = useSanitize(userInput, {
+  allowedTags: ['p', 'b', 'i']
+})
+
+// sanitized.value is the clean HTML string`
+
 		return {
 			userInput1,
 			userInput2,
 			userInput3,
+			composableInput,
+			sanitizedOutput,
 			basicCode,
 			allowedTagsCode,
-			optionsCode
+			optionsCode,
+			composableCode
 		}
 	}
 })
@@ -103,6 +121,26 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ optionsCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use useSanitize for programmatic HTML sanitization</p>
+			<div class="demo-box">
+				<div class="input-group">
+					<label>Input HTML:</label>
+					<textarea v-model="composableInput" class="html-input" rows="2"></textarea>
+				</div>
+				<div class="result-section">
+					<div class="result-label">Sanitized Output:</div>
+					<div v-html="sanitizedOutput" class="html-output"></div>
+				</div>
+				<p class="hint">Using useSanitize composable for reactive sanitization</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

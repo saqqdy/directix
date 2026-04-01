@@ -1,8 +1,53 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useDraggable } from 'directix'
 
 export default defineComponent({
 	name: 'DraggableDemo',
+	setup() {
+		// Composable API demo
+		const composableRef = ref<HTMLElement>()
+		const composablePosition = ref({ x: 0, y: 0 })
+		const composableDragging = ref(false)
+		const { position, isDragging, bind, reset } = useDraggable({
+			constrain: true,
+			onStart: () => {
+				composableDragging.value = true
+			},
+			onEnd: (pos) => {
+				composablePosition.value = pos
+				composableDragging.value = false
+			}
+		})
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useDraggable } from 'directix'
+
+const target = ref()
+const { position, isDragging, bind, reset } = useDraggable({
+  constrain: true,
+  onEnd: (pos) => console.log('Dropped at:', pos)
+})
+
+onMounted(() => {
+  if (target.value) bind(target.value)
+})`
+
+		return {
+			composableRef,
+			composablePosition,
+			composableDragging,
+			position,
+			isDragging,
+			reset,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			position: { x: 0, y: 0 },
@@ -26,6 +71,9 @@ export default defineComponent({
 		handleAxisYDrag(pos: { x: number; y: number }) {
 			this.axisYPosition = pos
 		},
+		handleReset() {
+			this.reset()
+		}
 	},
 })
 </script>
@@ -114,6 +162,21 @@ export default defineComponent({
 				</div>
 			</div>
 		</div>
+
+		<!-- Composable API -->
+		<h3>Composable API</h3>
+		<p class="hint">Using useDraggable composable for programmatic control</p>
+		<div class="demo-container constrained composable-demo">
+			<div ref="composableRef" class="draggable-box composable-box" :class="{ dragging: isDragging }">
+				<div class="position-display">
+					<span>X: {{ Math.round(position.x) }}</span>
+					<span>Y: {{ Math.round(position.y) }}</span>
+				</div>
+				<span class="badge">Composable</span>
+			</div>
+			<button class="reset-btn" @click="handleReset">Reset Position</button>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
 
 		<h3>Code Example</h3>
 		<pre class="code"><code>&lt;!-- Basic usage --&gt;
@@ -320,6 +383,50 @@ h3 {
 	gap: 16px;
 	font-family: 'SF Mono', Monaco, monospace;
 	font-size: 13px;
+}
+
+/* Composable Demo */
+.composable-demo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.composable-box {
+	flex-direction: column;
+	gap: 8px;
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+	box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+}
+
+.composable-box.dragging {
+	box-shadow: 0 8px 24px rgba(240, 147, 251, 0.5);
+	transform: scale(1.02);
+}
+
+.badge {
+	font-size: 11px;
+	padding: 2px 8px;
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+}
+
+.reset-btn {
+	margin-top: 16px;
+	padding: 8px 16px;
+	font-size: 13px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: white;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.reset-btn:hover {
+	background: #f5f5f5;
+	border-color: #ccc;
 }
 
 /* Code Block */

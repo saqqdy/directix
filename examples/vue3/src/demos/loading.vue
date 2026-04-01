@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useLoading } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
@@ -39,6 +40,17 @@ const startLoading4 = () => {
 	}, 3000)
 }
 
+// Composable API
+const composableContainerRef = ref<HTMLElement | null>(null)
+const { isLoading: composableIsLoading, setLoading } = useLoading(composableContainerRef)
+
+const toggleComposableLoading = () => {
+	setLoading(true)
+	setTimeout(() => {
+		setLoading(false)
+	}, 2000)
+}
+
 const basicCode = `<div v-loading="isLoading">
   Content here
 </div>
@@ -59,6 +71,20 @@ const fullscreenCode = `<div
 const lockCode = `<div v-loading="{ value: isLoading, lock: true }">
   Content is locked while loading
 </div>`
+
+const composableCode = `import { ref } from 'vue'
+import { useLoading } from 'directix'
+
+const containerRef = ref<HTMLElement | null>(null)
+const { isLoading, setLoading } = useLoading(containerRef)
+
+const startLoading = () => {
+  setLoading(true)
+  // ... async operation
+  setLoading(false)
+}
+
+// In template: <div ref="containerRef">Content</div>`
 </script>
 
 <template>
@@ -126,6 +152,23 @@ const lockCode = `<div v-loading="{ value: isLoading, lock: true }">
 				<p class="hint">Scrolling is locked while loading</p>
 			</div>
 			<CodeBlock :code="lockCode" />
+		</DemoSection>
+
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use useLoading for programmatic loading control">
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="toggleComposableLoading" :disabled="composableIsLoading">
+						{{ composableIsLoading ? 'Loading...' : 'Start Loading (Composable)' }}
+					</button>
+				</div>
+				<div ref="composableContainerRef" v-loading="composableIsLoading" class="loading-container">
+					<p>Composable loading content</p>
+					<p>Using useLoading for programmatic control</p>
+				</div>
+				<p class="hint">Using useLoading composable for programmatic loading</p>
+			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

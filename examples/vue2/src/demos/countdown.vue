@@ -1,11 +1,61 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useCountdown } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'CountdownDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API
+		const composableCompleted = ref(false)
+		const composableTargetTime = Date.now() + 60 * 1000 // 1 minute
+
+		const { formatted: composableFormatted, running, paused, completed, pause, resume, reset } = useCountdown({
+			target: composableTargetTime,
+			format: 'mm:ss',
+			onComplete: () => {
+				composableCompleted.value = true
+			}
+		})
+
+		const handleComposableReset = () => {
+			composableCompleted.value = false
+			reset()
+		}
+
+		const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useCountdown } from 'directix'
+
+const targetDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+
+const { formatted, running, completed, pause, resume } = useCountdown({
+  target: targetDate,
+  format: 'hh:mm:ss',
+  onComplete: () => console.log('Done!')
+})
+<\/script>
+
+<template>
+  <p>{{ formatted }}</p>
+  <button @click="pause" v-if="running">Pause</button>
+  <button @click="resume" v-if="!running && !completed">Resume</button>
+</template>`
+
+		return {
+			composableTargetTime,
+			composableFormatted,
+			running,
+			paused,
+			composableCompleted,
+			pause,
+			resume,
+			handleComposableReset,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			completed: false,
@@ -100,7 +150,23 @@ export default defineComponent({
 			<CodeBlock :code="callbackCode" />
 		</DemoSection>
 
-		<DemoSection title="API">
+		<DemoSection title="Composable API (useCountdown)" description="Programmatic countdown with pause/resume controls">
+				<div class="demo-box">
+					<div class="countdown-item">
+						<span class="label">1 minute countdown:</span>
+						<span class="countdown-value" :class="{ 'countdown-done': composableCompleted }">{{ composableFormatted }}</span>
+						<span v-if="composableCompleted" class="done-badge">Done!</span>
+					</div>
+					<div class="controls">
+						<button v-if="running" @click="pause" class="control-btn">Pause</button>
+						<button v-if="!running && !composableCompleted" @click="resume" class="control-btn">Resume</button>
+						<button @click="handleComposableReset" class="control-btn reset">Reset</button>
+					</div>
+				</div>
+				<CodeBlock :code="composableCode" />
+			</DemoSection>
+
+			<DemoSection title="API">
 			<table class="api-table">
 				<thead>
 					<tr>
@@ -226,6 +292,34 @@ h1 {
 	cursor: pointer;
 	font-size: 14px;
 	margin-top: 12px;
+}
+
+.controls {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.control-btn {
+	padding: 8px 16px;
+	background: #42b883;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.control-btn:hover {
+	background: #3aa876;
+}
+
+.control-btn.reset {
+	background: #718096;
+}
+
+.control-btn.reset:hover {
+	background: #5a6a7e;
 }
 
 .api-table {

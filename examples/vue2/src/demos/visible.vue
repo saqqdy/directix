@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useVisible } from 'directix'
 
 export default defineComponent({
 	name: 'VisibleDemo',
@@ -20,27 +21,63 @@ export default defineComponent({
 		const showAnimated = ref(true)
 
 		const basicCode = `<div v-visible="showElement">
-  Toggle visibility
-</div>
+	  Toggle visibility
+	</div>
 
-<button @click="showElement = !showElement">
-  Toggle
-</button>`
+	<button @click="showElement = !showElement">
+	  Toggle
+	</button>`
 
 		const handlerCode = `<div v-visible="{ handler: handleVisibilityChange }">
-  Track visibility changes
-</div>`
+	  Track visibility changes
+	</div>`
 
 		const hiddenCode = `<div v-visible="{ useHidden: true, initial: true }">
-  Uses visibility: hidden instead of display: none
-</div>`
+	  Uses visibility: hidden instead of display: none
+	</div>`
 
 		const animatedCode = `<div
-  v-visible="{ initial: showAnimated, useHidden: true }"
-  class="animated-box"
->
-  Animated visibility
-</div>`
+	  v-visible="{ initial: showAnimated, useHidden: true }"
+	  class="animated-box"
+	>
+	  Animated visibility
+	</div>`
+
+		// Composable API demo
+		const composableElement = ref<HTMLElement | null>(null)
+		const composableHistory = ref<string[]>([])
+
+		const { visible, show, hide, toggle, bind } = useVisible({
+			initial: false,
+			onChange: (v) => {
+				composableHistory.value.push(v ? 'Shown' : 'Hidden')
+				if (composableHistory.value.length > 5) {
+					composableHistory.value.shift()
+				}
+			},
+		})
+
+		onMounted(() => {
+			if (composableElement.value) {
+				bind(composableElement.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useVisible } from 'directix'
+
+const element = ref(null)
+const { visible, show, hide, toggle, bind } = useVisible({
+  initial: false,
+  onChange: (v) => console.log('Visible:', v)
+})
+
+onMounted(() => bind(element.value))
+
+// Programmatic control
+show()
+hide()
+toggle()`
 
 		return {
 			showElement,
@@ -53,6 +90,14 @@ export default defineComponent({
 			handlerCode,
 			hiddenCode,
 			animatedCode,
+			// Composable API
+			composableElement,
+			visible,
+			show,
+			hide,
+			toggle,
+			composableHistory,
+			composableCode,
 		}
 	},
 })
@@ -102,7 +147,7 @@ export default defineComponent({
 					Visibility tracked
 				</div>
 				<div class="history">
-					<strong>History:</strong> {{ visibilityHistory.join(' → ') || 'No changes yet' }}
+					<strong>History:</strong> {{ visibilityHistory.join(' -> ') || 'No changes yet' }}
 				</div>
 			</div>
 			<div class="code-block">
@@ -154,6 +199,29 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ animatedCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">使用 useVisible composable 编程式控制可见性</p>
+			<div class="demo-box">
+				<div class="controls">
+					<button class="btn" @click="show">Show</button>
+					<button class="btn" @click="hide">Hide</button>
+					<button class="btn" @click="toggle">Toggle</button>
+				</div>
+				<div ref="composableElement" class="visible-box composable-box">
+					Current state: <strong>{{ visible ? 'Visible' : 'Hidden' }}</strong>
+				</div>
+				<div class="history">
+					<strong>History:</strong> {{ composableHistory.join(' -> ') || 'No changes yet' }}
+				</div>
+				<p class="hint">使用 composable 可以编程式控制可见性并追踪状态变化</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 
@@ -243,6 +311,8 @@ h1 {
 
 .controls {
 	margin-bottom: 16px;
+	display: flex;
+	gap: 12px;
 }
 
 .btn {
@@ -275,6 +345,10 @@ h1 {
 .visible-box.small {
 	padding: 20px;
 	flex: 1;
+}
+
+.visible-box.composable-box {
+	background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
 .container-row {

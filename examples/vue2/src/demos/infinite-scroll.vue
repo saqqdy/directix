@@ -1,9 +1,11 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useInfiniteScroll } from 'directix'
 
 export default defineComponent({
 	name: 'InfiniteScrollDemo',
 	setup() {
+		// Directive demos
 		const items1 = ref(Array.from({ length: 10 }, (_, i) => `Item ${i + 1}`))
 		const loading1 = ref(false)
 		const loadMore1 = async () => {
@@ -38,6 +40,27 @@ export default defineComponent({
 			}
 		}
 
+		// Composable API
+		const containerRef = ref<HTMLElement | null>(null)
+		const composableItems = ref<string[]>(Array.from({ length: 10 }, (_, i) => `Composable Item ${i + 1}`))
+
+		const { loading: composableLoading, finished, bind } = useInfiniteScroll({
+			onLoad: async () => {
+				await new Promise(resolve => setTimeout(resolve, 1000))
+				const newItems = Array.from({ length: 5 }, (_, i) => `Composable Item ${composableItems.value.length + i + 1}`)
+				composableItems.value.push(...newItems)
+				if (composableItems.value.length >= 30) {
+					;(finished as any).value = true
+				}
+			},
+		})
+
+		onMounted(() => {
+			if (containerRef.value) {
+				bind(containerRef.value)
+			}
+		})
+
 		const basicCode = `<div v-infinite-scroll="loadMore" class="scroll-container">
   <div v-for="item in items" :key="item">
     {{ item }}
@@ -47,6 +70,39 @@ export default defineComponent({
 		const distanceCode = `<div v-infinite-scroll="{ handler: loadMore, distance: 100 }">
   Load more when 100px from bottom
 </div>`
+
+		const composableCode = `<script lang="ts">
+import { ref, onMounted } from 'vue'
+import { useInfiniteScroll } from 'directix'
+
+const containerRef = ref<HTMLElement | null>(null)
+const items = ref([])
+const { loading, finished, bind } = useInfiniteScroll({
+  onLoad: async () => {
+    const newItems = await fetchItems()
+    items.value.push(...newItems)
+    if (newItems.length === 0) {
+      finished.value = true
+    }
+  }
+})
+
+onMounted(() => {
+  if (containerRef.value) {
+    bind(containerRef.value)
+  }
+})
+</script>
+
+<template>
+  <div ref="containerRef" class="scroll-container">
+    <div v-for="item in items" :key="item.id">
+      {{ item.name }}
+    </div>
+    <div v-if="loading">Loading...</div>
+    <div v-if="finished">All loaded!</div>
+  </div>
+</template>`
 
 		return {
 			items1,
@@ -60,7 +116,13 @@ export default defineComponent({
 			disabled3,
 			loadMore3,
 			basicCode,
-			distanceCode
+			distanceCode,
+			// Composable API
+			containerRef,
+			composableItems,
+			composableLoading,
+			finished,
+			composableCode,
 		}
 	}
 })
@@ -130,6 +192,29 @@ export default defineComponent({
 					</div>
 				</div>
 				<p class="hint">Stops loading after 30 items</p>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use the composable for programmatic control</p>
+			<div class="demo-box">
+				<div ref="containerRef" class="scroll-container">
+					<div v-for="item in composableItems" :key="item" class="list-item">
+						{{ item }}
+					</div>
+					<div v-if="composableLoading" class="loading-indicator">
+						Loading via composable...
+					</div>
+					<div v-if="finished" class="complete-indicator">
+						All composable items loaded!
+					</div>
+				</div>
+				<p class="hint">This list uses the useInfiniteScroll composable</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 

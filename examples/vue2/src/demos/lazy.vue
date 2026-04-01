@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useLazy } from 'directix'
 
 export default defineComponent({
 	name: 'LazyDemo',
@@ -12,6 +13,20 @@ export default defineComponent({
 		const handleLoad = () => {
 			// Image loaded callback
 		}
+
+		// Composable API
+		const composableImageRef = ref<HTMLImageElement | null>(null)
+		const { state, isLoading, isLoaded, bind } = useLazy({
+			src: 'https://picsum.photos/400/300?random=10',
+			placeholder: placeholderUrl,
+			onLoad: () => console.log('Composable image loaded'),
+		})
+
+		onMounted(() => {
+			if (composableImageRef.value) {
+				bind(composableImageRef.value)
+			}
+		})
 
 		const basicCode = `<img v-lazy="imageUrl" alt="Lazy loaded image" />`
 

@@ -1,11 +1,53 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { useVirtualList } from 'directix'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
 	name: 'VirtualListDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API
+		const composableItems = Array.from({ length: 1000 }, (_, i) => ({
+			id: i,
+			name: `Item ${i + 1}`,
+			value: Math.floor(Math.random() * 1000)
+		}))
+
+		const { list, containerProps, wrapperProps } = useVirtualList(
+			composableItems,
+			{ itemHeight: 50 }
+		)
+
+		const composableCode = `import { useVirtualList } from 'directix'
+
+const items = Array.from({ length: 10000 }, (_, i) => ({
+  id: i,
+  name: \`Item \${i + 1}\`
+}))
+
+const { list, containerProps, wrapperProps } = useVirtualList(
+  items,
+  { itemHeight: 50 }
+)
+
+// In template:
+// <div v-bind="containerProps" style="height: 400px">
+//   <div v-bind="wrapperProps">
+//     <div v-for="{ data, index } in list" :key="index">
+//       {{ data.name }}
+//     </div>
+//   </div>
+// </div>`
+
+		return {
+			composableList: list,
+			containerProps,
+			wrapperProps,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			visibleRange: { start: 0, end: 0 },
@@ -108,6 +150,22 @@ export default defineComponent({
 			<CodeBlock :code="variableCode" />
 		</DemoSection>
 
+		<!-- Composable API -->
+		<DemoSection title="Composable API" description="Use useVirtualList for programmatic virtual lists">
+			<div class="demo-box">
+				<div v-bind="containerProps" class="virtual-list" style="height: 300px">
+					<div v-bind="wrapperProps">
+						<div v-for="{ data, index } in composableList" :key="index" class="virtual-item">
+							<strong>{{ data.name }}</strong>
+							<span style="color: #42b883;">{{ data.value }}</span>
+						</div>
+					</div>
+				</div>
+				<p class="hint">Using useVirtualList composable for programmatic virtualization</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<DemoSection title="API">
 			<table class="api-table">
 				<thead>
@@ -193,6 +251,14 @@ h1 {
 .virtual-list.custom {
 	border-color: #42b883;
 	box-shadow: 0 4px 12px rgba(66, 184, 131, 0.15);
+}
+
+.virtual-item {
+	padding: 10px 14px;
+	border-bottom: 1px solid #f0f0f0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .info {

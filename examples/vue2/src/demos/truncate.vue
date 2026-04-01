@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { useTruncate } from 'directix'
 
 export default defineComponent({
 	name: 'TruncateDemo',
@@ -34,6 +35,37 @@ export default defineComponent({
 			}
 		})
 
+		// Composable API demo
+		const composableText = ref('This is a long text that will be truncated using the useTruncate composable API. It demonstrates programmatic text truncation with reactive state.')
+		const composableLength = ref(50)
+		const composablePosition = ref<'start' | 'middle' | 'end'>('middle')
+
+		const { truncated, isTruncated, originalLength, truncate } = useTruncate({
+			text: composableText,
+			length: composableLength,
+			position: composablePosition
+		})
+
+		const composableCode = `<script setup>
+import { ref } from 'vue'
+import { useTruncate } from 'directix'
+
+const text = ref('This is a long text...')
+const length = ref(30)
+const position = ref('middle')
+
+const { truncated, isTruncated } = useTruncate({
+  text,
+  length,
+  position
+})
+<\/script>
+
+<template>
+  <p>{{ truncated }}</p>
+  <span v-if="isTruncated">Text was truncated</span>
+</template>`
+
 		return {
 			customLength,
 			customPosition,
@@ -42,6 +74,15 @@ export default defineComponent({
 			longParagraph,
 			positions,
 			truncatedText,
+			// Composable API
+			composableText,
+			composableLength,
+			composablePosition,
+			truncated,
+			isTruncated,
+			originalLength,
+			truncate,
+			composableCode
 		}
 	},
 })
@@ -204,6 +245,44 @@ export default defineComponent({
 				</div>
 			</div>
 		</div>
+
+		<!-- Composable API -->
+		<h3>🎯 Composable API</h3>
+		<div class="composable-demo">
+			<div class="composable-controls">
+				<div class="control-group">
+					<label>Length: {{ composableLength }}</label>
+					<input type="range" v-model.number="composableLength" min="20" max="100" step="5" />
+				</div>
+				<div class="control-group">
+					<label>Position:</label>
+					<div class="btn-group">
+						<button
+							v-for="pos in positions"
+							:key="pos"
+							:class="{ active: composablePosition === pos }"
+							@click="composablePosition = pos"
+						>
+							{{ pos }}
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="composable-result">
+				<div class="result-item">
+					<span class="result-label">Original ({{ originalLength }} chars):</span>
+					<p class="result-text">{{ composableText }}</p>
+				</div>
+				<div class="result-item">
+					<span class="result-label">Truncated:</span>
+					<p class="result-text truncated">{{ truncated }}</p>
+				</div>
+				<div class="result-status" v-if="isTruncated">
+					<span class="status-badge">Truncated</span>
+				</div>
+			</div>
+		</div>
+		<pre class="code"><code>{{ composableCode }}</code></pre>
 
 		<!-- Code Example -->
 		<h3>💻 Code Example</h3>
@@ -553,6 +632,69 @@ h3 {
 	background: #f0f9ff;
 	border-radius: 6px;
 	cursor: help;
+}
+
+/* Composable Demo */
+.composable-demo {
+	background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+	border: 1px solid #bae6fd;
+	border-radius: 12px;
+	padding: 20px;
+	margin-bottom: 24px;
+}
+
+.composable-controls {
+	display: flex;
+	gap: 24px;
+	flex-wrap: wrap;
+	margin-bottom: 20px;
+}
+
+.composable-result {
+	background: white;
+	border-radius: 8px;
+	padding: 16px;
+	border: 1px solid #e2e8f0;
+}
+
+.result-item {
+	margin-bottom: 12px;
+}
+
+.result-label {
+	display: block;
+	font-size: 12px;
+	color: #666;
+	margin-bottom: 4px;
+	font-weight: 500;
+}
+
+.result-text {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #333;
+}
+
+.result-text.truncated {
+	background: #f0fdf4;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #bbf7d0;
+}
+
+.result-status {
+	margin-top: 12px;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 4px 12px;
+	background: #22c55e;
+	color: white;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 500;
 }
 
 /* Code */

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useHover } from 'directix'
 
 export default defineComponent({
 	name: 'HoverDemo',
@@ -21,6 +22,10 @@ export default defineComponent({
 
 		// Scenario 4: With custom class
 		const customClassHover = ref(false)
+
+		// Composable API demo
+		const composableHoverRef = ref<HTMLElement | null>(null)
+		const { isHovering: composableIsHovering } = useHover(composableHoverRef)
 
 		const basicCode = `<div v-hover="handleHover">
   {{ isHovering ? 'Hovering!' : 'Hover me' }}
@@ -45,6 +50,14 @@ export default defineComponent({
   Custom hover class
 </div>`
 
+		const composableCode = `import { ref } from 'vue'
+import { useHover } from 'directix'
+
+const elementRef = ref<HTMLElement | null>(null)
+const { isHovering } = useHover(elementRef)
+
+// In template: <div ref="elementRef">Hover me</div>`
+
 		return {
 			isHovering,
 			handleHover,
@@ -53,10 +66,13 @@ export default defineComponent({
 			handleLeave,
 			delayedHover,
 			customClassHover,
+			composableHoverRef,
+			composableIsHovering,
 			basicCode,
 			enterLeaveCode,
 			delayCode,
-			classCode
+			classCode,
+			composableCode
 		}
 	}
 })
@@ -140,6 +156,21 @@ export default defineComponent({
 			</div>
 			<div class="code-block">
 				<pre><code>{{ classCode }}</code></pre>
+			</div>
+		</div>
+
+		<!-- Composable API -->
+		<div class="demo-section">
+			<h2>Composable API</h2>
+			<p class="description">Use useHover for programmatic hover tracking</p>
+			<div class="demo-box">
+				<div ref="composableHoverRef" class="hover-box" :class="{ active: composableIsHovering }">
+					{{ composableIsHovering ? 'Hovering!' : 'Hover Me (Composable)' }}
+				</div>
+				<p class="hint">Hover state: {{ composableIsHovering }}</p>
+			</div>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
 			</div>
 		</div>
 
