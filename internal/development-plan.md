@@ -3769,7 +3769,7 @@ export default defineConfig({
 - ✅ 每个指令和 composable 都有交互式 Demo
 - ✅ Vue 2 和 Vue 3 示例项目
 
-### 10.4 v1.5.0 新增指令计划（共 20 个）
+### 10.4 v1.5.0 新增指令规划（共 20 个）
 
 #### 🎯 高价值指令 (3个)
 
