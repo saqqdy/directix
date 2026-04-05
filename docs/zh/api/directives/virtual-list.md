@@ -1,12 +1,12 @@
 # v-virtual-list
 
-Render large lists efficiently using virtual scrolling. Only visible items are rendered for optimal performance.
+使用虚拟滚动高效渲染大型列表。仅渲染可见项以获得最佳性能。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
@@ -24,44 +24,44 @@ Render large lists efficiently using virtual scrolling. Only visible items are r
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface VirtualListOptions<T = any> {
   items: T[]
   itemHeight: number | ((index: number) => number)
   height: number
-  buffer?: number // default: 5
-  keyField?: string // default: 'id'
-  direction?: 'vertical' | 'horizontal' // default: 'vertical'
+  buffer?: number // 默认: 5
+  keyField?: string // 默认: 'id'
+  direction?: 'vertical' | 'horizontal' // 默认: 'vertical'
   onScroll?: (event: Event) => void
   onResize?: (size: { width: number; height: number }) => void
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `items` | `T[]` | - | Array of items to render (required) |
-| `itemHeight` | `number \| (index) => number` | - | Height of each item (required) |
-| `height` | `number` | - | Height of the container (required) |
-| `buffer` | `number` | `5` | Number of extra items to render |
-| `keyField` | `string` | `'id'` | Field to use as unique key |
-| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` | Scroll direction |
-| `onScroll` | `(event) => void` | - | Scroll event handler |
-| `onResize` | `(size) => void` | - | Resize event handler |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `items` | `T[]` | - | 要渲染的数组（必填） |
+| `itemHeight` | `number \| (index) => number` | - | 每项高度（必填） |
+| `height` | `number` | - | 容器高度（必填） |
+| `buffer` | `number` | `5` | 额外渲染的项目数 |
+| `keyField` | `string` | `'id'` | 用作唯一键的字段 |
+| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` | 滚动方向 |
+| `onScroll` | `(event) => void` | - | 滚动事件处理程序 |
+| `onResize` | `(size) => void` | - | 尺寸变化事件处理程序 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useVirtualList` composable for the same functionality:
+你也可以使用 `useVirtualList` composable 实现相同功能：
 
 ```vue
 <script setup>
 import { ref } from 'vue'
 import { useVirtualList } from 'directix'
 
-const items = ref(Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `Item ${i}` })))
+const items = ref(Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `项目 ${i}` })))
 
 const {
   visibleItems,
@@ -145,9 +145,9 @@ interface UseVirtualListReturn<T = any> {
 }
 ```
 
-## Examples
+## 示例
 
-### Large Data List
+### 大数据列表
 
 ```vue
 <template>
@@ -172,13 +172,13 @@ interface UseVirtualListReturn<T = any> {
 <script setup>
 const items = Array.from({ length: 10000 }, (_, i) => ({
   id: i,
-  name: `User ${i}`,
+  name: `用户 ${i}`,
   avatar: `https://i.pravatar.cc/40?img=${i % 70}`
 }))
 </script>
 ```
 
-### Dynamic Item Height
+### 动态高度项
 
 ```vue
 <template>
@@ -194,7 +194,7 @@ const items = Array.from({ length: 10000 }, (_, i) => ({
 </template>
 ```
 
-### Horizontal Scroll
+### 水平滚动
 
 ```vue
 <template>

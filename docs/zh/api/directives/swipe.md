@@ -1,45 +1,45 @@
 # v-swipe
 
-Detect swipe gestures on elements. Supports directional swipes with configurable thresholds.
+检测元素上的滑动手势。支持方向性滑动，可配置阈值。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
   <div v-swipe="handleSwipe">
-    Swipe me in any direction
+    在任意方向滑动
   </div>
 </template>
 
 <script setup>
 function handleSwipe(direction) {
-  console.log('Swiped:', direction) // 'left' | 'right' | 'up' | 'down'
+  console.log('滑动方向:', direction) // 'left' | 'right' | 'up' | 'down'
 }
 </script>
 ```
 
-### With Directional Callbacks
+### 带方向回调
 
 ```vue
 <template>
   <div v-swipe="{
     onLeft: () => prevSlide(),
     onRight: () => nextSlide(),
-    onUp: () => console.log('Swiped up'),
-    onDown: () => console.log('Swiped down')
+    onUp: () => console.log('向上滑动'),
+    onDown: () => console.log('向下滑动')
   }">
-    Swipe left or right to navigate
+    左右滑动导航
   </div>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface SwipeOptions {
@@ -48,30 +48,30 @@ interface SwipeOptions {
   onUp?: () => void
   onDown?: () => void
   onSwipe?: (direction: 'left' | 'right' | 'up' | 'down') => void
-  threshold?: number // default: 50
-  preventDefault?: boolean // default: true
-  touchOnly?: boolean // default: false
+  threshold?: number // 默认: 50
+  preventDefault?: boolean // 默认: true
+  touchOnly?: boolean // 默认: false
 }
 
 type SwipeBinding = SwipeOptions | ((direction: 'left' | 'right' | 'up' | 'down') => void)
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `onLeft` | `() => void` | - | Callback for left swipe |
-| `onRight` | `() => void` | - | Callback for right swipe |
-| `onUp` | `() => void` | - | Callback for up swipe |
-| `onDown` | `() => void` | - | Callback for down swipe |
-| `onSwipe` | `(direction) => void` | - | Callback with direction parameter |
-| `threshold` | `number` | `50` | Minimum distance for swipe detection |
-| `preventDefault` | `boolean` | `true` | Prevent default scroll behavior |
-| `touchOnly` | `boolean` | `false` | Only detect touch events |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `onLeft` | `() => void` | - | 向左滑动回调 |
+| `onRight` | `() => void` | - | 向右滑动回调 |
+| `onUp` | `() => void` | - | 向上滑动回调 |
+| `onDown` | `() => void` | - | 向下滑动回调 |
+| `onSwipe` | `(direction) => void` | - | 带方向参数的回调 |
+| `threshold` | `number` | `50` | 触发滑动的最小距离 |
+| `preventDefault` | `boolean` | `true` | 是否阻止默认滚动行为 |
+| `touchOnly` | `boolean` | `false` | 仅检测触摸事件 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useSwipe` composable:
+你也可以使用 `useSwipe` composable：
 
 ```vue
 <script setup>
@@ -90,7 +90,7 @@ onMounted(() => bind(container.value))
 
 <template>
   <div ref="container">
-    Swipe me!
+    滑动我！
   </div>
 </template>
 ```
@@ -99,45 +99,45 @@ onMounted(() => bind(container.value))
 
 ```typescript
 interface UseSwipeOptions {
-  /** Swipe handler */
+  /** 滑动处理程序 */
   handler?: (direction: SwipeDirection, event: Event) => void
-  /** Minimum distance to trigger swipe */
+  /** 触发滑动的最小距离 */
   threshold?: number | Ref<number>
-  /** Maximum time for swipe */
+  /** 滑动最大时间 */
   maxTime?: number | Ref<number>
-  /** Allowed directions */
+  /** 允许的方向 */
   directions?: SwipeDirection[]
-  /** Whether to prevent scroll on swipe */
+  /** 是否在滑动时阻止滚动 */
   preventScrollOnSwipe?: boolean
-  /** Whether to enable mouse events */
+  /** 是否启用鼠标事件 */
   mouse?: boolean
-  /** Callback for left swipe */
+  /** 向左滑动回调 */
   onLeft?: () => void
-  /** Callback for right swipe */
+  /** 向右滑动回调 */
   onRight?: () => void
-  /** Callback for up swipe */
+  /** 向上滑动回调 */
   onUp?: () => void
-  /** Callback for down swipe */
+  /** 向下滑动回调 */
   onDown?: () => void
 }
 
 interface UseSwipeReturn {
-  /** Current swipe direction */
+  /** 当前滑动方向 */
   direction: Readonly<Ref<SwipeDirection | null>>
-  /** Length of the swipe (X) */
+  /** 滑动长度（X） */
   lengthX: Readonly<Ref<number>>
-  /** Length of the swipe (Y) */
+  /** 滑动长度（Y） */
   lengthY: Readonly<Ref<number>>
-  /** Whether a swipe is being performed */
+  /** 是否正在滑动 */
   isSwiping: Readonly<Ref<boolean>>
-  /** Bind swipe detection to an element */
+  /** 绑定滑动检测到元素 */
   bind: (element: HTMLElement) => () => void
 }
 ```
 
-## Examples
+## 示例
 
-### Image Carousel
+### 图片轮播
 
 ```vue
 <template>
@@ -154,7 +154,7 @@ interface UseSwipeReturn {
 </template>
 ```
 
-### Tab Navigation
+### 标签页导航
 
 ```vue
 <template>

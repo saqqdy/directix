@@ -1,68 +1,67 @@
 # v-ellipsis
 
-Apply multi-line text ellipsis with CSS. Truncates text after specified number of lines.
+使用 CSS 实现多行文本省略。在指定行数后截断文本。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
-  <!-- Single line ellipsis -->
-  <p v-ellipsis>This is a very long text that will be truncated with ellipsis...</p>
+  <!-- 单行省略 -->
+  <p v-ellipsis>这是一段很长的文本，将被省略号截断...</p>
 
-  <!-- Multi-line ellipsis -->
+  <!-- 多行省略 -->
   <p v-ellipsis="3">
-    This is a very long text that will be truncated after 3 lines
-    with an ellipsis at the end. The text continues here and will
-    be cut off when it exceeds the specified number of lines.
+    这是一段很长的文本，将在3行后被截断并显示省略号。
+    文本会在这里继续，当超过指定行数时会被截断。
   </p>
 </template>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
   <p v-ellipsis="{ lines: 2, expandable: true }">
-    Click to expand this long text that will be truncated after 2 lines.
-    The expandable option allows users to click to see the full content.
+    点击展开这段将在2行后被截断的长文本。
+    expandable 选项允许用户点击查看完整内容。
   </p>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface EllipsisOptions {
-  lines?: number // default: 1
-  expandable?: boolean // default: false
-  ellipsis?: string // default: '...'
+  lines?: number // 默认: 1
+  expandable?: boolean // 默认: false
+  ellipsis?: string // 默认: '...'
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `lines` | `number` | `1` | Number of lines before truncation |
-| `expandable` | `boolean` | `false` | Allow click to expand/collapse |
-| `ellipsis` | `string` | `'...'` | Custom ellipsis string |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `lines` | `number` | `1` | 截断前的行数 |
+| `expandable` | `boolean` | `false` | 允许点击展开/收起 |
+| `ellipsis` | `string` | `'...'` | 自定义省略号字符串 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useEllipsis` composable for the same functionality:
+你也可以使用 `useEllipsis` composable 实现相同功能：
 
 ```vue
 <script setup>
 import { ref } from 'vue'
 import { useEllipsis } from 'directix'
 
-const longText = ref('This is a very long text that needs to be truncated')
+const longText = ref('这是一段需要被截断的长文本')
 
 const { truncated, isTruncated } = useEllipsis({
   text: longText,
@@ -106,9 +105,9 @@ interface UseEllipsisReturn {
 }
 ```
 
-## Examples
+## 示例
 
-### Card Description
+### 卡片描述
 
 ```vue
 <template>
@@ -125,12 +124,12 @@ interface UseEllipsisReturn {
 </style>
 ```
 
-### Expandable Content
+### 可展开内容
 
 ```vue
 <template>
   <p v-ellipsis="{ lines: 3, expandable: true }">
-    Long expandable content here...
+    长文本可展开内容...
   </p>
 </template>
 ```

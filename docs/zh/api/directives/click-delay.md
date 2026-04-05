@@ -1,38 +1,38 @@
 # v-click-delay
 
-Prevent repeated clicks within a specified time period. Perfect for preventing double submissions and spam clicks.
+在指定时间内防止重复点击。非常适合防止重复提交和恶意点击。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
-  <button v-click-delay="handleClick">Click Me</button>
+  <button v-click-delay="handleClick">点击我</button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
 function handleClick(event) {
-  console.log('Button clicked!')
+  console.log('按钮被点击！')
 }
 </script>
 ```
 
-### With Delay Time
+### 指定延迟时间
 
 ```vue
 <template>
-  <!-- Using argument syntax for delay time -->
-  <button v-click-delay:500="handleClick">500ms delay</button>
-  <button v-click-delay:1s="handleClick">1s delay</button>
+  <!-- 使用参数语法指定延迟时间 -->
+  <button v-click-delay:500="handleClick">500ms 延迟</button>
+  <button v-click-delay:1s="handleClick">1s 延迟</button>
 </template>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
@@ -41,46 +41,46 @@ function handleClick(event) {
     delay: 1000,
     feedback: true
   }">
-    Submit
+    提交
   </button>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 type ClickDelayHandler = (event: MouseEvent | TouchEvent) => void
 
 interface ClickDelayOptions {
   handler: ClickDelayHandler
-  delay?: number // default: 300
-  disabled?: boolean // default: false
-  pendingClass?: string // default: 'v-click-delay--pending'
-  feedback?: boolean // default: true
+  delay?: number // 默认: 300
+  disabled?: boolean // 默认: false
+  pendingClass?: string // 默认: 'v-click-delay--pending'
+  feedback?: boolean // 默认: true
 }
 
 type ClickDelayBinding = ClickDelayHandler | ClickDelayOptions
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `handler` | `(event: MouseEvent \| TouchEvent) => void` | - | Click handler (required) |
-| `delay` | `number` | `300` | Delay time in milliseconds |
-| `disabled` | `boolean` | `false` | Disable the delay behavior |
-| `pendingClass` | `string` | `'v-click-delay--pending'` | CSS class added during delay |
-| `feedback` | `boolean` | `true` | Whether to add visual feedback |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `handler` | `(event: MouseEvent \| TouchEvent) => void` | - | 点击处理程序（必填） |
+| `delay` | `number` | `300` | 延迟时间（毫秒） |
+| `disabled` | `boolean` | `false` | 是否禁用延迟行为 |
+| `pendingClass` | `string` | `'v-click-delay--pending'` | 延迟期间添加的 CSS 类名 |
+| `feedback` | `boolean` | `true` | 是否添加视觉反馈 |
 
-### CSS Classes
+### CSS 类名
 
-- `v-click-delay--pending` - Added to element during the delay period (customizable via `pendingClass`)
+- `v-click-delay--pending` - 在延迟期间添加到元素上（可通过 `pendingClass` 自定义）
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useClickDelay` composable for the same functionality:
+你也可以使用 `useClickDelay` composable 实现相同功能：
 
 ```vue
 <script setup>
@@ -96,7 +96,7 @@ const { click, isPending } = useClickDelay({
 
 <template>
   <button @click="click" :disabled="isPending">
-    {{ isPending ? 'Processing...' : 'Submit' }}
+    {{ isPending ? '处理中...' : '提交' }}
   </button>
 </template>
 ```
@@ -127,15 +127,15 @@ interface UseClickDelayReturn {
 }
 ```
 
-## Examples
+## 示例
 
-### Form Submission
+### 表单提交
 
 ```vue
 <template>
   <form @submit.prevent="submit">
     <button type="submit" v-click-delay="{ handler: submit, delay: 2000 }">
-      {{ submitting ? 'Submitting...' : 'Submit' }}
+      {{ submitting ? '提交中...' : '提交' }}
     </button>
   </form>
 </template>

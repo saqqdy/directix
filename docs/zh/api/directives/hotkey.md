@@ -1,27 +1,27 @@
 # v-hotkey
 
-Bind keyboard shortcuts to elements. Supports modifier keys and multiple hotkey formats.
+为元素绑定键盘快捷键。支持修饰键和多种快捷键格式。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Using Argument Syntax
+### 使用参数语法
 
 ```vue
 <template>
-  <!-- Ctrl+S to save -->
-  <input v-hotkey:ctrl.s="save" placeholder="Press Ctrl+S to save" />
+  <!-- Ctrl+S 保存 -->
+  <input v-hotkey:ctrl.s="save" placeholder="按 Ctrl+S 保存" />
 
-  <!-- Escape to cancel -->
-  <div v-hotkey:escape="cancel">Press Escape to cancel</div>
+  <!-- Escape 取消 -->
+  <div v-hotkey:escape="cancel">按 Escape 取消</div>
 
-  <!-- Multiple modifiers -->
+  <!-- 多个修饰键 -->
   <div v-hotkey:ctrl.shift.s="saveAs">Ctrl+Shift+S</div>
 </template>
 ```
 
-### Using Object Syntax
+### 使用对象语法
 
 ```vue
 <template>
@@ -33,12 +33,12 @@ Bind keyboard shortcuts to elements. Supports modifier keys and multiple hotkey 
     }"
     tabindex="0"
   >
-    Press Ctrl+S to save, Escape to cancel
+    按 Ctrl+S 保存，Escape 取消
   </div>
 </template>
 ```
 
-### Using Array Syntax
+### 使用数组语法
 
 ```vue
 <template>
@@ -46,14 +46,14 @@ Bind keyboard shortcuts to elements. Supports modifier keys and multiple hotkey 
     { key: 's', modifiers: ['ctrl'], handler: save },
     { key: 'escape', handler: cancel }
   ]">
-    Multiple hotkeys
+    多个快捷键
   </div>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 type HotkeyHandler = (event: KeyboardEvent) => void
@@ -64,9 +64,9 @@ interface HotkeyDefinition {
   key: string
   modifiers?: ModifierKey[]
   handler: HotkeyHandler
-  prevent?: boolean // default: true
-  stop?: boolean // default: true
-  disabled?: boolean // default: false
+  prevent?: boolean // 默认: true
+  stop?: boolean // 默认: true
+  disabled?: boolean // 默认: false
 }
 
 type HotkeyBinding =
@@ -76,23 +76,23 @@ type HotkeyBinding =
   | Record<string, HotkeyHandler | HotkeyDefinition>
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `key` | `string` | - | Key to listen for (e.g., 's', 'enter', 'escape') |
-| `modifiers` | `ModifierKey[]` | `[]` | Required modifier keys |
-| `handler` | `(event: KeyboardEvent) => void` | - | Handler function (required) |
-| `prevent` | `boolean` | `true` | Prevent default behavior |
-| `stop` | `boolean` | `true` | Stop event propagation |
-| `disabled` | `boolean` | `false` | Disable this hotkey |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `key` | `string` | - | 要监听的键（如 's', 'enter', 'escape'） |
+| `modifiers` | `ModifierKey[]` | `[]` | 必需的修饰键 |
+| `handler` | `(event: KeyboardEvent) => void` | - | 处理函数（必填） |
+| `prevent` | `boolean` | `true` | 是否阻止默认行为 |
+| `stop` | `boolean` | `true` | 是否阻止事件冒泡 |
+| `disabled` | `boolean` | `false` | 是否禁用此快捷键 |
 
-### Key Aliases
+### 按键别名
 
-| Alias | Key |
-| ----- | --- |
+| 别名 | 按键 |
+| ---- | ---- |
 | `esc` | `escape` |
-| `space` | ` ` (space) |
+| `space` | ` ` (空格) |
 | `up` | `arrowup` |
 | `down` | `arrowdown` |
 | `left` | `arrowleft` |
@@ -101,11 +101,11 @@ type HotkeyBinding =
 | `tab` | `tab` |
 | `delete` | `delete` |
 | `backspace` | `backspace` |
-| `f1`-`f12` | Function keys |
+| `f1`-`f12` | 功能键 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useHotkey` composable:
+你也可以使用 `useHotkey` composable：
 
 ```vue
 <script setup>
@@ -118,10 +118,10 @@ const { enable, disable, add, remove } = useHotkey({
   ]
 })
 
-// Add dynamic hotkey
+// 添加动态快捷键
 add({ key: 'esc', handler: (e) => closeModal() })
 
-// Remove hotkey
+// 移除快捷键
 remove('ctrl+z')
 </script>
 ```
@@ -130,52 +130,52 @@ remove('ctrl+z')
 
 ```typescript
 interface HotkeyDefinition {
-  /** Key combination (e.g., 'ctrl+s', 'alt+shift+a') */
+  /** 按键组合（如 'ctrl+s', 'alt+shift+a'） */
   key: string
-  /** Handler function */
+  /** 处理函数 */
   handler: (event: KeyboardEvent) => void
-  /** Whether to prevent default behavior */
+  /** 是否阻止默认行为 */
   prevent?: boolean
-  /** Whether to stop propagation */
+  /** 是否阻止事件冒泡 */
   stop?: boolean
-  /** Whether to trigger on keyup instead of keydown */
+  /** 是否在 keyup 而非 keydown 时触发 */
   keyup?: boolean
-  /** Whether the hotkey is disabled */
+  /** 是否禁用快捷键 */
   disabled?: boolean | Ref<boolean>
 }
 
 interface UseHotkeyOptions {
-  /** Single hotkey definition */
+  /** 单个快捷键定义 */
   hotkey?: HotkeyDefinition
-  /** Multiple hotkey definitions */
+  /** 多个快捷键定义 */
   hotkeys?: HotkeyDefinition[]
-  /** Target element to bind events (defaults to document) */
+  /** 绑定事件的目标元素（默认为 document） */
   target?: HTMLElement | Ref<HTMLElement | null>
-  /** Whether to enable the hotkey(s) */
+  /** 是否启用快捷键 */
   enabled?: boolean | Ref<boolean>
 }
 
 interface UseHotkeyReturn {
-  /** Whether the hotkey is currently enabled */
+  /** 快捷键当前是否启用 */
   enabled: Ref<boolean>
-  /** Enable the hotkey */
+  /** 启用快捷键 */
   enable: () => void
-  /** Disable the hotkey */
+  /** 禁用快捷键 */
   disable: () => void
-  /** Toggle the hotkey */
+  /** 切换快捷键状态 */
   toggle: () => void
-  /** Add a hotkey */
+  /** 添加快捷键 */
   add: (hotkey: HotkeyDefinition) => void
-  /** Remove a hotkey by key */
+  /** 按键移除快捷键 */
   remove: (key: string) => void
-  /** Remove all hotkeys */
+  /** 移除所有快捷键 */
   clear: () => void
 }
 ```
 
-## Examples
+## 示例
 
-### Editor Shortcuts
+### 编辑器快捷键
 
 ```vue
 <template>
@@ -195,12 +195,12 @@ interface UseHotkeyReturn {
 </template>
 ```
 
-### Dynamic Hotkeys
+### 动态快捷键
 
 ```vue
 <template>
   <div v-hotkey="hotkeys" tabindex="0">
-    Hotkeys: {{ enabled ? 'enabled' : 'disabled' }}
+    快捷键: {{ enabled ? '已启用' : '已禁用' }}
   </div>
 </template>
 

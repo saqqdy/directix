@@ -1,17 +1,17 @@
 # v-pull-refresh
 
-Implement pull-to-refresh functionality for mobile apps. Triggers refresh action when user pulls down.
+为移动应用实现下拉刷新功能。当用户下拉时触发刷新操作。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
   <div v-pull-refresh="refresh" class="content">
-    <div v-if="refreshing" class="loading">Refreshing...</div>
+    <div v-if="refreshing" class="loading">刷新中...</div>
     <ul>
       <li v-for="item in items" :key="item.id">{{ item.name }}</li>
     </ul>
@@ -30,51 +30,51 @@ async function refresh(done) {
 </script>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
   <div v-pull-refresh="{
     handler: refresh,
     threshold: 80,
-    loadingText: 'Loading...'
+    loadingText: '加载中...'
   }">
-    Pull down to refresh
+    下拉刷新
   </div>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface PullRefreshOptions {
   handler: (done: () => void) => void | Promise<void>
-  threshold?: number // default: 60
-  disabled?: boolean // default: false
-  pullDistance?: number // default: 60
+  threshold?: number // 默认: 60
+  disabled?: boolean // 默认: false
+  pullDistance?: number // 默认: 60
   loadingText?: string
   pullingText?: string
   loosingText?: string
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `handler` | `(done) => void \| Promise<void>` | - | Refresh handler (required) |
-| `threshold` | `number` | `60` | Distance to trigger refresh |
-| `disabled` | `boolean` | `false` | Disable pull-to-refresh |
-| `pullDistance` | `number` | `60` | Max pull distance |
-| `loadingText` | `string` | `'Loading...'` | Text while loading |
-| `pullingText` | `string` | `'Pull to refresh'` | Text while pulling |
-| `loosingText` | `string` | `'Release to refresh'` | Text when threshold reached |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `handler` | `(done) => void \| Promise<void>` | - | 刷新处理程序（必填） |
+| `threshold` | `number` | `60` | 触发刷新的距离阈值 |
+| `disabled` | `boolean` | `false` | 是否禁用下拉刷新 |
+| `pullDistance` | `number` | `60` | 最大拉动距离 |
+| `loadingText` | `string` | `'加载中...'` | 加载时的文本 |
+| `pullingText` | `string` | `'下拉刷新'` | 下拉时的文本 |
+| `loosingText` | `string` | `'释放刷新'` | 达到阈值时的文本 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `usePullRefresh` composable for the same functionality:
+你也可以使用 `usePullRefresh` composable 实现相同功能：
 
 ```vue
 <script setup>
@@ -144,9 +144,9 @@ interface UsePullRefreshReturn {
 }
 ```
 
-## Examples
+## 示例
 
-### List Refresh
+### 列表刷新
 
 ```vue
 <template>
@@ -171,7 +171,7 @@ async function refresh(done) {
 </script>
 ```
 
-### Custom Indicator
+### 自定义指示器
 
 ```vue
 <template>
@@ -181,7 +181,7 @@ async function refresh(done) {
     loosingText: '释放刷新',
     loadingText: '刷新中...'
   }">
-    Custom Chinese text
+    自定义中文文本
   </div>
 </template>
 ```

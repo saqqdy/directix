@@ -1,53 +1,53 @@
 # v-watermark
 
-Add watermark overlay to elements. Supports text and image watermarks.
+为元素添加水印遮罩层。支持文字和图片水印。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic Text Watermark
+### 基本文字水印
 
 ```vue
 <template>
-  <div v-watermark="'Confidential'" class="content">
-    This content is watermarked.
+  <div v-watermark="'机密文件'" class="content">
+    这是受水印保护的内容。
   </div>
 </template>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
   <div v-watermark="{
-    content: 'Confidential',
+    content: '机密文件',
     font: '16px Arial',
     color: 'rgba(0, 0, 0, 0.1)',
     rotate: -20,
     gap: [100, 100]
   }" class="document">
-    Protected content here.
+    受保护的内容。
   </div>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface WatermarkOptions {
   content: string | string[]
   width?: number
   height?: number
-  rotate?: number // default: -22
-  color?: string // default: 'rgba(0, 0, 0, 0.15)'
-  fontSize?: number // default: 14
-  fontFamily?: string // default: 'sans-serif'
-  fontWeight?: string // default: 'normal'
-  font?: string // shorthand for font properties
-  gap?: [number, number] // default: [100, 100]
+  rotate?: number // 默认: -22
+  color?: string // 默认: 'rgba(0, 0, 0, 0.15)'
+  fontSize?: number // 默认: 14
+  fontFamily?: string // 默认: 'sans-serif'
+  fontWeight?: string // 默认: 'normal'
+  font?: string // 字体属性简写
+  gap?: [number, number] // 默认: [100, 100]
   offset?: [number, number]
   image?: string
   imageWidth?: number
@@ -58,32 +58,32 @@ interface WatermarkOptions {
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `content` | `string \| string[]` | - | Watermark text (required) |
-| `width` | `number` | `300` | Watermark width |
-| `height` | `number` | `200` | Watermark height |
-| `rotate` | `number` | `-22` | Rotation angle in degrees |
-| `color` | `string` | `'rgba(0, 0, 0, 0.15)'` | Text color |
-| `fontSize` | `number` | `14` | Font size |
-| `fontFamily` | `string` | `'sans-serif'` | Font family |
-| `gap` | `[number, number]` | `[100, 100]` | Gap between watermarks |
-| `image` | `string` | - | Image URL for image watermark |
-| `zIndex` | `number` | `9999` | Z-index of watermark layer |
-| `movable` | `boolean` | `false` | Make watermark move with scroll |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `content` | `string \| string[]` | - | 水印文本（必填） |
+| `width` | `number` | `300` | 水印宽度 |
+| `height` | `number` | `200` | 水印高度 |
+| `rotate` | `number` | `-22` | 旋转角度（度） |
+| `color` | `string` | `'rgba(0, 0, 0, 0.15)'` | 文字颜色 |
+| `fontSize` | `number` | `14` | 字体大小 |
+| `fontFamily` | `string` | `'sans-serif'` | 字体名称 |
+| `gap` | `[number, number]` | `[100, 100]` | 水印间距 |
+| `image` | `string` | - | 图片水印 URL |
+| `zIndex` | `number` | `9999` | 水印层 z-index |
+| `movable` | `boolean` | `false` | 水印是否随滚动移动 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useWatermark` composable:
+你也可以使用 `useWatermark` composable：
 
 ```vue
 <script setup>
 import { useWatermark } from 'directix'
 
 const { dataUrl, style, disable, enable } = useWatermark({
-  content: 'Confidential',
+  content: '机密文件',
   fontSize: 20,
   color: 'rgba(255, 0, 0, 0.2)'
 })
@@ -101,66 +101,66 @@ const { dataUrl, style, disable, enable } = useWatermark({
 
 ```typescript
 interface UseWatermarkOptions {
-  /** Watermark text content */
+  /** 水印文本内容 */
   content: string | string[] | Ref<string | string[]>
-  /** Width of watermark canvas */
+  /** 水印画布宽度 */
   width?: number | Ref<number>
-  /** Height of watermark canvas */
+  /** 水印画布高度 */
   height?: number | Ref<number>
-  /** Rotation angle in degrees */
+  /** 旋转角度（度） */
   rotate?: number | Ref<number>
-  /** Font size in pixels */
+  /** 字体大小（像素） */
   fontSize?: number | Ref<number>
-  /** Font family */
+  /** 字体名称 */
   fontFamily?: string | Ref<string>
-  /** Font weight */
+  /** 字体粗细 */
   fontWeight?: string | number | Ref<string | number>
-  /** Font color */
+  /** 字体颜色 */
   color?: string | Ref<string>
-  /** Gap between watermarks */
+  /** 水印间距 */
   gap?: [number, number] | number | Ref<[number, number] | number>
-  /** Z-index of watermark layer */
+  /** 水印层 z-index */
   zIndex?: number | Ref<number>
-  /** Whether to disable watermark */
+  /** 是否禁用水印 */
   disabled?: boolean | Ref<boolean>
 }
 
 interface UseWatermarkReturn {
-  /** Watermark canvas element */
+  /** 水印画布元素 */
   canvas: Ref<HTMLCanvasElement | null>
-  /** Watermark data URL */
+  /** 水印 data URL */
   dataUrl: Ref<string>
-  /** Watermark CSS style object */
+  /** 水印 CSS 样式对象 */
   style: Ref<Record<string, any>>
-  /** Whether watermark is disabled */
+  /** 是否禁用水印 */
   disabled: Ref<boolean>
-  /** Update watermark options */
+  /** 更新水印选项 */
   update: (options: Partial<UseWatermarkOptions>) => void
-  /** Enable watermark */
+  /** 启用水印 */
   enable: () => void
-  /** Disable watermark */
+  /** 禁用水印 */
   disable: () => void
 }
 ```
 
-## Examples
+## 示例
 
-### Multi-line Watermark
+### 多行水印
 
 ```vue
 <template>
-  <div v-watermark="['Company Name', 'Employee: John']" class="document">
-    Multi-line watermark content.
+  <div v-watermark="['公司名称', '员工：张三']" class="document">
+    多行水印内容。
   </div>
 </template>
 ```
 
-### Image Watermark
+### 图片水印
 
 ```vue
 <template>
   <div v-watermark="{ image: '/logo.png', imageWidth: 100 }" class="content">
-    Image watermark overlay.
+    图片水印遮罩。
   </div>
 </template>
 ```

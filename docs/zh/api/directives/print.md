@@ -1,78 +1,78 @@
 # v-print
 
-Print specific elements with customizable options. Perfect for generating printable documents.
+打印特定元素，支持自定义选项。非常适合生成可打印文档。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
   <div v-print>
-    <h1>Invoice</h1>
-    <p>Click anywhere on this element to print.</p>
+    <h1>发票</h1>
+    <p>点击此元素任意位置即可打印。</p>
   </div>
 </template>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
-  <div v-print="{ title: 'My Document', preview: true }">
-    <h1>Report</h1>
-    <p>Content to print...</p>
+  <div v-print="{ title: '我的文档', preview: true }">
+    <h1>报告</h1>
+    <p>要打印的内容...</p>
   </div>
-  <button @click="printDocument">Print</button>
+  <button @click="printDocument">打印</button>
 </template>
 ```
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface PrintOptions {
   title?: string
   preview?: boolean
-  timeout?: number // default: 1000
+  timeout?: number // 默认: 1000
   beforePrint?: () => void | Promise<void>
   afterPrint?: () => void
   styles?: string
-  media?: string // default: 'print'
+  media?: string // 默认: 'print'
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `title` | `string` | Document title | Print document title |
-| `preview` | `boolean` | `false` | Show print preview |
-| `timeout` | `number` | `1000` | Timeout for print dialog |
-| `beforePrint` | `() => void \| Promise<void>` | - | Callback before printing |
-| `afterPrint` | `() => void` | - | Callback after printing |
-| `styles` | `string` | - | Additional CSS styles for print |
-| `media` | `string` | `'print'` | Media type for styles |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `title` | `string` | 文档标题 | 打印文档标题 |
+| `preview` | `boolean` | `false` | 显示打印预览 |
+| `timeout` | `number` | `1000` | 打印对话框超时时间 |
+| `beforePrint` | `() => void \| Promise<void>` | - | 打印前回调 |
+| `afterPrint` | `() => void` | - | 打印后回调 |
+| `styles` | `string` | - | 打印时的额外 CSS 样式 |
+| `media` | `string` | `'print'` | 样式的媒体类型 |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `usePrint` composable for the same functionality:
+你也可以使用 `usePrint` composable 实现相同功能：
 
 ```vue
 <script setup>
 import { usePrint } from 'directix'
 
 const { isPrinting, print } = usePrint({
-  title: 'My Document',
+  title: '我的文档',
   onBeforePrint: () => {
-    console.log('About to print...')
+    console.log('准备打印...')
     return true
   },
   onAfterPrint: () => {
-    console.log('Print complete!')
+    console.log('打印完成！')
   }
 })
 
@@ -84,9 +84,9 @@ async function handlePrint() {
 <template>
   <div>
     <button @click="handlePrint" :disabled="isPrinting">
-      {{ isPrinting ? 'Printing...' : 'Print' }}
+      {{ isPrinting ? '打印中...' : '打印' }}
     </button>
-    <div id="content">Content to print</div>
+    <div id="content">要打印的内容</div>
   </div>
 </template>
 ```
@@ -121,31 +121,31 @@ interface UsePrintReturn {
 }
 ```
 
-## Examples
+## 示例
 
-### Invoice Printing
+### 发票打印
 
 ```vue
 <template>
-  <div v-print="{ title: 'Invoice #' + invoiceId, beforePrint: formatInvoice }">
-    <h1>Invoice #{{ invoiceId }}</h1>
+  <div v-print="{ title: '发票 #' + invoiceId, beforePrint: formatInvoice }">
+    <h1>发票 #{{ invoiceId }}</h1>
     <table>
       <tr v-for="item in items" :key="item.id">
         <td>{{ item.name }}</td>
         <td>{{ item.price }}</td>
       </tr>
     </table>
-    <div class="total">Total: {{ total }}</div>
+    <div class="total">总计: {{ total }}</div>
   </div>
 </template>
 ```
 
-### Custom Print Styles
+### 自定义打印样式
 
 ```vue
 <template>
   <article v-print="{
-    title: 'Article',
+    title: '文章',
     styles: '@page { margin: 2cm; } body { font-size: 12pt; }'
   }">
     <h1>{{ title }}</h1>

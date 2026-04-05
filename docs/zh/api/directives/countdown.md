@@ -1,12 +1,12 @@
 # v-countdown
 
-Display a countdown timer to a target time. Supports multiple formats and completion callbacks.
+显示到目标时间的倒计时。支持多种格式和完成回调。
 
-> **Since:** `1.3.0`
+> **起始版本：** `1.3.0`
 
-## Usage
+## 用法
 
-### Basic
+### 基本
 
 ```vue
 <template>
@@ -18,7 +18,7 @@ const targetDate = new Date('2026-12-31T00:00:00')
 </script>
 ```
 
-### With Timestamp
+### 使用时间戳
 
 ```vue
 <template>
@@ -26,7 +26,7 @@ const targetDate = new Date('2026-12-31T00:00:00')
 </template>
 ```
 
-### With Options
+### 带选项
 
 ```vue
 <template>
@@ -40,16 +40,16 @@ const targetDate = new Date('2026-12-31T00:00:00')
 
 ## API
 
-### Types
+### 类型
 
 ```typescript
 interface CountdownOptions {
   target: Date | number | string
   format?: string | ((time: CountdownTime) => string)
-  interval?: number // default: 1000
+  interval?: number // 默认: 1000
   onComplete?: () => void
   onTick?: (time: CountdownTime) => void
-  autoStart?: boolean // default: true
+  autoStart?: boolean // 默认: true
 }
 
 interface CountdownTime {
@@ -62,51 +62,51 @@ interface CountdownTime {
 }
 ```
 
-### Options
+### 选项
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `target` | `Date \| number \| string` | - | Target time (required) |
-| `format` | `string \| Function` | `'hh:mm:ss'` | Display format or custom function |
-| `interval` | `number` | `1000` | Update interval in milliseconds |
-| `onComplete` | `() => void` | - | Callback when countdown ends |
-| `onTick` | `(time: CountdownTime) => void` | - | Callback on each tick |
-| `autoStart` | `boolean` | `true` | Auto-start countdown |
+| 选项 | 类型 | 默认值 | 描述 |
+| ---- | ---- | ------ | ---- |
+| `target` | `Date \| number \| string` | - | 目标时间（必填） |
+| `format` | `string \| Function` | `'hh:mm:ss'` | 显示格式或自定义函数 |
+| `interval` | `number` | `1000` | 更新间隔（毫秒） |
+| `onComplete` | `() => void` | - | 倒计时结束时的回调 |
+| `onTick` | `(time: CountdownTime) => void` | - | 每次更新的回调 |
+| `autoStart` | `boolean` | `true` | 是否自动开始倒计时 |
 
-### Format Placeholders
+### 格式占位符
 
-| Placeholder | Description |
-| ----------- | ----------- |
-| `dd` | Days (2 digits) |
-| `hh` | Hours (2 digits) |
-| `mm` | Minutes (2 digits) |
-| `ss` | Seconds (2 digits) |
-| `SSS` | Milliseconds (3 digits) |
+| 占位符 | 描述 |
+| ------ | ---- |
+| `dd` | 天数（2位数） |
+| `hh` | 小时（2位数） |
+| `mm` | 分钟（2位数） |
+| `ss` | 秒数（2位数） |
+| `SSS` | 毫秒（3位数） |
 
-## Composable Usage
+## Composable 用法
 
-You can also use the `useCountdown` composable:
+你也可以使用 `useCountdown` composable：
 
 ```vue
 <script setup>
 import { useCountdown } from 'directix'
 
-const targetDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
+const targetDate = new Date(Date.now() + 60 * 60 * 1000) // 1小时后
 
 const { time, formatted, running, completed, pause, resume, reset } = useCountdown({
   target: targetDate,
   format: 'hh:mm:ss',
-  onComplete: () => console.log('Done!')
+  onComplete: () => console.log('完成！')
 })
 </script>
 
 <template>
   <div>
     <p>{{ formatted }}</p>
-    <p>Remaining: {{ time.days }}d {{ time.hours }}h {{ time.minutes }}m {{ time.seconds }}s</p>
-    <button @click="pause" v-if="running">Pause</button>
-    <button @click="resume" v-if="!running && !completed">Resume</button>
-    <button @click="reset">Reset</button>
+    <p>剩余: {{ time.days }}天 {{ time.hours }}时 {{ time.minutes }}分 {{ time.seconds }}秒</p>
+    <button @click="pause" v-if="running">暂停</button>
+    <button @click="resume" v-if="!running && !completed">继续</button>
+    <button @click="reset">重置</button>
   </div>
 </template>
 ```
@@ -115,66 +115,66 @@ const { time, formatted, running, completed, pause, resume, reset } = useCountdo
 
 ```typescript
 interface UseCountdownOptions {
-  /** Target time (Date object, timestamp, or ISO string) */
+  /** 目标时间（Date 对象、时间戳或 ISO 字符串） */
   target: Date | number | string | Ref<Date | number | string>
-  /** Format string or custom format function */
+  /** 格式字符串或自定义格式函数 */
   format?: string | CountdownFormatFunction | Ref<string | CountdownFormatFunction>
-  /** Callback when countdown completes */
+  /** 倒计时完成时的回调 */
   onComplete?: () => void
-  /** Callback on each tick */
+  /** 每次更新的回调 */
   onTick?: (time: CountdownTime) => void
-  /** Update interval in milliseconds */
+  /** 更新间隔（毫秒） */
   interval?: number | Ref<number>
-  /** Whether to auto-start */
+  /** 是否自动开始 */
   autoStart?: boolean | Ref<boolean>
 }
 
 interface UseCountdownReturn {
-  /** Current countdown time */
+  /** 当前倒计时时间 */
   time: Ref<CountdownTime>
-  /** Formatted time string */
+  /** 格式化后的时间字符串 */
   formatted: Ref<string>
-  /** Whether countdown is running */
+  /** 倒计时是否运行中 */
   running: Ref<boolean>
-  /** Whether countdown is paused */
+  /** 倒计时是否暂停 */
   paused: Ref<boolean>
-  /** Whether countdown has completed */
+  /** 倒计时是否已完成 */
   completed: Ref<boolean>
-  /** Start the countdown */
+  /** 开始倒计时 */
   start: () => void
-  /** Pause the countdown */
+  /** 暂停倒计时 */
   pause: () => void
-  /** Resume the countdown */
+  /** 继续倒计时 */
   resume: () => void
-  /** Reset the countdown */
+  /** 重置倒计时 */
   reset: () => void
 }
 ```
 
-## Examples
+## 示例
 
-### Sale Countdown
+### 促销倒计时
 
 ```vue
 <template>
   <div class="sale-banner">
-    Sale ends in: <span v-countdown="{ target: saleEnd, format: 'dd:hh:mm:ss' }"></span>
+    促销结束倒计时: <span v-countdown="{ target: saleEnd, format: 'dd:hh:mm:ss' }"></span>
   </div>
 </template>
 ```
 
-### Custom Format
+### 自定义格式
 
 ```vue
 <template>
   <span v-countdown="{
     target: targetDate,
-    format: (time) => `${time.days}d ${time.hours}h ${time.minutes}m`
+    format: (time) => `${time.days}天 ${time.hours}时 ${time.minutes}分`
   }"></span>
 </template>
 ```
 
-### With Completion Callback
+### 带完成回调
 
 ```vue
 <template>
@@ -185,6 +185,6 @@ interface UseCountdownReturn {
       onComplete: () => completed = true
     }"
   ></span>
-  <span v-if="completed">Done!</span>
+  <span v-if="completed">已完成！</span>
 </template>
 ```
