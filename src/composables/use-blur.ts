@@ -66,9 +66,9 @@ function createBlurOverlay(options: UseBlurOptions): HTMLDivElement {
     left: 0;
     right: 0;
     bottom: 0;
-    backdrop-filter: blur(${options.radius || 10}px);
-    -webkit-backdrop-filter: blur(${options.radius || 10}px);
-    background: ${options.overlayColor || 'rgba(0, 0, 0, 0.5)'};
+    backdrop-filter: blur(${options.radius || 5}px);
+    -webkit-backdrop-filter: blur(${options.radius || 5}px);
+    background: ${options.overlayColor || 'transparent'};
     z-index: ${options.zIndex || 999};
     opacity: 0;
     transition: opacity ${options.duration || 300}ms ease;
@@ -90,34 +90,28 @@ function createBlurOverlay(options: UseBlurOptions): HTMLDivElement {
  * import { ref } from 'vue'
  * import { useBlur } from 'directix'
  *
- * const containerRef = ref(null)
- * const { isVisible, show, hide, bind } = useBlur({ radius: 15 })
- *
- * onMounted(() => bind(containerRef.value))
+ * const { isVisible, show, hide, toggle } = useBlur({ radius: 15 })
  * </script>
  *
  * <template>
- *   <div ref="containerRef">
- *     <button @click="toggle">Toggle Blur</button>
- *   </div>
+ *   <button @click="toggle">Toggle Blur</button>
  * </template>
  * ```
  */
 export function useBlur(options: UseBlurOptions = {}): UseBlurReturn {
 	const isVisible = ref(unref(options.visible) ?? false)
 
-	let currentElement: HTMLElement | null = null,
-		overlayElement: HTMLDivElement | null = null,
+	let overlayElement: HTMLDivElement | null = null,
 		originalOverflow = ''
 
 	function show(): void {
-		if (overlayElement || !currentElement) return
+		if (overlayElement || !isBrowser()) return
 
 		isVisible.value = true
 
 		overlayElement = createBlurOverlay({
 			...options,
-			radius: unref(options.radius) ?? 10,
+			radius: unref(options.radius) ?? 5,
 		})
 
 		document.body.appendChild(overlayElement)
@@ -127,7 +121,7 @@ export function useBlur(options: UseBlurOptions = {}): UseBlurReturn {
 
 		overlayElement.style.opacity = '1'
 
-		if (options.lockScroll !== false) {
+		if (options.lockScroll) {
 			originalOverflow = document.body.style.overflow
 			document.body.style.overflow = 'hidden'
 		}
@@ -142,7 +136,7 @@ export function useBlur(options: UseBlurOptions = {}): UseBlurReturn {
 
 		overlayElement.style.opacity = '0'
 
-		if (options.lockScroll !== false) {
+		if (options.lockScroll) {
 			document.body.style.overflow = originalOverflow
 		}
 
@@ -167,9 +161,6 @@ export function useBlur(options: UseBlurOptions = {}): UseBlurReturn {
 	function bind(element: HTMLElement): () => void {
 		if (!isBrowser()) return () => {}
 
-		unbind()
-
-		currentElement = element
 		element.classList.add('v-blur')
 
 		// Watch for visibility changes
@@ -185,21 +176,18 @@ export function useBlur(options: UseBlurOptions = {}): UseBlurReturn {
 			show()
 		}
 
-		return unbind
-	}
-
-	function unbind(): void {
-		if (overlayElement) {
-			hide()
+		return () => {
+			if (overlayElement) {
+				hide()
+			}
+			element.classList.remove('v-blur')
 		}
-		if (currentElement) {
-			currentElement.classList.remove('v-blur')
-		}
-		currentElement = null
 	}
 
 	onUnmounted(() => {
-		unbind()
+		if (overlayElement) {
+			hide()
+		}
 	})
 
 	return {

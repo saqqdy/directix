@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useBlur } from 'directix'
 
 export default defineComponent({
 	name: 'BlurDemo',
@@ -9,10 +10,21 @@ export default defineComponent({
 		DemoSection,
 		CodeBlock,
 	},
+	setup() {
+		const { show: composableShow, hide: composableHide, toggle: composableToggle } = useBlur({
+			radius: 8,
+		})
+
+		return {
+			composableShow,
+			composableHide,
+			composableToggle,
+		}
+	},
 	data() {
 		return {
 			isBlurred: false,
-			customRadius: 15,
+			customRadius: 10,
 			showCustomBlur: false,
 			optionsBlur: false,
 		}
@@ -76,6 +88,11 @@ toggle() // Toggle blur overlay`
 					<div class="content">
 						<h3>Content Behind Blur</h3>
 						<p>This content will be blurred when the overlay is active.</p>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<button @click="isBlurred = !isBlurred" class="btn">
@@ -89,9 +106,14 @@ toggle() // Toggle blur overlay`
 		<!-- Scenario 2: Custom radius -->
 		<DemoSection title="Custom Radius" description="Adjust the blur intensity">
 			<div class="demo-box">
-				<div class="blur-container" v-blur="showCustomBlur ? customRadius : false">
+				<div class="blur-container" v-blur="showCustomBlur ? { visible: true, radius: customRadius } : false">
 					<div class="content">
 						<h3>Custom Blur Radius: {{ customRadius }}px</h3>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<div class="controls">
@@ -114,14 +136,19 @@ toggle() // Toggle blur overlay`
 					class="blur-container"
 					v-blur="{
 						visible: optionsBlur,
-						radius: 20,
-						overlayColor: 'rgba(102, 126, 234, 0.3)',
+						radius: 15,
+						overlayColor: 'rgba(0, 0, 0, 0.3)',
 						lockScroll: true
 					}"
 				>
 					<div class="content">
 						<h3>Styled Blur Overlay</h3>
 						<p>Semi-transparent colored overlay with scroll lock</p>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<button @click="optionsBlur = !optionsBlur" class="btn">
@@ -134,7 +161,12 @@ toggle() // Toggle blur overlay`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useBlur" description="Using useBlur composable for programmatic control">
 			<div class="demo-box">
-				<p class="hint">Control blur overlay programmatically with the composable API</p>
+				<div class="button-group">
+					<button @click="composableShow" class="btn">Show Blur</button>
+					<button @click="composableHide" class="btn btn-secondary">Hide Blur</button>
+					<button @click="composableToggle" class="btn btn-outline">Toggle</button>
+				</div>
+				<p class="hint">This uses the useBlur composable instead of the directive</p>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -170,25 +202,50 @@ h1 {
 
 .blur-container {
 	position: relative;
-	min-height: 150px;
-	border-radius: 8px;
-	background: linear-gradient(135deg, #42b883 0%, #35495e 100%);
+	min-height: 180px;
+	border-radius: 12px;
 	margin-bottom: 16px;
+	overflow: hidden;
+	/* Rich gradient background for better blur visibility */
+	background: linear-gradient(135deg, #42b883 0%, #35495e 50%, #42b883 100%);
 }
 
 .content {
 	padding: 30px;
-	color: white;
+	color: #fff;
 	text-align: center;
+	position: relative;
+	z-index: 1;
 }
 
 .content h3 {
 	margin: 0 0 8px 0;
+	font-size: 1.4rem;
+	font-weight: 700;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .content p {
-	margin: 0;
-	opacity: 0.9;
+	margin: 0 0 16px 0;
+	opacity: 0.95;
+	font-size: 1rem;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sample-text {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 16px;
+}
+
+.sample-text span {
+	font-size: 2rem;
+	font-weight: 800;
+	padding: 10px 20px;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 8px;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn {
@@ -224,5 +281,30 @@ h1 {
 
 .controls input[type="range"] {
 	width: 200px;
+}
+
+.button-group {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.btn-secondary {
+	background: #6b7280;
+}
+
+.btn-secondary:hover {
+	background: #4b5563;
+}
+
+.btn-outline {
+	background: transparent;
+	border: 1px solid #42b883;
+	color: #42b883;
+}
+
+.btn-outline:hover {
+	background: #42b883;
+	color: white;
 }
 </style>

@@ -80,24 +80,28 @@ interface SkeletonState {
 }
 
 /**
+ * Default skeleton options
+ */
+const defaultOptions: SkeletonOptions = {
+	loading: true,
+	animation: 'wave',
+	width: '100%',
+	height: '1em',
+	radius: '4px',
+	color: '#e8e8e8',
+	animationColor: '#f0f0f0',
+	preserveDimensions: true,
+}
+
+/**
  * Normalize options
  */
 function normalizeOptions(binding: SkeletonBinding | undefined): SkeletonOptions {
 	if (typeof binding === 'boolean') {
-		return { loading: binding }
+		return { ...defaultOptions, loading: binding }
 	}
 
-	return {
-		loading: true,
-		animation: 'wave',
-		width: '100%',
-		height: '1em',
-		radius: '4px',
-		color: '#e8e8e8',
-		animationColor: '#f0f0f0',
-		preserveDimensions: true,
-		...binding,
-	}
+	return { ...defaultOptions, ...binding }
 }
 
 /**

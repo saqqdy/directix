@@ -6,7 +6,7 @@ import { defineDirective, isBrowser } from '@directix/core'
 export interface BlurOptions {
 	/**
 	 * Blur radius in pixels
-	 * @default 10
+	 * @default 5
 	 */
 	radius?: number
 
@@ -24,7 +24,7 @@ export interface BlurOptions {
 
 	/**
 	 * Overlay color
-	 * @default 'rgba(0, 0, 0, 0.5)'
+	 * @default 'transparent'
 	 */
 	overlayColor?: string
 
@@ -36,7 +36,7 @@ export interface BlurOptions {
 
 	/**
 	 * Whether to lock scroll when blur is active
-	 * @default true
+	 * @default false
 	 */
 	lockScroll?: boolean
 
@@ -75,20 +75,34 @@ interface BlurState {
  */
 function normalizeOptions(binding: BlurBinding | undefined): BlurOptions {
 	if (typeof binding === 'boolean') {
-		return { visible: binding }
+		return {
+			visible: binding,
+			radius: 5,
+			duration: 300,
+			overlayColor: 'transparent',
+			zIndex: 999,
+			lockScroll: false,
+		}
 	}
 
 	if (typeof binding === 'number') {
-		return { radius: binding }
+		return {
+			visible: true,
+			radius: binding,
+			duration: 300,
+			overlayColor: 'transparent',
+			zIndex: 999,
+			lockScroll: false,
+		}
 	}
 
 	return {
-		radius: 10,
+		radius: 5,
 		visible: true,
 		duration: 300,
-		overlayColor: 'rgba(0, 0, 0, 0.5)',
+		overlayColor: 'transparent',
 		zIndex: 999,
-		lockScroll: true,
+		lockScroll: false,
 		...binding,
 	}
 }
@@ -101,18 +115,19 @@ function createBlurOverlay(options: BlurOptions): HTMLDivElement {
 	overlay.className = `v-blur-overlay ${options.class || ''}`
 
 	overlay.style.cssText = `
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     backdrop-filter: blur(${options.radius}px);
     -webkit-backdrop-filter: blur(${options.radius}px);
-    background: ${options.overlayColor};
+    background: ${options.overlayColor || 'transparent'};
     z-index: ${options.zIndex};
     opacity: 0;
     transition: opacity ${options.duration}ms ease;
     pointer-events: auto;
+    border-radius: inherit;
   `
 
 	return overlay
@@ -206,14 +221,20 @@ export const vBlur = defineDirective<BlurBinding, HTMLElement>({
 /**
  * Show blur effect
  */
-function showBlur(_el: HTMLElement, state: BlurState): void {
+function showBlur(el: HTMLElement, state: BlurState): void {
 	const options = state.options
+
+	// Ensure element has position for absolute overlay
+	const computedStyle = window.getComputedStyle(el)
+	if (computedStyle.position === 'static') {
+		el.style.position = 'relative'
+	}
 
 	// Create blur overlay
 	state.blurContainer = createBlurOverlay(options)
 
-	// Insert overlay
-	document.body.appendChild(state.blurContainer)
+	// Insert overlay inside the element
+	el.appendChild(state.blurContainer)
 
 	// Trigger reflow for transition
 	String(state.blurContainer.offsetHeight)

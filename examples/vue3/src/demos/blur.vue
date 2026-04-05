@@ -8,7 +8,7 @@ import { useBlur } from 'directix'
 const isBlurred = ref(false)
 
 // Scenario 2: Custom radius
-const customRadius = ref(15)
+const customRadius = ref(10)
 const showCustomBlur = ref(false)
 
 // Scenario 3: With options
@@ -16,8 +16,7 @@ const optionsBlur = ref(false)
 
 // Composable API demo
 const { show: composableShow, hide: composableHide, toggle: composableToggle } = useBlur({
-	radius: 10,
-	overlayColor: 'rgba(0, 0, 0, 0.5)',
+	radius: 8,
 	onShow: () => console.log('Blur shown'),
 	onHide: () => console.log('Blur hidden')
 })
@@ -37,9 +36,9 @@ const radiusCode = `<!-- With radius -->
 
 const optionsCode = `<div v-blur="{
   visible: isBlurred,
-  radius: 20,
-  overlayColor: 'rgba(255, 255, 255, 0.3)',
-  lockScroll: true
+  radius: 8,
+  overlayColor: 'rgba(255, 255, 255, 0.2)',
+  lockScroll: false
 }">
   Content
 </div>`
@@ -47,8 +46,7 @@ const optionsCode = `<div v-blur="{
 const composableCode = `import { useBlur } from 'directix'
 
 const { show, hide, toggle } = useBlur({
-  radius: 10,
-  overlayColor: 'rgba(0, 0, 0, 0.5)',
+  radius: 8,
   onShow: () => console.log('Blur shown'),
   onHide: () => console.log('Blur hidden')
 })
@@ -73,6 +71,11 @@ toggle() // Toggle blur overlay`
 					<div class="content">
 						<h3>Content Behind Blur</h3>
 						<p>This content will be blurred when the overlay is active.</p>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<button @click="isBlurred = !isBlurred" class="btn">
@@ -86,9 +89,14 @@ toggle() // Toggle blur overlay`
 		<!-- Scenario 2: Custom radius -->
 		<DemoSection title="Custom Radius" description="Adjust the blur intensity">
 			<div class="demo-box">
-				<div class="blur-container" v-blur="showCustomBlur ? customRadius : false">
+				<div class="blur-container" v-blur="showCustomBlur ? { visible: true, radius: customRadius } : false">
 					<div class="content">
 						<h3>Custom Blur Radius: {{ customRadius }}px</h3>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<div class="controls">
@@ -105,20 +113,24 @@ toggle() // Toggle blur overlay`
 		</DemoSection>
 
 		<!-- Scenario 3: With options -->
-		<DemoSection title="With Options" description="Full configuration with overlay color and scroll lock">
+		<DemoSection title="With Options" description="Full configuration with overlay color">
 			<div class="demo-box">
 				<div
 					class="blur-container"
 					v-blur="{
 						visible: optionsBlur,
-						radius: 20,
-						overlayColor: 'rgba(102, 126, 234, 0.3)',
-						lockScroll: true
+						radius: 8,
+						overlayColor: 'rgba(255, 255, 255, 0.2)'
 					}"
 				>
 					<div class="content">
 						<h3>Styled Blur Overlay</h3>
 						<p>Semi-transparent colored overlay with scroll lock</p>
+						<div class="sample-text">
+							<span>ABC</span>
+							<span>123</span>
+							<span>XYZ</span>
+						</div>
 					</div>
 				</div>
 				<button @click="optionsBlur = !optionsBlur" class="btn">
@@ -172,25 +184,51 @@ h1 {
 
 .blur-container {
 	position: relative;
-	min-height: 150px;
-	border-radius: 8px;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	min-height: 180px;
+	border-radius: 12px;
 	margin-bottom: 16px;
+	overflow: hidden;
+	/* Rich gradient background for better blur visibility */
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
 }
 
 .content {
 	padding: 30px;
-	color: white;
+	color: #fff;
 	text-align: center;
+	position: relative;
+	z-index: 1;
 }
 
 .content h3 {
 	margin: 0 0 8px 0;
+	font-size: 1.4rem;
+	font-weight: 700;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .content p {
-	margin: 0;
-	opacity: 0.9;
+	margin: 0 0 16px 0;
+	opacity: 0.95;
+	font-size: 1rem;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sample-text {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 16px;
+}
+
+.sample-text span {
+	font-size: 2rem;
+	font-weight: 800;
+	padding: 10px 20px;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 8px;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(2px);
 }
 
 .btn {
