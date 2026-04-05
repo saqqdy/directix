@@ -53,6 +53,59 @@ interface EllipsisOptions {
 | `expandable` | `boolean` | `false` | Allow click to expand/collapse |
 | `ellipsis` | `string` | `'...'` | Custom ellipsis string |
 
+## Composable Usage
+
+You can also use the `useEllipsis` composable for the same functionality:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useEllipsis } from 'directix'
+
+const longText = ref('This is a very long text that needs to be truncated')
+
+const { truncated, isTruncated } = useEllipsis({
+  text: longText,
+  maxWidth: 200,
+  lines: 1
+})
+</script>
+
+<template>
+  <span :title="isTruncated ? longText : ''">
+    {{ truncated }}
+  </span>
+</template>
+```
+
+### API
+
+```typescript
+interface UseEllipsisOptions {
+  /** 要截断的文本 */
+  text: string | Ref<string>
+  /** 截断前显示的行数 @default 1 */
+  lines?: number | Ref<number>
+  /** 自定义省略号字符串 @default '...' */
+  ellipsis?: string | Ref<string>
+  /** 最大宽度（像素，0 表示无限制） @default 0 */
+  maxWidth?: number | Ref<number>
+}
+
+interface UseEllipsisReturn {
+  /** 截断后的文本 */
+  truncated: Ref<string>
+  /** 文本是否被截断 */
+  isTruncated: Ref<boolean>
+  /** 原始文本 */
+  original: Ref<string>
+  /** 计算指定宽度的截断 */
+  calculateForWidth: (width: number) => string
+  /** 检查文本在指定宽度下是否会被截断 */
+  wouldTruncate: (width: number) => boolean
+}
+```
+
 ## Examples
 
 ### Card Description

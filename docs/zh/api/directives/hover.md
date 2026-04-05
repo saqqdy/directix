@@ -34,6 +34,59 @@ function handleHover(isHovering, event) {
 </template>
 ```
 
+## Composable 用法
+
+你也可以使用 `useHover` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useHover } from 'directix'
+
+const buttonRef = ref(null)
+const { isHovering, bind } = useHover({
+  onEnter: () => console.log('鼠标进入'),
+  onLeave: () => console.log('鼠标离开'),
+  enterDelay: 100
+})
+
+onMounted(() => {
+  const unbind = bind(buttonRef.value)
+  onUnmounted(unbind)
+})
+</script>
+
+<template>
+  <button ref="buttonRef" :class="{ 'is-hovering': isHovering }">
+    悬停我
+  </button>
+</template>
+```
+
+### API
+
+```typescript
+interface UseHoverOptions {
+  /** 鼠标进入时的回调 */
+  onEnter?: (event: MouseEvent) => void
+  /** 鼠标离开时的回调 */
+  onLeave?: (event: MouseEvent) => void
+  /** 悬停时添加的 CSS 类 */
+  class?: string
+  /** 进入延迟（毫秒） */
+  enterDelay?: number | Ref<number>
+  /** 离开延迟（毫秒） */
+  leaveDelay?: number | Ref<number>
+}
+
+interface UseHoverReturn {
+  /** 是否正在悬停 */
+  isHovering: Readonly<Ref<boolean>>
+  /** 绑定事件到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## API
 
 | 选项 | 类型 | 默认值 | 描述 |

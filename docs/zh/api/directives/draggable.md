@@ -96,6 +96,67 @@ type DraggableBinding = boolean | DraggableOptions
 | `onDrag` | `Function` | - | 拖拽中回调 |
 | `onEnd` | `Function` | - | 结束拖拽回调 |
 
+## Composable 用法
+
+你也可以使用 `useDraggable` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useDraggable } from 'directix'
+
+const target = ref(null)
+const { position, isDragging, reset, bind } = useDraggable({
+  constrain: true,
+  onEnd: (pos) => console.log('拖拽结束:', pos)
+})
+
+onMounted(() => bind(target.value))
+</script>
+
+<template>
+  <div ref="target" :class="{ dragging: isDragging }">
+    拖拽我！位置: {{ position.x }}, {{ position.y }}
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseDraggableOptions {
+  /** 拖拽轴向 */
+  axis?: DraggableAxis | Ref<DraggableAxis>
+  /** 约束在父元素内 */
+  constrain?: boolean | Ref<boolean>
+  /** 边界元素选择器或元素 */
+  boundary?: string | HTMLElement | (() => HTMLElement | null)
+  /** 拖拽手柄选择器 */
+  handle?: string
+  /** 网格对齐 [x, y] */
+  grid?: [number, number] | Ref<[number, number]>
+  /** 是否禁用拖拽 */
+  disabled?: boolean | Ref<boolean>
+  /** 开始拖拽回调 */
+  onStart?: (position: Position, event: MouseEvent | TouchEvent) => void
+  /** 拖拽回调 */
+  onDrag?: (position: Position, event: MouseEvent | TouchEvent) => void
+  /** 结束拖拽回调 */
+  onEnd?: (position: Position, event: MouseEvent | TouchEvent) => void
+}
+
+interface UseDraggableReturn {
+  /** 当前位置 */
+  position: Readonly<Ref<Position>>
+  /** 是否正在拖拽 */
+  isDragging: Readonly<Ref<boolean>>
+  /** 重置位置到原点 */
+  reset: () => void
+  /** 绑定拖拽行为到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## 示例
 
 ### 网格对齐

@@ -45,6 +45,48 @@ type CapitalcaseBinding = boolean | CapitalcaseOptions
 | `on` | `string` | `'blur'` | 何时应用转换 |
 | `disabled` | `boolean` | `false` | 禁用转换 |
 
+## Composable 用法
+
+你也可以使用 `useCapitalcase` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCapitalcase } from 'directix'
+
+const title = ref('the quick brown fox')
+const { capitalized } = useCapitalcase({
+  text: title,
+  every: true
+})
+// capitalized.value = 'The Quick Brown Fox'
+</script>
+
+<template>
+  <h1>{{ capitalized }}</h1>
+</template>
+```
+
+### API
+
+```typescript
+interface UseCapitalcaseOptions {
+  /** 要转换的文本 */
+  text: string | Ref<string>
+  /** 是否转换每个单词或仅第一个单词 @default true */
+  every?: boolean | Ref<boolean>
+  /** 保持小写的单词（冠词、介词等） */
+  keepLower?: string[] | Ref<string[]>
+}
+
+interface UseCapitalcaseReturn {
+  /** 转换后的文本 */
+  capitalized: Ref<string>
+  /** 原始文本 */
+  original: Ref<string>
+}
+```
+
 ## 示例
 
 ### 实时转换

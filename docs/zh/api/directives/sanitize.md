@@ -32,3 +32,56 @@
 | `allowStyles` | `boolean` | `false` | 允许 style 属性 |
 | `allowClass` | `boolean` | `false` | 允许 class 属性 |
 | `handler` | `Function` | - | 自定义清理函数 |
+
+## Composable 用法
+
+你也可以使用 `useSanitize` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useSanitize } from 'directix'
+
+const userInput = ref('<script>alert("xss")</script><p>Safe content</p>')
+
+const { sanitize } = useSanitize({
+  allowedTags: ['b', 'i', 'p'],
+  allowedAttributes: []
+})
+
+const safeHtml = sanitize(userInput.value)
+// safeHtml = '<p>Safe content</p>'
+</script>
+
+<template>
+  <div v-html="safeHtml"></div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseSanitizeOptions {
+  /** 允许的标签（白名单） @default ['b', 'i', 'u', 'strong', 'em', 'br', 'p', 'span', 'div'] */
+  allowedTags?: string[]
+  /** 允许的属性（白名单） @default ['title', 'alt', 'href', 'src'] */
+  allowedAttributes?: string[]
+  /** 是否允许 data URL @default false */
+  allowDataUrls?: boolean
+  /** 是否允许内联样式 @default false */
+  allowStyles?: boolean
+  /** 是否允许 class 属性 @default false */
+  allowClass?: boolean
+  /** 是否允许 id 属性 @default false */
+  allowId?: boolean
+  /** 自定义清理函数 */
+  handler?: (html: string) => string
+}
+
+interface UseSanitizeReturn {
+  /** 清理 HTML 字符串 */
+  sanitize: (html: string) => string
+  /** 清理并设置到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```

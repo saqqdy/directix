@@ -103,6 +103,76 @@ type HotkeyBinding =
 | `backspace` | `backspace` |
 | `f1`-`f12` | Function keys |
 
+## Composable Usage
+
+You can also use the `useHotkey` composable:
+
+```vue
+<script setup>
+import { useHotkey } from 'directix'
+
+const { enable, disable, add, remove } = useHotkey({
+  hotkeys: [
+    { key: 'ctrl+s', handler: (e) => save() },
+    { key: 'ctrl+z', handler: (e) => undo() },
+  ]
+})
+
+// Add dynamic hotkey
+add({ key: 'esc', handler: (e) => closeModal() })
+
+// Remove hotkey
+remove('ctrl+z')
+</script>
+```
+
+### API
+
+```typescript
+interface HotkeyDefinition {
+  /** Key combination (e.g., 'ctrl+s', 'alt+shift+a') */
+  key: string
+  /** Handler function */
+  handler: (event: KeyboardEvent) => void
+  /** Whether to prevent default behavior */
+  prevent?: boolean
+  /** Whether to stop propagation */
+  stop?: boolean
+  /** Whether to trigger on keyup instead of keydown */
+  keyup?: boolean
+  /** Whether the hotkey is disabled */
+  disabled?: boolean | Ref<boolean>
+}
+
+interface UseHotkeyOptions {
+  /** Single hotkey definition */
+  hotkey?: HotkeyDefinition
+  /** Multiple hotkey definitions */
+  hotkeys?: HotkeyDefinition[]
+  /** Target element to bind events (defaults to document) */
+  target?: HTMLElement | Ref<HTMLElement | null>
+  /** Whether to enable the hotkey(s) */
+  enabled?: boolean | Ref<boolean>
+}
+
+interface UseHotkeyReturn {
+  /** Whether the hotkey is currently enabled */
+  enabled: Ref<boolean>
+  /** Enable the hotkey */
+  enable: () => void
+  /** Disable the hotkey */
+  disable: () => void
+  /** Toggle the hotkey */
+  toggle: () => void
+  /** Add a hotkey */
+  add: (hotkey: HotkeyDefinition) => void
+  /** Remove a hotkey by key */
+  remove: (key: string) => void
+  /** Remove all hotkeys */
+  clear: () => void
+}
+```
+
 ## Examples
 
 ### Editor Shortcuts

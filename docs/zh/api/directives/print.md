@@ -57,6 +57,70 @@ interface PrintOptions {
 | `styles` | `string` | - | Additional CSS styles for print |
 | `media` | `string` | `'print'` | Media type for styles |
 
+## Composable Usage
+
+You can also use the `usePrint` composable for the same functionality:
+
+```vue
+<script setup>
+import { usePrint } from 'directix'
+
+const { isPrinting, print } = usePrint({
+  title: 'My Document',
+  onBeforePrint: () => {
+    console.log('About to print...')
+    return true
+  },
+  onAfterPrint: () => {
+    console.log('Print complete!')
+  }
+})
+
+async function handlePrint() {
+  await print('#content')
+}
+</script>
+
+<template>
+  <div>
+    <button @click="handlePrint" :disabled="isPrinting">
+      {{ isPrinting ? 'Printing...' : 'Print' }}
+    </button>
+    <div id="content">Content to print</div>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UsePrintOptions {
+  /** 打印文档的标题 */
+  title?: string | Ref<string>
+  /** 注入的额外 CSS 样式 */
+  styles?: string | string[] | Ref<string | string[]>
+  /** 包含的额外 CSS URL */
+  cssUrls?: string[] | Ref<string[]>
+  /** 打印前的回调，返回 false 取消打印 */
+  onBeforePrint?: () => boolean | void
+  /** 打印后的回调 */
+  onAfterPrint?: () => void
+  /** 是否在新窗口打印 @default false */
+  newWindow?: boolean | Ref<boolean>
+  /** 打印容器的自定义类名 */
+  printClass?: string | Ref<string>
+}
+
+interface UsePrintReturn {
+  /** 是否正在打印 */
+  isPrinting: Ref<boolean>
+  /** 打印指定元素或选择器 */
+  print: (target?: string | HTMLElement) => Promise<void>
+  /** 打印当前页面 */
+  printPage: () => Promise<void>
+}
+```
+
 ## Examples
 
 ### Invoice Printing

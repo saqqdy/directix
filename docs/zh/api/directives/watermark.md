@@ -74,6 +74,75 @@ interface WatermarkOptions {
 | `zIndex` | `number` | `9999` | Z-index of watermark layer |
 | `movable` | `boolean` | `false` | Make watermark move with scroll |
 
+## Composable Usage
+
+You can also use the `useWatermark` composable:
+
+```vue
+<script setup>
+import { useWatermark } from 'directix'
+
+const { dataUrl, style, disable, enable } = useWatermark({
+  content: 'Confidential',
+  fontSize: 20,
+  color: 'rgba(255, 0, 0, 0.2)'
+})
+</script>
+
+<template>
+  <div class="container">
+    <div :style="style"></div>
+    <slot></slot>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseWatermarkOptions {
+  /** Watermark text content */
+  content: string | string[] | Ref<string | string[]>
+  /** Width of watermark canvas */
+  width?: number | Ref<number>
+  /** Height of watermark canvas */
+  height?: number | Ref<number>
+  /** Rotation angle in degrees */
+  rotate?: number | Ref<number>
+  /** Font size in pixels */
+  fontSize?: number | Ref<number>
+  /** Font family */
+  fontFamily?: string | Ref<string>
+  /** Font weight */
+  fontWeight?: string | number | Ref<string | number>
+  /** Font color */
+  color?: string | Ref<string>
+  /** Gap between watermarks */
+  gap?: [number, number] | number | Ref<[number, number] | number>
+  /** Z-index of watermark layer */
+  zIndex?: number | Ref<number>
+  /** Whether to disable watermark */
+  disabled?: boolean | Ref<boolean>
+}
+
+interface UseWatermarkReturn {
+  /** Watermark canvas element */
+  canvas: Ref<HTMLCanvasElement | null>
+  /** Watermark data URL */
+  dataUrl: Ref<string>
+  /** Watermark CSS style object */
+  style: Ref<Record<string, any>>
+  /** Whether watermark is disabled */
+  disabled: Ref<boolean>
+  /** Update watermark options */
+  update: (options: Partial<UseWatermarkOptions>) => void
+  /** Enable watermark */
+  enable: () => void
+  /** Disable watermark */
+  disable: () => void
+}
+```
+
 ## Examples
 
 ### Multi-line Watermark

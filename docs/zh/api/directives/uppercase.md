@@ -45,6 +45,43 @@ type UppercaseBinding = boolean | UppercaseOptions
 | `on` | `string` | `'blur'` | 何时应用转换 |
 | `disabled` | `boolean` | `false` | 禁用转换 |
 
+## Composable 用法
+
+你也可以使用 `useUppercase` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useUppercase } from 'directix'
+
+const text = ref('hello world')
+const { transformed } = useUppercase({ text })
+// transformed.value = 'HELLO WORLD'
+</script>
+
+<template>
+  <p>{{ transformed }}</p>
+</template>
+```
+
+### API
+
+```typescript
+interface UseUppercaseOptions {
+  /** 要转换的文本 */
+  text: string | Ref<string>
+  /** 是否仅转换第一个字符 @default false */
+  first?: boolean | Ref<boolean>
+}
+
+interface UseUppercaseReturn {
+  /** 转换后的文本 */
+  transformed: Ref<string>
+  /** 原始文本 */
+  original: Ref<string>
+}
+```
+
 ## 示例
 
 ### 产品编码

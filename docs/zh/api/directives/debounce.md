@@ -74,6 +74,64 @@ type DebounceBinding = DebounceOptions['handler'] | DebounceOptions
 | `leading` | `boolean` | `false` | 是否在开始边界触发 |
 | `trailing` | `boolean` | `true` | 是否在结束边界触发 |
 
+## Composable 用法
+
+你也可以使用 `useDebounce` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, watch } from 'vue'
+import { useDebounce } from 'directix'
+
+const searchQuery = ref('')
+
+const { run: debouncedSearch, cancel, flush } = useDebounce({
+  handler: (query: string) => {
+    console.log('搜索:', query)
+    // 执行搜索 API 调用
+  },
+  wait: 500,
+  leading: false,
+  trailing: true
+})
+
+// 监听并防抖
+watch(searchQuery, (query) => {
+  debouncedSearch(query)
+})
+</script>
+
+<template>
+  <input v-model="searchQuery" placeholder="搜索..." />
+</template>
+```
+
+### API
+
+```typescript
+interface UseDebounceOptions<T extends (...args: any[]) => any> {
+  /** 需要防抖的函数 */
+  handler: T
+  /** 等待时间（毫秒） */
+  wait?: number | Ref<number>
+  /** 是否在开始边界触发 */
+  leading?: boolean | Ref<boolean>
+  /** 是否在结束边界触发 */
+  trailing?: boolean | Ref<boolean>
+}
+
+interface UseDebounceReturn<T> {
+  /** 执行防抖函数 */
+  run: (...args: Parameters<T>) => void
+  /** 取消待执行的函数 */
+  cancel: () => void
+  /** 立即执行待执行的函数 */
+  flush: () => void
+  /** 是否有待执行的函数 */
+  pending: () => boolean
+}
+```
+
 ## 示例
 
 ### 搜索输入

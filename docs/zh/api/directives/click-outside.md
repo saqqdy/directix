@@ -67,6 +67,62 @@ type ClickOutsideBinding = ClickOutsideOptions['handler'] | ClickOutsideOptions
 | `include` | `string[]` | `[]` | 包含的 CSS 选择器 |
 | `exclude` | `string[]` | `[]` | 排除的 CSS 选择器 |
 
+## Composable 用法
+
+你也可以使用 `useClickOutside` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useClickOutside } from 'directix'
+
+const dropdown = ref(null)
+const show = ref(false)
+
+const { bind } = useClickOutside({
+  handler: () => {
+    show.value = false
+  },
+  exclude: ['.trigger']
+})
+
+onMounted(() => {
+  bind(dropdown.value)
+})
+</script>
+
+<template>
+  <div ref="dropdown">
+    <button class="trigger" @click="show = !show">切换</button>
+    <div v-if="show">下拉菜单内容</div>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseClickOutsideOptions {
+  /** 点击外部时的回调函数 */
+  handler: (event: MouseEvent | TouchEvent) => void
+  /** 排除的元素选择器或元素引用 */
+  exclude?: (string | HTMLElement | (() => HTMLElement | null) | Ref<HTMLElement | null>)[]
+  /** 是否使用捕获模式 */
+  capture?: boolean
+  /** 要监听的事件类型 */
+  events?: ('click' | 'mousedown' | 'mouseup' | 'touchstart' | 'touchend')[]
+  /** 是否阻止事件冒泡 */
+  stop?: boolean
+  /** 是否阻止默认行为 */
+  prevent?: boolean
+}
+
+interface UseClickOutsideReturn {
+  /** 绑定点击外部检测到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## 示例
 
 ### 下拉菜单

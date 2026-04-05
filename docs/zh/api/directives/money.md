@@ -58,6 +58,57 @@ type MoneyBinding = boolean | MoneyOptions
 | `decimal` | `string` | `'.'` | 小数分隔符 |
 | `disabled` | `boolean` | `false` | 禁用格式化 |
 
+## Composable 用法
+
+你也可以使用 `useMoney` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useMoney } from 'directix'
+
+const price = ref(1234.56)
+const { formatted, parse } = useMoney({
+  value: price,
+  symbol: '¥',
+  symbolPosition: 'before'
+})
+// formatted.value = '¥1,234.56'
+</script>
+
+<template>
+  <span>{{ formatted }}</span>
+</template>
+```
+
+### API
+
+```typescript
+interface UseMoneyOptions {
+  /** 数值 */
+  value: number | Ref<number>
+  /** 货币符号 @default '$' */
+  symbol?: string | Ref<string>
+  /** 符号位置 @default 'before' */
+  symbolPosition?: 'before' | 'after' | Ref<'before' | 'after'>
+  /** 小数位数 @default 2 */
+  precision?: number | Ref<number>
+  /** 千位分隔符 @default ',' */
+  separator?: string | Ref<string>
+  /** 小数分隔符 @default '.' */
+  decimal?: string | Ref<string>
+}
+
+interface UseMoneyReturn {
+  /** 格式化后的金额字符串 */
+  formatted: Ref<string>
+  /** 数值 */
+  value: Ref<number>
+  /** 将格式化字符串解析为数字 */
+  parse: (formatted: string) => number
+}
+```
+
 ## 示例
 
 ### 人民币格式

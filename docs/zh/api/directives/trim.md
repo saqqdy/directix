@@ -57,6 +57,50 @@ type TrimBinding = 'input' | 'blur' | TrimOptions
 | `position` | `string` | `'both'` | 去除哪一侧 |
 | `disabled` | `boolean` | `false` | 禁用去除 |
 
+## Composable 用法
+
+你也可以使用 `useTrim` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useTrim } from 'directix'
+
+const text = ref('  hello world  ')
+const { trimmed, wasTrimmed } = useTrim({ text })
+// trimmed.value = 'hello world'
+// wasTrimmed.value = true
+</script>
+
+<template>
+  <p>{{ trimmed }}</p>
+</template>
+```
+
+### API
+
+```typescript
+type TrimPosition = 'start' | 'end' | 'both'
+
+interface UseTrimOptions {
+  /** 要去除的文本 */
+  text: string | Ref<string>
+  /** 去除位置 @default 'both' */
+  position?: TrimPosition | Ref<TrimPosition>
+  /** 自定义要去除的字符（除空白外） */
+  chars?: string | Ref<string>
+}
+
+interface UseTrimReturn {
+  /** 去除后的文本 */
+  trimmed: Ref<string>
+  /** 原始文本 */
+  original: Ref<string>
+  /** 文本是否被去除 */
+  wasTrimmed: Ref<boolean>
+}
+```
+
 ## 示例
 
 ### 仅去除开头

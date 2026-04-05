@@ -83,6 +83,74 @@ interface CountdownTime {
 | `ss` | Seconds (2 digits) |
 | `SSS` | Milliseconds (3 digits) |
 
+## Composable Usage
+
+You can also use the `useCountdown` composable:
+
+```vue
+<script setup>
+import { useCountdown } from 'directix'
+
+const targetDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
+
+const { time, formatted, running, completed, pause, resume, reset } = useCountdown({
+  target: targetDate,
+  format: 'hh:mm:ss',
+  onComplete: () => console.log('Done!')
+})
+</script>
+
+<template>
+  <div>
+    <p>{{ formatted }}</p>
+    <p>Remaining: {{ time.days }}d {{ time.hours }}h {{ time.minutes }}m {{ time.seconds }}s</p>
+    <button @click="pause" v-if="running">Pause</button>
+    <button @click="resume" v-if="!running && !completed">Resume</button>
+    <button @click="reset">Reset</button>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseCountdownOptions {
+  /** Target time (Date object, timestamp, or ISO string) */
+  target: Date | number | string | Ref<Date | number | string>
+  /** Format string or custom format function */
+  format?: string | CountdownFormatFunction | Ref<string | CountdownFormatFunction>
+  /** Callback when countdown completes */
+  onComplete?: () => void
+  /** Callback on each tick */
+  onTick?: (time: CountdownTime) => void
+  /** Update interval in milliseconds */
+  interval?: number | Ref<number>
+  /** Whether to auto-start */
+  autoStart?: boolean | Ref<boolean>
+}
+
+interface UseCountdownReturn {
+  /** Current countdown time */
+  time: Ref<CountdownTime>
+  /** Formatted time string */
+  formatted: Ref<string>
+  /** Whether countdown is running */
+  running: Ref<boolean>
+  /** Whether countdown is paused */
+  paused: Ref<boolean>
+  /** Whether countdown has completed */
+  completed: Ref<boolean>
+  /** Start the countdown */
+  start: () => void
+  /** Pause the countdown */
+  pause: () => void
+  /** Resume the countdown */
+  resume: () => void
+  /** Reset the countdown */
+  reset: () => void
+}
+```
+
 ## Examples
 
 ### Sale Countdown

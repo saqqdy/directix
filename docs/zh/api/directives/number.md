@@ -62,6 +62,57 @@ type NumberBinding = boolean | NumberOptions
 | `decimal` | `string` | `'.'` | 小数分隔符 |
 | `disabled` | `boolean` | `false` | 禁用格式化 |
 
+## Composable 用法
+
+你也可以使用 `useNumber` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useNumber } from 'directix'
+
+const count = ref(1234567)
+const { formatted, parse } = useNumber({
+  value: count,
+  precision: 2,
+  suffix: ' items'
+})
+// formatted.value = '1,234,567.00 items'
+</script>
+
+<template>
+  <span>{{ formatted }}</span>
+</template>
+```
+
+### API
+
+```typescript
+interface UseNumberOptions {
+  /** 数值 */
+  value: number | Ref<number>
+  /** 小数位数 @default 0 */
+  precision?: number | Ref<number>
+  /** 千位分隔符 @default ',' */
+  separator?: string | Ref<string>
+  /** 小数分隔符 @default '.' */
+  decimal?: string | Ref<string>
+  /** 前缀字符串（如 '$'） */
+  prefix?: string | Ref<string>
+  /** 后缀字符串（如 '%'） */
+  suffix?: string | Ref<string>
+}
+
+interface UseNumberReturn {
+  /** 格式化后的数字字符串 */
+  formatted: Ref<string>
+  /** 数值 */
+  value: Ref<number>
+  /** 将格式化字符串解析为数字 */
+  parse: (formatted: string) => number
+}
+```
+
 ## 示例
 
 ### 百分比输入

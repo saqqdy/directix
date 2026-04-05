@@ -52,6 +52,99 @@ interface VirtualListOptions<T = any> {
 | `onScroll` | `(event) => void` | - | Scroll event handler |
 | `onResize` | `(size) => void` | - | Resize event handler |
 
+## Composable Usage
+
+You can also use the `useVirtualList` composable for the same functionality:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useVirtualList } from 'directix'
+
+const items = ref(Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `Item ${i}` })))
+
+const {
+  visibleItems,
+  totalHeight,
+  containerRef,
+  listStyle,
+  scrollToIndex
+} = useVirtualList({
+  items,
+  itemSize: 50,
+  height: 600
+})
+</script>
+
+<template>
+  <div ref="containerRef" :style="listStyle">
+    <div :style="{ height: totalHeight + 'px', position: 'relative' }">
+      <div
+        v-for="{ item, index, style } in visibleItems"
+        :key="item.id"
+        :style="style"
+      >
+        {{ item.name }}
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+type ItemSizeFunction = (index: number) => number
+
+interface UseVirtualListOptions<T = any> {
+  /** 要渲染的数组（必填） */
+  items: Ref<T[]> | T[]
+  /** 每项的高度（像素），可以是固定值或函数 @default 50 */
+  itemSize?: number | ItemSizeFunction | Ref<number | ItemSizeFunction>
+  /** 容器高度（像素） @default 400 */
+  height?: number | Ref<number>
+  /** 可见区域外额外渲染的项目数 @default 3 */
+  overscan?: number | Ref<number>
+  /** 项目键字段名 @default 'id' */
+  keyField?: string
+}
+
+interface VirtualListItem<T = any> {
+  /** 项目数据 */
+  item: T
+  /** 原始列表中的索引 */
+  index: number
+  /** 定位样式 */
+  style: {
+    position: string
+    top: string
+    height: string
+    width: string
+  }
+}
+
+interface UseVirtualListReturn<T = any> {
+  /** 当前可见的项目 */
+  visibleItems: Ref<VirtualListItem<T>[]>
+  /** 列表总高度 */
+  totalHeight: Ref<number>
+  /** 当前滚动位置 */
+  scrollTop: Ref<number>
+  /** 可见项目起始索引 */
+  startIndex: Ref<number>
+  /** 可见项目结束索引 */
+  endIndex: Ref<number>
+  /** 滚动到指定索引 */
+  scrollToIndex: (index: number) => void
+  /** 滚动到指定位置 */
+  scrollTo: (scrollTop: number) => void
+  /** 容器 ref */
+  containerRef: Ref<HTMLElement | null>
+  /** 列表样式 */
+  listStyle: Ref<{ height: string, overflow: string, position: string }>
+}
+```
+
 ## Examples
 
 ### Large Data List

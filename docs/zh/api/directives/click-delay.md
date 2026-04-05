@@ -78,6 +78,55 @@ type ClickDelayBinding = ClickDelayHandler | ClickDelayOptions
 
 - `v-click-delay--pending` - Added to element during the delay period (customizable via `pendingClass`)
 
+## Composable Usage
+
+You can also use the `useClickDelay` composable for the same functionality:
+
+```vue
+<script setup>
+import { useClickDelay } from 'directix'
+
+const { click, isPending } = useClickDelay({
+  handler: async (event) => {
+    await submitForm()
+  },
+  delay: 500
+})
+</script>
+
+<template>
+  <button @click="click" :disabled="isPending">
+    {{ isPending ? 'Processing...' : 'Submit' }}
+  </button>
+</template>
+```
+
+### API
+
+```typescript
+type ClickDelayHandler = (event: MouseEvent | TouchEvent) => void
+
+interface UseClickDelayOptions {
+  /** 点击处理程序（必填） */
+  handler: ClickDelayHandler
+  /** 延迟时间（毫秒） @default 300 */
+  delay?: number | Ref<number>
+  /** 是否禁用 @default false */
+  disabled?: boolean | Ref<boolean>
+}
+
+interface UseClickDelayReturn {
+  /** 是否正在等待 */
+  isPending: Ref<boolean>
+  /** 触发点击处理程序（带延迟保护） */
+  click: (event: MouseEvent | TouchEvent) => void
+  /** 手动重置等待状态 */
+  reset: () => void
+  /** 取消任何等待中的超时 */
+  cancel: () => void
+}
+```
+
 ## Examples
 
 ### Form Submission

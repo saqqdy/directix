@@ -45,6 +45,43 @@ type LowercaseBinding = boolean | LowercaseOptions
 | `on` | `string` | `'blur'` | 何时应用转换 |
 | `disabled` | `boolean` | `false` | 禁用转换 |
 
+## Composable 用法
+
+你也可以使用 `useLowercase` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useLowercase } from 'directix'
+
+const text = ref('HELLO WORLD')
+const { transformed } = useLowercase({ text })
+// transformed.value = 'hello world'
+</script>
+
+<template>
+  <p>{{ transformed }}</p>
+</template>
+```
+
+### API
+
+```typescript
+interface UseLowercaseOptions {
+  /** 要转换的文本 */
+  text: string | Ref<string>
+  /** 是否仅转换第一个字符 @default false */
+  first?: boolean | Ref<boolean>
+}
+
+interface UseLowercaseReturn {
+  /** 转换后的文本 */
+  transformed: Ref<string>
+  /** 原始文本 */
+  original: Ref<string>
+}
+```
+
 ## 示例
 
 ### 邮箱输入

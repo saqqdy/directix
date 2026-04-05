@@ -139,6 +139,66 @@ type ImagePreviewBinding = string | ImagePreviewOptions
 | 拖拽 | 缩放后平移 |
 | 滚轮 | 桌面端缩放 |
 
+## Composable 用法
+
+你也可以使用 `useImagePreview` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useImagePreview } from 'directix'
+
+const imageRef = ref(null)
+const { isOpen, bind, open, close } = useImagePreview({
+  onOpen: () => console.log('预览已打开'),
+  onClose: () => console.log('预览已关闭')
+})
+
+onMounted(() => bind(imageRef.value))
+
+function openCustomImage() {
+  open('https://example.com/high-res.jpg')
+}
+</script>
+
+<template>
+  <img ref="imageRef" src="thumbnail.jpg" />
+  <button @click="openCustomImage">预览其他图片</button>
+</template>
+```
+
+### API
+
+```typescript
+interface UseImagePreviewOptions {
+  /** 初始图片 URL */
+  src?: string | Ref<string>
+  /** 点击外部关闭 @default true */
+  closeOnClickOutside?: boolean
+  /** ESC 键关闭 @default true */
+  closeOnEsc?: boolean
+  /** 显示关闭按钮 @default true */
+  showCloseButton?: boolean
+  /** 预览打开时的回调 */
+  onOpen?: () => void
+  /** 预览关闭时的回调 */
+  onClose?: () => void
+}
+
+interface UseImagePreviewReturn {
+  /** 预览是否打开 */
+  isOpen: Readonly<Ref<boolean>>
+  /** 当前图片 URL */
+  currentSrc: Readonly<Ref<string>>
+  /** 打开预览 */
+  open: (src?: string) => void
+  /** 关闭预览 */
+  close: () => void
+  /** 绑定点击预览到图片元素 */
+  bind: (element: HTMLImageElement) => () => void
+}
+```
+
 ## 示例
 
 ### 多图画廊

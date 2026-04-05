@@ -71,6 +71,60 @@ type CopyBinding = string | CopyOptions
 | `onSuccess` | `Function` | - | 复制成功回调 |
 | `onError` | `Function` | - | 复制失败回调 |
 
+## Composable 用法
+
+你也可以使用 `useCopy` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useCopy } from 'directix'
+
+const text = ref('Hello, World!')
+const { copy, copied, isSupported } = useCopy({
+  source: text,
+  onSuccess: (text) => console.log('已复制:', text)
+})
+
+// 也可以直接传入文本
+async function handleCopy() {
+  await copy('自定义文本')
+}
+</script>
+
+<template>
+  <button @click="copy()" :disabled="!isSupported">
+    {{ copied ? '已复制!' : '复制' }}
+  </button>
+</template>
+```
+
+### API
+
+```typescript
+interface UseCopyOptions {
+  /** 源文本（可以是响应式） */
+  source?: string | Ref<string>
+  /** 复制成功回调 */
+  onSuccess?: (text: string) => void
+  /** 复制失败回调 */
+  onError?: (error: Error) => void
+  /** 重置已复制状态的时间（毫秒） */
+  copiedTimeout?: number
+}
+
+interface UseCopyReturn {
+  /** 复制函数 */
+  copy: (text?: string) => Promise<boolean>
+  /** 是否已复制成功 */
+  copied: Readonly<Ref<boolean>>
+  /** 最后一次复制的错误 */
+  error: Readonly<Ref<Error | null>>
+  /** 是否支持剪贴板 API */
+  isSupported: boolean
+}
+```
+
 ## 示例
 
 ### 复制输入框内容

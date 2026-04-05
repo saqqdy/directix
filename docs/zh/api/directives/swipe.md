@@ -69,6 +69,72 @@ type SwipeBinding = SwipeOptions | ((direction: 'left' | 'right' | 'up' | 'down'
 | `preventDefault` | `boolean` | `true` | Prevent default scroll behavior |
 | `touchOnly` | `boolean` | `false` | Only detect touch events |
 
+## Composable Usage
+
+You can also use the `useSwipe` composable:
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useSwipe } from 'directix'
+
+const container = ref(null)
+const { direction, isSwiping, bind } = useSwipe({
+  onLeft: () => nextSlide(),
+  onRight: () => prevSlide(),
+  threshold: 50
+})
+
+onMounted(() => bind(container.value))
+</script>
+
+<template>
+  <div ref="container">
+    Swipe me!
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+interface UseSwipeOptions {
+  /** Swipe handler */
+  handler?: (direction: SwipeDirection, event: Event) => void
+  /** Minimum distance to trigger swipe */
+  threshold?: number | Ref<number>
+  /** Maximum time for swipe */
+  maxTime?: number | Ref<number>
+  /** Allowed directions */
+  directions?: SwipeDirection[]
+  /** Whether to prevent scroll on swipe */
+  preventScrollOnSwipe?: boolean
+  /** Whether to enable mouse events */
+  mouse?: boolean
+  /** Callback for left swipe */
+  onLeft?: () => void
+  /** Callback for right swipe */
+  onRight?: () => void
+  /** Callback for up swipe */
+  onUp?: () => void
+  /** Callback for down swipe */
+  onDown?: () => void
+}
+
+interface UseSwipeReturn {
+  /** Current swipe direction */
+  direction: Readonly<Ref<SwipeDirection | null>>
+  /** Length of the swipe (X) */
+  lengthX: Readonly<Ref<number>>
+  /** Length of the swipe (Y) */
+  lengthY: Readonly<Ref<number>>
+  /** Whether a swipe is being performed */
+  isSwiping: Readonly<Ref<boolean>>
+  /** Bind swipe detection to an element */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## Examples
 
 ### Image Carousel

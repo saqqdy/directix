@@ -72,6 +72,78 @@ interface PullRefreshOptions {
 | `pullingText` | `string` | `'Pull to refresh'` | Text while pulling |
 | `loosingText` | `string` | `'Release to refresh'` | Text when threshold reached |
 
+## Composable Usage
+
+You can also use the `usePullRefresh` composable for the same functionality:
+
+```vue
+<script setup>
+import { usePullRefresh } from 'directix'
+
+const { state, distance, events, containerRef, refresh } = usePullRefresh({
+  handler: async () => {
+    await fetchData()
+  },
+  distance: 80
+})
+</script>
+
+<template>
+  <div
+    ref="containerRef"
+    @touchstart="events.touchstart"
+    @touchmove="events.touchmove"
+    @touchend="events.touchend"
+  >
+    <div class="indicator" :style="{ transform: `translateY(${distance}px)` }">
+      {{ state }}
+    </div>
+    <slot></slot>
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+type PullRefreshHandler = () => Promise<void> | void
+type PullRefreshState = 'idle' | 'pulling' | 'ready' | 'loading' | 'success' | 'error'
+
+interface UsePullRefreshOptions {
+  /** 刷新处理程序（必填） */
+  handler: PullRefreshHandler
+  /** 触发刷新的距离阈值 @default 60 */
+  distance?: number | Ref<number>
+  /** 最大拉动距离 @default 100 */
+  maxDistance?: number | Ref<number>
+  /** 是否禁用下拉刷新 @default false */
+  disabled?: boolean | Ref<boolean>
+  /** 成功指示器显示时长 @default 500 */
+  successDuration?: number | Ref<number>
+  /** 错误指示器显示时长 @default 1000 */
+  errorDuration?: number | Ref<number>
+}
+
+interface UsePullRefreshReturn {
+  /** 当前下拉刷新状态 */
+  state: Ref<PullRefreshState>
+  /** 当前拉动距离 */
+  distance: Ref<number>
+  /** 是否正在拉动 */
+  isPulling: Ref<boolean>
+  /** 绑定到容器元素的事件处理器 */
+  events: {
+    touchstart: (e: TouchEvent) => void
+    touchmove: (e: TouchEvent) => void
+    touchend: () => void
+  }
+  /** 容器 ref */
+  containerRef: Ref<HTMLElement | null>
+  /** 手动触发刷新 */
+  refresh: () => Promise<void>
+}
+```
+
 ## Examples
 
 ### List Refresh

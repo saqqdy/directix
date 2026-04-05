@@ -40,3 +40,61 @@
 | `clearIncomplete` | `boolean` | `false` | 失焦时清除不完整的值 |
 | `onChange` | `Function` | - | 值改变时的回调 |
 | `onComplete` | `Function` | - | 掩码完成时的回调 |
+
+## Composable 用法
+
+你也可以使用 `useMask` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useMask } from 'directix'
+
+const inputRef = ref(null)
+const { bind, getRawValue, isComplete } = useMask({
+  mask: '###-##-####',
+  placeholder: '_',
+  onComplete: (value) => console.log('完成:', value)
+})
+
+onMounted(() => bind(inputRef.value))
+</script>
+
+<template>
+  <input ref="inputRef" type="text" placeholder="SSN: ###-##-####" />
+</template>
+```
+
+### API
+
+```typescript
+interface UseMaskOptions {
+  /** 掩码模式：# 数字，A 字母，N 字母数字，X 任意，其他为字面量 */
+  mask: string | Ref<string>
+  /** 占位符字符 @default '_' */
+  placeholder?: string
+  /** 聚焦时显示掩码占位符 @default true */
+  showPlaceholder?: boolean
+  /** 失焦时显示掩码 @default false */
+  showMaskOnBlur?: boolean
+  /** 失焦时清除不完整的值 @default false */
+  clearIncomplete?: boolean
+  /** 是否禁用 @default false */
+  disabled?: boolean | Ref<boolean>
+  /** 值改变时的回调 */
+  onChange?: (value: string, rawValue: string) => void
+  /** 掩码完成时的回调 */
+  onComplete?: (value: string) => void
+}
+
+interface UseMaskReturn {
+  /** 获取格式化后的值 */
+  getFormattedValue: (value: string) => string
+  /** 获取原始值（不含掩码字面量） */
+  getRawValue: (value: string) => string
+  /** 检查掩码是否完成 */
+  isComplete: (value: string) => boolean
+  /** 绑定掩码到输入元素 */
+  bind: (element: HTMLInputElement | HTMLTextAreaElement) => () => void
+}
+```

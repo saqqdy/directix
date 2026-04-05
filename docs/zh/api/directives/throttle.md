@@ -76,6 +76,49 @@ type ThrottleBinding = ThrottleOptions['handler'] | ThrottleOptions
 | `leading` | `boolean` | `true` | 是否在开始边界触发 |
 | `trailing` | `boolean` | `true` | 是否在结束边界触发 |
 
+## Composable 用法
+
+你也可以使用 `useThrottle` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useThrottle } from 'directix'
+
+const { run: throttledScroll, cancel } = useThrottle({
+  handler: (event) => {
+    console.log('滚动位置:', event.target.scrollTop)
+  },
+  wait: 100
+})
+
+// 在模板中使用
+// <div @scroll="throttledScroll($event)">...</div>
+</script>
+```
+
+### API
+
+```typescript
+interface UseThrottleOptions<T extends (...args: any[]) => any> {
+  /** 需要节流的函数 */
+  handler: T
+  /** 等待时间（毫秒） */
+  wait?: number | Ref<number>
+  /** 是否在开始边界触发 */
+  leading?: boolean | Ref<boolean>
+  /** 是否在结束边界触发 */
+  trailing?: boolean | Ref<boolean>
+}
+
+interface UseThrottleReturn<T> {
+  /** 执行节流函数 */
+  run: (...args: Parameters<T>) => void
+  /** 取消待执行的函数 */
+  cancel: () => void
+}
+```
+
 ## 示例
 
 ### 按钮点击

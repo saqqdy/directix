@@ -154,6 +154,85 @@ interface TouchOptions {
 | `enableLongPress` | `boolean` | `true` | 启用长按检测 |
 | `enableMouse` | `boolean` | `true` | 启用桌面端鼠标模拟 |
 
+## Composable 用法
+
+你也可以使用 `useTouch` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useTouch } from 'directix'
+
+const containerRef = ref(null)
+const { gesture, bind } = useTouch({
+  onSwipeLeft: () => nextSlide(),
+  onSwipeRight: () => prevSlide(),
+  onTap: (e) => console.log('点击', e.center)
+})
+
+onMounted(() => bind(containerRef.value))
+</script>
+
+<template>
+  <div ref="containerRef">
+    滑动我！当前手势: {{ gesture }}
+  </div>
+</template>
+```
+
+### API
+
+```typescript
+type TouchGesture = 'swipe' | 'pinch' | 'rotate' | 'tap' | 'longPress'
+
+interface TouchGestureEvent {
+  type: TouchGesture
+  direction?: 'left' | 'right' | 'up' | 'down'
+  distance?: number
+  angle?: number
+  scale?: number
+  rotation?: number
+  center?: { x: number, y: number }
+  event: TouchEvent
+}
+
+interface UseTouchOptions {
+  /** 滑动手势回调 */
+  onSwipe?: (event: TouchGestureEvent) => void
+  /** 向左滑动回调 */
+  onSwipeLeft?: (event: TouchGestureEvent) => void
+  /** 向右滑动回调 */
+  onSwipeRight?: (event: TouchGestureEvent) => void
+  /** 向上滑动回调 */
+  onSwipeUp?: (event: TouchGestureEvent) => void
+  /** 向下滑动回调 */
+  onSwipeDown?: (event: TouchGestureEvent) => void
+  /** 双指缩放回调 */
+  onPinch?: (event: TouchGestureEvent) => void
+  /** 旋转手势回调 */
+  onRotate?: (event: TouchGestureEvent) => void
+  /** 点击回调 */
+  onTap?: (event: TouchGestureEvent) => void
+  /** 长按回调 */
+  onLongPress?: (event: TouchGestureEvent) => void
+  /** 滑动阈值距离（像素） @default 30 */
+  swipeThreshold?: number
+  /** 长按持续时间（毫秒） @default 500 */
+  longPressDuration?: number
+  /** 点击最大持续时间（毫秒） @default 250 */
+  tapDuration?: number
+  /** 是否禁用 @default false */
+  disabled?: boolean | Ref<boolean>
+}
+
+interface UseTouchReturn {
+  /** 当前正在进行的手势 */
+  gesture: Readonly<Ref<TouchGesture | null>>
+  /** 绑定触摸事件到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## 示例
 
 ### 图片轮播

@@ -44,6 +44,56 @@ type FocusBinding = boolean | FocusOptions
 | `focus` | `boolean` | `true` | 挂载时聚焦元素 |
 | `refocus` | `boolean` | `false` | 元素再次显示时重新聚焦。**起始版本：** `1.0.0` |
 
+## Composable 用法
+
+你也可以使用 `useFocus` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useFocus } from 'directix'
+
+const inputRef = ref(null)
+const { isFocused, focus, blur, bind } = useFocus({
+  onBlur: () => validate()
+})
+
+onMounted(() => bind(inputRef.value))
+
+// 编程式聚焦
+function handleButtonClick() {
+  focus()
+}
+</script>
+
+<template>
+  <input ref="inputRef" />
+  <button @click="focus">聚焦输入框</button>
+</template>
+```
+
+### API
+
+```typescript
+interface UseFocusOptions {
+  /** 聚焦时的回调 */
+  onFocus?: (event: FocusEvent) => void
+  /** 失焦时的回调 */
+  onBlur?: (event: FocusEvent) => void
+}
+
+interface UseFocusReturn {
+  /** 元素是否聚焦 */
+  isFocused: Readonly<Ref<boolean>>
+  /** 聚焦元素 */
+  focus: () => void
+  /** 失焦元素 */
+  blur: () => void
+  /** 绑定焦点跟踪到元素 */
+  bind: (element: HTMLElement) => () => void
+}
+```
+
 ## 示例
 
 ### 弹窗输入框

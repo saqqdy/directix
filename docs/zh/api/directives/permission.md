@@ -46,3 +46,53 @@ configurePermission({
 | `mode` | `'some' \| 'every'` | `'some'` | 多个权限的逻辑 |
 | `action` | `'remove' \| 'disable' \| 'hide'` | `'remove'` | 拒绝时的操作 |
 | `check` | `Function` | - | 自定义检查函数 |
+
+## Composable 用法
+
+你也可以使用 `usePermission` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { usePermission } from 'directix'
+
+const { granted, recheck } = usePermission({
+  value: 'admin',
+  getPermissions: () => store.getters.permissions,
+  getRoles: () => store.getters.roles,
+  roleMap: { admin: ['*'], editor: ['read', 'write'] }
+})
+</script>
+
+<template>
+  <button v-if="granted">仅管理员可见</button>
+</template>
+```
+
+### API
+
+```typescript
+type PermissionMode = 'some' | 'every'
+
+interface UsePermissionOptions {
+  /** 要检查的权限值 */
+  value: string | string[] | Ref<string | string[]>
+  /** 多个权限的逻辑：'some'（OR）或 'every'（AND） @default 'some' */
+  mode?: PermissionMode | Ref<PermissionMode>
+  /** 自定义权限检查函数 */
+  check?: (permission: string | string[], mode: PermissionMode) => boolean
+  /** 获取当前用户权限 */
+  getPermissions?: () => string[]
+  /** 获取当前用户角色 */
+  getRoles?: () => string[]
+  /** 角色到权限的映射 */
+  roleMap?: Record<string, string[]>
+}
+
+interface UsePermissionReturn {
+  /** 权限是否已授予 */
+  granted: Readonly<Ref<boolean>>
+  /** 重新检查权限 */
+  recheck: () => void
+}
+```

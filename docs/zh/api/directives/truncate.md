@@ -63,6 +63,57 @@ type TruncateBinding = number | TruncateOptions
 | `class` | `string` | - | 自定义 CSS 类 |
 | `disabled` | `boolean` | `false` | 禁用截断 |
 
+## Composable 用法
+
+你也可以使用 `useTruncate` composable 来实现相同功能：
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { useTruncate } from 'directix'
+
+const longText = ref('这是一段很长的文本内容，将被截断处理')
+const { truncated, isTruncated } = useTruncate({
+  text: longText,
+  length: 20,
+  position: 'end'
+})
+</script>
+
+<template>
+  <span>{{ truncated }}</span>
+  <span v-if="isTruncated" :title="longText">...</span>
+</template>
+```
+
+### API
+
+```typescript
+type TruncatePosition = 'start' | 'middle' | 'end'
+
+interface UseTruncateOptions {
+  /** 要截断的文本 */
+  text: string | Ref<string>
+  /** 最大长度 @default 100 */
+  length?: number | Ref<number>
+  /** 截断位置 @default 'end' */
+  position?: TruncatePosition | Ref<TruncatePosition>
+  /** 省略字符串 @default '...' */
+  omission?: string
+}
+
+interface UseTruncateReturn {
+  /** 截断后的文本 */
+  truncated: Readonly<Ref<string>>
+  /** 文本是否被截断 */
+  isTruncated: Readonly<Ref<boolean>>
+  /** 原始文本长度 */
+  originalLength: Readonly<Ref<number>>
+  /** 截断自定义字符串 */
+  truncate: (text: string, length?: number, position?: TruncatePosition) => string
+}
+```
+
 ## 示例
 
 ### 中间截断
