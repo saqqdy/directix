@@ -36,9 +36,23 @@ app.use(Directix)`,
   Copy with Callback
 </button>`,
 			optionsCode: `interface CopyOptions {
-  value: string                        // 要复制的文本
-  onSuccess?: (text: string) => void   // 成功回调
-  onError?: (err: Error) => void       // 失败回调
+  value: string                        // Text to copy
+  onSuccess?: (text: string) => void   // Success callback
+  onError?: (err: Error) => void       // Error callback
+}`,
+			composableCode: `import { useCopy } from 'directix'
+
+const { copy, copied } = useCopy({
+  onSuccess: (text) => console.log('Copied:', text),
+  onError: (err) => console.error('Failed:', err)
+})
+
+// Copy text to clipboard
+await copy('Hello, World!')
+
+// Check if recently copied
+if (copied.value) {
+  console.log('Text was just copied')
 }`
 		}
 	},
@@ -148,6 +162,14 @@ app.use(Directix)`,
 			</div>
 		</DemoSection>
 
+		<!-- Composable API -->
+		<DemoSection title="Composable API - useCopy" description="Using useCopy composable for programmatic clipboard control">
+			<div class="demo-box">
+				<p class="hint">Control clipboard programmatically with the composable API</p>
+			</div>
+			<CodeBlock :code="composableCode" />
+		</DemoSection>
+
 		<!-- API Reference -->
 		<DemoSection title="API">
 			<CodeBlock :code="optionsCode" />
@@ -224,12 +246,12 @@ h1 {
 
 .input:focus {
 	outline: none;
-	border-color: #667eea;
+	border-color: #42b883;
 }
 
 .btn {
 	padding: 10px 20px;
-	background: #667eea;
+	background: #42b883;
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -239,7 +261,7 @@ h1 {
 }
 
 .btn:hover {
-	background: #5a6fd6;
+	background: #3aa876;
 }
 
 .btn.copied {

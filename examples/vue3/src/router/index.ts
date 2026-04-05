@@ -216,6 +216,97 @@ const routes = [
 		name: 'PullRefresh',
 		component: () => import('@/demos/pull-refresh.vue'),
 	},
+	// v1.4.0 directives
+	{
+		path: '/blur',
+		name: 'Blur',
+		component: () => import('@/demos/blur.vue'),
+	},
+	{
+		path: '/skeleton',
+		name: 'Skeleton',
+		component: () => import('@/demos/skeleton.vue'),
+	},
+	{
+		path: '/click-wave',
+		name: 'ClickWave',
+		component: () => import('@/demos/click-wave.vue'),
+	},
+	{
+		path: '/context-menu',
+		name: 'ContextMenu',
+		component: () => import('@/demos/context-menu.vue'),
+	},
+	{
+		path: '/counter',
+		name: 'Counter',
+		component: () => import('@/demos/counter.vue'),
+	},
+	{
+		path: '/emoji',
+		name: 'Emoji',
+		component: () => import('@/demos/emoji.vue'),
+	},
+	{
+		path: '/export',
+		name: 'Export',
+		component: () => import('@/demos/export.vue'),
+	},
+	{
+		path: '/fade',
+		name: 'Fade',
+		component: () => import('@/demos/fade.vue'),
+	},
+	{
+		path: '/fullscreen',
+		name: 'Fullscreen',
+		component: () => import('@/demos/fullscreen.vue'),
+	},
+	{
+		path: '/highlight',
+		name: 'Highlight',
+		component: () => import('@/demos/highlight.vue'),
+	},
+	{
+		path: '/lottie',
+		name: 'Lottie',
+		component: () => import('@/demos/lottie.vue'),
+	},
+	{
+		path: '/pan',
+		name: 'Pan',
+		component: () => import('@/demos/pan.vue'),
+	},
+	{
+		path: '/parallax',
+		name: 'Parallax',
+		component: () => import('@/demos/parallax.vue'),
+	},
+	{
+		path: '/pinch',
+		name: 'Pinch',
+		component: () => import('@/demos/pinch.vue'),
+	},
+	{
+		path: '/progress',
+		name: 'Progress',
+		component: () => import('@/demos/progress.vue'),
+	},
+	{
+		path: '/rotate-gesture',
+		name: 'RotateGesture',
+		component: () => import('@/demos/rotate-gesture.vue'),
+	},
+	{
+		path: '/typewriter',
+		name: 'Typewriter',
+		component: () => import('@/demos/typewriter.vue'),
+	},
+	{
+		path: '/chart',
+		name: 'Chart',
+		component: () => import('@/demos/chart.vue'),
+	},
 ]
 
 const router = createRouter({

@@ -26,11 +26,13 @@ const categoryDefinitions: CategoryDefinition[] = [
 		demos: [
 			{ path: '/click-outside', name: 'v-click-outside', desc: 'Click outside detection', version: '1.0.0' },
 			{ path: '/click-delay', name: 'v-click-delay', desc: 'Prevent repeated clicks', version: '1.3.0' },
+			{ path: '/click-wave', name: 'v-click-wave', desc: 'Click wave effect', version: '1.4.0' },
 			{ path: '/copy', name: 'v-copy', desc: 'Copy to clipboard', version: '1.0.0' },
 			{ path: '/debounce', name: 'v-debounce', desc: 'Debounce events', version: '1.0.0' },
 			{ path: '/throttle', name: 'v-throttle', desc: 'Throttle events', version: '1.0.0' },
 			{ path: '/focus', name: 'v-focus', desc: 'Auto focus', version: '1.0.0' },
 			{ path: '/hotkey', name: 'v-hotkey', desc: 'Keyboard shortcuts', version: '1.3.0' },
+			{ path: '/context-menu', name: 'v-context-menu', desc: 'Right-click menu', version: '1.4.0' },
 		],
 	},
 	{
@@ -41,6 +43,8 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/intersect', name: 'v-intersect', desc: 'Intersection observer', version: '1.1.0' },
 			{ path: '/visible', name: 'v-visible', desc: 'Visibility control', version: '1.1.0' },
 			{ path: '/loading', name: 'v-loading', desc: 'Loading overlay', version: '1.1.0' },
+			{ path: '/blur', name: 'v-blur', desc: 'Blur overlay effect', version: '1.4.0' },
+			{ path: '/skeleton', name: 'v-skeleton', desc: 'Skeleton loading', version: '1.4.0' },
 		],
 	},
 	{
@@ -50,6 +54,8 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/scroll', name: 'v-scroll', desc: 'Scroll event handler', version: '1.1.0' },
 			{ path: '/infinite-scroll', name: 'v-infinite-scroll', desc: 'Infinite scrolling', version: '1.1.0' },
 			{ path: '/sticky', name: 'v-sticky', desc: 'Sticky positioning', version: '1.1.0' },
+			{ path: '/parallax', name: 'v-parallax', desc: 'Parallax scrolling', version: '1.4.0' },
+			{ path: '/progress', name: 'v-progress', desc: 'Progress bar', version: '1.4.0' },
 		],
 	},
 	{
@@ -122,6 +128,42 @@ const categoryDefinitions: CategoryDefinition[] = [
 		icon: '📱',
 		demos: [
 			{ path: '/pull-refresh', name: 'v-pull-refresh', desc: 'Pull to refresh', version: '1.3.0' },
+			{ path: '/pan', name: 'v-pan', desc: 'Pan gesture', version: '1.4.0' },
+			{ path: '/pinch', name: 'v-pinch', desc: 'Pinch to zoom', version: '1.4.0' },
+			{ path: '/rotate-gesture', name: 'v-rotate-gesture', desc: 'Rotation gesture', version: '1.4.0' },
+		],
+	},
+	{
+		name: 'Animation',
+		icon: '✨',
+		demos: [
+			{ path: '/fade', name: 'v-fade', desc: 'Fade in/out', version: '1.4.0' },
+			{ path: '/typewriter', name: 'v-typewriter', desc: 'Typewriter effect', version: '1.4.0' },
+			{ path: '/counter', name: 'v-counter', desc: 'Number counter', version: '1.4.0' },
+			{ path: '/lottie', name: 'v-lottie', desc: 'Lottie animations', version: '1.4.0' },
+		],
+	},
+	{
+		name: 'Data',
+		icon: '📊',
+		demos: [
+			{ path: '/chart', name: 'v-chart', desc: 'Chart.js charts', version: '1.4.0' },
+			{ path: '/export', name: 'v-export', desc: 'Export data', version: '1.4.0' },
+			{ path: '/highlight', name: 'v-highlight', desc: 'Highlight keywords', version: '1.4.0' },
+		],
+	},
+	{
+		name: 'Media',
+		icon: '🎬',
+		demos: [
+			{ path: '/fullscreen', name: 'v-fullscreen', desc: 'Fullscreen mode', version: '1.4.0' },
+		],
+	},
+	{
+		name: 'Input',
+		icon: '⌨️',
+		demos: [
+			{ path: '/emoji', name: 'v-emoji', desc: 'Emoji filter', version: '1.4.0' },
 		],
 	},
 ]
@@ -381,6 +423,11 @@ body {
 .nav-version.v1-3-0 {
 	background: #fce4ec;
 	color: #c2185b;
+}
+
+.nav-version.v1-4-0 {
+	background: #e0f2fe;
+	color: #0369a1;
 }
 
 .nav-desc {
