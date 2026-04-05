@@ -216,7 +216,7 @@ const routes = [
 		name: 'PullRefresh',
 		component: () => import('@/demos/pull-refresh.vue'),
 	},
-	// v1.4.0 directives
+	// v1.5.0 directives
 	{
 		path: '/blur',
 		name: 'Blur',
