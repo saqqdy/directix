@@ -1613,13 +1613,18 @@ Click wave effect.
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useClickWave } from 'directix'
 
 // Composable usage
-const { enable, disable } = useClickWave({
+const buttonRef = ref(null)
+const { bind, trigger } = useClickWave({
   color: 'currentColor',
   duration: 500
 })
+
+// Bind to element on mount
+onMounted(() => bind(buttonRef.value))
 </script>
 ```
 

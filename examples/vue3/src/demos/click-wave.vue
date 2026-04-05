@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useClickWave } from 'directix'
@@ -13,11 +13,33 @@ const customColorClickCount = ref(0)
 // Scenario 3: With options
 const optionsClickCount = ref(0)
 
-// Composable API demo
-const { enable, disable } = useClickWave({
+// Composable API demo - demonstrates manual binding
+const waveRef = ref<HTMLElement | null>(null)
+const { bind, trigger } = useClickWave({
 	color: 'rgba(255, 255, 255, 0.4)',
 	duration: 600
 })
+
+// Bind wave effect on mount
+onMounted(() => {
+	if (waveRef.value) {
+		bind(waveRef.value)
+	}
+})
+
+// Manually trigger wave at center
+const triggerCenter = () => {
+	trigger()
+}
+
+// Manually trigger wave at custom position
+const triggerCustom = () => {
+	const el = waveRef.value
+	if (el) {
+		const rect = el.getBoundingClientRect()
+		trigger({ x: rect.width / 4, y: rect.height / 4 })
+	}
+}
 
 const basicCode = `<button v-click-wave>
   Click me for wave effect
@@ -41,16 +63,21 @@ const optionsCode = `<button v-click-wave="{
   Customized wave
 </button>`
 
-const composableCode = `import { useClickWave } from 'directix'
+const composableCode = `import { ref } from 'vue'
+import { useClickWave } from 'directix'
 
-const { enable, disable } = useClickWave({
+const buttonRef = ref(null)
+const { bind, trigger } = useClickWave({
   color: 'rgba(255, 255, 255, 0.4)',
   duration: 600
 })
 
-// Enable/disable wave effect
-enable()
-disable()`
+// Bind wave effect to element
+onMounted(() => bind(buttonRef.value))
+
+// Trigger wave manually
+trigger() // triggers at center
+trigger({ x: 50, y: 50 }) // triggers at custom position`
 </script>
 
 <template>
@@ -124,10 +151,13 @@ disable()`
 		<DemoSection title="Composable API - useClickWave" description="Using useClickWave composable">
 			<div class="demo-box">
 				<div class="button-group">
-					<button @click="enable()" class="btn-primary">Enable Wave</button>
-					<button @click="disable()" class="btn-secondary">Disable Wave</button>
+					<button ref="waveRef" class="btn-primary">
+						Click Me
+					</button>
+					<button @click="triggerCenter" class="btn-secondary">Trigger Center</button>
+					<button @click="triggerCustom" class="btn-secondary">Trigger Corner</button>
 				</div>
-				<p class="hint">Control wave effect programmatically</p>
+				<p class="hint">Wave bound on mount. Click first button for normal wave, or use trigger buttons for manual control.</p>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>

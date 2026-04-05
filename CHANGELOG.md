@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.5.0] - 2026-04-04
+## [1.5.0] - 2026-04-05
 
 ### Added
 
@@ -154,6 +154,15 @@ All 19 new directives have corresponding composable functions:
 
 - Updated README with all 60 directives and 60 composables
 - Improved directive count accuracy
+- Vue 2 demos now use consistent pattern with other demo files (`defineComponent` + `setup()`)
+- Improved Composable API demo section with interactive trigger buttons
+
+### Fixed
+
+- `useClickWave`: Fixed incorrect API documentation - the composable returns `{ bind, trigger }` instead of `{ enable, disable }`
+- Updated Vue 3 click-wave demo to correctly use `bind()` and `trigger()` methods
+- Updated Vue 2 click-wave demo to use Composition API with `defineComponent` + `setup()` pattern
+- Updated README.md and README_CN.md with correct `useClickWave` usage examples
 
 ---
 

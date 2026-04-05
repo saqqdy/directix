@@ -902,6 +902,33 @@ const list = Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `项目 ${i
 </template>
 ```
 
+### v-click-wave
+
+点击波纹效果。
+
+```vue
+<template>
+  <button v-click-wave>点击我</button>
+  <button v-click-wave="'rgba(255, 255, 255, 0.3)'">自定义颜色</button>
+  <button v-click-wave="{ color: 'red', duration: 400 }">自定义选项</button>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useClickWave } from 'directix'
+
+// 组合式API用法
+const buttonRef = ref(null)
+const { bind, trigger } = useClickWave({
+  color: 'rgba(255, 255, 255, 0.4)',
+  duration: 600
+})
+
+// 在挂载时绑定到元素
+onMounted(() => bind(buttonRef.value))
+</script>
+```
+
 ## API 参考
 
 ### DirectiveInstallOptions

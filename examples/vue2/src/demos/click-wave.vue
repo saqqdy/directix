@@ -1,28 +1,20 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
-import DemoSection from '@/components/DemoSection.vue'
-import CodeBlock from '@/components/CodeBlock.vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useClickWave } from 'directix'
 
 export default defineComponent({
 	name: 'ClickWaveDemo',
-	components: {
-		DemoSection,
-		CodeBlock,
-	},
-	data() {
-		return {
-			basicClickCount: 0,
-			customColorClickCount: 0,
-		}
-	},
-	computed: {
-		basicCode(): string {
-			return `<button v-click-wave>
+	setup() {
+		// Basic usage counter
+		const basicClickCount = ref(0)
+		const customColorClickCount = ref(0)
+
+		// Code examples
+		const basicCode = `<button v-click-wave>
   Click me for wave effect
 </button>`
-		},
-		colorCode(): string {
-			return `<!-- With custom color -->
+
+		const colorCode = `<!-- With custom color -->
 <button v-click-wave="'rgba(255, 255, 255, 0.3)'">
   Custom color wave
 </button>
@@ -31,29 +23,71 @@ export default defineComponent({
 <button v-click-wave="'#ff0000'">
   Red wave
 </button>`
-		},
-		optionsCode(): string {
-			return `<button v-click-wave="{
+
+		const optionsCode = `<button v-click-wave="{
   color: 'rgba(255, 255, 255, 0.4)',
   duration: 400,
   sizeRatio: 2
 }">
   Customized wave
 </button>`
-		},
-		composableCode(): string {
-			return `import { useClickWave } from 'directix'
 
-const { enable, disable } = useClickWave({
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useClickWave } from 'directix'
+
+const buttonRef = ref(null)
+const { bind, trigger } = useClickWave({
   color: 'rgba(255, 255, 255, 0.4)',
   duration: 600
 })
 
-// Enable/disable wave effect
-enable()
-disable()`
-		},
-	},
+// Bind wave effect to element
+onMounted(() => bind(buttonRef.value))
+
+// Trigger wave manually
+trigger() // triggers at center
+trigger({ x: 50, y: 50 }) // triggers at custom position`
+
+		// Composable API demo
+		const waveRef = ref<HTMLElement | null>(null)
+		const { bind, trigger } = useClickWave({
+			color: 'rgba(255, 255, 255, 0.4)',
+			duration: 600
+		})
+
+		// Bind wave effect on mount
+		onMounted(() => {
+			if (waveRef.value) {
+				bind(waveRef.value)
+			}
+		})
+
+		// Manually trigger wave at center
+		const triggerCenter = () => {
+			trigger()
+		}
+
+		// Manually trigger wave at custom position
+		const triggerCorner = () => {
+			const el = waveRef.value
+			if (el) {
+				const rect = el.getBoundingClientRect()
+				trigger({ x: rect.width / 4, y: rect.height / 4 })
+			}
+		}
+
+		return {
+			basicClickCount,
+			customColorClickCount,
+			basicCode,
+			colorCode,
+			optionsCode,
+			composableCode,
+			waveRef,
+			triggerCenter,
+			triggerCorner
+		}
+	}
 })
 </script>
 
@@ -65,18 +99,24 @@ disable()`
 		</p>
 
 		<!-- Scenario 1: Basic usage -->
-		<DemoSection title="Basic Usage" description="Click to see the wave effect">
+		<div class="demo-section">
+			<h2>Basic Usage</h2>
+			<p class="description">Click to see the wave effect</p>
 			<div class="demo-box">
 				<button v-click-wave class="btn-primary" @click="basicClickCount++">
 					Click me! ({{ basicClickCount }} clicks)
 				</button>
 				<p class="hint">Click the button to see the wave effect</p>
 			</div>
-			<CodeBlock :code="basicCode" />
-		</DemoSection>
+			<div class="code-block">
+				<pre><code>{{ basicCode }}</code></pre>
+			</div>
+		</div>
 
 		<!-- Scenario 2: Custom color -->
-		<DemoSection title="Custom Colors" description="Customize the wave color">
+		<div class="demo-section">
+			<h2>Custom Colors</h2>
+			<p class="description">Customize the wave color</p>
 			<div class="demo-box">
 				<div class="button-group">
 					<button v-click-wave="'rgba(255, 255, 255, 0.3)'" class="btn-primary" @click="customColorClickCount++">
@@ -91,11 +131,15 @@ disable()`
 				</div>
 				<p class="hint">Total clicks: {{ customColorClickCount }}</p>
 			</div>
-			<CodeBlock :code="colorCode" />
-		</DemoSection>
+			<div class="code-block">
+				<pre><code>{{ colorCode }}</code></pre>
+			</div>
+		</div>
 
 		<!-- Scenario 3: With options -->
-		<DemoSection title="With Options" description="Customize duration and size">
+		<div class="demo-section">
+			<h2>With Options</h2>
+			<p class="description">Customize duration and size</p>
 			<div class="demo-box">
 				<div class="button-group">
 					<button v-click-wave="{ color: 'rgba(255, 255, 255, 0.4)', duration: 400 }" class="btn-primary">
@@ -109,11 +153,15 @@ disable()`
 					</button>
 				</div>
 			</div>
-			<CodeBlock :code="optionsCode" />
-		</DemoSection>
+			<div class="code-block">
+				<pre><code>{{ optionsCode }}</code></pre>
+			</div>
+		</div>
 
 		<!-- Different button styles -->
-		<DemoSection title="Different Button Styles" description="Wave effect works with any button style">
+		<div class="demo-section">
+			<h2>Different Button Styles</h2>
+			<p class="description">Wave effect works with any button style</p>
 			<div class="demo-box">
 				<div class="button-group">
 					<button v-click-wave class="btn-small">Small</button>
@@ -122,18 +170,30 @@ disable()`
 					<button v-click-wave class="btn-outline">Outline</button>
 				</div>
 			</div>
-		</DemoSection>
+		</div>
 
 		<!-- Composable API -->
-		<DemoSection title="Composable API - useClickWave" description="Using useClickWave composable">
+		<div class="demo-section">
+			<h2>Composable API - useClickWave</h2>
+			<p class="description">Using useClickWave composable</p>
 			<div class="demo-box">
-				<p class="hint">Control wave effect programmatically with the composable API</p>
+				<div class="button-group">
+					<button ref="waveRef" class="btn-primary">
+						Click Me
+					</button>
+					<button @click="triggerCenter" class="btn-secondary">Trigger Center</button>
+					<button @click="triggerCorner" class="btn-secondary">Trigger Corner</button>
+				</div>
+				<p class="hint">Wave bound on mount. Click first button for normal wave, or use trigger buttons for manual control.</p>
 			</div>
-			<CodeBlock :code="composableCode" />
-		</DemoSection>
+			<div class="code-block">
+				<pre><code>{{ composableCode }}</code></pre>
+			</div>
+		</div>
 
 		<!-- API Reference -->
-		<DemoSection title="API">
+		<div class="demo-section">
+			<h2>API</h2>
 			<table class="api-table">
 				<thead>
 					<tr>
@@ -170,7 +230,7 @@ disable()`
 					</tr>
 				</tbody>
 			</table>
-		</DemoSection>
+		</div>
 	</div>
 </template>
 
@@ -186,6 +246,20 @@ h1 {
 .intro {
 	color: #666;
 	margin-bottom: 24px;
+}
+
+.demo-section {
+	margin-bottom: 32px;
+}
+
+.demo-section h2 {
+	margin-bottom: 8px;
+	font-size: 18px;
+}
+
+.description {
+	color: #666;
+	margin-bottom: 16px;
 }
 
 .demo-box {
@@ -221,6 +295,16 @@ h1 {
 
 .btn-primary:hover {
 	background: #3aa876;
+}
+
+.btn-secondary {
+	padding: 12px 24px;
+	background: #6b7280;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
 }
 
 .btn-light {
@@ -293,6 +377,22 @@ h1 {
 	font-size: 14px;
 	position: relative;
 	overflow: hidden;
+}
+
+.code-block {
+	background: #f4f4f5;
+	border-radius: 8px;
+	padding: 16px;
+	overflow-x: auto;
+}
+
+.code-block pre {
+	margin: 0;
+}
+
+.code-block code {
+	font-family: 'Monaco', 'Menlo', monospace;
+	font-size: 13px;
 }
 
 .api-table {
