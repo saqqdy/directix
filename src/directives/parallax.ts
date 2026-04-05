@@ -78,11 +78,11 @@ interface ParallaxState {
  */
 function normalizeOptions(binding: ParallaxBinding | undefined): ParallaxOptions {
 	if (typeof binding === 'boolean') {
-		return { enabled: binding }
+		return { enabled: binding, speed: 0.5 }
 	}
 
 	if (typeof binding === 'number') {
-		return { speed: binding }
+		return { speed: binding, enabled: true }
 	}
 
 	return {

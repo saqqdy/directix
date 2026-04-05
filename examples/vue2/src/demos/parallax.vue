@@ -11,8 +11,9 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			speed: 0.5,
-			reverseSpeed: 0.3,
+			speed1: 0.2,
+			speed2: 0.5,
+			speed3: 0.8,
 		}
 	},
 	computed: {
@@ -21,31 +22,20 @@ export default defineComponent({
 <div v-parallax>Parallax content</div>
 
 <!-- With speed factor -->
-<div v-parallax="0.3">Slower parallax</div>`
-		},
-		optionsCode(): string {
-			return `<div v-parallax="{
-  speed: 0.5,
-  reverse: true,
-  horizontal: false,
-  mobileBreakpoint: 768
-}">
-  Reverse parallax, disabled on mobile
+<div v-parallax="0.3">Slower parallax</div>
+
+<!-- With options -->
+<div v-parallax="{ speed: 0.5, reverse: true }">
+  Reverse parallax
 </div>`
 		},
-		composableCode(): string {
-			return `import { useParallax } from 'directix'
-
-const { offset, isActive, bind } = useParallax({
-  speed: 0.5,
-  reverse: false
-})
-
-// Bind to element
-onMounted(() => bind(containerRef.value))
-
-// Access current offset
-console.log('Parallax offset:', offset.value)`
+		multiCode(): string {
+			return `<!-- Multi-layer parallax -->
+<div class="scene">
+  <div v-parallax="0.1" class="layer far">Far layer</div>
+  <div v-parallax="0.5" class="layer mid">Middle layer</div>
+  <div v-parallax="0.9" class="layer near">Near layer</div>
+</div>`
 		},
 	},
 })
@@ -55,75 +45,93 @@ console.log('Parallax offset:', offset.value)`
 	<div class="demo-page">
 		<h1>v-parallax</h1>
 		<p class="intro">
-			A directive for creating parallax scrolling effects. Elements move at different speeds relative to scroll position for depth effects.
+			Creates parallax scrolling effects where elements move at different speeds relative to scroll position, creating depth and visual interest.
 		</p>
 
-		<!-- Scenario 1: Basic parallax -->
-		<DemoSection title="Basic Usage" description="Simple parallax effect">
+		<!-- Speed Comparison -->
+		<DemoSection title="Speed Comparison" description="Scroll inside the container to see different speeds">
 			<div class="demo-box">
-				<div class="parallax-container">
-					<div v-parallax="speed" class="parallax-layer">
-						<div class="parallax-content">
-							<h3>Parallax Layer</h3>
-							<p>Speed: {{ speed }}</p>
+				<div class="scroll-container">
+					<div class="scroll-content">
+						<div class="spacer"></div>
+
+						<div class="parallax-row">
+							<div class="speed-bar slow" v-parallax="speed1">
+								<span>Speed {{ speed1 }}</span>
+							</div>
 						</div>
+
+						<div class="spacer small"></div>
+
+						<div class="parallax-row">
+							<div class="speed-bar medium" v-parallax="speed2">
+								<span>Speed {{ speed2 }}</span>
+							</div>
+						</div>
+
+						<div class="spacer small"></div>
+
+						<div class="parallax-row">
+							<div class="speed-bar fast" v-parallax="speed3">
+								<span>Speed {{ speed3 }}</span>
+							</div>
+						</div>
+
+						<div class="spacer"></div>
 					</div>
 				</div>
+
 				<div class="controls">
 					<label>
-						Speed: {{ speed }}
-						<input type="range" v-model.number="speed" min="0.1" max="1" step="0.1" />
+						<span>Slow: {{ speed1 }}</span>
+						<input type="range" v-model.number="speed1" min="0" max="1" step="0.1" />
+					</label>
+					<label>
+						<span>Medium: {{ speed2 }}</span>
+						<input type="range" v-model.number="speed2" min="0" max="1" step="0.1" />
+					</label>
+					<label>
+						<span>Fast: {{ speed3 }}</span>
+						<input type="range" v-model.number="speed3" min="0" max="1" step="0.1" />
 					</label>
 				</div>
-				<p class="hint">Scroll the page to see the effect. Higher values = faster movement.</p>
+				<p class="hint">Scroll inside the container above to see elements move at different speeds</p>
 			</div>
 			<CodeBlock :code="basicCode" />
 		</DemoSection>
 
-		<!-- Scenario 2: Reverse direction -->
-		<DemoSection title="Reverse Direction" description="Parallax moving opposite to scroll">
+		<!-- Multi-Layer Scene -->
+		<DemoSection title="Multi-Layer Scene" description="Layers at different depths create 3D effect">
 			<div class="demo-box">
-				<div class="parallax-container">
-					<div
-						v-parallax="{
-							speed: reverseSpeed,
-							reverse: true
-						}"
-						class="parallax-layer reverse"
-					>
-						<div class="parallax-content">
-							<h3>Reverse Parallax</h3>
-							<p>Moves opposite to scroll</p>
+				<div class="scroll-container tall">
+					<div class="scroll-content">
+						<div class="spacer"></div>
+
+						<div class="scene">
+							<div v-parallax="0.15" class="scene-layer sky">
+								<div class="sun"></div>
+								<div class="cloud c1"></div>
+								<div class="cloud c2"></div>
+							</div>
+
+							<div v-parallax="0.4" class="scene-layer mountains">
+								<div class="mountain m1"></div>
+								<div class="mountain m2"></div>
+							</div>
+
+							<div v-parallax="0.7" class="scene-layer trees">
+								<span class="tree">🌲</span>
+								<span class="tree">🌳</span>
+								<span class="tree">🌲</span>
+							</div>
 						</div>
+
+						<div class="spacer"></div>
 					</div>
 				</div>
+				<p class="hint">Scroll to see layers at different depths</p>
 			</div>
-			<CodeBlock :code="optionsCode" />
-		</DemoSection>
-
-		<!-- Multi-layer demo -->
-		<DemoSection title="Multi-Layer Parallax" description="Multiple layers at different speeds">
-			<div class="demo-box">
-				<div class="multi-layer-container">
-					<div v-parallax="0.2" class="layer layer-1">
-						<span>Layer 1 (0.2)</span>
-					</div>
-					<div v-parallax="0.5" class="layer layer-2">
-						<span>Layer 2 (0.5)</span>
-					</div>
-					<div v-parallax="0.8" class="layer layer-3">
-						<span>Layer 3 (0.8)</span>
-					</div>
-				</div>
-				<p class="hint">Scroll to see layers move at different speeds</p>
-			</div>
-		</DemoSection>
-
-		<!-- Composable API -->
-		<DemoSection title="Composable API - useParallax" description="Using useParallax composable">
-			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
-			</div>
+			<CodeBlock :code="multiCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -142,7 +150,7 @@ console.log('Parallax offset:', offset.value)`
 						<td>speed</td>
 						<td>Number</td>
 						<td>0.5</td>
-						<td>Parallax speed factor (0-1)</td>
+						<td>Parallax speed factor (0-1). 0 = fixed, 1 = normal scroll</td>
 					</tr>
 					<tr>
 						<td>enabled</td>
@@ -167,12 +175,6 @@ console.log('Parallax offset:', offset.value)`
 						<td>Number</td>
 						<td>-</td>
 						<td>Disable below this width</td>
-					</tr>
-					<tr>
-						<td>minScroll / maxScroll</td>
-						<td>Number</td>
-						<td>-</td>
-						<td>Scroll position limits</td>
 					</tr>
 				</tbody>
 			</table>
@@ -201,49 +203,68 @@ h1 {
 	margin-bottom: 12px;
 }
 
-.parallax-container {
-	height: 200px;
-	overflow: hidden;
+/* Scroll Container */
+.scroll-container {
+	height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%);
 	border-radius: 8px;
+	border: 2px solid #ccc;
+}
+
+.scroll-container.tall {
+	height: 400px;
+}
+
+.scroll-content {
 	position: relative;
-	background: #333;
 }
 
-.parallax-layer {
-	position: relative;
-	height: 100%;
-	will-change: transform;
+.spacer {
+	height: 200px;
 }
 
-.parallax-layer.reverse {
-	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+.spacer.small {
+	height: 80px;
 }
 
-.parallax-content {
+/* Speed Bars */
+.parallax-row {
+	padding: 0 20px;
+}
+
+.speed-bar {
+	height: 60px;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 100%;
+	border-radius: 8px;
 	color: white;
-	text-align: center;
+	font-weight: 600;
+	font-size: 16px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.parallax-content h3 {
-	margin: 0 0 8px 0;
-	font-size: 20px;
+.speed-bar.slow {
+	background: linear-gradient(135deg, #42b883, #35495e);
 }
 
-.parallax-content p {
-	margin: 0;
-	opacity: 0.9;
+.speed-bar.medium {
+	background: linear-gradient(135deg, #f093fb, #f5576c);
 }
 
+.speed-bar.fast {
+	background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+/* Controls */
 .controls {
 	display: flex;
-	align-items: center;
+	gap: 24px;
 	justify-content: center;
 	margin-top: 16px;
+	flex-wrap: wrap;
 }
 
 .controls label {
@@ -255,53 +276,106 @@ h1 {
 	color: #666;
 }
 
-.controls input[type="range"] {
-	width: 200px;
+.controls input[type='range'] {
+	width: 120px;
 }
 
-.multi-layer-container {
+/* Scene */
+.scene {
 	position: relative;
-	height: 250px;
+	height: 280px;
 	overflow: hidden;
-	border-radius: 8px;
-	background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+	border-radius: 12px;
+	background: linear-gradient(to bottom, #87ceeb 0%, #b0e0e6 100%);
+	margin: 0 20px;
 }
 
-.layer {
+.scene-layer {
 	position: absolute;
 	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-	font-weight: bold;
+	height: 100%;
 }
 
-.layer-1 {
-	height: 80px;
+/* Sky */
+.sun {
+	position: absolute;
 	top: 30px;
-	background: rgba(66, 184, 131, 0.3);
+	right: 50px;
+	width: 50px;
+	height: 50px;
+	background: radial-gradient(circle, #ffd700, #ff8c00);
+	border-radius: 50%;
+	box-shadow: 0 0 30px #ffd700;
 }
 
-.layer-2 {
+.cloud {
+	position: absolute;
+	background: white;
+	border-radius: 50px;
+	opacity: 0.9;
+}
+
+.c1 {
+	top: 40px;
+	left: 20%;
+	width: 80px;
+	height: 30px;
+}
+
+.c2 {
+	top: 70px;
+	left: 60%;
+	width: 60px;
+	height: 25px;
+}
+
+/* Mountains */
+.mountains {
+	bottom: 0;
+	height: 150px;
+}
+
+.mountain {
+	position: absolute;
+	bottom: 0;
+	border-style: solid;
+	border-color: transparent transparent #6b7280 transparent;
+}
+
+.m1 {
+	left: 0;
+	border-width: 0 100px 120px 100px;
+}
+
+.m2 {
+	right: 0;
+	border-width: 0 120px 140px 120px;
+	border-color: transparent transparent #4b5563 transparent;
+}
+
+/* Trees */
+.trees {
+	bottom: 0;
 	height: 80px;
-	top: 90px;
-	background: rgba(118, 75, 162, 0.3);
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-end;
+	padding: 0 20px;
 }
 
-.layer-3 {
-	height: 80px;
-	top: 150px;
-	background: rgba(16, 185, 129, 0.3);
+.tree {
+	font-size: 40px;
 }
 
+/* Hint */
 .hint {
 	font-size: 13px;
 	color: #888;
-	margin-top: 12px;
+	margin-top: 16px;
 	text-align: center;
 }
 
+/* API Table */
 .api-table {
 	width: 100%;
 	border-collapse: collapse;
