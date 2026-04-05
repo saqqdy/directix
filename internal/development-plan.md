@@ -3613,11 +3613,36 @@ export default defineConfig({
 
 **里程碑 M7：v1.4.0 发布** ✅
 
+#### 第八阶段：v1.5.0 高价值指令扩展 (Week 10) ✅ 已完成
+
+| 指令 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| v-click-wave | 4h | P2 | - | ✅ 已完成 |
+| v-context-menu | 6h | P1 | - | ✅ 已完成 |
+| v-fullscreen | 3h | P2 | - | ✅ 已完成 |
+| v-skeleton | 4h | P3 | - | ✅ 已完成 |
+| v-export | 8h | P2 | - | ✅ 已完成 |
+| v-highlight | 4h | P3 | - | ✅ 已完成 |
+| v-emoji | 2h | P3 | - | ✅ 已完成 |
+| v-pan | 4h | P3 | - | ✅ 已完成 |
+| v-pinch | 4h | P3 | - | ✅ 已完成 |
+| v-rotate-gesture | 4h | P3 | - | ✅ 已完成 |
+| v-blur | 3h | P3 | - | ✅ 已完成 |
+| v-fade | 3h | P3 | - | ✅ 已完成 |
+| v-parallax | 6h | P3 | - | ✅ 已完成 |
+| v-lottie | 6h | P3 | - | ✅ 已完成 |
+| v-typewriter | 4h | P3 | - | ✅ 已完成 |
+| v-chart | 8h | P3 | Chart.js | ✅ 已完成 |
+| v-progress | 3h | P3 | - | ✅ 已完成 |
+| v-counter | 4h | P3 | - | ✅ 已完成 |
+
+**里程碑 M8：v1.5.0 发布** ✅
+
 ---
 
 ### 10.2 当前进度总览
 
-#### 已完成指令 (41/41) ✅ 全部完成
+#### 已完成指令 (60/60) ✅ 全部完成
 
 | 指令 | 功能描述 | SSR | 示例 | Composable | 版本 |
 |------|---------|-----|------|------------|------|
@@ -3661,10 +3686,28 @@ export default defineConfig({
 | v-pull-refresh | 下拉刷新 | ❌ | ✅ | ✅ | v1.3.0 |
 | v-swipe | 滑动切换 | ❌ | ✅ | ✅ | v1.3.0 |
 | v-virtual-list | 虚拟列表 | ❌ | ✅ | ✅ | v1.3.0 |
+| v-click-wave | 点击波纹效果 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-context-menu | 右键菜单 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-fullscreen | 全屏切换 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-skeleton | 骨架屏 | ✅ | ✅ | ✅ | v1.5.0 |
+| v-export | 数据导出 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-highlight | 关键词高亮 | ✅ | ✅ | ✅ | v1.5.0 |
+| v-emoji | Emoji过滤 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-pan | 平移手势 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-pinch | 缩放手势 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-rotate-gesture | 旋转手势 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-blur | 背景模糊遮罩 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-fade | 淡入淡出过渡 | ✅ | ✅ | ✅ | v1.5.0 |
+| v-parallax | 视差滚动效果 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-lottie | Lottie动画 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-typewriter | 打字机效果 | ✅ | ✅ | ✅ | v1.5.0 |
+| v-chart | 简易图表 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-progress | 进度条动画 | ❌ | ✅ | ✅ | v1.5.0 |
+| v-counter | 数字滚动动画 | ✅ | ✅ | ✅ | v1.5.0 |
 
-#### 已完成 Composables (41/41) ✅ v1.4.0 完成
+#### 已完成 Composables (60/60) ✅ v1.5.0 完成
 
-所有 41 个指令均已提供对应的组合式 API，详见 [10.3 当前版本亮点](#103-当前版本亮点v140)
+所有 60 个指令均已提供对应的组合式 API，详见 [10.3 当前版本亮点](#103-当前版本亮点v150)
 
 #### v1.2.0 新增指令 ✅ 已完成
 
@@ -3700,24 +3743,34 @@ export default defineConfig({
 
 暂无
 
-#### 待开发指令
+#### v1.5.0 新增指令 ✅ 已完成
 
-**P3 低优先级：**
-- v-skeleton - 骨架屏
-- v-click-wave - 点击波纹效果（v-ripple 的简化版）
-- v-export - 导出数据（CSV/Excel/图片）
-- v-highlight - 关键词高亮
-- v-emoji - 限制/过滤 emoji 输入
-- v-blur - 背景模糊遮罩
-- v-fade - 淡入淡出过渡
-- v-parallax - 视差滚动效果
-- v-lottie - Lottie 动画播放
+| 指令 | 功能描述 | SSR | 状态 |
+|------|---------|-----|------|
+| v-click-wave | 点击波纹效果（v-ripple 的简化版） | ❌ | ✅ |
+| v-context-menu | 右键菜单 | ❌ | ✅ |
+| v-fullscreen | 全屏切换 | ❌ | ✅ |
+| v-skeleton | 骨架屏 | ✅ | ✅ |
+| v-export | 导出数据（CSV/JSON/HTML/TXT） | ❌ | ✅ |
+| v-highlight | 关键词高亮 | ✅ | ✅ |
+| v-emoji | 限制/过滤 emoji 输入 | ❌ | ✅ |
+| v-pan | 平移手势 | ❌ | ✅ |
+| v-pinch | 缩放手势 | ❌ | ✅ |
+| v-rotate-gesture | 旋转手势 | ❌ | ✅ |
+| v-blur | 背景模糊遮罩 | ❌ | ✅ |
+| v-fade | 淡入淡出过渡 | ✅ | ✅ |
+| v-parallax | 视差滚动效果 | ❌ | ✅ |
+| v-lottie | Lottie 动画播放 | ❌ | ✅ |
+| v-typewriter | 打字机效果 | ✅ | ✅ |
+| v-chart | 简易图表绑定 | ❌ | ✅ |
+| v-progress | 进度条动画 | ❌ | ✅ |
+| v-counter | 数字滚动动画 | ✅ | ✅ |
 
-### 10.3 当前版本亮点（v1.4.0）
+### 10.3 当前版本亮点（v1.5.0）
 
 #### ✨ 组合式 API 完成
 
-所有 41 个指令都已提供对应的组合式 API (composables)，提供更灵活的使用方式：
+所有 60 个指令都已提供对应的组合式 API (composables)，提供更灵活的使用方式：
 
 | Composable | 对应指令 | 功能描述 |
 |------------|---------|---------|
@@ -3761,60 +3814,63 @@ export default defineConfig({
 | usePullRefresh | v-pull-refresh | 下拉刷新 |
 | useSwipe | v-swipe | 滑动切换 |
 | useVirtualList | v-virtual-list | 虚拟列表 |
+| useClickWave | v-click-wave | 点击波纹效果 |
+| useContextMenu | v-context-menu | 右键菜单 |
+| useFullscreen | v-fullscreen | 全屏切换 |
+| useSkeleton | v-skeleton | 骨架屏 |
+| useExport | v-export | 导出数据 |
+| useHighlight | v-highlight | 关键词高亮 |
+| useEmoji | v-emoji | Emoji 过滤 |
+| usePan | v-pan | 平移手势 |
+| usePinch | v-pinch | 缩放手势 |
+| useRotateGesture | v-rotate-gesture | 旋转手势 |
+| useBlur | v-blur | 背景模糊遮罩 |
+| useFade | v-fade | 淡入淡出过渡 |
+| useParallax | v-parallax | 视差滚动效果 |
+| useLottie | v-lottie | Lottie 动画播放 |
+| useTypewriter | v-typewriter | 打字机效果 |
+| useChart | v-chart | 简易图表绑定 |
+| useProgress | v-progress | 进度条动画 |
+| useCounter | v-counter | 数字滚动动画 |
 
 #### 📚 文档完善
 
-- ✅ 所有 41 个指令的完整 API 文档
-- ✅ 所有 41 个 composables 的使用文档
+- ✅ 所有 60 个指令的完整 API 文档
+- ✅ 所有 60 个 composables 的使用文档
 - ✅ 每个指令和 composable 都有交互式 Demo
 - ✅ Vue 2 和 Vue 3 示例项目
 
-### 10.4 v1.5.0 新增指令规划（共 20 个）
+### 10.4 v1.5.0 新增指令 ✅ 已完成
+
+共新增 19 个指令，所有指令均已包含对应的 composable：
 
 #### 🎯 高价值指令 (3个)
-
-| 指令 | 功能描述 | 优先级 | 预计工时 |
-|------|---------|--------|---------|
-| v-click-wave | 点击波纹效果（v-ripple 的简化版） | P2 | 4h |
-| v-context-menu | 右键菜单 | P1 | 6h |
-| v-fullscreen | 全屏切换 | P2 | 3h |
+- v-click-wave - 点击波纹效果
+- v-context-menu - 右键菜单
+- v-fullscreen - 全屏切换
 
 #### 🔧 实用工具指令 (3个)
-
-| 指令 | 功能描述 | 优先级 | 预计工时 |
-|------|---------|--------|---------|
-| v-skeleton | 骨架屏 | P3 | 4h |
-| v-export | 导出数据（CSV/Excel/图片） | P2 | 8h |
-| v-highlight | 关键词高亮 | P3 | 4h |
+- v-skeleton - 骨架屏
+- v-export - 导出数据（CSV/JSON/HTML/TXT）
+- v-highlight - 关键词高亮
 
 #### 📱 移动端专用 (4个)
-
-| 指令 | 功能描述 | 优先级 | 预计工时 |
-|------|---------|--------|---------|
-| v-emoji | 限制/过滤 emoji 输入 | P3 | 2h |
-| v-pan | 平移手势 | P3 | 4h |
-| v-pinch | 缩放手势 | P3 | 4h |
-| v-rotate | 旋转手势 | P3 | 4h |
+- v-emoji - 限制/过滤 emoji 输入
+- v-pan - 平移手势
+- v-pinch - 缩放手势
+- v-rotate-gesture - 旋转手势
 
 #### 🎨 视觉增强 (5个)
-
-| 指令 | 功能描述 | 优先级 | 预计工时 |
-|------|---------|--------|---------|
-| v-blur | 背景模糊遮罩 | P3 | 3h |
-| v-fade | 淡入淡出过渡 | P3 | 3h |
-| v-parallax | 视差滚动效果 | P3 | 6h |
-| v-lottie | Lottie 动画播放 | P3 | 6h |
-| v-typewriter | 打字机效果 | P3 | 4h |
+- v-blur - 背景模糊遮罩
+- v-fade - 淡入淡出过渡
+- v-parallax - 视差滚动效果
+- v-lottie - Lottie 动画播放
+- v-typewriter - 打字机效果
 
 #### 📊 数据可视化 (3个)
-
-| 指令 | 功能描述 | 优先级 | 预计工时 |
-|------|---------|--------|---------|
-| v-chart | 简易图表绑定 | P3 | 8h |
-| v-progress | 进度条动画 | P3 | 3h |
-| v-counter | 数字滚动动画 | P3 | 4h |
-
-**预计总工时：约 80 小时**
+- v-chart - 简易图表绑定
+- v-progress - 进度条动画
+- v-counter - 数字滚动动画
 
 ### 10.5 未来版本规划（v1.6.0+）
 
@@ -3839,7 +3895,7 @@ export default defineConfig({
 | v1.2.0 | 2026-03-29 | 扩展指令（11个新增）、格式化指令、UI指令 | ✅ 已完成 |
 | v1.3.0 | 2026-03-30 | 新增9个高价值指令（v-hotkey、v-click-delay、v-virtual-list等） | ✅ 已完成 |
 | v1.4.0 | 2026-04-01 | 组合式 API（41个 composables）、完整文档和示例 | ✅ 已完成 |
-| v1.5.0 | TBD | 新增 20 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等） | 📋 计划中 |
+| v1.5.0 | 2026-04-05 | 新增 19 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 60 个指令 | ✅ 已完成 |
 | v1.6.0 | TBD | 单元测试覆盖率提升、性能优化、Nuxt 模块 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 

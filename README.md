@@ -10,7 +10,7 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 
 ## Features
 
-- 🎯 **Comprehensive** - 40 commonly used directives and 40 composables
+- 🎯 **Comprehensive** - 60 commonly used directives and 60 composables
 - 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
@@ -214,6 +214,39 @@ See the [Composables](#composables) section below for all available composables.
 | `v-countdown` | Countdown timer display | ✅ |
 | `v-print` | Print element content | ❌ |
 | `v-watermark` | Watermark overlay | ✅ |
+| `v-skeleton` | Skeleton loading placeholder | ✅ |
+| `v-progress` | Progress bar animation | ❌ |
+| `v-counter` | Animated number counter | ✅ |
+
+### Gesture Directives
+
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-pan` | Pan/drag gesture | ❌ |
+| `v-pinch` | Pinch/zoom gesture | ❌ |
+| `v-rotate-gesture` | Rotation gesture | ❌ |
+
+### Visual Effect Directives
+
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-blur` | Background blur overlay | ❌ |
+| `v-fade` | Fade in/out transition | ✅ |
+| `v-parallax` | Parallax scrolling effect | ❌ |
+| `v-lottie` | Lottie animation player | ❌ |
+| `v-typewriter` | Typewriter animation | ✅ |
+| `v-click-wave` | Click wave effect | ❌ |
+
+### Data Directives
+
+| Directive | Description | SSR |
+|-----------|-------------|-----|
+| `v-chart` | Simple chart binding | ❌ |
+| `v-export` | Export data (CSV/JSON/HTML) | ❌ |
+| `v-highlight` | Keyword highlighting | ✅ |
+| `v-emoji` | Emoji input filter | ❌ |
+| `v-context-menu` | Right-click context menu | ❌ |
+| `v-fullscreen` | Fullscreen toggle | ❌ |
 
 > ✅ = SSR compatible | ❌ = Not SSR compatible
 
@@ -290,6 +323,24 @@ Every directive has a corresponding composable function for use with the Composi
 | `useCountdown` | Countdown timer |
 | `usePrint` | Print content |
 | `useWatermark` | Watermark overlay |
+| `useSkeleton` | Skeleton loading state |
+| `useProgress` | Progress bar control |
+| `useCounter` | Animated number counter |
+| `usePan` | Pan gesture detection |
+| `usePinch` | Pinch gesture detection |
+| `useRotateGesture` | Rotation gesture detection |
+| `useBlur` | Blur overlay control |
+| `useFade` | Fade transition control |
+| `useParallax` | Parallax scrolling |
+| `useLottie` | Lottie animation control |
+| `useTypewriter` | Typewriter effect |
+| `useChart` | Chart instance management |
+| `useExport` | Data export utilities |
+| `useHighlight` | Keyword highlighting |
+| `useEmoji` | Emoji filtering |
+| `useContextMenu` | Context menu control |
+| `useFullscreen` | Fullscreen mode control |
+| `useClickWave` | Click wave effect |
 
 ### Composable Usage Example
 
@@ -343,12 +394,19 @@ Detect clicks outside an element, useful for closing dropdowns, modals, etc.
 
 <script setup>
 import { ref } from 'vue'
+import { useClickOutside } from 'directix'
 
 const show = ref(false)
 
 function closeDropdown() {
   show.value = false
 }
+
+// Composable usage
+const containerRef = ref()
+useClickOutside(containerRef, () => {
+  show.value = false
+})
 </script>
 ```
 
@@ -368,6 +426,9 @@ Copy text to clipboard with a simple directive.
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useCopy } from 'directix'
+
 const textToCopy = 'Hello, World!'
 
 function handleSuccess(text) {
@@ -377,6 +438,10 @@ function handleSuccess(text) {
 function handleError(error) {
   console.error('Copy failed:', error)
 }
+
+// Composable usage
+const sourceText = ref('Hello World')
+const { copy, copied } = useCopy({ source: sourceText })
 </script>
 ```
 
@@ -397,9 +462,17 @@ Debounce event handlers to limit execution frequency.
 </template>
 
 <script setup>
+import { useDebounce } from 'directix'
+
 function handleInput(event) {
   console.log('Debounced input:', event.target.value)
 }
+
+// Composable usage
+const { run: debouncedSearch, cancel } = useDebounce({
+  handler: (query) => fetchResults(query),
+  wait: 500
+})
 </script>
 ```
 
@@ -422,9 +495,17 @@ Throttle event handlers to limit execution frequency.
 </template>
 
 <script setup>
+import { useThrottle } from 'directix'
+
 function handleClick() {
   console.log('Throttled click')
 }
+
+// Composable usage
+const { run: throttledScroll, cancel } = useThrottle({
+  handler: (position) => updatePosition(position),
+  wait: 100
+})
 </script>
 ```
 
@@ -440,6 +521,13 @@ Auto focus an element when mounted.
   <!-- With options -->
   <input v-focus="{ focus: true, refocus: true }" />
 </template>
+
+<script setup>
+import { useFocus } from 'directix'
+
+// Composable usage
+const { focus, blur, hasFocus } = useFocus()
+</script>
 ```
 
 ### v-permission
@@ -466,7 +554,7 @@ Control element visibility based on user permissions.
 </template>
 
 <script setup>
-import { configurePermission } from 'directix'
+import { configurePermission, usePermission } from 'directix'
 
 configurePermission({
   getPermissions: () => ['read', 'write'],
@@ -476,6 +564,10 @@ configurePermission({
     editor: ['read', 'write', 'edit']
   }
 })
+
+// Composable usage
+const { hasPermission, hasAnyPermission, hasAllPermissions } = usePermission()
+const canEdit = hasPermission('edit')
 </script>
 ```
 
@@ -491,6 +583,16 @@ Lazy load images when they enter the viewport.
   <!-- With placeholder and error image -->
   <img v-lazy="{ src: imageUrl, placeholder: '/placeholder.png', error: '/error.png' }" />
 </template>
+
+<script setup>
+import { useLazy } from 'directix'
+
+// Composable usage
+const { load, state, loaded } = useLazy({
+  src: 'image.jpg',
+  preload: 100
+})
+</script>
 ```
 
 ### v-mask
@@ -508,6 +610,16 @@ Input masking for formatted input.
   <!-- SSN -->
   <input v-mask="{ mask: '###-##-####', placeholder: '_' }" placeholder="SSN" />
 </template>
+
+<script setup>
+import { useMask } from 'directix'
+
+// Composable usage
+const { maskedValue, unmaskedValue, update } = useMask({
+  mask: '(###) ###-####',
+  value: '1234567890'
+})
+</script>
 ```
 
 ### v-loading
@@ -524,6 +636,19 @@ Show loading overlay on elements.
     Content with locked scroll
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { useLoading } from 'directix'
+
+const isLoading = ref(true)
+
+// Composable usage
+const { show, hide, setText } = useLoading({
+  text: 'Loading...',
+  lock: true
+})
+</script>
 ```
 
 ### v-sanitize
@@ -538,6 +663,16 @@ Sanitize HTML content to prevent XSS attacks.
   <!-- With custom allowed tags -->
   <div v-sanitize="{ html: userContent, allowedTags: ['b', 'i', 'u'] }"></div>
 </template>
+
+<script setup>
+import { useSanitize } from 'directix'
+
+// Composable usage
+const { sanitize, setAllowedTags } = useSanitize({
+  allowedTags: ['b', 'i', 'u', 'a']
+})
+const cleanHtml = sanitize(dirtyHtml)
+</script>
 ```
 
 ### v-tooltip
@@ -554,6 +689,16 @@ Display tooltips on hover or click.
     Click me
   </button>
 </template>
+
+<script setup>
+import { useTooltip } from 'directix'
+
+// Composable usage
+const { show, hide, updateContent, updatePosition } = useTooltip({
+  content: 'Tooltip content',
+  placement: 'top'
+})
+</script>
 ```
 
 ### v-image-preview
@@ -568,6 +713,15 @@ Preview images with zoom and gesture support.
   <!-- With options -->
   <img v-image-preview="{ src: 'thumbnail.jpg', previewSrc: 'full.jpg', enablePinchZoom: true }" />
 </template>
+
+<script setup>
+import { useImagePreview } from 'directix'
+
+// Composable usage
+const { open, close, zoom, rotate } = useImagePreview({
+  enablePinchZoom: true
+})
+</script>
 ```
 
 ### v-draggable
@@ -582,6 +736,16 @@ Make elements draggable.
   <!-- With constraints -->
   <div v-draggable="{ axis: 'x', bounds: 'parent' }">Horizontal drag only</div>
 </template>
+
+<script setup>
+import { useDraggable } from 'directix'
+
+// Composable usage
+const { position, isDragging, reset } = useDraggable({
+  axis: 'x',
+  bounds: 'parent'
+})
+</script>
 ```
 
 ### v-uppercase / v-lowercase / v-capitalcase
@@ -594,6 +758,15 @@ Transform text case.
   <input v-lowercase placeholder="Auto lowercase" />
   <input v-capitalcase placeholder="Capitalize first letter" />
 </template>
+
+<script setup>
+import { useUppercase, useLowercase, useCapitalcase } from 'directix'
+
+// Composable usage
+const { transform: toUppercase } = useUppercase()
+const { transform: toLowercase } = useLowercase()
+const { transform: toCapitalcase } = useCapitalcase()
+</script>
 ```
 
 ### v-truncate
@@ -608,6 +781,14 @@ Truncate text with ellipsis.
   <!-- With options -->
   <p v-truncate="{ length: 100, suffix: '...', position: 'end' }">Long text...</p>
 </template>
+
+<script setup>
+import { useTruncate } from 'directix'
+
+// Composable usage
+const { truncate } = useTruncate({ length: 100, suffix: '...' })
+const shortText = truncate(longText)
+</script>
 ```
 
 ### v-touch
@@ -622,6 +803,8 @@ Detect touch gestures.
 </template>
 
 <script setup>
+import { useTouch } from 'directix'
+
 function handleSwipe(direction) {
   console.log('Swiped:', direction) // 'left', 'right', 'up', 'down'
 }
@@ -629,6 +812,11 @@ function handleSwipe(direction) {
 function handlePinch(scale) {
   console.log('Pinched:', scale)
 }
+
+// Composable usage
+const { onSwipe, onPinch, onRotate } = useTouch({
+  onSwipe: handleSwipe
+})
 </script>
 ```
 
@@ -644,6 +832,13 @@ Trim input whitespace.
   <!-- Trim on input -->
   <input v-trim="{ position: 'both', event: 'input' }" />
 </template>
+
+<script setup>
+import { useTrim } from 'directix'
+
+// Composable usage
+const { trim, trimLeft, trimRight } = useTrim({ position: 'both' })
+</script>
 ```
 
 ### v-money
@@ -654,6 +849,14 @@ Currency format input.
 <template>
   <input v-money="{ prefix: '$', precision: 2 }" placeholder="Enter amount" />
 </template>
+
+<script setup>
+import { useMoney } from 'directix'
+
+// Composable usage
+const { format, parse } = useMoney({ prefix: '$', precision: 2 })
+const formatted = format(1234.56) // "$1,234.56"
+</script>
 ```
 
 ### v-number
@@ -664,6 +867,13 @@ Number format input.
 <template>
   <input v-number="{ precision: 2, min: 0, max: 100 }" placeholder="Enter number" />
 </template>
+
+<script setup>
+import { useNumber } from 'directix'
+
+// Composable usage
+const { format, parse } = useNumber({ precision: 2, min: 0, max: 100 })
+</script>
 ```
 
 ### v-click-delay
@@ -680,9 +890,17 @@ Delay click execution to prevent double clicks.
 </template>
 
 <script setup>
+import { useClickDelay } from 'directix'
+
 function handleClick() {
   console.log('Clicked (delayed)')
 }
+
+// Composable usage
+const { run: delayedClick, cancel } = useClickDelay({
+  handler: handleClick,
+  delay: 300
+})
 </script>
 ```
 
@@ -703,6 +921,8 @@ Countdown timer display.
 </template>
 
 <script setup>
+import { useCountdown } from 'directix'
+
 function handleTick(remaining) {
   console.log('Remaining:', remaining)
 }
@@ -710,6 +930,13 @@ function handleTick(remaining) {
 function handleComplete() {
   console.log('Countdown complete!')
 }
+
+// Composable usage
+const { start, pause, reset, remaining } = useCountdown({
+  time: 60,
+  onTick: handleTick,
+  onComplete: handleComplete
+})
 </script>
 ```
 
@@ -725,6 +952,13 @@ Text ellipsis overflow with tooltip.
   <!-- With custom lines -->
   <div v-ellipsis="{ lines: 2 }">Multi-line text with ellipsis</div>
 </template>
+
+<script setup>
+import { useEllipsis } from 'directix'
+
+// Composable usage
+const { isEllipsisActive, checkEllipsis } = useEllipsis({ lines: 1 })
+</script>
 ```
 
 ### v-hotkey
@@ -743,6 +977,8 @@ Keyboard shortcut binding.
 </template>
 
 <script setup>
+import { useHotkey } from 'directix'
+
 function handleSave() {
   console.log('Saving...')
 }
@@ -750,6 +986,11 @@ function handleSave() {
 function handleCopy() {
   console.log('Copying...')
 }
+
+// Composable usage
+const { bind, unbind, unbindAll } = useHotkey({
+  'ctrl+s': handleSave
+})
 </script>
 ```
 
@@ -766,6 +1007,19 @@ Print element content.
   <!-- Print self -->
   <div v-print="{ self: true }">Click to print this content</div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { usePrint } from 'directix'
+
+const printRef = ref()
+
+// Composable usage
+const { print, printElement } = usePrint({
+  onBefore: () => console.log('Printing...'),
+  onComplete: () => console.log('Printed!')
+})
+</script>
 ```
 
 ### v-pull-refresh
@@ -785,10 +1039,17 @@ Pull to refresh functionality.
 </template>
 
 <script setup>
+import { usePullRefresh } from 'directix'
+
 async function handleRefresh() {
   // Fetch new data
   await fetchData()
 }
+
+// Composable usage
+const { isLoading, disable, enable } = usePullRefresh({
+  handler: handleRefresh
+})
 </script>
 ```
 
@@ -809,9 +1070,17 @@ Swipe gesture detection with mouse support.
 </template>
 
 <script setup>
+import { useSwipe } from 'directix'
+
 function handleSwipe(direction) {
   console.log('Swiped:', direction) // 'left', 'right', 'up', 'down'
 }
+
+// Composable usage
+const { direction, lengthX, lengthY } = useSwipe({
+  onSwipe: handleSwipe,
+  threshold: 50
+})
 </script>
 ```
 
@@ -830,6 +1099,14 @@ Virtual list for rendering large datasets efficiently.
 
 <script setup>
 const list = Array.from({ length: 10000 }, (_, i) => ({ id: i, name: `Item ${i}` }))
+
+import { useVirtualList } from 'directix'
+
+// Composable usage
+const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
+  largeList,
+  { itemHeight: 50 }
+)
 </script>
 ```
 
@@ -849,6 +1126,601 @@ Watermark overlay.
     Content with watermark
   </div>
 </template>
+
+<script setup>
+import { useWatermark } from 'directix'
+
+// Composable usage
+const { show, hide, update } = useWatermark({
+  content: 'Confidential',
+  fontSize: 16,
+  color: '#ccc'
+})
+</script>
+```
+
+### v-blur
+
+Background blur overlay effect.
+
+```vue
+<template>
+  <!-- Simple blur -->
+  <div v-blur="isBlurred">Content behind blur</div>
+
+  <!-- With radius -->
+  <div v-blur="15">Blur with 15px radius</div>
+
+  <!-- With options -->
+  <div v-blur="{
+    visible: isBlurred,
+    radius: 20,
+    overlayColor: 'rgba(255, 255, 255, 0.3)',
+    lockScroll: true
+  }">
+    Content
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useBlur } from 'directix'
+
+const isBlurred = ref(false)
+
+// Composable usage
+const { show, hide, toggle } = useBlur({
+  radius: 10,
+  overlayColor: 'rgba(0, 0, 0, 0.5)'
+})
+</script>
+```
+
+### v-fade
+
+Fade in/out transition effect.
+
+```vue
+<template>
+  <!-- Toggle visibility with fade -->
+  <div v-fade="isVisible">Fade content</div>
+
+  <!-- Fade in only -->
+  <div v-fade="'in'">Fade in</div>
+
+  <!-- With options -->
+  <div v-fade="{
+    visible: isVisible,
+    duration: 500,
+    easing: 'ease-in-out',
+    onComplete: () => console.log('Fade complete')
+  }">
+    Content
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useFade } from 'directix'
+
+const isVisible = ref(true)
+
+// Composable usage
+const { fadeIn, fadeOut, toggle } = useFade({
+  duration: 300,
+  easing: 'ease'
+})
+</script>
+```
+
+### v-parallax
+
+Parallax scrolling effect.
+
+```vue
+<template>
+  <!-- Simple parallax -->
+  <div v-parallax>Parallax content</div>
+
+  <!-- With speed factor -->
+  <div v-parallax="0.3">Slower parallax</div>
+
+  <!-- With options -->
+  <div v-parallax="{
+    speed: 0.5,
+    reverse: true,
+    mobileBreakpoint: 768
+  }">
+    Reverse parallax, disabled on mobile
+  </div>
+</template>
+
+<script setup>
+import { useParallax } from 'directix'
+
+// Composable usage
+const { offset, progress, enabled } = useParallax({
+  speed: 0.5,
+  reverse: false
+})
+</script>
+```
+
+### v-lottie
+
+Lottie animation player.
+
+```vue
+<template>
+  <!-- With URL -->
+  <div v-lottie="'https://assets.example.com/animation.json'"></div>
+
+  <!-- With animation data -->
+  <div v-lottie="animationData"></div>
+
+  <!-- With options -->
+  <div v-lottie="{
+    animationData: animationData,
+    autoplay: true,
+    loop: true,
+    speed: 1.5,
+    onComplete: () => console.log('Done')
+  }"></div>
+</template>
+
+<script setup>
+import animationData from './animation.json'
+import { useLottie } from 'directix'
+
+// Composable usage
+const { play, pause, stop, setSpeed, setDirection } = useLottie({
+  animationData,
+  autoplay: true,
+  loop: true
+})
+</script>
+```
+
+### v-typewriter
+
+Typewriter animation effect.
+
+```vue
+<template>
+  <!-- Simple usage -->
+  <span v-typewriter="'Hello, World!'"></span>
+
+  <!-- With options -->
+  <span v-typewriter="{
+    text: 'Typing animation',
+    speed: 100,
+    cursor: '_',
+    onComplete: () => console.log('Done!')
+  }"></span>
+
+  <!-- Loop mode -->
+  <span v-typewriter="{
+    text: 'Loop animation',
+    loop: true,
+    deleteDelay: 1000
+  }"></span>
+</template>
+
+<script setup>
+import { useTypewriter } from 'directix'
+
+// Composable usage
+const { start, stop, pause, resume } = useTypewriter({
+  text: 'Hello World',
+  speed: 50,
+  loop: false
+})
+</script>
+```
+
+### v-chart
+
+Simple chart binding.
+
+```vue
+<template>
+  <canvas v-chart="chartConfig"></canvas>
+
+  <canvas v-chart="{
+    type: 'bar',
+    labels: ['Jan', 'Feb', 'Mar'],
+    datasets: [{
+      label: 'Sales',
+      data: [12, 19, 3],
+      backgroundColor: '#42b883'
+    }]
+  }"></canvas>
+</template>
+
+<script setup>
+import { useChart } from 'directix'
+
+// Composable usage
+const { chart, update, destroy } = useChart({
+  type: 'bar',
+  labels: ['Jan', 'Feb', 'Mar'],
+  datasets: [{ label: 'Sales', data: [12, 19, 3] }]
+})
+</script>
+```
+
+### v-export
+
+Export data (CSV/JSON/HTML/TXT).
+
+```vue
+<template>
+  <button v-export="exportData">Export CSV</button>
+
+  <button v-export="{ data: tableData, format: 'json', filename: 'my-data' }">
+    Export JSON
+  </button>
+
+  <button v-export="{
+    data: tableData,
+    format: 'csv',
+    columns: ['name', 'email'],
+    headers: { name: 'Name', email: 'Email Address' }
+  }">
+    Export with custom columns
+  </button>
+</template>
+
+<script setup>
+const tableData = [
+  { name: 'John', email: 'john@example.com', age: 30 },
+  { name: 'Jane', email: 'jane@example.com', age: 25 }
+]
+
+import { useExport } from 'directix'
+
+// Composable usage
+const { exportCSV, exportJSON, exportHTML } = useExport()
+</script>
+```
+
+### v-highlight
+
+Keyword highlighting.
+
+```vue
+<template>
+  <p v-highlight="'important'">This is an important message.</p>
+
+  <p v-highlight="['Vue', 'React']">Vue and React are popular frameworks.</p>
+
+  <p v-highlight="{
+    keywords: 'highlight',
+    className: 'my-highlight',
+    style: 'background: yellow; color: black;',
+    caseSensitive: true
+  }">
+    This will highlight the word.
+  </p>
+</template>
+
+<script setup>
+import { useHighlight } from 'directix'
+
+// Composable usage
+const { highlight, clear } = useHighlight({
+  keywords: ['important', 'key'],
+  className: 'highlight'
+})
+</script>
+```
+
+### v-emoji
+
+Emoji input filter.
+
+```vue
+<template>
+  <!-- Strip all emojis -->
+  <input v-emoji type="text" />
+
+  <!-- Strip emojis with replacement -->
+  <input v-emoji="{ strip: true, replacement: '*' }" type="text" />
+
+  <!-- Allow specific emojis -->
+  <input v-emoji="{ allowList: ['😊', '👍'] }" type="text" />
+
+  <!-- Block specific emojis -->
+  <input v-emoji="{ blockList: ['🚫', '❌'] }" type="text" />
+</template>
+
+<script setup>
+import { useEmoji } from 'directix'
+
+// Composable usage
+const { stripEmojis, containsEmoji } = useEmoji({
+  strip: true,
+  allowList: ['😊', '👍']
+})
+</script>
+```
+
+### v-context-menu
+
+Right-click context menu.
+
+```vue
+<template>
+  <div v-context-menu="menuItems">Right click here</div>
+  <div v-context-menu="{ items: menuItems, width: 200 }">Custom width</div>
+</template>
+
+<script setup>
+import { useContextMenu } from 'directix'
+
+const menuItems = [
+  { label: 'Copy', handler: () => console.log('Copy') },
+  { label: 'Paste', handler: () => console.log('Paste') },
+  { divider: true, label: '' },
+  { label: 'Delete', handler: () => console.log('Delete') }
+]
+
+// Composable usage
+const { show, hide, setItems } = useContextMenu({
+  items: menuItems
+})
+</script>
+```
+
+### v-fullscreen
+
+Fullscreen toggle.
+
+```vue
+<template>
+  <div v-fullscreen>
+    Content to show in fullscreen
+    <button @click="$el.toggleFullscreen()">Toggle</button>
+  </div>
+
+  <div v-fullscreen="{ fullscreenClass: 'my-fullscreen' }">
+    Custom fullscreen class
+  </div>
+</template>
+
+<script setup>
+import { useFullscreen } from 'directix'
+
+// Composable usage
+const { isFullscreen, enter, exit, toggle } = useFullscreen({
+  onEnter: () => console.log('Entered fullscreen'),
+  onExit: () => console.log('Exited fullscreen')
+})
+</script>
+```
+
+### v-skeleton
+
+Skeleton loading placeholder.
+
+```vue
+<template>
+  <!-- Basic usage -->
+  <div v-skeleton="isLoading">Content here</div>
+
+  <!-- With options -->
+  <div v-skeleton="{ loading: isLoading, animation: 'pulse', width: 200, height: 20 }">
+    Content here
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useSkeleton } from 'directix'
+
+const isLoading = ref(true)
+
+// Composable usage
+const { show, hide, update } = useSkeleton({
+  animation: 'wave',
+  color: '#e8e8e8'
+})
+</script>
+```
+
+### v-progress
+
+Progress bar animation.
+
+```vue
+<template>
+  <div v-progress="50">Progress at 50%</div>
+
+  <div v-progress="{
+    value: progressValue,
+    color: '#42b883',
+    height: 8,
+    showText: true
+  }">
+    Content
+  </div>
+
+  <div v-progress="{ indeterminate: true }">
+    Loading...
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useProgress } from 'directix'
+
+const progressValue = ref(50)
+
+// Composable usage
+const { setProgress, start, finish, fail } = useProgress({
+  color: '#42b883',
+  height: 4
+})
+</script>
+```
+
+### v-counter
+
+Animated number counter.
+
+```vue
+<template>
+  <span v-counter="1000">0</span>
+
+  <span v-counter="{
+    value: 10000,
+    duration: 3000,
+    decimals: 2,
+    useGrouping: true
+  }">0</span>
+
+  <span v-counter="{
+    value: targetValue,
+    formatter: (v) => '$' + v.toFixed(2)
+  }">0</span>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useCounter } from 'directix'
+
+const targetValue = ref(1000)
+
+// Composable usage
+const { start, pause, reset, update } = useCounter({
+  startValue: 0,
+  endValue: 1000,
+  duration: 2000,
+  formatter: (v) => `$${v.toFixed(2)}`
+})
+</script>
+```
+
+### v-click-wave
+
+Click wave effect.
+
+```vue
+<template>
+  <button v-click-wave>Click me</button>
+  <button v-click-wave="'rgba(255, 255, 255, 0.3)'">Custom color</button>
+  <button v-click-wave="{ color: 'red', duration: 400 }">Custom options</button>
+</template>
+
+<script setup>
+import { useClickWave } from 'directix'
+
+// Composable usage
+const { enable, disable } = useClickWave({
+  color: 'currentColor',
+  duration: 500
+})
+</script>
+```
+
+### v-pan
+
+Pan/drag gesture.
+
+```vue
+<template>
+  <div v-pan="handlePan">Swipe me</div>
+
+  <div v-pan="{
+    onPan: handlePan,
+    direction: 'horizontal',
+    threshold: 20
+  }">
+    Horizontal only
+  </div>
+</template>
+
+<script setup>
+import { usePan } from 'directix'
+
+function handlePan(e) {
+  console.log('Direction:', e.direction)
+  console.log('Distance:', e.distance)
+}
+
+// Composable usage
+const { isPanning, deltaX, deltaY } = usePan({
+  onPan: handlePan,
+  direction: 'horizontal'
+})
+</script>
+```
+
+### v-pinch
+
+Pinch/zoom gesture.
+
+```vue
+<template>
+  <div v-pinch="handlePinch">Pinch to zoom</div>
+
+  <div v-pinch="{
+    onPinch: handlePinch,
+    enableTransform: true,
+    minScale: 0.5,
+    maxScale: 3
+  }">
+    Pinch to scale
+  </div>
+</template>
+
+<script setup>
+import { usePinch } from 'directix'
+
+function handlePinch(e) {
+  console.log('Scale:', e.scale)
+  console.log('Center:', e.centerX, e.centerY)
+}
+
+// Composable usage
+const { scale, isPinching } = usePinch({
+  onPinch: handlePinch,
+  minScale: 0.5,
+  maxScale: 3
+})
+</script>
+```
+
+### v-rotate-gesture
+
+Rotation gesture.
+
+```vue
+<template>
+  <div v-rotate-gesture="handleRotate">Rotate with two fingers</div>
+
+  <div v-rotate-gesture="{
+    onRotate: handleRotate,
+    enableTransform: true
+  }">
+    Rotate with transform
+  </div>
+</template>
+
+<script setup>
+import { useRotateGesture } from 'directix'
+
+function handleRotate(e) {
+  console.log('Rotation:', e.rotation)
+  console.log('Angle:', e.angle)
+}
+
+// Composable usage
+const { angle, isRotating } = useRotateGesture({
+  onRotate: handleRotate,
+  enableTransform: true
+})
+</script>
 ```
 
 ## API Reference

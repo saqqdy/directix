@@ -10,7 +10,7 @@
 
 ## 特性
 
-- 🎯 **功能全面** - 提供 40 个常用指令和 40 个组合式函数
+- 🎯 **功能全面** - 提供 60 个常用指令和 60 个组合式函数
 - 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
@@ -214,6 +214,39 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 | `v-countdown` | 倒计时显示 | ✅ |
 | `v-print` | 打印元素内容 | ❌ |
 | `v-watermark` | 水印遮罩 | ✅ |
+| `v-skeleton` | 骨架屏加载占位 | ✅ |
+| `v-progress` | 进度条动画 | ❌ |
+| `v-counter` | 数字滚动动画 | ✅ |
+
+### 手势指令
+
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-pan` | 平移/拖拽手势 | ❌ |
+| `v-pinch` | 缩放手势 | ❌ |
+| `v-rotate-gesture` | 旋转手势 | ❌ |
+
+### 视觉效果指令
+
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-blur` | 背景模糊遮罩 | ❌ |
+| `v-fade` | 淡入淡出过渡 | ✅ |
+| `v-parallax` | 视差滚动效果 | ❌ |
+| `v-lottie` | Lottie 动画播放 | ❌ |
+| `v-typewriter` | 打字机动画 | ✅ |
+| `v-click-wave` | 点击波纹效果 | ❌ |
+
+### 数据指令
+
+| 指令 | 描述 | SSR |
+|-----------|-------------|-----|
+| `v-chart` | 简易图表绑定 | ❌ |
+| `v-export` | 导出数据（CSV/JSON/HTML） | ❌ |
+| `v-highlight` | 关键词高亮 | ✅ |
+| `v-emoji` | Emoji 输入过滤 | ❌ |
+| `v-context-menu` | 右键菜单 | ❌ |
+| `v-fullscreen` | 全屏切换 | ❌ |
 
 > ✅ = 支持 SSR | ❌ = 不支持 SSR
 
@@ -290,6 +323,24 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 | `useCountdown` | 倒计时 |
 | `usePrint` | 打印内容 |
 | `useWatermark` | 水印遮罩 |
+| `useSkeleton` | 骨架屏加载状态 |
+| `useProgress` | 进度条控制 |
+| `useCounter` | 数字滚动动画 |
+| `usePan` | 平移手势检测 |
+| `usePinch` | 缩放手势检测 |
+| `useRotateGesture` | 旋转手势检测 |
+| `useBlur` | 模糊遮罩控制 |
+| `useFade` | 淡入淡出控制 |
+| `useParallax` | 视差滚动效果 |
+| `useLottie` | Lottie 动画控制 |
+| `useTypewriter` | 打字机效果 |
+| `useChart` | 图表实例管理 |
+| `useExport` | 数据导出工具 |
+| `useHighlight` | 关键词高亮 |
+| `useEmoji` | Emoji 过滤 |
+| `useContextMenu` | 右键菜单控制 |
+| `useFullscreen` | 全屏模式控制 |
+| `useClickWave` | 点击波纹效果 |
 
 ### 组合式API使用示例
 

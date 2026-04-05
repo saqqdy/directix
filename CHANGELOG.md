@@ -2,6 +2,161 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-04-04
+
+### Added
+
+#### New Directives (19 new directives, total 60)
+
+##### High-Value Directives
+
+###### v-click-wave
+- Simplified ripple effect with easier configuration
+- Customizable color, duration, and size ratio
+- Perfect for buttons and interactive elements
+
+###### v-context-menu
+- Right-click context menu with full customization
+- Support for icons, dividers, and disabled items
+- Automatic viewport boundary detection
+- Custom render function support
+
+###### v-fullscreen
+- Toggle fullscreen mode for any element
+- Cross-browser support with vendor prefixes
+- Keyboard shortcut support (Escape to exit)
+- Callbacks for enter/exit/change events
+
+##### Utility Directives
+
+###### v-skeleton
+- Skeleton loading placeholder with animations
+- Multiple animation types: wave, pulse, none
+- Preserves original content dimensions
+- Toggle loading state dynamically
+
+###### v-export
+- Export data to CSV, JSON, HTML, or TXT
+- Custom column selection and header mapping
+- Before/after export callbacks
+- Automatic file download
+
+###### v-highlight
+- Highlight keywords in text content
+- Support for single or multiple keywords
+- Case-sensitive and whole-word options
+- Customizable highlight tag and style
+
+##### Mobile Gestures
+
+###### v-emoji
+- Filter or restrict emoji input
+- Allow list and block list support
+- Custom replacement character
+- Works with input and textarea elements
+
+###### v-pan
+- Pan/drag gesture detection
+- Support for touch and mouse events
+- Direction constraints (horizontal/vertical/all)
+- Threshold and velocity tracking
+
+###### v-pinch
+- Two-finger pinch/zoom gesture
+- Min/max scale constraints
+- Optional transform application
+- Center point tracking
+
+###### v-rotate-gesture
+- Two-finger rotation gesture
+- Optional transform application
+- Angle and rotation tracking
+- Works alongside pinch gesture
+
+##### Visual Enhancement
+
+###### v-blur
+- Background blur overlay effect
+- Customizable radius and overlay color
+- Scroll lock option
+- Show/hide callbacks
+
+###### v-fade
+- Fade in/out transition effect
+- Customizable duration and easing
+- Min/max opacity control
+- Direction support (in/out/toggle)
+
+###### v-parallax
+- Parallax scrolling effect
+- Adjustable speed factor
+- Horizontal/vertical support
+- Mobile breakpoint support
+
+###### v-lottie
+- Lottie animation player
+- Play/pause/stop controls
+- Speed and direction control
+- Loop and autoplay support
+
+###### v-typewriter
+- Typewriter text animation
+- Loop mode with delete animation
+- Customizable speed and cursor
+- Character-by-character callbacks
+
+##### Data Visualization
+
+###### v-chart
+- Simple chart binding with Chart.js
+- Multiple chart types: line, bar, pie, doughnut, radar, polarArea
+- Dynamic data updates
+- Auto-loading Chart.js library
+
+###### v-progress
+- Progress bar animation
+- Indeterminate mode support
+- Striped and animated patterns
+- Show percentage text option
+
+###### v-counter
+- Animated number counter
+- Multiple easing functions
+- Custom formatter support
+- Thousands separator
+
+#### New Composables (19 new composables)
+
+All 19 new directives have corresponding composable functions:
+
+| Composable | Directive | Description |
+|------------|-----------|-------------|
+| `useClickWave` | v-click-wave | Click wave effect |
+| `useContextMenu` | v-context-menu | Context menu control |
+| `useFullscreen` | v-fullscreen | Fullscreen mode control |
+| `useSkeleton` | v-skeleton | Skeleton loading state |
+| `useExport` | v-export | Data export utilities |
+| `useHighlight` | v-highlight | Keyword highlighting |
+| `useEmoji` | v-emoji | Emoji filtering |
+| `usePan` | v-pan | Pan gesture detection |
+| `usePinch` | v-pinch | Pinch gesture detection |
+| `useRotateGesture` | v-rotate-gesture | Rotation gesture detection |
+| `useBlur` | v-blur | Blur overlay control |
+| `useFade` | v-fade | Fade transition control |
+| `useParallax` | v-parallax | Parallax scrolling |
+| `useLottie` | v-lottie | Lottie animation control |
+| `useTypewriter` | v-typewriter | Typewriter effect |
+| `useChart` | v-chart | Chart instance management |
+| `useProgress` | v-progress | Progress bar control |
+| `useCounter` | v-counter | Animated number counter |
+
+### Changed
+
+- Updated README with all 60 directives and 60 composables
+- Improved directive count accuracy
+
+---
+
 ## [1.4.1] - 2026-04-01
 
 ### Fixed
@@ -582,12 +737,10 @@ None
 
 ## Roadmap
 
-### v1.5.0 (Planned)
-- `v-skeleton` - Skeleton loading component
-- `v-context-menu` - Right-click context menu
-- `v-fullscreen` - Fullscreen toggle
-- Nuxt module
-- Better documentation site
+### v1.6.0 (Planned)
+- Nuxt module for auto-import
+- Unit test coverage improvement
+- Performance optimization
 
 ### v2.0.0 (Future)
 - Vue 3 exclusive optimizations
