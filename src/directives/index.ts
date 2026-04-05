@@ -1,5 +1,11 @@
+export { default as blur, vBlur } from './blur'
+export type { BlurBinding, BlurOptions } from './blur'
+
 export { default as capitalcase, vCapitalcase } from './capitalcase'
 export type { CapitalcaseBinding, CapitalcaseOptions } from './capitalcase'
+
+export { default as chart, vChart } from './chart'
+export type { ChartBinding, ChartDataset, ChartOptions, ChartType } from './chart'
 
 export { default as clickDelay, vClickDelay } from './click-delay'
 export type { ClickDelayBinding, ClickDelayHandler, ClickDelayOptions } from './click-delay'
@@ -7,6 +13,12 @@ export type { ClickDelayBinding, ClickDelayHandler, ClickDelayOptions } from './
 // Event directives
 export { default as clickOutside, vClickOutside } from './click-outside'
 export type { ClickOutsideBinding, ClickOutsideHandler, ClickOutsideOptions } from './click-outside'
+
+export { default as clickWave, vClickWave } from './click-wave'
+export type { ClickWaveBinding, ClickWaveOptions } from './click-wave'
+
+export { default as contextMenu, vContextMenu } from './context-menu'
+export type { ContextMenuBinding, ContextMenuItem, ContextMenuOptions } from './context-menu'
 
 export { default as copy, vCopy } from './copy'
 export type { CopyBinding, CopyErrorCallback, CopyOptions, CopySuccessCallback } from './copy'
@@ -21,6 +33,9 @@ export type {
 	CountdownTime,
 } from './countdown'
 
+export { default as counter, vCounter } from './counter'
+export type { CounterBinding, CounterEasing, CounterOptions } from './counter'
+
 export { default as debounce, vDebounce } from './debounce'
 export type { DebounceBinding, DebouncedFunction, DebounceOptions } from './debounce'
 
@@ -30,8 +45,23 @@ export type { DraggableAxis, DraggableBinding, DraggableOptions } from './dragga
 export { default as ellipsis, vEllipsis } from './ellipsis'
 export type { EllipsisBinding, EllipsisOptions } from './ellipsis'
 
+export { default as emoji, vEmoji } from './emoji'
+export type { EmojiBinding, EmojiOptions } from './emoji'
+
+export { default as exportDirective, vExport } from './export'
+export type { ExportBinding, ExportFormat, ExportOptions } from './export'
+
+export { default as fade, vFade } from './fade'
+export type { FadeBinding, FadeDirection, FadeOptions } from './fade'
+
 export { default as focus, vFocus } from './focus'
 export type { FocusBinding, FocusOptions } from './focus'
+
+export { default as fullscreen, vFullscreen } from './fullscreen'
+export type { FullscreenBinding, FullscreenOptions } from './fullscreen'
+
+export { default as highlight, vHighlight } from './highlight'
+export type { HighlightBinding, HighlightOptions } from './highlight'
 
 export { default as hotkey, vHotkey } from './hotkey'
 export type { HotkeyBinding, HotkeyDefinition, HotkeyHandler, ModifierKey } from './hotkey'
@@ -59,6 +89,9 @@ export type { LoadingBinding, LoadingOptions } from './loading'
 export { default as longPress, vLongPress } from './long-press'
 export type { LongPressBinding, LongPressHandler, LongPressOptions } from './long-press'
 
+export { default as lottie, vLottie } from './lottie'
+export type { LottieAnimationState, LottieBinding, LottieOptions } from './lottie'
+
 export { default as lowercase, vLowercase } from './lowercase'
 export type { LowercaseBinding, LowercaseOptions } from './lowercase'
 
@@ -75,12 +108,25 @@ export type { MutationBinding, MutationHandler, MutationOptions } from './mutati
 export { default as number, vNumber } from './number'
 export type { NumberBinding, NumberOptions } from './number'
 
+// Gesture directives
+export { default as pan, vPan } from './pan'
+export type { PanBinding, PanEvent, PanOptions } from './pan'
+
+export { default as parallax, vParallax } from './parallax'
+export type { ParallaxBinding, ParallaxOptions } from './parallax'
+
 // Security directives
 export { configurePermission, getPermissionConfig, default as permission, vPermission } from './permission'
 export type { PermissionAction, PermissionBinding, PermissionConfig, PermissionOptions } from './permission'
 
+export { default as pinch, vPinch } from './pinch'
+export type { PinchBinding, PinchEvent, PinchOptions } from './pinch'
+
 export { default as print, vPrint } from './print'
 export type { PrintBeforeCallback, PrintBinding, PrintCompleteCallback, PrintOptions } from './print'
+
+export { default as progress, vProgress } from './progress'
+export type { ProgressBinding, ProgressOptions, ProgressPosition } from './progress'
 
 export { default as pullRefresh, vPullRefresh } from './pull-refresh'
 export type {
@@ -97,12 +143,18 @@ export type { ResizeBinding, ResizeHandler, ResizeInfo, ResizeOptions } from './
 export { default as ripple, vRipple } from './ripple'
 export type { RippleBinding, RippleOptions } from './ripple'
 
+export { default as rotateGesture, vRotateGesture } from './rotate-gesture'
+export type { RotateGestureBinding, RotateGestureEvent, RotateGestureOptions } from './rotate-gesture'
+
 export { default as sanitize, vSanitize } from './sanitize'
 export type { SanitizeBinding, SanitizeHandler, SanitizeOptions } from './sanitize'
 
 // Scroll directives
 export { default as scroll, vScroll } from './scroll'
 export type { ScrollBinding, ScrollHandler, ScrollInfo, ScrollOptions } from './scroll'
+
+export { default as skeleton, vSkeleton } from './skeleton'
+export type { SkeletonAnimation, SkeletonBinding, SkeletonOptions } from './skeleton'
 
 export { default as sticky, vSticky } from './sticky'
 export type { StickyBinding, StickyOptions } from './sticky'
@@ -126,6 +178,9 @@ export type { TrimBinding, TrimOptions, TrimPosition } from './trim'
 // Format directives
 export { default as truncate, vTruncate } from './truncate'
 export type { TruncateBinding, TruncateOptions, TruncatePosition } from './truncate'
+
+export { default as typewriter, vTypewriter } from './typewriter'
+export type { TypewriterBinding, TypewriterOptions } from './typewriter'
 
 export { default as uppercase, vUppercase } from './uppercase'
 export type { UppercaseBinding, UppercaseOptions } from './uppercase'
