@@ -1,4 +1,5 @@
 import { defineDirective } from '@directix/core'
+import { isInputElement } from '@directix/shared'
 import { clampValue, formatNumber, type NumberFormatOptions, parseToNumber, setupNumberInput } from '../utils/number'
 
 /**
@@ -25,7 +26,7 @@ export const vNumber = defineDirective<NumberBinding, HTMLElement>({
 	mounted(el, binding) {
 		const options: NumberOptions = typeof binding.value === 'number' ? { precision: binding.value } : (binding.value ?? {})
 
-		if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+		if (isInputElement(el)) {
 			const cleanup = setupNumberInput(el as HTMLInputElement, options, formatNumber)
 
 			;(el as any).__number = { options, cleanup }
@@ -77,7 +78,7 @@ export const vNumber = defineDirective<NumberBinding, HTMLElement>({
 
 		if (state) {
 			state.options = options
-		} else if (!(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+		} else if (!isInputElement(el)) {
 			// Only format non-input elements on update
 			let value: number | null = null
 

@@ -1,4 +1,5 @@
 import { defineDirective } from '@directix/core'
+import { isInputElement } from '@directix/shared'
 import { clampValue, type NumberFormatOptions, parseToNumber, setupNumberInput } from '../utils/number'
 
 /**
@@ -49,7 +50,7 @@ export const vMoney = defineDirective<MoneyBinding, HTMLElement>({
 		// Set defaults for money
 		options.precision = options.precision ?? 2
 
-		if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+		if (isInputElement(el)) {
 			const { symbol = '$', symbolPosition = 'before' } = options
 			// For money, prefix is the symbol when positioned before
 			const prefix = symbolPosition === 'before' ? symbol : ''
@@ -105,7 +106,7 @@ export const vMoney = defineDirective<MoneyBinding, HTMLElement>({
 
 		if (state) {
 			state.options = options
-		} else if (!(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+		} else if (!isInputElement(el)) {
 			// Only format non-input elements on update
 			let value: number | null = null
 

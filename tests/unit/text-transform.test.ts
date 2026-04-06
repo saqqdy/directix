@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
-	setupTextTransformInput,
-	transformTextContent,
 	isInputElement,
+	setupTextTransformInput,
 	type TextTransformOptions,
+	transformTextContent,
 } from '../../src/utils/text-transform'
 
 describe('text-transform utils', () => {
@@ -34,7 +34,7 @@ describe('text-transform utils', () => {
 			const input = document.createElement('input')
 			input.value = 'hello'
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text.toUpperCase())
 
 			expect(input.value).toBe('HELLO')
 			cleanup()
@@ -44,7 +44,7 @@ describe('text-transform utils', () => {
 			const input = document.createElement('input')
 			input.value = ''
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text.toUpperCase())
 
 			// Simulate input
 			input.value = 'world'
@@ -61,7 +61,7 @@ describe('text-transform utils', () => {
 			const cleanup = setupTextTransformInput(
 				input,
 				{ onInput: false } as TextTransformOptions,
-				(text) => text.toUpperCase(),
+				text => text.toUpperCase(),
 			)
 
 			expect(input.value).toBe('hello')
@@ -78,7 +78,7 @@ describe('text-transform utils', () => {
 			const input = document.createElement('input')
 			input.value = ''
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text.toUpperCase())
 
 			// Simulate input with cursor position
 			input.value = 'hello'
@@ -97,7 +97,7 @@ describe('text-transform utils', () => {
 			const inputHandler = vi.fn()
 			input.addEventListener('input', inputHandler)
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text.toUpperCase())
 
 			// Simulate input
 			input.value = 'hello'
@@ -120,7 +120,7 @@ describe('text-transform utils', () => {
 				return originalDispatch(event)
 			}
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text)
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text)
 
 			const initialCount = dispatchCount
 
@@ -137,7 +137,7 @@ describe('text-transform utils', () => {
 			const input = document.createElement('input')
 			input.value = ''
 
-			const cleanup = setupTextTransformInput(input, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(input, { onInput: true }, text => text.toUpperCase())
 
 			// Verify it works before cleanup
 			input.value = 'hello'
@@ -157,7 +157,7 @@ describe('text-transform utils', () => {
 			const textarea = document.createElement('textarea')
 			textarea.value = 'hello'
 
-			const cleanup = setupTextTransformInput(textarea, { onInput: true }, (text) => text.toUpperCase())
+			const cleanup = setupTextTransformInput(textarea, { onInput: true }, text => text.toUpperCase())
 
 			expect(textarea.value).toBe('HELLO')
 			cleanup()
@@ -169,7 +169,7 @@ describe('text-transform utils', () => {
 			const div = document.createElement('div')
 			div.textContent = 'hello world'
 
-			transformTextContent(div, (text) => text.toUpperCase())
+			transformTextContent(div, text => text.toUpperCase())
 
 			expect(div.textContent).toBe('HELLO WORLD')
 		})
@@ -178,7 +178,7 @@ describe('text-transform utils', () => {
 			const div = document.createElement('div')
 			div.textContent = ''
 
-			transformTextContent(div, (text) => text.toUpperCase())
+			transformTextContent(div, text => text.toUpperCase())
 
 			expect(div.textContent).toBe('')
 		})
@@ -187,7 +187,7 @@ describe('text-transform utils', () => {
 			const div = document.createElement('div')
 			div.textContent = null as unknown as string
 
-			transformTextContent(div, (text) => text.toUpperCase())
+			transformTextContent(div, text => text.toUpperCase())
 
 			expect(div.textContent).toBe('')
 		})
@@ -196,7 +196,7 @@ describe('text-transform utils', () => {
 			const div = document.createElement('div')
 			div.textContent = '  hello  world  '
 
-			transformTextContent(div, (text) => text.trim())
+			transformTextContent(div, text => text.trim())
 
 			expect(div.textContent).toBe('hello  world')
 		})
@@ -205,7 +205,7 @@ describe('text-transform utils', () => {
 			const div = document.createElement('div')
 			div.textContent = 'hello!@#$%^&*()world'
 
-			transformTextContent(div, (text) => text.toUpperCase())
+			transformTextContent(div, text => text.toUpperCase())
 
 			expect(div.textContent).toBe('HELLO!@#$%^&*()WORLD')
 		})

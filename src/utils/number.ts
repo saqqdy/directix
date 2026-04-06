@@ -2,6 +2,8 @@
  * Shared utilities for number and money formatting directives
  */
 
+import { clamp } from '@directix/shared'
+
 /**
  * Base options shared by number and money formatting
  */
@@ -63,10 +65,8 @@ export function clampValue(value: number, options: NumberFormatOptions): number 
 	if (!allowNegative && result < 0) {
 		result = Math.abs(result)
 	}
-	if (options.min !== undefined) result = Math.max(options.min, result)
-	if (options.max !== undefined) result = Math.min(options.max, result)
 
-	return result
+	return clamp(result, options.min, options.max)
 }
 
 /**

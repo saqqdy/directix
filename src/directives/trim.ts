@@ -1,4 +1,5 @@
 import { defineDirective } from '@directix/core'
+import { escapeRegex, isInputElement } from '@directix/shared'
 
 /**
  * Trim position
@@ -70,13 +71,6 @@ function trimText(text: string, options: TrimOptions): string {
 }
 
 /**
- * Escape special regex characters
- */
-function escapeRegex(str: string): string {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-/**
  * v-trim directive
  *
  * @example
@@ -106,7 +100,7 @@ export const vTrim = defineDirective<TrimBinding, HTMLElement>({
 	mounted(el, binding) {
 		const options = normalizeOptions(binding.value)
 
-		if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+		if (isInputElement(el)) {
 			setupInputElement(el as HTMLInputElement | HTMLTextAreaElement, options)
 		} else {
 			// For non-input elements, trim text content
@@ -120,7 +114,7 @@ export const vTrim = defineDirective<TrimBinding, HTMLElement>({
 		const options = normalizeOptions(binding.value)
 		const state: TrimState | undefined = (el as any).__trim
 
-		if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+		if (isInputElement(el)) {
 			// For input elements, trimming happens on blur/input events
 			if (state) {
 				state.options = options

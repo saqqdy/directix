@@ -1,5 +1,5 @@
 import { defineDirective, isBrowser } from '@directix/core'
-import { off, on } from '@directix/shared'
+import { ensureOverflowHidden, ensurePosition, off, on } from '@directix/shared'
 
 /**
  * Ripple directive options
@@ -178,17 +178,9 @@ export const vRipple = defineDirective<RippleBinding, HTMLElement>({
 
 		if (options.disabled || !isBrowser()) return
 
-		// Ensure element has proper positioning
-		const computedStyle = getComputedStyle(el)
-
-		if (computedStyle.position === 'static') {
-			el.style.position = 'relative'
-		}
-
-		// Ensure overflow is hidden to contain ripple
-		if (computedStyle.overflow === 'visible') {
-			el.style.overflow = 'hidden'
-		}
+		// Ensure element has proper positioning and overflow
+		ensurePosition(el)
+		ensureOverflowHidden(el)
 
 		// Add base class
 		el.classList.add('v-ripple')

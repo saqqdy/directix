@@ -1,4 +1,5 @@
 import { defineDirective, isBrowser, supportsResizeObserver } from '@directix/core'
+import { ensurePosition } from '@directix/shared'
 
 /**
  * Resize event handler
@@ -177,12 +178,8 @@ export const vResize = defineDirective<ResizeBinding, HTMLElement>({
 
 		if (options.disabled || !isBrowser()) return
 
-		// Ensure element has relative or absolute positioning for fallback
-		const computedStyle = getComputedStyle(el)
-
-		if (computedStyle.position === 'static') {
-			el.style.position = 'relative'
-		}
+		// Ensure element has relative positioning for fallback
+		ensurePosition(el)
 
 		const state: ResizeState = {
 			options,

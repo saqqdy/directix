@@ -1,5 +1,5 @@
 import { defineDirective, isBrowser } from '@directix/core'
-import { off, on } from '@directix/shared'
+import { isInputElement, off, on } from '@directix/shared'
 
 const STATE_KEY = '__mask' as const
 
@@ -62,10 +62,6 @@ function normalizeOptions(binding: MaskBinding | undefined): MaskOptions {
 	if (!binding?.mask) throw new Error('[Directix] v-mask: mask is required')
 
 	return { placeholder: '_', showPlaceholder: true, showMaskOnBlur: false, clearIncomplete: false, disabled: false, ...binding }
-}
-
-function isInput(el: HTMLElement): el is HTMLInputElement | HTMLTextAreaElement {
-	return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
 }
 
 /**
@@ -158,7 +154,7 @@ export const vMask = defineDirective<MaskBinding, HTMLInputElement>({
 	defaults: { placeholder: '_', showPlaceholder: true, showMaskOnBlur: false, clearIncomplete: false, disabled: false },
 
 	mounted(el, binding) {
-		if (!isInput(el)) {
+		if (!isInputElement(el)) {
 			console.warn('[Directix] v-mask: directive must be used on input or textarea elements')
 
 			return

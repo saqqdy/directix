@@ -1,4 +1,5 @@
 import { defineDirective, isBrowser } from '@directix/core'
+import { ensurePosition } from '@directix/shared'
 
 /**
  * Loading directive options
@@ -174,9 +175,6 @@ export const vLoading = defineDirective<LoadingBinding, HTMLElement>({
 
 		if (options.disabled) return
 
-		// Ensure element has relative positioning
-		const computedStyle = getComputedStyle(el)
-
 		const originalPosition = el.style.position
 		const originalOverflow = el.style.overflow
 
@@ -190,9 +188,8 @@ export const vLoading = defineDirective<LoadingBinding, HTMLElement>({
 		// Store state
 		;(el as any).__loading = state
 
-		if (computedStyle.position === 'static') {
-			el.style.position = 'relative'
-		}
+		// Ensure element has relative positioning
+		ensurePosition(el)
 
 		// Show loading if value is true
 		if (options.value) {

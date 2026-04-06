@@ -3,6 +3,11 @@
  * (uppercase, lowercase, capitalcase, trim)
  */
 
+import { isInputElement } from '@directix/shared'
+
+// Re-export isInputElement for convenience
+export { isInputElement }
+
 /**
  * Base options for text transform directives
  */
@@ -61,11 +66,4 @@ export function transformTextContent(el: HTMLElement, transformFn: (text: string
 	const text = el.textContent || ''
 
 	el.textContent = transformFn(text)
-}
-
-/**
- * Check if element is an input or textarea
- */
-export function isInputElement(el: HTMLElement): el is HTMLInputElement | HTMLTextAreaElement {
-	return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
 }

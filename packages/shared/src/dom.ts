@@ -165,3 +165,33 @@ export function matches(el: Element, selector: string): boolean {
 export function closest(el: Element, selector: string): Element | null {
 	return el.closest(selector)
 }
+
+/**
+ * Check if element is an input or textarea
+ */
+export function isInputElement(el: Element): el is HTMLInputElement | HTMLTextAreaElement {
+	return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+}
+
+/**
+ * Ensure element has specified position (set to relative if static)
+ * @param el - Target element
+ * @param position - Desired position value
+ */
+export function ensurePosition(el: HTMLElement, position: 'relative' | 'absolute' = 'relative'): void {
+	if (!isBrowser()) return
+	if (getComputedStyle(el).position === 'static') {
+		el.style.position = position
+	}
+}
+
+/**
+ * Ensure element has overflow hidden (to contain child elements like ripple)
+ * @param el - Target element
+ */
+export function ensureOverflowHidden(el: HTMLElement): void {
+	if (!isBrowser()) return
+	if (getComputedStyle(el).overflow === 'visible') {
+		el.style.overflow = 'hidden'
+	}
+}

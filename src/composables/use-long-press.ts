@@ -1,4 +1,5 @@
 import { isBrowser } from '@directix/core'
+import { getDistance, getEventPosition } from '@directix/shared'
 import { onUnmounted, ref, type Ref, unref } from 'vue'
 
 /**
@@ -76,32 +77,6 @@ export interface UseLongPressReturn {
 }
 
 /**
- * Get position from mouse/touch event
- */
-function getEventPosition(e: MouseEvent | TouchEvent): { x: number, y: number } {
-	if ('touches' in e && e.touches.length > 0) {
-		return {
-			x: e.touches[0].clientX,
-			y: e.touches[0].clientY,
-		}
-	}
-	if ('clientX' in e) {
-		return {
-			x: e.clientX,
-			y: e.clientY,
-		}
-	}
-	return { x: 0, y: 0 }
-}
-
-/**
- * Calculate distance between two points
- */
-function getDistance(p1: { x: number, y: number }, p2: { x: number, y: number }): number {
-	return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
-}
-
-/**
  * Composable for detecting long press gestures
  *
  * @param options - Configuration options
@@ -163,7 +138,8 @@ export function useLongPress(options: UseLongPressOptions = {}): UseLongPressRet
 		clearTimers()
 
 		// Store start position
-		startPos = getEventPosition(event)
+		const pos = getEventPosition(event)
+		startPos = { x: pos.x, y: pos.y }
 		startPosSet = true
 		isPressing.value = true
 
@@ -200,7 +176,7 @@ export function useLongPress(options: UseLongPressOptions = {}): UseLongPressRet
 		if (!isPressing.value || !startPosSet) return
 
 		const pos = getEventPosition(event)
-		const dist = getDistance(startPos, pos)
+		const dist = getDistance(startPos, { x: pos.x, y: pos.y })
 
 		if (dist > unref(distance)) {
 			stop(event)

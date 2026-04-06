@@ -304,3 +304,30 @@ export function parseTime(arg?: string): number | null {
 export function generateId(prefix: string = ''): string {
 	return `${prefix}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 9)}`
 }
+
+/**
+ * Calculate distance between two points
+ */
+export function getDistance(
+	p1: { x: number, y: number },
+	p2: { x: number, y: number },
+): number {
+	return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
+}
+
+/**
+ * Clamp value within min/max bounds
+ */
+export function clamp(value: number, min?: number, max?: number): number {
+	let result = value
+	if (min !== undefined) result = Math.max(min, result)
+	if (max !== undefined) result = Math.min(max, result)
+	return result
+}
+
+/**
+ * Escape special regex characters in a string
+ */
+export function escapeRegex(str: string): string {
+	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
