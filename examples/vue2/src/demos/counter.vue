@@ -1,13 +1,49 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useCounter } from 'directix'
 
 export default defineComponent({
 	name: 'CounterDemo',
 	components: {
 		DemoSection,
 		CodeBlock,
+	},
+	setup() {
+		// Composable API demo
+		const composableTarget = ref(0)
+		const { formattedValue, isAnimating, setValue, start, stop } = useCounter({
+			value: composableTarget,
+			duration: 2000,
+			decimals: 2,
+			formatter: (v) => '$' + v.toFixed(2)
+		})
+
+		const composableCode = `import { ref } from 'vue'
+import { useCounter } from 'directix'
+
+const target = ref(0)
+const { formattedValue, isAnimating, setValue, start, stop } = useCounter({
+  value: target,
+  duration: 2000,
+  formatter: (v) => \`$\${v.toFixed(2)}\`
+})
+
+// Control the animation
+setValue(500)  // Animate to 500
+start()        // Start animation
+stop()         // Stop animation`
+
+		return {
+			composableTarget,
+			formattedValue,
+			isAnimating,
+			setValue,
+			start,
+			stop,
+			composableCode
+		}
 	},
 	data() {
 		return {
@@ -29,6 +65,10 @@ export default defineComponent({
 		},
 		randomizeValue4() {
 			this.targetValue4 = Math.random() * 1000
+		},
+		randomComposableValue() {
+			const newValue = Math.random() * 1000
+			this.setValue(newValue)
 		},
 	},
 	computed: {
@@ -52,22 +92,6 @@ export default defineComponent({
   formatter: (v) => '$' + v.toFixed(2),
   easing: 'easeOutExpo'
 }">$0.00</span>`
-		},
-		composableCode(): string {
-			return `import { useCounter } from 'directix'
-
-const { start, pause, reset, update } = useCounter({
-  startValue: 0,
-  endValue: 1000,
-  duration: 2000,
-  formatter: (v) => \`$\${v.toFixed(2)}\`
-})
-
-// Control the animation
-start()         // Start animation
-pause()         // Pause animation
-reset()         // Reset to start value
-update(500)     // Update end value`
 		},
 	},
 })
@@ -158,7 +182,20 @@ update(500)     // Update end value`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useCounter" description="Using useCounter composable for programmatic control">
 			<div class="demo-box">
-				<p class="hint">Control counter animation programmatically with the composable API</p>
+				<div class="counter-display currency">
+					<span>{{ formattedValue }}</span>
+				</div>
+				<div class="controls">
+					<button @click="randomComposableValue" class="btn">
+						Random Value
+					</button>
+					<button @click="stop" class="btn btn-secondary" :disabled="!isAnimating">
+						Stop
+					</button>
+					<button @click="start" class="btn btn-outline" :disabled="isAnimating">
+						Resume
+					</button>
+				</div>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -233,12 +270,10 @@ h1 {
 
 .controls {
 	text-align: center;
-}
-
-.hint {
-	font-size: 13px;
-	color: #888;
-	text-align: center;
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .btn {
@@ -253,6 +288,30 @@ h1 {
 
 .btn:hover {
 	background: #3aa876;
+}
+
+.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.btn-secondary {
+	background: #6b7280;
+}
+
+.btn-secondary:hover {
+	background: #5b6169;
+}
+
+.btn-outline {
+	background: transparent;
+	border: 1px solid #42b883;
+	color: #42b883;
+}
+
+.btn-outline:hover {
+	background: #42b883;
+	color: white;
 }
 
 .easing-grid {

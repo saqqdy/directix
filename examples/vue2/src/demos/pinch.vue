@@ -13,7 +13,7 @@ export default defineComponent({
 		return {
 			pinchScale: 1,
 			pinchCenter: { x: 0, y: 0 },
-			transformScale: 1,
+			composableScale: 1,
 		}
 	},
 	methods: {
@@ -36,26 +36,39 @@ function handlePinch(e) {
 <\/script>`
 		},
 		transformCode(): string {
-			return `<div v-pinch="{
-  onPinch: handlePinch,
+			return `<!-- Let directive handle transform -->
+<div v-pinch="{
   enableTransform: true,
   minScale: 0.5,
   maxScale: 3
 }">
   Pinch to scale element
+</div>
+
+<!-- Or handle transform yourself -->
+<div v-pinch="{
+  onPinch: (e) => scale = e.scale,
+  minScale: 0.5,
+  maxScale: 3
+}"
+  :style="{ transform: 'scale(' + scale + ')' }">
+  Pinch to scale element
 </div>`
 		},
 		composableCode(): string {
-			return `import { usePinch } from 'directix'
+			return `import { ref, onMounted } from 'vue'
+import { usePinch } from 'directix'
 
-const { isPinching, scale, bind } = usePinch({
-  onPinch: (e) => console.log('Scale:', e.scale),
-  minScale: 0.5,
-  maxScale: 3
+const el = ref<HTMLElement>()
+const scale = ref(1)
+
+const { bind } = usePinch({
+  onPinch: (e) => scale.value = e.scale
 })
 
-// Bind to element
-onMounted(() => bind(containerRef.value))`
+onMounted(() => {
+  if (el.value) bind(el.value)
+})`
 		},
 	},
 })
@@ -94,17 +107,15 @@ onMounted(() => bind(containerRef.value))`
 			<div class="demo-box">
 				<div
 					v-pinch="{
-						onPinch: (e) => transformScale = e.scale,
 						enableTransform: true,
 						minScale: 0.5,
 						maxScale: 2
 					}"
 					class="pinch-area transform"
-					:style="{ transform: `scale(${transformScale})` }"
 				>
 					<div class="pinch-content">
-						<p class="scale">{{ (transformScale * 100).toFixed(0) }}%</p>
 						<p class="hint-text">Pinch to zoom in/out</p>
+						<p class="hint-text">(directive handles transform internally)</p>
 					</div>
 				</div>
 			</div>

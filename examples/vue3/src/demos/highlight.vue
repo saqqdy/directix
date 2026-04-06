@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useHighlight } from 'directix'
@@ -21,10 +21,18 @@ const searchText = ref('Vue')
 const dynamicText = 'Vue 3 introduces the Composition API, which provides better TypeScript support and code organization in Vue applications.'
 
 // Composable API demo
-const { highlight, clear } = useHighlight({
-	keywords: ['important'],
-	className: 'highlight',
-	style: 'background: yellow; color: black;'
+const composableRef = ref<HTMLElement>()
+const composableKeywords = ref(['important', 'message'])
+const { count, updateKeywords, bind } = useHighlight({
+	keywords: composableKeywords,
+	className: 'composable-highlight',
+	style: 'background: #ffd700; color: #333; padding: 2px 4px; border-radius: 3px;'
+})
+
+onMounted(() => {
+	if (composableRef.value) {
+		bind(composableRef.value)
+	}
 })
 
 const basicCode = `<p v-highlight="'important'">
@@ -46,19 +54,24 @@ const optionsCode = `<p v-highlight="{
   This will highlight the word.
 </p>`
 
-const composableCode = `import { useHighlight } from 'directix'
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useHighlight } from 'directix'
 
-const { highlight, clear } = useHighlight({
-  keywords: ['important'],
-  className: 'highlight',
+const el = ref<HTMLElement>()
+const keywords = ref(['important'])
+
+const { count, updateKeywords, bind } = useHighlight({
+  keywords,
+  className: 'my-highlight',
   style: 'background: yellow;'
 })
 
-// Highlight text programmatically
-const highlighted = highlight(text)
+onMounted(() => {
+  if (el.value) bind(el.value)
+})
 
-// Clear highlights
-clear()`
+// Update keywords dynamically
+updateKeywords(['Vue', 'React'])`
 </script>
 
 <template>
@@ -140,8 +153,26 @@ clear()`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useHighlight" description="Using useHighlight composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div class="composable-controls">
+					<input
+						v-model="composableKeywords[0]"
+						class="input-small"
+						placeholder="Keyword 1"
+						@input="updateKeywords([...composableKeywords])"
+					/>
+					<input
+						v-model="composableKeywords[1]"
+						class="input-small"
+						placeholder="Keyword 2"
+						@input="updateKeywords([...composableKeywords])"
+					/>
+				</div>
+				<p ref="composableRef" class="highlight-text">
+					This is an important message that demonstrates the useHighlight composable API.
+				</p>
+				<p class="hint">Highlighted: {{ count }} matches. Edit keywords above to update.</p>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -258,6 +289,25 @@ h1 {
 	margin-top: 12px;
 }
 
+.composable-controls {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.input-small {
+	flex: 1;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.input-small:focus {
+	outline: none;
+	border-color: #667eea;
+}
+
 .api-table {
 	width: 100%;
 	border-collapse: collapse;
@@ -287,6 +337,10 @@ h1 {
 
 /* Custom highlight style */
 .custom-highlight {
+	font-weight: 600;
+}
+
+.composable-highlight {
 	font-weight: 600;
 }
 </style>

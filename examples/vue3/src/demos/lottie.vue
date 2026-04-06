@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useLottie } from 'directix'
@@ -17,11 +17,21 @@ const optionsEl = ref<HTMLElement>()
 const speed = ref(1)
 const speedEl = ref<HTMLElement>()
 
+// Control Methods demo
+const controlEl = ref<HTMLElement>()
+
 // Composable API demo
-const { play, pause, stop, setSpeed, setDirection } = useLottie({
+const composableEl = ref<HTMLElement>()
+const { play, pause, stop, setSpeed, setDirection, bind } = useLottie({
 	animationData: animationUrl,
 	autoplay: true,
 	loop: true
+})
+
+onMounted(() => {
+	if (composableEl.value) {
+		bind(composableEl.value)
+	}
 })
 
 const basicCode = `<!-- With URL -->
@@ -52,12 +62,18 @@ el.value.lottieSetSpeed(2)
 el.value.lottieSetDirection(-1)
 <\/script>`
 
-const composableCode = `import { useLottie } from 'directix'
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useLottie } from 'directix'
 
-const { play, pause, stop, setSpeed, setDirection } = useLottie({
+const el = ref<HTMLElement>()
+const { play, pause, stop, setSpeed, setDirection, bind } = useLottie({
   animationData: animationUrl,
   autoplay: true,
   loop: true
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
 })
 
 // Control animation
@@ -66,6 +82,18 @@ pause()          // Pause animation
 stop()           // Stop and reset
 setSpeed(2)      // Set speed to 2x
 setDirection(-1) // Reverse direction`
+
+function handlePlay() {
+	;(controlEl.value as any)?.lottiePlay?.()
+}
+
+function handlePause() {
+	;(controlEl.value as any)?.lottiePause?.()
+}
+
+function handleStop() {
+	;(controlEl.value as any)?.lottieStop?.()
+}
 </script>
 
 <template>
@@ -130,10 +158,11 @@ setDirection(-1) // Reverse direction`
 		<!-- Control methods -->
 		<DemoSection title="Control Methods" description="Programmatic playback control">
 			<div class="demo-box">
+				<div ref="controlEl" v-lottie="animationUrl" class="animation-container"></div>
 				<div class="button-group">
-					<button @click="basicEl?.lottiePlay?.()" class="btn">Play</button>
-					<button @click="basicEl?.lottiePause?.()" class="btn btn-secondary">Pause</button>
-					<button @click="basicEl?.lottieStop?.()" class="btn btn-outline">Stop</button>
+					<button @click="handlePlay" class="btn">Play</button>
+					<button @click="handlePause" class="btn btn-secondary">Pause</button>
+					<button @click="handleStop" class="btn btn-outline">Stop</button>
 				</div>
 				<p class="hint">Control animation using exposed methods</p>
 			</div>
@@ -143,6 +172,7 @@ setDirection(-1) // Reverse direction`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useLottie" description="Using useLottie composable">
 			<div class="demo-box">
+				<div ref="composableEl" class="animation-container"></div>
 				<div class="button-group">
 					<button @click="play()" class="btn">Play</button>
 					<button @click="pause()" class="btn btn-secondary">Pause</button>
@@ -150,7 +180,6 @@ setDirection(-1) // Reverse direction`
 					<button @click="setSpeed(2)" class="btn">2x Speed</button>
 					<button @click="setDirection(-1)" class="btn">Reverse</button>
 				</div>
-				<p class="hint">Programmatic control with composable</p>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -284,6 +313,7 @@ h1 {
 	gap: 12px;
 	flex-wrap: wrap;
 	justify-content: center;
+	margin-top: 16px;
 }
 
 .btn {

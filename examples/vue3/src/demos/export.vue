@@ -16,6 +16,21 @@ const tableData = [
 // Export status
 const lastExport = ref('')
 
+// Callback handlers for With Callbacks demo
+const handleBeforeExport = () => confirm('Export data?')
+const handleAfterExport = () => {
+	lastExport.value = new Date().toLocaleTimeString()
+}
+
+// Composable API demo
+const { exportCSV, exportJSON, exportHTML, exportText } = useExport({
+	data: tableData,
+	filename: 'employees',
+	onAfterExport: () => {
+		lastExport.value = new Date().toLocaleTimeString()
+	}
+})
+
 const basicCode = `<button v-export="data">
   Export CSV
 </button>
@@ -47,19 +62,27 @@ const columnsCode = `<button v-export="{
 
 const composableCode = `import { useExport } from 'directix'
 
-const { exportCSV, exportJSON, exportHTML, exportTXT } = useExport()
+const data = [
+  { name: 'John', email: 'john@example.com' },
+  { name: 'Jane', email: 'jane@example.com' }
+]
+
+const { exportCSV, exportJSON, exportHTML, exportText } = useExport({
+  data,
+  filename: 'users'
+})
 
 // Export as CSV
-exportCSV(data, 'my-data')
+exportCSV()
 
 // Export as JSON
-exportJSON(data, 'my-data')
+exportJSON()
 
 // Export as HTML table
-exportHTML(data, 'my-data')
+exportHTML()
 
 // Export as plain text
-exportTXT(data, 'my-data')`
+exportText()`
 </script>
 
 <template>
@@ -169,8 +192,8 @@ exportTXT(data, 'my-data')`
 						data: tableData,
 						format: 'csv',
 						filename: 'report',
-						onBeforeExport: () => confirm('Export data?'),
-						onAfterExport: () => { lastExport = new Date().toLocaleTimeString() }
+						onBeforeExport: handleBeforeExport,
+						onAfterExport: handleAfterExport
 					}"
 					class="btn"
 				>
@@ -183,8 +206,16 @@ exportTXT(data, 'my-data')`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useExport" description="Using useExport composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div class="button-group">
+					<button @click="exportCSV" class="btn">Export CSV</button>
+					<button @click="exportJSON" class="btn btn-secondary">Export JSON</button>
+					<button @click="exportHTML" class="btn btn-outline">Export HTML</button>
+					<button @click="exportText" class="btn btn-dark">Export TXT</button>
+				</div>
+				<p v-if="lastExport" class="hint">Last exported at: {{ lastExport }}</p>
+				<p v-else class="hint">Using useExport composable for programmatic export</p>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

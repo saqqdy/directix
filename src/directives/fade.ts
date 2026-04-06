@@ -78,27 +78,31 @@ interface FadeState {
 }
 
 /**
+ * Default options
+ */
+const defaultOptions: FadeOptions = {
+	direction: 'toggle',
+	visible: true,
+	duration: 300,
+	delay: 0,
+	easing: 'ease',
+	minOpacity: 0,
+	maxOpacity: 1,
+}
+
+/**
  * Normalize options
  */
 function normalizeOptions(binding: FadeBinding | undefined): FadeOptions {
 	if (typeof binding === 'boolean') {
-		return { visible: binding }
+		return { ...defaultOptions, visible: binding }
 	}
 
 	if (typeof binding === 'string') {
-		return { direction: binding as FadeDirection }
+		return { ...defaultOptions, direction: binding as FadeDirection }
 	}
 
-	return {
-		direction: 'toggle',
-		visible: true,
-		duration: 300,
-		delay: 0,
-		easing: 'ease',
-		minOpacity: 0,
-		maxOpacity: 1,
-		...binding,
-	}
+	return { ...defaultOptions, ...binding }
 }
 
 /**
@@ -160,13 +164,38 @@ export const vFade = defineDirective<FadeBinding, HTMLElement>({
 
 		;(el as any).__fade = state
 
-		// Set initial state
+		// Set transition style
 		el.style.transition = `opacity ${options.duration}ms ${getTimingFunction(options.easing || 'ease')} ${options.delay}ms`
-		el.style.opacity = String(state.currentOpacity)
 
-		// Hide element if starting invisible
-		if (!options.visible) {
-			el.style.display = 'none'
+		// Handle direction on mount
+		if (options.direction === 'in') {
+			// Start invisible, then fade in
+			el.style.opacity = String(options.minOpacity || 0)
+			el.style.display = ''
+			// Force reflow
+			String(el.offsetHeight)
+			// Fade in
+			requestAnimationFrame(() => {
+				el.style.opacity = String(options.maxOpacity || 1)
+				state.currentOpacity = options.maxOpacity || 1
+			})
+		} else if (options.direction === 'out') {
+			// Start visible, then fade out
+			el.style.opacity = String(options.maxOpacity || 1)
+			el.style.display = ''
+			// Fade out
+			requestAnimationFrame(() => {
+				el.style.opacity = String(options.minOpacity || 0)
+				setTimeout(() => {
+					el.style.display = 'none'
+				}, (options.duration || 300) + (options.delay || 0))
+			})
+		} else {
+			// Toggle mode: set initial state based on visible
+			el.style.opacity = String(state.currentOpacity)
+			if (!options.visible) {
+				el.style.display = 'none'
+			}
 		}
 
 		el.classList.add('v-fade')
@@ -178,15 +207,18 @@ export const vFade = defineDirective<FadeBinding, HTMLElement>({
 		if (!state) return
 
 		const newOptions = normalizeOptions(binding.value)
-		const wasVisible = state.options.visible !== false
 		const isVisible = newOptions.visible !== false
+
+		// Store old visible state before updating options
+		const oldVisible = state.options.visible
 
 		state.options = newOptions
 
 		// Update transition
 		el.style.transition = `opacity ${newOptions.duration}ms ${getTimingFunction(newOptions.easing || 'ease')} ${newOptions.delay}ms`
 
-		if (wasVisible !== isVisible) {
+		// Only animate if visible state changed
+		if (oldVisible !== newOptions.visible) {
 			animate(el, state, isVisible ? 'in' : 'out')
 		}
 	},

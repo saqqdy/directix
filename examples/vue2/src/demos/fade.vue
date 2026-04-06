@@ -1,7 +1,8 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useFade } from 'directix'
 
 export default defineComponent({
 	name: 'FadeDemo',
@@ -9,10 +10,52 @@ export default defineComponent({
 		DemoSection,
 		CodeBlock,
 	},
+	setup() {
+		// Composable API demo
+		const composableEl = ref<HTMLElement>()
+		const { isVisible, fadeIn, fadeOut, toggle, bind } = useFade({
+			duration: 400,
+			easing: 'ease-in-out'
+		})
+		onMounted(() => {
+			if (composableEl.value) {
+				bind(composableEl.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useFade } from 'directix'
+
+const el = ref<HTMLElement>()
+
+const { isVisible, fadeIn, fadeOut, toggle, bind } = useFade({
+  duration: 400,
+  easing: 'ease-in-out'
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
+})
+
+// Programmatic control
+fadeIn()   // Fade in
+fadeOut()  // Fade out
+toggle()   // Toggle`
+
+		return {
+			composableEl,
+			isVisible,
+			fadeIn,
+			fadeOut,
+			toggle,
+			composableCode
+		}
+	},
 	data() {
 		return {
 			isVisible1: true,
-			showFadeIn: false,
+			fadeInTrigger: 0,
+			fadeOutTrigger: 0,
 			isVisible3: true,
 			isVisible4: true,
 		}
@@ -27,11 +70,15 @@ export default defineComponent({
 </button>`
 		},
 		directionCode(): string {
-			return `<!-- Fade in only -->
+			return `<!-- Fade in on mount -->
 <div v-fade="'in'">Fades in on mount</div>
 
-<!-- Fade out only -->
-<div v-fade="'out'">Fades out on mount</div>`
+<!-- Fade out on mount -->
+<div v-fade="'out'">Fades out on mount</div>
+
+<!-- Re-trigger by using key -->
+<div v-fade="'in'" :key="trigger">Fade in again</div>
+<button @click="trigger++">Trigger</button>`
 		},
 		optionsCode(): string {
 			return `<div v-fade="{
@@ -44,20 +91,6 @@ export default defineComponent({
 }">
   Content
 </div>`
-		},
-		composableCode(): string {
-			return `import { useFade } from 'directix'
-
-const { fadeIn, fadeOut, toggle } = useFade({
-  duration: 300,
-  easing: 'ease-in-out',
-  onComplete: (direction) => console.log('Fade', direction)
-})
-
-// Control fade animation
-fadeIn()   // Fade element in
-fadeOut()  // Fade element out
-toggle()   // Toggle fade state`
 		},
 	},
 })
@@ -87,19 +120,24 @@ toggle()   // Toggle fade state`
 		</DemoSection>
 
 		<!-- Scenario 2: Direction -->
-		<DemoSection title="Fade Direction" description="Fade in or out only">
+		<DemoSection title="Fade Direction" description="Fade in or out on mount">
 			<div class="demo-box">
-				<div class="fade-container">
-					<div v-if="showFadeIn" v-fade="'in'" class="fade-box">
-						<p>Faded in on appear</p>
+				<div class="fade-container direction-demo">
+					<div class="direction-item">
+						<span class="label">Fade In</span>
+						<div :key="'in-' + fadeInTrigger" v-fade="'in'" class="fade-box small">
+							Faded in
+						</div>
+					</div>
+					<div class="direction-item">
+						<span class="label">Fade Out</span>
+						<div :key="'out-' + fadeOutTrigger" v-fade="'out'" class="fade-box small">
+							Fading out...
+						</div>
 					</div>
 				</div>
-				<button @click="showFadeIn = true" class="btn" :disabled="showFadeIn">
-					Fade In
-				</button>
-				<button @click="showFadeIn = false" class="btn btn-secondary">
-					Reset
-				</button>
+				<button @click="fadeInTrigger++" class="btn">Trigger Fade In</button>
+				<button @click="fadeOutTrigger++" class="btn btn-secondary">Trigger Fade Out</button>
 			</div>
 			<CodeBlock :code="directionCode" />
 		</DemoSection>
@@ -160,8 +198,19 @@ toggle()   // Toggle fade state`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useFade" description="Using useFade composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div class="fade-container">
+					<div ref="composableEl" class="fade-box">
+						<h3>Composable Fade</h3>
+						<p>Controlled by fadeIn(), fadeOut(), toggle()</p>
+					</div>
+				</div>
+				<div class="button-group">
+					<button @click="fadeIn()" class="btn">Fade In</button>
+					<button @click="fadeOut()" class="btn btn-secondary">Fade Out</button>
+					<button @click="toggle()" class="btn btn-outline">Toggle</button>
+				</div>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -290,6 +339,27 @@ h1 {
 	background: #6b7280;
 }
 
+.btn-secondary:hover {
+	background: #5b6169;
+}
+
+.btn-outline {
+	background: transparent;
+	border: 1px solid #42b883;
+	color: #42b883;
+}
+
+.btn-outline:hover {
+	background: #42b883;
+	color: white;
+}
+
+.button-group {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
 .duration-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
@@ -303,6 +373,24 @@ h1 {
 	color: #666;
 	margin-bottom: 8px;
 	text-align: center;
+}
+
+.direction-demo {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+}
+
+.direction-item {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.direction-item .label {
+	font-size: 12px;
+	color: #666;
+	font-weight: 500;
 }
 
 .api-table {

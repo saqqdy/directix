@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useFullscreen } from 'directix'
 
 export default defineComponent({
 	name: 'FullscreenDemo',
@@ -12,6 +13,11 @@ export default defineComponent({
 	data() {
 		return {
 			fullscreenState: false,
+			// Composable API
+			isFullscreen: false,
+			enter: (() => {}) as () => Promise<void>,
+			exit: (() => {}) as () => Promise<void>,
+			toggle: (() => {}) as () => Promise<void>,
 		}
 	},
 	computed: {
@@ -43,9 +49,29 @@ const { enter, exit, toggle, isFullscreen } = useFullscreen({
 enter()   // Enter fullscreen
 exit()    // Exit fullscreen
 toggle()  // Toggle fullscreen`
+			},
 		},
-	},
-})
+		mounted() {
+			// Initialize composable and bind to element
+			const el = this.$refs.composableEl as HTMLElement
+			if (el) {
+				const { isFullscreen, enter, exit, toggle, bind } = useFullscreen({
+					onEnter: () => console.log('Entered fullscreen'),
+					onExit: () => console.log('Exited fullscreen'),
+					onChange: (state) => {
+						this.isFullscreen = state
+					}
+				})
+				bind(el)
+				this.enter = enter
+				this.exit = exit
+				this.toggle = toggle
+				this.$watch(() => isFullscreen.value, (newVal) => {
+					this.isFullscreen = newVal
+				})
+			}
+		},
+	})
 </script>
 
 <template>
@@ -93,11 +119,34 @@ toggle()  // Toggle fullscreen`
 			<CodeBlock :code="optionsCode" />
 		</DemoSection>
 
+		<!-- Scenario 3: Initial fullscreen -->
+		<DemoSection title="Initial State" description="Start in fullscreen mode">
+			<div class="demo-box">
+				<div ref="initialEl" v-fullscreen="{ initialState: false }" class="fullscreen-box">
+					<h3>Initial State Demo</h3>
+					<p>Set initialState: true to start in fullscreen (requires user interaction)</p>
+					<button @click="$refs.initialEl.toggleFullscreen && $refs.initialEl.toggleFullscreen()" class="btn">
+						Toggle Fullscreen
+					</button>
+				</div>
+			</div>
+		</DemoSection>
+
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useFullscreen" description="Using useFullscreen composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div ref="composableEl" class="fullscreen-box">
+					<h3>Composable Fullscreen</h3>
+					<p class="status">State: {{ isFullscreen ? 'Fullscreen' : 'Normal' }}</p>
+					<div class="button-group">
+						<button @click="enter" class="btn">Enter</button>
+						<button @click="exit" class="btn btn-secondary">Exit</button>
+						<button @click="toggle" class="btn btn-outline">Toggle</button>
+					</div>
+				</div>
+				<p class="hint">Programmatic control with composable</p>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -221,6 +270,42 @@ h1 {
 
 .btn:hover {
 	background: #f3f4f6;
+}
+
+.btn-secondary {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+}
+
+.btn-secondary:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline {
+	background: transparent;
+	border: 2px solid white;
+	color: white;
+}
+
+.button-group {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.status {
+	text-align: center;
+	font-weight: 600;
+	color: #42b883;
+	margin-bottom: 16px;
+}
+
+.hint {
+	font-size: 13px;
+	color: #888;
+	margin-top: 12px;
+	text-align: center;
 }
 
 .api-table {

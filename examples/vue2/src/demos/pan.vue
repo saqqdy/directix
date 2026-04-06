@@ -1,13 +1,60 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { usePan } from 'directix'
 
 export default defineComponent({
 	name: 'PanDemo',
 	components: {
 		DemoSection,
 		CodeBlock,
+	},
+	setup() {
+		// Composable API demo
+		const composableEl = ref<HTMLElement>()
+		const composablePosition = ref({ x: 0, y: 0 })
+		const composableDir = ref('')
+
+		const { isPanning, direction, distance, bind } = usePan({
+			onPan: (e) => {
+				composablePosition.value = { x: e.deltaX, y: e.deltaY }
+				composableDir.value = e.direction
+			}
+		})
+
+		onMounted(() => {
+			if (composableEl.value) {
+				bind(composableEl.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { usePan } from 'directix'
+
+const el = ref<HTMLElement>()
+
+const { isPanning, direction, distance, bind } = usePan({
+  onPan: (e) => {
+    console.log('Direction:', e.direction)
+    console.log('Distance:', e.distance)
+  },
+  onStart: (e) => console.log('Pan started'),
+  onEnd: (e) => console.log('Pan ended')
+})
+
+onMounted(() => {
+  if (el.value) {
+    bind(el.value)
+  }
+})`
+
+		return {
+			composableEl,
+			composablePosition,
+			composableDir,
+			composableCode
+		}
 	},
 	data() {
 		return {
@@ -22,10 +69,16 @@ export default defineComponent({
 			this.panPosition = { x: e.deltaX, y: e.deltaY }
 			this.panDirection = e.direction
 		},
+		handleHorizontalPan(e: any) {
+			this.horizontalOffset = e.deltaX
+		},
+		handleThresholdPan(e: any) {
+			this.thresholdPan = { x: e.deltaX, y: e.deltaY, distance: e.distance }
+		},
 	},
 	computed: {
 		basicCode(): string {
-			return `<div v-pan="handlePan">
+			return `<div v-pan="{ onPan: handlePan }">
   Drag me around
 </div>
 
@@ -46,18 +99,6 @@ function handlePan(e) {
   Horizontal pan only
 </div>`
 		},
-		composableCode(): string {
-			return `import { usePan } from 'directix'
-
-const { isPanning, direction, distance, bind } = usePan({
-  onPan: (e) => console.log('Pan:', e.direction, e.distance),
-  direction: 'all',
-  threshold: 10
-})
-
-// Bind to element
-onMounted(() => bind(containerRef.value))`
-		},
 	},
 })
 </script>
@@ -73,7 +114,7 @@ onMounted(() => bind(containerRef.value))`
 		<DemoSection title="Basic Usage" description="Pan in any direction">
 			<div class="demo-box">
 				<div
-					v-pan="handlePan"
+					v-pan="{ onPan: handlePan }"
 					class="pan-area"
 				>
 					<div class="pan-content">
@@ -91,7 +132,7 @@ onMounted(() => bind(containerRef.value))`
 			<div class="demo-box">
 				<div
 					v-pan="{
-						onPan: (e) => horizontalOffset = e.deltaX,
+						onPan: handleHorizontalPan,
 						direction: 'horizontal',
 						threshold: 5
 					}"
@@ -111,7 +152,7 @@ onMounted(() => bind(containerRef.value))`
 			<div class="demo-box">
 				<div
 					v-pan="{
-						onPan: (e) => thresholdPan = { x: e.deltaX, y: e.deltaY, distance: e.distance },
+						onPan: handleThresholdPan,
 						threshold: 50
 					}"
 					class="pan-area"
@@ -174,8 +215,15 @@ onMounted(() => bind(containerRef.value))`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - usePan" description="Using usePan composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div ref="composableEl" class="pan-area">
+					<div class="pan-content">
+						<p class="direction">Direction: {{ composableDir || '-' }}</p>
+						<p class="position">Delta: {{ Math.round(composablePosition.x) }}, {{ Math.round(composablePosition.y) }}</p>
+						<p class="hint-text">Using usePan composable (bind method)</p>
+					</div>
+				</div>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

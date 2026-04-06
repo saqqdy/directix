@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { usePinch } from 'directix'
@@ -13,13 +13,23 @@ function handlePinch(e: any) {
 	pinchCenter.value = { x: e.centerX, y: e.centerY }
 }
 
-// Scenario 2: With transform
-const transformScale = ref(1)
+// Scenario 2: With transform (directive handles transform internally)
+// No need to track scale separately when enableTransform is true
 
 // Composable API demo
 const composableEl = ref<HTMLElement>()
-usePinch(composableEl, {
-	onPinch: (e) => console.log('Pinch scale:', e.scale)
+const composableScale = ref(1)
+
+const { scale, bind } = usePinch({
+	onPinch: (e) => {
+		composableScale.value = e.scale
+	}
+})
+
+onMounted(() => {
+	if (composableEl.value) {
+		bind(composableEl.value)
+	}
 })
 
 const basicCode = `<div v-pinch="handlePinch">
@@ -33,23 +43,37 @@ function handlePinch(e) {
 }
 <\/script>`
 
-const transformCode = `<div v-pinch="{
-  onPinch: handlePinch,
+const transformCode = `<!-- Let directive handle transform -->
+<div v-pinch="{
   enableTransform: true,
   minScale: 0.5,
   maxScale: 3
 }">
   Pinch to scale element
+</div>
+
+<!-- Or handle transform yourself -->
+<div v-pinch="{
+  onPinch: (e) => scale = e.scale,
+  minScale: 0.5,
+  maxScale: 3
+}"
+  :style="{ transform: 'scale(' + scale + ')' }">
+  Pinch to scale element
 </div>`
 
-const composableCode = `import { usePinch } from 'directix'
+const composableCode = `import { ref, onMounted } from 'vue'
+import { usePinch } from 'directix'
 
 const el = ref<HTMLElement>()
+const scale = ref(1)
 
-const { enable, disable } = usePinch(el, {
-  onPinch: (e) => console.log('Pinch:', e.scale),
-  onStart: (e) => console.log('Pinch started'),
-  onEnd: (e) => console.log('Pinch ended')
+const { bind } = usePinch({
+  onPinch: (e) => scale.value = e.scale
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
 })`
 </script>
 
@@ -86,17 +110,15 @@ const { enable, disable } = usePinch(el, {
 			<div class="demo-box">
 				<div
 					v-pinch="{
-						onPinch: (e) => transformScale = e.scale,
 						enableTransform: true,
 						minScale: 0.5,
 						maxScale: 2
 					}"
 					class="pinch-area transform"
-					:style="{ transform: `scale(${transformScale})` }"
 				>
 					<div class="pinch-content">
-						<p class="scale">{{ (transformScale * 100).toFixed(0) }}%</p>
 						<p class="hint-text">Pinch to zoom in/out</p>
+						<p class="hint-text">(directive handles transform internally)</p>
 					</div>
 				</div>
 			</div>
@@ -155,8 +177,8 @@ const { enable, disable } = usePinch(el, {
 			<div class="demo-box">
 				<div ref="composableEl" class="pinch-area">
 					<div class="pinch-content">
+						<p class="scale">{{ composableScale.toFixed(2) }}x</p>
 						<p>Using usePinch composable</p>
-						<p class="hint-text">Check console for pinch events</p>
 					</div>
 				</div>
 			</div>

@@ -96,6 +96,7 @@ interface PinchState {
 	touchmoveHandler: (e: Event) => void
 	touchendHandler: (e: Event) => void
 	initialScale: number
+	savedTransition: string
 }
 
 /**
@@ -196,9 +197,10 @@ export const vPinch = defineDirective<PinchBinding, HTMLElement>({
 			currentDistance: 0,
 			isPinching: false,
 			initialScale: 1,
+			savedTransition: '',
 			touchstartHandler: (e: Event) => handleStart(e as TouchEvent, state, el),
 			touchmoveHandler: (e: Event) => handleMove(e as TouchEvent, state, el),
-			touchendHandler: (e: Event) => handleEnd(e as TouchEvent, state),
+			touchendHandler: (e: Event) => handleEnd(e as TouchEvent, state, el),
 		}
 
 		;(el as any).__pinch = state
@@ -246,6 +248,9 @@ function handleStart(e: TouchEvent, state: PinchState, el: HTMLElement): void {
 		const transform = getComputedStyle(el).transform
 		const matrix = new DOMMatrix(transform)
 		state.initialScale = matrix.a // Get scale from matrix
+		// Disable transition during pinch for smooth response
+		state.savedTransition = el.style.transition
+		el.style.transition = 'none'
 	}
 
 	if (state.options.preventDefault) {
@@ -298,8 +303,13 @@ function handleMove(e: TouchEvent, state: PinchState, el: HTMLElement): void {
 /**
  * Handle pinch end
  */
-function handleEnd(e: TouchEvent, state: PinchState): void {
+function handleEnd(e: TouchEvent, state: PinchState, el: HTMLElement): void {
 	if (!state.isPinching) return
+
+	// Restore transition
+	if (state.options.enableTransform) {
+		el.style.transition = state.savedTransition
+	}
 
 	// Create final event with 0 touches
 	const finalEvent = {

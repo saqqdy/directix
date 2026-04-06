@@ -166,7 +166,7 @@ function createProgressContainer(options: ProgressOptions): { container: HTMLDiv
 
 	let barStyle = `
     height: 100%;
-    background: ${options.color};
+    background-color: ${options.color};
     transition: ${options.animate !== false ? `width ${options.duration}ms ease` : 'none'};
     width: 0%;
   `
@@ -315,9 +315,8 @@ export const vProgress = defineDirective<ProgressBinding, HTMLElement>({
 
 		if (!state) return
 
+		const oldOptions = state.options
 		const newOptions = normalizeOptions(binding.value)
-		const oldValue = state.options.value
-		const newValue = newOptions.value
 
 		state.options = newOptions
 
@@ -328,12 +327,26 @@ export const vProgress = defineDirective<ProgressBinding, HTMLElement>({
 		}
 
 		if (state.progressBar) {
-			state.progressBar.style.background = newOptions.color || '#42b883'
+			state.progressBar.style.backgroundColor = newOptions.color || '#42b883'
 		}
 
-		// Update progress
-		if (!newOptions.indeterminate && newValue !== oldValue) {
-			setProgress(state, newValue)
+		// Handle indeterminate state change
+		if (oldOptions.indeterminate !== newOptions.indeterminate && state.progressBar) {
+			if (newOptions.indeterminate) {
+				// Start indeterminate animation
+				state.progressBar.classList.add('v-progress--indeterminate')
+				state.progressBar.style.width = '30%'
+				state.progressBar.style.animation = 'v-progress-indeterminate 1.5s infinite linear'
+			} else {
+				// Stop indeterminate animation
+				state.progressBar.classList.remove('v-progress--indeterminate')
+				state.progressBar.style.animation = ''
+				// Set to current value
+				setProgress(state, newOptions.value)
+			}
+		} else if (!newOptions.indeterminate && newOptions.value !== oldOptions.value) {
+			// Update progress value
+			setProgress(state, newOptions.value)
 		}
 	},
 

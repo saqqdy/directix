@@ -1,13 +1,59 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useTypewriter } from 'directix'
 
 export default defineComponent({
 	name: 'TypewriterDemo',
 	components: {
 		DemoSection,
 		CodeBlock,
+	},
+	setup() {
+		// Composable API demo
+		const composableText = ref('Hello from composable!')
+		const { cursorText, isTyping, isDeleting, start, stop, reset } = useTypewriter({
+			text: composableText,
+			speed: 80,
+			cursor: '|',
+			cursorBlink: true
+		})
+
+		// Auto-start on mount
+		onMounted(() => {
+			start()
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useTypewriter } from 'directix'
+
+const text = ref('Hello, World!')
+
+const { cursorText, isTyping, start, stop, reset } = useTypewriter({
+  text: text,
+  speed: 80,
+  cursor: '|'
+})
+
+// Auto-start on mount
+onMounted(() => start())
+
+// Control animation
+start()   // Start typing
+stop()    // Stop animation
+reset()   // Reset to beginning`
+
+		return {
+			composableText,
+			cursorText,
+			isTyping,
+			isDeleting,
+			start,
+			stop,
+			reset,
+			composableCode
+		}
 	},
 	data() {
 		return {
@@ -43,24 +89,21 @@ export default defineComponent({
   deleteSpeed: 30
 }"></span>`
 		},
-		composableCode(): string {
-			return `import { useTypewriter } from 'directix'
-
-const { start, pause, resume, reset } = useTypewriter({
-  text: 'Hello, World!',
-  speed: 50
-})
-
-// Control animation
-start()   // Start typing
-pause()   // Pause animation
-resume()  // Resume animation
-reset()   // Reset to beginning`
-		},
 	},
 	methods: {
 		replay() {
 			this.dynamicKey++
+		},
+		changeComposableText() {
+			const texts = [
+				'Hello from composable!',
+				'This is useTypewriter!',
+				'Vue 2.7 supports Composition API!',
+				'Type, pause, reset, repeat!'
+			]
+			const currentIndex = texts.indexOf(this.composableText)
+			const nextIndex = (currentIndex + 1) % texts.length
+			this.composableText = texts[nextIndex]
 		},
 	},
 })
@@ -167,7 +210,23 @@ reset()   // Reset to beginning`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useTypewriter" description="Using useTypewriter composable">
 			<div class="demo-box">
-				<p class="hint">Programmatic control with composable</p>
+				<div class="typewriter-display">
+					<span class="v-typewriter-cursor">{{ cursorText }}</span>
+				</div>
+				<div class="controls">
+					<button @click="start" class="btn" :disabled="isTyping">
+						Start
+					</button>
+					<button @click="stop" class="btn btn-secondary" :disabled="!isTyping && !isDeleting">
+						Stop
+					</button>
+					<button @click="reset" class="btn btn-outline">
+						Reset
+					</button>
+					<button @click="changeComposableText" class="btn btn-outline">
+						Change Text
+					</button>
+				</div>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -271,6 +330,17 @@ h1 {
 	align-items: center;
 }
 
+.v-typewriter-cursor {
+	animation: cursor-blink 0.7s infinite;
+}
+
+@keyframes cursor-blink {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+	align-items: center;
+}
+
 .cursor-grid {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -308,10 +378,12 @@ h1 {
 	display: flex;
 	gap: 12px;
 	margin-top: 16px;
+	flex-wrap: wrap;
 }
 
 .input {
 	flex: 1;
+	min-width: 200px;
 	padding: 10px 14px;
 	border: 1px solid #ddd;
 	border-radius: 6px;
@@ -335,6 +407,30 @@ h1 {
 
 .btn:hover {
 	background: #3aa876;
+}
+
+.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.btn-secondary {
+	background: #6b7280;
+}
+
+.btn-secondary:hover {
+	background: #5b6169;
+}
+
+.btn-outline {
+	background: transparent;
+	border: 1px solid #42b883;
+	color: #42b883;
+}
+
+.btn-outline:hover {
+	background: #42b883;
+	color: white;
 }
 
 .hint {

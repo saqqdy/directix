@@ -17,13 +17,17 @@ const targetValue3 = ref(1000000)
 const targetValue4 = ref(999.99)
 
 // Composable API demo
-const composableTarget = ref(500)
-const { start, pause, reset, update } = useCounter({
-	startValue: 0,
-	endValue: composableTarget.value,
+const composableTarget = ref(0)
+const { formattedValue, isAnimating, setValue, start, stop } = useCounter({
+	value: composableTarget,
 	duration: 2000,
+	decimals: 2,
 	formatter: (v) => `$${v.toFixed(2)}`
 })
+
+function randomComposableValue() {
+	setValue(Math.random() * 1000)
+}
 
 const basicCode = `<span v-counter="1000">0</span>
 
@@ -43,20 +47,20 @@ const customCode = `<span v-counter="{
   easing: 'easeOutExpo'
 }">$0.00</span>`
 
-const composableCode = `import { useCounter } from 'directix'
+const composableCode = `import { ref } from 'vue'
+import { useCounter } from 'directix'
 
-const { start, pause, reset, update } = useCounter({
-  startValue: 0,
-  endValue: 1000,
+const target = ref(0)
+const { formattedValue, isAnimating, setValue, start, stop } = useCounter({
+  value: target,
   duration: 2000,
   formatter: (v) => \`$\${v.toFixed(2)}\`
 })
 
 // Control the animation
-start()         // Start animation
-pause()         // Pause animation
-reset()         // Reset to start value
-update(500)     // Update end value`
+setValue(500)  // Animate to 500
+start()        // Start animation
+stop()         // Stop animation`
 </script>
 
 <template>
@@ -144,13 +148,20 @@ update(500)     // Update end value`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useCounter" description="Using useCounter composable for programmatic control">
 			<div class="demo-box">
-				<div class="button-group">
-					<button @click="start()" class="btn">Start</button>
-					<button @click="pause()" class="btn btn-secondary">Pause</button>
-					<button @click="reset()" class="btn btn-outline">Reset</button>
-					<button @click="update(Math.random() * 1000)" class="btn">Update Target</button>
+				<div class="counter-display currency">
+					<span>{{ formattedValue }}</span>
 				</div>
-				<p class="hint">Control counter animation programmatically</p>
+				<div class="controls">
+					<button @click="randomComposableValue" class="btn">
+						Random Value
+					</button>
+					<button @click="stop" class="btn btn-secondary" :disabled="!isAnimating">
+						Stop
+					</button>
+					<button @click="start" class="btn btn-outline" :disabled="isAnimating">
+						Resume
+					</button>
+				</div>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -225,6 +236,10 @@ h1 {
 
 .controls {
 	text-align: center;
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .button-group {

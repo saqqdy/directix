@@ -108,6 +108,7 @@ export function usePinch(options: UsePinchOptions = {}): UsePinchReturn {
 		initialDistance = 0,
 		currentDistance = 0,
 		baseScale = 1,
+		savedTransition = '',
 		handlers: { [key: string]: (e: Event) => void } = {}
 
 	function createPinchEvent(e: TouchEvent, isFirst: boolean = false, isFinal: boolean = false): PinchEvent {
@@ -138,6 +139,9 @@ export function usePinch(options: UsePinchOptions = {}): UsePinchReturn {
 			const transform = getComputedStyle(currentElement).transform
 			const matrix = new DOMMatrix(transform)
 			baseScale = matrix.a
+			// Disable transition during pinch for smooth response
+			savedTransition = currentElement.style.transition
+			currentElement.style.transition = 'none'
 		}
 
 		e.preventDefault()
@@ -178,6 +182,11 @@ export function usePinch(options: UsePinchOptions = {}): UsePinchReturn {
 
 	function handleEnd(_e: Event): void {
 		if (!isPinching.value) return
+
+		// Restore transition
+		if (enableTransform && currentElement) {
+			currentElement.style.transition = savedTransition
+		}
 
 		const emptyTouchList = { length: 0, item: () => null } as unknown as TouchList
 		const pinchEvent = createPinchEvent({ touches: emptyTouchList } as TouchEvent, false, true)

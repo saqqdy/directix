@@ -1,7 +1,8 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useLottie } from 'directix'
 
 export default defineComponent({
 	name: 'LottieDemo',
@@ -9,9 +10,57 @@ export default defineComponent({
 		DemoSection,
 		CodeBlock,
 	},
+	setup() {
+		const animationUrl = 'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json'
+
+		// Composable API demo
+		const composableEl = ref<HTMLElement>()
+		const { play, pause, stop, setSpeed, setDirection, bind } = useLottie({
+			animationData: animationUrl,
+			autoplay: true,
+			loop: true
+		})
+
+		onMounted(() => {
+			if (composableEl.value) {
+				bind(composableEl.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useLottie } from 'directix'
+
+const el = ref<HTMLElement>()
+const { play, pause, stop, setSpeed, setDirection, bind } = useLottie({
+  animationData: animationUrl,
+  autoplay: true,
+  loop: true
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
+})
+
+// Control animation
+play()           // Play animation
+pause()          // Pause animation
+stop()           // Stop and reset
+setSpeed(2)      // Set speed to 2x
+setDirection(-1) // Reverse direction`
+
+		return {
+			animationUrl,
+			composableEl,
+			play,
+			pause,
+			stop,
+			setSpeed,
+			setDirection,
+			composableCode
+		}
+	},
 	data() {
 		return {
-			animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json',
 			speed: 1,
 		}
 	},
@@ -45,21 +94,19 @@ this.$refs.el.lottieSetSpeed(2)
 this.$refs.el.lottieSetDirection(-1)
 <\/script>`
 		},
-		composableCode(): string {
-			return `import { useLottie } from 'directix'
-
-const { play, pause, stop, setSpeed, setDirection } = useLottie({
-  animationData: animationUrl,
-  autoplay: true,
-  loop: true
-})
-
-// Control animation
-play()           // Play animation
-pause()          // Pause animation
-stop()           // Stop and reset
-setSpeed(2)      // Set speed to 2x
-setDirection(-1) // Reverse direction`
+	},
+	methods: {
+		handlePlay() {
+			const el = this.$refs.controlEl as HTMLElement
+			el?.lottiePlay?.()
+		},
+		handlePause() {
+			const el = this.$refs.controlEl as HTMLElement
+			el?.lottiePause?.()
+		},
+		handleStop() {
+			const el = this.$refs.controlEl as HTMLElement
+			el?.lottieStop?.()
 		},
 	},
 })
@@ -127,10 +174,11 @@ setDirection(-1) // Reverse direction`
 		<!-- Control methods -->
 		<DemoSection title="Control Methods" description="Programmatic playback control">
 			<div class="demo-box">
+				<div ref="controlEl" v-lottie="animationUrl" class="animation-container"></div>
 				<div class="button-group">
-					<button @click="$refs.basicEl && $refs.basicEl.lottiePlay && $refs.basicEl.lottiePlay()" class="btn">Play</button>
-					<button @click="$refs.basicEl && $refs.basicEl.lottiePause && $refs.basicEl.lottiePause()" class="btn btn-secondary">Pause</button>
-					<button @click="$refs.basicEl && $refs.basicEl.lottieStop && $refs.basicEl.lottieStop()" class="btn btn-outline">Stop</button>
+					<button @click="handlePlay" class="btn">Play</button>
+					<button @click="handlePause" class="btn btn-secondary">Pause</button>
+					<button @click="handleStop" class="btn btn-outline">Stop</button>
 				</div>
 				<p class="hint">Control animation using exposed methods</p>
 			</div>
@@ -140,7 +188,14 @@ setDirection(-1) // Reverse direction`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useLottie" description="Using useLottie composable">
 			<div class="demo-box">
-				<p class="hint">Programmatic control with composable</p>
+				<div ref="composableEl" class="animation-container"></div>
+				<div class="button-group">
+					<button @click="play()" class="btn">Play</button>
+					<button @click="pause()" class="btn btn-secondary">Pause</button>
+					<button @click="stop()" class="btn btn-outline">Stop</button>
+					<button @click="setSpeed(2)" class="btn">2x Speed</button>
+					<button @click="setDirection(-1)" class="btn">Reverse</button>
+				</div>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -274,6 +329,7 @@ h1 {
 	gap: 12px;
 	flex-wrap: wrap;
 	justify-content: center;
+	margin-top: 16px;
 }
 
 .btn {

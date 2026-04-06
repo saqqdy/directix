@@ -13,12 +13,11 @@ export default defineComponent({
 		return {
 			rotationAngle: 0,
 			rotationDirection: '',
-			transformAngle: 0,
 		}
 	},
 	computed: {
 		basicCode(): string {
-			return `<div v-rotate="handleRotate">
+			return `<div v-rotate-gesture="handleRotate">
   Rotate with two fingers
 </div>
 
@@ -30,21 +29,35 @@ function handleRotate(e) {
 <\/script>`
 		},
 		transformCode(): string {
-			return `<div v-rotate="{
-  onRotate: handleRotate,
+			return `<!-- Let directive handle transform -->
+<div v-rotate-gesture="{
   enableTransform: true,
   transformOrigin: 'center center'
 }">
   Rotate to spin element
+</div>
+
+<!-- Or handle transform yourself -->
+<div v-rotate-gesture="{
+  onRotate: (e) => angle = e.angle
+}"
+  :style="{ transform: 'rotate(' + angle + 'deg)' }">
+  Rotate to spin element
 </div>`
 		},
 		composableCode(): string {
-			return `import { useRotateGesture } from 'directix'
+			return `import { ref, onMounted } from 'vue'
+import { useRotateGesture } from 'directix'
 
-const { enable, disable } = useRotateGesture(el, {
-  onRotate: (e) => console.log('Rotation:', e.rotation),
-  onStart: (e) => console.log('Rotation started'),
-  onEnd: (e) => console.log('Rotation ended')
+const el = ref<HTMLElement>()
+const rotation = ref(0)
+
+const { bind } = useRotateGesture({
+  onRotate: (e) => rotation.value = e.rotation
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
 })`
 		},
 	},
@@ -90,17 +103,16 @@ const { enable, disable } = useRotateGesture(el, {
 			<div class="demo-box">
 				<div
 					v-rotate-gesture="{
-						onRotate: (e) => transformAngle = e.angle,
 						enableTransform: true
 					}"
 					class="rotate-area transform"
-					:style="{ transform: `rotate(${transformAngle}deg)` }"
 				>
 					<div class="rotate-content">
 						<div class="dial">
 							<div class="dial-marker"></div>
 						</div>
 						<p class="hint-text">Pinch and rotate</p>
+						<p class="hint-text">(directive handles transform internally)</p>
 					</div>
 				</div>
 			</div>

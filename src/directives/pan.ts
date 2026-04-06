@@ -342,16 +342,16 @@ function handleMove(e: Event, state: PanState, _el: HTMLElement): void {
  * Handle pan end
  */
 function handleEnd(e: Event, state: PanState): void {
+	// Remove document-level listeners for mouse events
+	document.removeEventListener('mousemove', state.mousemoveHandler)
+	document.removeEventListener('mouseup', state.mouseupHandler)
+
 	if (!state.isPanning) return
 
 	const panEvent = createPanEvent(e as TouchEvent | MouseEvent, state, false, true)
 	state.options.onEnd?.(panEvent)
 
 	state.isPanning = false
-
-	// Remove document-level listeners
-	document.removeEventListener('mousemove', state.mousemoveHandler)
-	document.removeEventListener('mouseup', state.mouseupHandler)
 }
 
 export default vPan

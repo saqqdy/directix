@@ -102,6 +102,7 @@ export function useRotateGesture(options: UseRotateGestureOptions = {}): UseRota
 		initialAngle = 0,
 		currentAngle = 0,
 		baseRotation = 0,
+		savedTransition = '',
 		handlers: { [key: string]: (e: Event) => void } = {}
 
 	function createRotateEvent(e: TouchEvent, isFirst: boolean = false, isFinal: boolean = false): RotateGestureEvent {
@@ -132,6 +133,9 @@ export function useRotateGesture(options: UseRotateGestureOptions = {}): UseRota
 			const transform = getComputedStyle(currentElement).transform
 			const matrix = new DOMMatrix(transform)
 			baseRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI)
+			// Disable transition during rotation for smooth response
+			savedTransition = currentElement.style.transition
+			currentElement.style.transition = 'none'
 		}
 
 		e.preventDefault()
@@ -165,6 +169,11 @@ export function useRotateGesture(options: UseRotateGestureOptions = {}): UseRota
 
 	function handleEnd(_e: Event): void {
 		if (!isRotating.value) return
+
+		// Restore transition
+		if (enableTransform && currentElement) {
+			currentElement.style.transition = savedTransition
+		}
 
 		const emptyTouchList = { length: 0, item: () => null } as unknown as TouchList
 		const rotateEvent = createRotateEvent({ touches: emptyTouchList } as TouchEvent, false, true)

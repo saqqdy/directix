@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useExport } from 'directix'
 
 export default defineComponent({
 	name: 'ExportDemo',
@@ -19,6 +20,11 @@ export default defineComponent({
 				{ id: 5, name: 'Charlie Davis', email: 'charlie@example.com', department: 'HR', salary: 65000 }
 			],
 			lastExport: '',
+			// Composable methods
+			exportCSV: (() => {}) as () => void,
+			exportJSON: (() => {}) as () => void,
+			exportHTML: (() => {}) as () => void,
+			exportText: (() => {}) as () => void,
 		}
 	},
 	computed: {
@@ -54,23 +60,65 @@ const data = [
   Export Custom Columns
 </button>`
 		},
+		callbacksCode(): string {
+			return `<button v-export="{
+  data: tableData,
+  format: 'csv',
+  filename: 'report',
+  onBeforeExport: () => confirm('Export data?'),
+  onAfterExport: () => { lastExport = new Date().toLocaleTimeString() }
+}">
+  Export with Confirmation
+</button>`
+		},
 		composableCode(): string {
 			return `import { useExport } from 'directix'
 
-const { exportCSV, exportJSON, exportHTML, exportTXT } = useExport()
+const data = [
+  { name: 'John', email: 'john@example.com' },
+  { name: 'Jane', email: 'jane@example.com' }
+]
+
+const { exportCSV, exportJSON, exportHTML, exportText } = useExport({
+  data,
+  filename: 'users'
+})
 
 // Export as CSV
-exportCSV(data, 'my-data')
+exportCSV()
 
 // Export as JSON
-exportJSON(data, 'my-data')
+exportJSON()
 
 // Export as HTML table
-exportHTML(data, 'my-data')
+exportHTML()
 
 // Export as plain text
-exportTXT(data, 'my-data')`
+exportText()`
 		},
+	},
+	methods: {
+		handleBeforeExport() {
+			return confirm('Export data?')
+		},
+		handleAfterExport() {
+			this.lastExport = new Date().toLocaleTimeString()
+		},
+	},
+	created() {
+		// Initialize composable in created hook
+		const exports = useExport({
+			data: this.tableData,
+			filename: 'employees',
+			onAfterExport: () => {
+				this.lastExport = new Date().toLocaleTimeString()
+			}
+		})
+		// Bind methods to instance
+		this.exportCSV = exports.exportCSV
+		this.exportJSON = exports.exportJSON
+		this.exportHTML = exports.exportHTML
+		this.exportText = exports.exportText
 	},
 })
 </script>
@@ -174,11 +222,38 @@ exportTXT(data, 'my-data')`
 			<CodeBlock :code="columnsCode" />
 		</DemoSection>
 
+		<!-- Scenario 4: With callbacks -->
+		<DemoSection title="With Callbacks" description="Handle export events">
+			<div class="demo-box">
+				<button
+					v-export="{
+						data: tableData,
+						format: 'csv',
+						filename: 'report',
+						onBeforeExport: handleBeforeExport,
+						onAfterExport: handleAfterExport
+					}"
+					class="btn"
+				>
+					Export with Confirmation
+				</button>
+				<p v-if="lastExport" class="hint">Last exported at: {{ lastExport }}</p>
+			</div>
+		</DemoSection>
+
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useExport" description="Using useExport composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div class="button-group">
+					<button @click="exportCSV" class="btn">Export CSV</button>
+					<button @click="exportJSON" class="btn btn-secondary">Export JSON</button>
+					<button @click="exportHTML" class="btn btn-outline">Export HTML</button>
+					<button @click="exportText" class="btn btn-dark">Export TXT</button>
+				</div>
+				<p v-if="lastExport" class="hint">Last exported at: {{ lastExport }}</p>
+				<p v-else class="hint">Using useExport composable for programmatic export</p>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->

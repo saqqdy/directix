@@ -86,6 +86,7 @@ interface RotateGestureState {
 	touchmoveHandler: (e: Event) => void
 	touchendHandler: (e: Event) => void
 	baseRotation: number
+	savedTransition: string
 }
 
 /**
@@ -191,9 +192,10 @@ export const vRotateGesture = defineDirective<RotateGestureBinding, HTMLElement>
 			currentAngle: 0,
 			isRotating: false,
 			baseRotation: 0,
+			savedTransition: '',
 			touchstartHandler: (e: Event) => handleStart(e as TouchEvent, state, el),
 			touchmoveHandler: (e: Event) => handleMove(e as TouchEvent, state, el),
-			touchendHandler: (e: Event) => handleEnd(e as TouchEvent, state),
+			touchendHandler: (e: Event) => handleEnd(e as TouchEvent, state, el),
 		}
 
 		;(el as any).__rotateGesture = state
@@ -242,6 +244,9 @@ function handleStart(e: TouchEvent, state: RotateGestureState, el: HTMLElement):
 		const matrix = new DOMMatrix(transform)
 		// Extract rotation angle from matrix
 		state.baseRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI)
+		// Disable transition during rotation for smooth response
+		state.savedTransition = el.style.transition
+		el.style.transition = 'none'
 	}
 
 	if (state.options.preventDefault) {
@@ -287,8 +292,13 @@ function handleMove(e: TouchEvent, state: RotateGestureState, el: HTMLElement): 
 /**
  * Handle rotation end
  */
-function handleEnd(e: TouchEvent, state: RotateGestureState): void {
+function handleEnd(e: TouchEvent, state: RotateGestureState, el: HTMLElement): void {
 	if (!state.isRotating) return
+
+	// Restore transition
+	if (state.options.enableTransform) {
+		el.style.transition = state.savedTransition
+	}
 
 	// Create final event
 	const finalEvent = {

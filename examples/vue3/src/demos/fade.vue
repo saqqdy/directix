@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useFade } from 'directix'
@@ -7,8 +7,9 @@ import { useFade } from 'directix'
 // Scenario 1: Basic toggle
 const isVisible1 = ref(true)
 
-// Scenario 2: Fade in only
-const showFadeIn = ref(false)
+// Scenario 2: Fade Direction
+const fadeInTrigger = ref(0) // Key to re-trigger fade in
+const fadeOutTrigger = ref(0) // Key to re-trigger fade out
 
 // Scenario 3: With options
 const isVisible3 = ref(true)
@@ -17,10 +18,17 @@ const isVisible3 = ref(true)
 const isVisible4 = ref(true)
 
 // Composable API demo
+const composableEl = ref<HTMLElement>()
 const composableVisible = ref(true)
-const { fadeIn, fadeOut, toggle } = useFade({
-	duration: 500,
+const { isVisible: fadeIsVisible, fadeIn, fadeOut, toggle, bind } = useFade({
+	duration: 400,
 	easing: 'ease-in-out'
+})
+
+onMounted(() => {
+	if (composableEl.value) {
+		bind(composableEl.value)
+	}
 })
 
 const basicCode = `<!-- Toggle visibility with fade -->
@@ -30,11 +38,15 @@ const basicCode = `<!-- Toggle visibility with fade -->
   Toggle
 </button>`
 
-const directionCode = `<!-- Fade in only -->
+const directionCode = `<!-- Fade in on mount -->
 <div v-fade="'in'">Fades in on mount</div>
 
-<!-- Fade out only -->
-<div v-fade="'out'">Fades out on mount</div>`
+<!-- Fade out on mount -->
+<div v-fade="'out'">Fades out on mount</div>
+
+<!-- Re-trigger by using key -->
+<div v-fade="'in'" :key="trigger">Fade in again</div>
+<button @click="trigger++">Trigger</button>`
 
 const optionsCode = `<div v-fade="{
   visible: isVisible,
@@ -47,11 +59,18 @@ const optionsCode = `<div v-fade="{
   Content
 </div>`
 
-const composableCode = `import { useFade } from 'directix'
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useFade } from 'directix'
 
-const { fadeIn, fadeOut, toggle } = useFade({
-  duration: 300,
-  easing: 'ease'
+const el = ref<HTMLElement>()
+
+const { isVisible, fadeIn, fadeOut, toggle, bind } = useFade({
+  duration: 400,
+  easing: 'ease-in-out'
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
 })
 
 // Programmatic control
@@ -84,19 +103,24 @@ toggle()   // Toggle`
 		</DemoSection>
 
 		<!-- Scenario 2: Direction -->
-		<DemoSection title="Fade Direction" description="Fade in or out only">
+		<DemoSection title="Fade Direction" description="Fade in or out on mount">
 			<div class="demo-box">
-				<div class="fade-container">
-					<div v-if="showFadeIn" v-fade="'in'" class="fade-box">
-						<p>Faded in on appear</p>
+				<div class="fade-container direction-demo">
+					<div class="direction-item">
+						<span class="label">Fade In</span>
+						<div :key="'in-' + fadeInTrigger" v-fade="'in'" class="fade-box small">
+							Faded in
+						</div>
+					</div>
+					<div class="direction-item">
+						<span class="label">Fade Out</span>
+						<div :key="'out-' + fadeOutTrigger" v-fade="'out'" class="fade-box small">
+							Fading out...
+						</div>
 					</div>
 				</div>
-				<button @click="showFadeIn = true" class="btn" :disabled="showFadeIn">
-					Fade In
-				</button>
-				<button @click="showFadeIn = false" class="btn btn-secondary">
-					Reset
-				</button>
+				<button @click="fadeInTrigger++" class="btn">Trigger Fade In</button>
+				<button @click="fadeOutTrigger++" class="btn btn-secondary">Trigger Fade Out</button>
 			</div>
 			<CodeBlock :code="directionCode" />
 		</DemoSection>
@@ -157,12 +181,17 @@ toggle()   // Toggle`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useFade" description="Using useFade composable">
 			<div class="demo-box">
+				<div class="fade-container">
+					<div ref="composableEl" class="fade-box">
+						<h3>Composable Fade</h3>
+						<p>Controlled by fadeIn(), fadeOut(), toggle()</p>
+					</div>
+				</div>
 				<div class="button-group">
 					<button @click="fadeIn()" class="btn">Fade In</button>
 					<button @click="fadeOut()" class="btn btn-secondary">Fade Out</button>
 					<button @click="toggle()" class="btn btn-outline">Toggle</button>
 				</div>
-				<p class="hint">Programmatic control with composable</p>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>
@@ -293,10 +322,19 @@ h1 {
 	background: #6b7280;
 }
 
+.btn-secondary:hover {
+	background: #5b6169;
+}
+
 .btn-outline {
 	background: transparent;
 	border: 1px solid #667eea;
 	color: #667eea;
+}
+
+.btn-outline:hover {
+	background: #667eea;
+	color: white;
 }
 
 .button-group {
@@ -318,6 +356,24 @@ h1 {
 	color: #666;
 	margin-bottom: 8px;
 	text-align: center;
+}
+
+.direction-demo {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+}
+
+.direction-item {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.direction-item .label {
+	font-size: 12px;
+	color: #666;
+	font-weight: 500;
 }
 
 .hint {

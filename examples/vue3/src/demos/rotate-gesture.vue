@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useRotateGesture } from 'directix'
@@ -13,16 +13,23 @@ function handleRotate(e: any) {
 	rotationDirection.value = e.rotation > 0 ? 'Clockwise' : 'Counter-clockwise'
 }
 
-// Scenario 2: With transform
-const transformAngle = ref(0)
-
 // Composable API demo
 const composableEl = ref<HTMLElement>()
-useRotateGesture(composableEl, {
-	onRotate: (e) => console.log('Rotation:', e.rotation)
+const composableRotation = ref(0)
+
+const { bind } = useRotateGesture({
+	onRotate: (e) => {
+		composableRotation.value = Math.round(e.rotation)
+	}
 })
 
-const basicCode = `<div v-rotate="handleRotate">
+onMounted(() => {
+	if (composableEl.value) {
+		bind(composableEl.value)
+	}
+})
+
+const basicCode = `<div v-rotate-gesture="handleRotate">
   Rotate with two fingers
 </div>
 
@@ -33,22 +40,34 @@ function handleRotate(e) {
 }
 <\/script>`
 
-const transformCode = `<div v-rotate="{
-  onRotate: handleRotate,
+const transformCode = `<!-- Let directive handle transform -->
+<div v-rotate-gesture="{
   enableTransform: true,
   transformOrigin: 'center center'
 }">
   Rotate to spin element
+</div>
+
+<!-- Or handle transform yourself -->
+<div v-rotate-gesture="{
+  onRotate: (e) => angle = e.angle
+}"
+  :style="{ transform: 'rotate(' + angle + 'deg)' }">
+  Rotate to spin element
 </div>`
 
-const composableCode = `import { useRotateGesture } from 'directix'
+const composableCode = `import { ref, onMounted } from 'vue'
+import { useRotateGesture } from 'directix'
 
 const el = ref<HTMLElement>()
+const rotation = ref(0)
 
-const { enable, disable } = useRotateGesture(el, {
-  onRotate: (e) => console.log('Rotation:', e.rotation),
-  onStart: (e) => console.log('Rotation started'),
-  onEnd: (e) => console.log('Rotation ended')
+const { bind } = useRotateGesture({
+  onRotate: (e) => rotation.value = e.rotation
+})
+
+onMounted(() => {
+  if (el.value) bind(el.value)
 })`
 </script>
 
@@ -85,17 +104,16 @@ const { enable, disable } = useRotateGesture(el, {
 			<div class="demo-box">
 				<div
 					v-rotate-gesture="{
-						onRotate: (e) => transformAngle = e.angle,
 						enableTransform: true
 					}"
 					class="rotate-area transform"
-					:style="{ transform: `rotate(${transformAngle}deg)` }"
 				>
 					<div class="rotate-content">
 						<div class="dial">
 							<div class="dial-marker"></div>
 						</div>
 						<p class="hint-text">Pinch and rotate</p>
+						<p class="hint-text">(directive handles transform internally)</p>
 					</div>
 				</div>
 			</div>
@@ -154,8 +172,8 @@ const { enable, disable } = useRotateGesture(el, {
 			<div class="demo-box">
 				<div ref="composableEl" class="rotate-area">
 					<div class="rotate-content">
+						<p class="angle">{{ composableRotation }}°</p>
 						<p>Using useRotateGesture</p>
-						<p class="hint-text">Check console for events</p>
 					</div>
 				</div>
 			</div>

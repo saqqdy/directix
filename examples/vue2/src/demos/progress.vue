@@ -1,13 +1,35 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useProgress } from 'directix'
 
 export default defineComponent({
 	name: 'ProgressDemo',
 	components: {
 		DemoSection,
 		CodeBlock,
+	},
+	setup() {
+		const progressContainerRef = ref<HTMLElement | null>(null)
+		const { value: composableValue, percent, setValue, reset, bind } = useProgress({
+			value: 0,
+			color: '#42b883',
+		})
+
+		onMounted(() => {
+			if (progressContainerRef.value) {
+				bind(progressContainerRef.value)
+			}
+		})
+
+		return {
+			progressContainerRef,
+			composableValue,
+			percent,
+			setValue,
+			reset,
+		}
 	},
 	data() {
 		return {
@@ -170,8 +192,18 @@ reset()           // Reset to 0%`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useProgress" description="Using useProgress composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div ref="progressContainerRef" class="progress-container composable-demo">
+					<p>Progress Bar Area</p>
+				</div>
+				<div class="button-group">
+					<button @click="setValue(25)" class="btn">25%</button>
+					<button @click="setValue(50)" class="btn">50%</button>
+					<button @click="setValue(75)" class="btn">75%</button>
+					<button @click="reset()" class="btn btn-secondary">Reset</button>
+				</div>
+				<p class="hint">Current: {{ Math.round(percent) }}%</p>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -341,5 +373,33 @@ h1 {
 .api-table th {
 	background: #f8f9fa;
 	font-weight: 600;
+}
+
+.button-group {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 16px;
+}
+
+.btn-secondary {
+	background: #10b981;
+}
+
+.btn-secondary:hover {
+	background: #059669;
+}
+
+.hint {
+	font-size: 13px;
+	color: #888;
+	margin-top: 12px;
+	text-align: center;
+}
+
+.composable-demo {
+	background: white;
+	margin-bottom: 16px;
 }
 </style>

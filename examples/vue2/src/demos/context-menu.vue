@@ -1,13 +1,54 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useContextMenu } from 'directix'
 
 export default defineComponent({
 	name: 'ContextMenuDemo',
 	components: {
 		DemoSection,
 		CodeBlock,
+	},
+	setup() {
+		// Composable API demo
+		const composableRef = ref<HTMLElement>()
+		const composableItems = [
+			{ label: 'Edit', icon: '✏️', handler: () => alert('Edit clicked!') },
+			{ label: 'Copy', icon: '📋', handler: () => alert('Copy clicked!') },
+			{ divider: true, label: '' },
+			{ label: 'Delete', icon: '🗑️', handler: () => alert('Delete clicked!') }
+		]
+
+		const { bind } = useContextMenu({ items: composableItems, width: 150 })
+
+		onMounted(() => {
+			if (composableRef.value) {
+				bind(composableRef.value)
+			}
+		})
+
+		const composableCode = `import { ref, onMounted } from 'vue'
+import { useContextMenu } from 'directix'
+
+const el = ref<HTMLElement>()
+const items = [
+  { label: 'Edit', icon: '✏️', handler: () => console.log('Edit') },
+  { label: 'Copy', icon: '📋', handler: () => console.log('Copy') },
+  { divider: true, label: '' },
+  { label: 'Delete', handler: () => console.log('Delete') }
+]
+
+const { bind } = useContextMenu({ items, width: 150 })
+
+onMounted(() => {
+  if (el.value) bind(el.value)
+})`
+
+		return {
+			composableRef,
+			composableCode
+		}
 	},
 	data() {
 		return {
@@ -78,23 +119,6 @@ const menuItems = [
   Right click for custom menu
 </div>`
 		},
-		composableCode(): string {
-			return `import { useContextMenu } from 'directix'
-
-const { show, hide, updateItems } = useContextMenu({
-  items: menuItems,
-  width: 200
-})
-
-// Show menu programmatically
-show(x, y)
-
-// Hide menu
-hide()
-
-// Update menu items dynamically
-updateItems(newItems)`
-		},
 	},
 })
 </script>
@@ -152,8 +176,12 @@ updateItems(newItems)`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useContextMenu" description="Using useContextMenu composable">
 			<div class="demo-box">
-				<CodeBlock :code="composableCode" />
+				<div ref="composableRef" class="context-area composable">
+					<p>Right-click here (Composable API)</p>
+					<p class="hint-text">This uses useContextMenu composable instead of directive</p>
+				</div>
 			</div>
+			<CodeBlock :code="composableCode" />
 		</DemoSection>
 
 		<!-- API Reference -->
@@ -232,6 +260,10 @@ h1 {
 	text-align: center;
 	cursor: context-menu;
 	user-select: none;
+}
+
+.context-area.composable {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .context-area p {

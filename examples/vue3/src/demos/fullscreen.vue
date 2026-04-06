@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { useFullscreen } from 'directix'
@@ -12,10 +12,17 @@ const callbackEl = ref<HTMLElement>()
 const fullscreenState = ref(false)
 
 // Composable API demo
-const { isFullscreen, enter, exit, toggle } = useFullscreen({
+const composableEl = ref<HTMLElement>()
+const { isFullscreen, enter, exit, toggle, bind } = useFullscreen({
 	onEnter: () => console.log('Entered fullscreen'),
 	onExit: () => console.log('Exited fullscreen'),
 	onChange: (state) => console.log('Fullscreen state:', state)
+})
+
+onMounted(() => {
+	if (composableEl.value) {
+		bind(composableEl.value)
+	}
 })
 
 const basicCode = `<div v-fullscreen>
@@ -94,8 +101,12 @@ toggle()  // Toggle fullscreen`
 		<!-- Scenario 3: Initial fullscreen -->
 		<DemoSection title="Initial State" description="Start in fullscreen mode">
 			<div class="demo-box">
-				<div v-fullscreen="{ initialState: false }" class="fullscreen-box">
-					<p>This element can start in fullscreen mode with initialState: true</p>
+				<div ref="initialEl" v-fullscreen="{ initialState: false }" class="fullscreen-box">
+					<h3>Initial State Demo</h3>
+					<p>Set initialState: true to start in fullscreen (requires user interaction)</p>
+					<button @click="initialEl?.toggleFullscreen?.()" class="btn">
+						Toggle Fullscreen
+					</button>
 				</div>
 			</div>
 		</DemoSection>
@@ -103,11 +114,14 @@ toggle()  // Toggle fullscreen`
 		<!-- Composable API -->
 		<DemoSection title="Composable API - useFullscreen" description="Using useFullscreen composable">
 			<div class="demo-box">
-				<p class="status">Current state: {{ isFullscreen ? 'Fullscreen' : 'Normal' }}</p>
-				<div class="button-group">
-					<button @click="enter()" class="btn">Enter Fullscreen</button>
-					<button @click="exit()" class="btn btn-secondary">Exit Fullscreen</button>
-					<button @click="toggle()" class="btn btn-outline">Toggle</button>
+				<div ref="composableEl" class="fullscreen-box">
+					<h3>Composable Fullscreen</h3>
+					<p class="status">State: {{ isFullscreen ? 'Fullscreen' : 'Normal' }}</p>
+					<div class="button-group">
+						<button @click="enter()" class="btn">Enter</button>
+						<button @click="exit()" class="btn btn-secondary">Exit</button>
+						<button @click="toggle()" class="btn btn-outline">Toggle</button>
+					</div>
 				</div>
 				<p class="hint">Programmatic control with composable</p>
 			</div>
