@@ -3632,7 +3632,6 @@ export default defineConfig({
 | v-parallax | 6h | P3 | - | ✅ 已完成 |
 | v-lottie | 6h | P3 | - | ✅ 已完成 |
 | v-typewriter | 4h | P3 | - | ✅ 已完成 |
-| v-chart | 8h | P3 | Chart.js | ✅ 已完成 |
 | v-progress | 3h | P3 | - | ✅ 已完成 |
 | v-counter | 4h | P3 | - | ✅ 已完成 |
 
@@ -3642,7 +3641,7 @@ export default defineConfig({
 
 ### 10.2 当前进度总览
 
-#### 已完成指令 (60/60) ✅ 全部完成
+#### 已完成指令 (57/57) ✅ 全部完成
 
 | 指令 | 功能描述 | SSR | 示例 | Composable | 版本 |
 |------|---------|-----|------|------------|------|
@@ -3701,13 +3700,12 @@ export default defineConfig({
 | v-parallax | 视差滚动效果 | ❌ | ✅ | ✅ | v1.5.0 |
 | v-lottie | Lottie动画 | ❌ | ✅ | ✅ | v1.5.0 |
 | v-typewriter | 打字机效果 | ✅ | ✅ | ✅ | v1.5.0 |
-| v-chart | 简易图表 | ❌ | ✅ | ✅ | v1.5.0 |
 | v-progress | 进度条动画 | ❌ | ✅ | ✅ | v1.5.0 |
 | v-counter | 数字滚动动画 | ✅ | ✅ | ✅ | v1.5.0 |
 
-#### 已完成 Composables (60/60) ✅ v1.5.0 完成
+#### 已完成 Composables (57/57) ✅ v1.5.0 完成
 
-所有 60 个指令均已提供对应的组合式 API，详见 [10.3 当前版本亮点](#103-当前版本亮点v150)
+所有 57 个指令均已提供对应的组合式 API，详见 [10.3 当前版本亮点](#103-当前版本亮点v150)
 
 #### v1.2.0 新增指令 ✅ 已完成
 
@@ -3762,7 +3760,7 @@ export default defineConfig({
 | v-parallax | 视差滚动效果 | ❌ | ✅ |
 | v-lottie | Lottie 动画播放 | ❌ | ✅ |
 | v-typewriter | 打字机效果 | ✅ | ✅ |
-| v-chart | 简易图表绑定 | ❌ | ✅ |
+| v-progress | 进度条动画 | ❌ | ✅ |
 | v-progress | 进度条动画 | ❌ | ✅ |
 | v-counter | 数字滚动动画 | ✅ | ✅ |
 
@@ -3770,7 +3768,7 @@ export default defineConfig({
 
 #### ✨ 组合式 API 完成
 
-所有 60 个指令都已提供对应的组合式 API (composables)，提供更灵活的使用方式：
+所有 57 个指令都已提供对应的组合式 API (composables)，提供更灵活的使用方式：
 
 | Composable | 对应指令 | 功能描述 |
 |------------|---------|---------|
@@ -3829,20 +3827,20 @@ export default defineConfig({
 | useParallax | v-parallax | 视差滚动效果 |
 | useLottie | v-lottie | Lottie 动画播放 |
 | useTypewriter | v-typewriter | 打字机效果 |
-| useChart | v-chart | 简易图表绑定 |
+| useProgress | v-progress | 进度条动画 |
 | useProgress | v-progress | 进度条动画 |
 | useCounter | v-counter | 数字滚动动画 |
 
 #### 📚 文档完善
 
-- ✅ 所有 60 个指令的完整 API 文档
-- ✅ 所有 60 个 composables 的使用文档
+- ✅ 所有 57 个指令的完整 API 文档
+- ✅ 所有 57 个 composables 的使用文档
 - ✅ 每个指令和 composable 都有交互式 Demo
 - ✅ Vue 2 和 Vue 3 示例项目
 
 ### 10.4 v1.5.0 新增指令 ✅ 已完成
 
-共新增 19 个指令，所有指令均已包含对应的 composable：
+共新增 17 个指令，所有指令均已包含对应的 composable：
 
 #### 🎯 高价值指令 (3个)
 - v-click-wave - 点击波纹效果
@@ -3867,8 +3865,7 @@ export default defineConfig({
 - v-lottie - Lottie 动画播放
 - v-typewriter - 打字机效果
 
-#### 📊 数据可视化 (3个)
-- v-chart - 简易图表绑定
+#### 📊 数据可视化 (2个)
 - v-progress - 进度条动画
 - v-counter - 数字滚动动画
 
@@ -3895,7 +3892,7 @@ export default defineConfig({
 | v1.2.0 | 2026-03-29 | 扩展指令（11个新增）、格式化指令、UI指令 | ✅ 已完成 |
 | v1.3.0 | 2026-03-30 | 新增9个高价值指令（v-hotkey、v-click-delay、v-virtual-list等） | ✅ 已完成 |
 | v1.4.0 | 2026-04-01 | 组合式 API（41个 composables）、完整文档和示例 | ✅ 已完成 |
-| v1.5.0 | 2026-04-05 | 新增 19 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 60 个指令 | ✅ 已完成 |
+| v1.5.0 | 2026-04-05 | 新增 17 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 57 个指令 | ✅ 已完成 |
 | v1.6.0 | TBD | 单元测试覆盖率提升、性能优化、Nuxt 模块 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 

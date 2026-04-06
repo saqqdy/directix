@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.5.0] - 2026-04-05
+## [1.5.0] - 2026-04-06
 
 ### Added
 
-#### New Directives (19 new directives, total 60)
+#### New Directives (17 new directives, total 57)
 
 ##### High-Value Directives
 
@@ -105,21 +105,9 @@ All notable changes to this project will be documented in this file.
 - Customizable speed and cursor
 - Character-by-character callbacks
 
-###### v-progress
-- Progress bar animation
-- Indeterminate mode support
-- Striped and animated patterns
-- Show percentage text option
+#### New Composables (17 new composables)
 
-###### v-counter
-- Animated number counter
-- Multiple easing functions
-- Custom formatter support
-- Thousands separator
-
-#### New Composables (19 new composables)
-
-All 19 new directives have corresponding composable functions:
+All 17 new directives have corresponding composable functions:
 
 | Composable | Directive | Description |
 |------------|-----------|-------------|
@@ -138,12 +126,13 @@ All 19 new directives have corresponding composable functions:
 | `useParallax` | v-parallax | Parallax scrolling |
 | `useLottie` | v-lottie | Lottie animation control |
 | `useTypewriter` | v-typewriter | Typewriter effect |
-| `useProgress` | v-progress | Progress bar control |
-| `useCounter` | v-counter | Animated number counter |
+| `useProgress` | v-progress | Progress bar animation |
+| `useCounter` | v-counter | Counter animation |
 
 ### Changed
 
-- Updated README with all 60 directives and 60 composables
+- Extracted shared utilities to `@directix/shared` package for better code organization
+- Updated README with all 57 directives and 57 composables
 - Improved directive count accuracy
 - Vue 2 demos now use consistent pattern with other demo files (`defineComponent` + `setup()`)
 - Improved Composable API demo section with interactive trigger buttons
