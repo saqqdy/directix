@@ -105,14 +105,6 @@ All notable changes to this project will be documented in this file.
 - Customizable speed and cursor
 - Character-by-character callbacks
 
-##### Data Visualization
-
-###### v-chart
-- Simple chart binding with Chart.js
-- Multiple chart types: line, bar, pie, doughnut, radar, polarArea
-- Dynamic data updates
-- Auto-loading Chart.js library
-
 ###### v-progress
 - Progress bar animation
 - Indeterminate mode support
@@ -146,7 +138,6 @@ All 19 new directives have corresponding composable functions:
 | `useParallax` | v-parallax | Parallax scrolling |
 | `useLottie` | v-lottie | Lottie animation control |
 | `useTypewriter` | v-typewriter | Typewriter effect |
-| `useChart` | v-chart | Chart instance management |
 | `useProgress` | v-progress | Progress bar control |
 | `useCounter` | v-counter | Animated number counter |
 

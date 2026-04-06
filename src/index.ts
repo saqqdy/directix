@@ -4,7 +4,6 @@ import { setVueVersion } from '@directix/core'
 import {
 	vBlur,
 	vCapitalcase,
-	vChart,
 	vClickDelay,
 	vClickOutside,
 	vClickWave,
@@ -72,7 +71,6 @@ export {
 	getPermissionConfig,
 	vBlur,
 	vCapitalcase,
-	vChart,
 	vClickDelay,
 	vClickOutside,
 	vClickWave,
@@ -196,7 +194,6 @@ const allDirectives: Record<string, Directive> = {
 	print: vPrint,
 	'virtual-list': vVirtualList,
 	'pull-refresh': vPullRefresh,
-	chart: vChart,
 	counter: vCounter,
 	emoji: vEmoji,
 	export: vExport,

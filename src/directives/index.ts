@@ -4,9 +4,6 @@ export type { BlurBinding, BlurOptions } from './blur'
 export { default as capitalcase, vCapitalcase } from './capitalcase'
 export type { CapitalcaseBinding, CapitalcaseOptions } from './capitalcase'
 
-export { default as chart, vChart } from './chart'
-export type { ChartBinding, ChartDataset, ChartOptions, ChartType } from './chart'
-
 export { default as clickDelay, vClickDelay } from './click-delay'
 export type { ClickDelayBinding, ClickDelayHandler, ClickDelayOptions } from './click-delay'
 

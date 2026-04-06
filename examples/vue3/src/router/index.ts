@@ -302,11 +302,6 @@ const routes = [
 		name: 'Typewriter',
 		component: () => import('@/demos/typewriter.vue'),
 	},
-	{
-		path: '/chart',
-		name: 'Chart',
-		component: () => import('@/demos/chart.vue'),
-	},
 ]
 
 const router = createRouter({

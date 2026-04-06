@@ -3,42 +3,6 @@
  * These modules are optional and will be dynamically imported when needed
  */
 
-declare module 'chart.js/auto' {
-	interface ChartConfiguration {
-		type: string
-		data: {
-			labels?: string[]
-			datasets: Array<{
-				label?: string
-				data: number[]
-				backgroundColor?: string | string[]
-				borderColor?: string | string[]
-				borderWidth?: number
-				[key: string]: unknown
-			}>
-		}
-		options?: Record<string, unknown>
-		[key: string]: unknown
-	}
-
-	interface ChartInstance {
-		data: ChartConfiguration['data']
-		options: ChartConfiguration['options']
-		update: (mode?: string) => void
-		destroy: () => void
-		resize: () => void
-		[key: string]: unknown
-	}
-
-	interface ChartConstructor {
-		new (ctx: CanvasRenderingContext2D, config: ChartConfiguration): ChartInstance
-		(ctx: CanvasRenderingContext2D, config: ChartConfiguration): ChartInstance
-	}
-
-	const Chart: ChartConstructor
-	export default Chart
-}
-
 declare module 'lottie-web' {
 	interface LottieConfig {
 		container: Element

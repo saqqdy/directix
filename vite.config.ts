@@ -40,12 +40,11 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			external: ['vue', 'chart.js/auto', 'lottie-web'],
+			external: ['vue', 'lottie-web'],
 			output: {
 				banner,
 				globals: {
 					vue: 'Vue',
-					'chart.js/auto': 'Chart',
 					'lottie-web': 'lottie',
 				},
 				extend: true,

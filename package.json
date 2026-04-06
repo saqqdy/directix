@@ -45,7 +45,6 @@
 		"example:build": "pnpm --dir examples/vue3 build"
 	},
 	"dependencies": {
-		"chart.js": "^4.5.1",
 		"lottie-web": "^5.13.0"
 	},
 	"devDependencies": {

@@ -13,10 +13,6 @@ export type { UseBlurOptions, UseBlurReturn } from './use-blur'
 export { capitalizeText, capitalizeWord, createCapitalizer, useCapitalcase } from './use-capitalcase'
 export type { UseCapitalcaseOptions, UseCapitalcaseReturn } from './use-capitalcase'
 
-// Chart composable
-export { useChart } from './use-chart'
-export type { ChartDataset, ChartType, UseChartOptions, UseChartReturn } from './use-chart'
-
 // Click delay composable
 export { createDelayedClick, useClickDelay } from './use-click-delay'
 export type { ClickDelayHandler, UseClickDelayOptions, UseClickDelayReturn } from './use-click-delay'

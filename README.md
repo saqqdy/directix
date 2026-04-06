@@ -241,7 +241,6 @@ See the [Composables](#composables) section below for all available composables.
 
 | Directive | Description | SSR |
 |-----------|-------------|-----|
-| `v-chart` | Simple chart binding | ❌ |
 | `v-export` | Export data (CSV/JSON/HTML) | ❌ |
 | `v-highlight` | Keyword highlighting | ✅ |
 | `v-emoji` | Emoji input filter | ❌ |
@@ -334,7 +333,6 @@ Every directive has a corresponding composable function for use with the Composi
 | `useParallax` | Parallax scrolling |
 | `useLottie` | Lottie animation control |
 | `useTypewriter` | Typewriter effect |
-| `useChart` | Chart instance management |
 | `useExport` | Data export utilities |
 | `useHighlight` | Keyword highlighting |
 | `useEmoji` | Emoji filtering |
@@ -1314,37 +1312,6 @@ const { start, stop, pause, resume } = useTypewriter({
   text: 'Hello World',
   speed: 50,
   loop: false
-})
-</script>
-```
-
-### v-chart
-
-Simple chart binding.
-
-```vue
-<template>
-  <canvas v-chart="chartConfig"></canvas>
-
-  <canvas v-chart="{
-    type: 'bar',
-    labels: ['Jan', 'Feb', 'Mar'],
-    datasets: [{
-      label: 'Sales',
-      data: [12, 19, 3],
-      backgroundColor: '#42b883'
-    }]
-  }"></canvas>
-</template>
-
-<script setup>
-import { useChart } from 'directix'
-
-// Composable usage
-const { chart, update, destroy } = useChart({
-  type: 'bar',
-  labels: ['Jan', 'Feb', 'Mar'],
-  datasets: [{ label: 'Sales', data: [12, 19, 3] }]
 })
 </script>
 ```

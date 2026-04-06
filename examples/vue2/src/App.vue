@@ -147,7 +147,6 @@ const categoryDefinitions: CategoryDefinition[] = [
 		name: 'Data',
 		icon: '📊',
 		demos: [
-			{ path: '/chart', name: 'v-chart', desc: 'Chart.js charts', version: '1.5.0' },
 			{ path: '/export', name: 'v-export', desc: 'Export data', version: '1.5.0' },
 			{ path: '/highlight', name: 'v-highlight', desc: 'Highlight keywords', version: '1.5.0' },
 		],

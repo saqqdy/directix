@@ -241,7 +241,6 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 
 | 指令 | 描述 | SSR |
 |-----------|-------------|-----|
-| `v-chart` | 简易图表绑定 | ❌ |
 | `v-export` | 导出数据（CSV/JSON/HTML） | ❌ |
 | `v-highlight` | 关键词高亮 | ✅ |
 | `v-emoji` | Emoji 输入过滤 | ❌ |
@@ -334,7 +333,6 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 | `useParallax` | 视差滚动效果 |
 | `useLottie` | Lottie 动画控制 |
 | `useTypewriter` | 打字机效果 |
-| `useChart` | 图表实例管理 |
 | `useExport` | 数据导出工具 |
 | `useHighlight` | 关键词高亮 |
 | `useEmoji` | Emoji 过滤 |
