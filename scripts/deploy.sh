@@ -4,13 +4,13 @@
 set -e
 
 # Generate static files
-# pnpm docs:build
-cd examples/vue3
-pnpm build
+pnpm docs:build
+# cd examples/vue3
+# pnpm build
 
 # Go to the generated folder
-# cd docs/.vitepress/dist
-cd dist
+cd docs/.vitepress/dist
+# cd dist
 
 # If you are publishing to a custom domain
 # echo 'github.saqqdy.com' > CNAME
