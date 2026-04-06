@@ -24,7 +24,7 @@ hero:
 features:
   - icon: 🎯
     title: Comprehensive
-    details: 30+ commonly used directives for events, forms, visibility, security and more.
+    details: 50+ commonly used directives for events, forms, visibility, security and more.
   - icon: 🔄
     title: Vue 2/3 Compatible
     details: Single codebase supports both Vue 2 and Vue 3. No need for separate packages.
