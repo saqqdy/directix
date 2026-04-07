@@ -2,7 +2,7 @@
 	"name": "directix",
 	"description": "A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3",
 	"type": "module",
-	"version": "1.5.0",
+	"version": "1.6.0",
 	"packageManager": "pnpm@9.15.9",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
@@ -14,6 +14,11 @@
 			"types": "./dist/index.d.ts",
 			"require": "./dist/index.cjs",
 			"import": "./dist/index.mjs"
+		},
+		"./nuxt": {
+			"types": "./dist/nuxt/index.d.ts",
+			"require": "./dist/nuxt/index.cjs",
+			"import": "./dist/nuxt/index.mjs"
 		},
 		"./style.css": "./dist/style.css"
 	},

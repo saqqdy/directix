@@ -40,12 +40,14 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			external: ['vue', 'lottie-web'],
+			external: ['vue', 'lottie-web', '@nuxt/kit', '@nuxt/schema', '#app', '#imports'],
 			output: {
 				banner,
 				globals: {
 					vue: 'Vue',
 					'lottie-web': 'lottie',
+					'@nuxt/kit': 'nuxtKit',
+					'@nuxt/schema': 'nuxtSchema',
 				},
 				extend: true,
 			},
