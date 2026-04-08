@@ -9,13 +9,13 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"directix": "link:../..",
 		"vue": "^2.7.16",
-		"vue-router": "^3.6.5",
-		"directix": "link:../.."
+		"vue-router": "^3.6.5"
 	},
 	"devDependencies": {
-		"vite": "^4.5.14",
-		"vite-plugin-vue2": "^2.0.3",
-		"typescript": "^5.9.3"
+		"@vitejs/plugin-vue2": "^2.3.4",
+		"typescript": "^5.9.3",
+		"vite": "^5.4.21"
 	}
 }

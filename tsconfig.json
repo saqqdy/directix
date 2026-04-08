@@ -14,7 +14,9 @@
 		"paths": {
 			"@/*": ["src/*"],
 			"@directix/core": ["packages/core/src"],
-			"@directix/shared": ["packages/shared/src"]
+			"@directix/shared": ["packages/shared/src"],
+			"#app": ["node_modules/nuxt/dist/app"],
+			"#imports": ["node_modules/nuxt/dist/app/imports"]
 		},
 		"resolveJsonModule": true,
 

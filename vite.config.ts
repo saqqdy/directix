@@ -17,6 +17,7 @@ export default defineConfig({
 	plugins: [
 		dts({
 			include: ['src/**/*.ts', 'packages/**/*.ts'],
+			exclude: ['src/nuxt/**'],
 			outDir: 'dist',
 			rollupTypes: true,
 		}),

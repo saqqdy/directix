@@ -128,6 +128,66 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 
 请参阅下方的[组合式API](#组合式api)章节了解所有可用的组合式函数。
 
+## Nuxt 集成
+
+Directix 提供了 Nuxt 模块，可以与 Nuxt 3 应用无缝集成。
+
+### 安装配置
+
+Nuxt 模块已包含在主包中，只需在 `nuxt.config.ts` 中添加：
+
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['directix/nuxt'],
+  
+  directix: {
+    // 启用/禁用模块（默认: true）
+    enabled: true,
+    
+    // 仅包含特定指令（可选）
+    include: ['v-click-outside', 'v-copy', 'v-debounce'],
+    
+    // 或排除特定指令（可选）
+    exclude: ['v-ripple'],
+    
+    // 指令默认选项（可选）
+    directiveOptions: {
+      'v-permission': {
+        config: {
+          getPermissions: () => ['read', 'write']
+        }
+      }
+    },
+    
+    // 自动导入 composables（默认: true）
+    autoImportComposables: true
+  }
+})
+```
+
+### 在 Nuxt 中使用
+
+指令会自动注册，composables 会自动导入：
+
+```vue
+<template>
+  <div v-click-outside="handleClose">
+    <button v-copy="text">复制</button>
+  </div>
+</template>
+
+<script setup>
+// Composables 自动导入，无需手动导入
+const { copy, copied } = useCopy({ source: text })
+const { isHovering } = useHover({ onEnter: handleEnter })
+</script>
+```
+
+### SSR 兼容性
+
+不支持 SSR 的指令只会在客户端运行，Nuxt 模块会自动处理。
+
 ## 可用指令
 
 ### 事件指令

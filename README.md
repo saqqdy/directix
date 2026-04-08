@@ -128,6 +128,66 @@ const { run: debouncedSearch } = useDebounce({ handler: search, wait: 500 })
 
 See the [Composables](#composables) section below for all available composables.
 
+## Nuxt Integration
+
+Directix provides a Nuxt module for seamless integration with Nuxt 3 applications.
+
+### Installation
+
+The Nuxt module is included in the main package. Simply add it to your `nuxt.config.ts`:
+
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['directix/nuxt'],
+  
+  directix: {
+    // Enable/disable the module (default: true)
+    enabled: true,
+    
+    // Only include specific directives (optional)
+    include: ['v-click-outside', 'v-copy', 'v-debounce'],
+    
+    // Or exclude specific directives (optional)
+    exclude: ['v-ripple'],
+    
+    // Default options for directives (optional)
+    directiveOptions: {
+      'v-permission': {
+        config: {
+          getPermissions: () => ['read', 'write']
+        }
+      }
+    },
+    
+    // Auto-import composables (default: true)
+    autoImportComposables: true
+  }
+})
+```
+
+### Usage in Nuxt
+
+Directives are automatically registered and composables are auto-imported:
+
+```vue
+<template>
+  <div v-click-outside="handleClose">
+    <button v-copy="text">Copy</button>
+  </div>
+</template>
+
+<script setup>
+// Composables are auto-imported, no need to import manually
+const { copy, copied } = useCopy({ source: text })
+const { isHovering } = useHover({ onEnter: handleEnter })
+</script>
+```
+
+### SSR Compatibility
+
+Directives that are not SSR-compatible will only run on the client side. The Nuxt module handles this automatically.
+
 ## Available Directives
 
 ### Event Directives

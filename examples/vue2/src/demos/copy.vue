@@ -1,11 +1,23 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useCopy } from 'directix'
 
 export default defineComponent({
 	name: 'CopyDemo',
 	components: { DemoSection, CodeBlock },
+	setup() {
+		// Composable API demo
+		const composableText = ref('Composable API demo')
+		const { copy: composableCopy, copied: composableCopied } = useCopy({ source: composableText })
+
+		return {
+			composableText,
+			composableCopy,
+			composableCopied
+		}
+	},
 	data() {
 		return {
 			basicText: 'Hello, Directix!',
@@ -40,19 +52,17 @@ app.use(Directix)`,
   onSuccess?: (text: string) => void   // Success callback
   onError?: (err: Error) => void       // Error callback
 }`,
-			composableCode: `import { useCopy } from 'directix'
+			composableCode: `import { ref } from 'vue'
+import { useCopy } from 'directix'
 
-const { copy, copied } = useCopy({
-  onSuccess: (text) => console.log('Copied:', text),
-  onError: (err) => console.error('Failed:', err)
-})
+const text = ref('Hello World')
+const { copy, copied, isSupported } = useCopy({ source: text })
 
-// Copy text to clipboard
-await copy('Hello, World!')
+// Or use inline text
+const { copy } = useCopy()
 
-// Check if recently copied
-if (copied.value) {
-  console.log('Text was just copied')
+async function handleCopy() {
+  await copy('Custom text')
 }`
 		}
 	},
@@ -163,9 +173,19 @@ if (copied.value) {
 		</DemoSection>
 
 		<!-- Composable API -->
-		<DemoSection title="Composable API - useCopy" description="Using useCopy composable for programmatic clipboard control">
+		<DemoSection title="Composable API - useCopy" description="Using useCopy composable for programmatic control">
 			<div class="demo-box">
-				<p class="hint">Control clipboard programmatically with the composable API</p>
+				<div class="copy-row">
+					<input v-model="composableText" class="input" />
+					<button
+						@click="composableCopy()"
+						class="btn"
+						:class="{ copied: composableCopied }"
+					>
+						{{ composableCopied ? '✓ Copied!' : 'Copy (Composable)' }}
+					</button>
+				</div>
+				<p class="hint">This uses the useCopy composable instead of the directive</p>
 			</div>
 			<CodeBlock :code="composableCode" />
 		</DemoSection>

@@ -1,12 +1,11 @@
 import type { DirectiveOptions } from '../../types'
-import { defineNuxtPlugin } from '#app'
-import { useRuntimeConfig } from '#imports'
+import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 import * as directives from '../../directives'
 
 export default defineNuxtPlugin(nuxtApp => {
 	const config = useRuntimeConfig()
-	const directiveNames = config.public.directix?.directiveNames || []
-	const directiveOptions = config.public.directix?.directiveOptions || {}
+	const directiveNames = (config.public as any).directix?.directiveNames || []
+	const directiveOptions = (config.public as any).directix?.directiveOptions || {}
 
 	// Register all enabled directives
 	for (const name of directiveNames) {
@@ -20,7 +19,7 @@ export default defineNuxtPlugin(nuxtApp => {
 			const options = directiveOptions[name] as DirectiveOptions | undefined
 			if (options?.config) {
 				// Some directives have configure functions
-				const configureKey = `configure${name.charAt(1).toUpperCase() + name.slice(2).replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())}`
+				const configureKey = `configure${name.charAt(1).toUpperCase() + name.slice(2).replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase())}`
 				if (typeof (directives as Record<string, any>)[configureKey] === 'function') {
 					(directives as Record<string, any>)[configureKey](options.config)
 				}

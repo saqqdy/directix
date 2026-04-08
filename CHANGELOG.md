@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2026-04-08
+
+### Added
+
+#### Nuxt Module
+
+Official Nuxt 3 module for seamless integration with Nuxt applications.
+
+##### Features
+
+- **Auto-import composables** - All composables are automatically imported in Nuxt apps
+- **Directive auto-registration** - Directives are automatically registered as Vue directives
+- **Selective inclusion** - Include or exclude specific directives via configuration
+- **SSR compatibility** - Proper handling of client-side only directives
+
+##### Configuration
+
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['directix/nuxt'],
+  
+  directix: {
+    // Enable/disable the module
+    enabled: true,
+    
+    // Only include specific directives
+    include: ['v-click-outside', 'v-copy', 'v-debounce'],
+    
+    // Or exclude specific directives
+    exclude: ['v-ripple'],
+    
+    // Default options for directives
+    directiveOptions: {
+      'v-permission': {
+        config: {
+          getPermissions: () => ['read', 'write']
+        }
+      }
+    },
+    
+    // Auto-import composables (default: true)
+    autoImportComposables: true
+  }
+})
+```
+
+##### Usage in Nuxt
+
+```vue
+<template>
+  <div v-click-outside="handleClose">
+    <button v-copy="text">Copy</button>
+  </div>
+</template>
+
+<script setup>
+// Composables are auto-imported
+const { copy, copied } = useCopy({ source: text })
+const { isHovering } = useHover({ onEnter: handleEnter })
+</script>
+```
+
+#### Package Exports
+
+- Added `./nuxt` export path for Nuxt module
+- Full TypeScript support with type definitions
+
+### Changed
+
+- Updated package.json with Nuxt module exports
+- Improved module structure for better tree-shaking
+
+---
+
 ## [1.5.0] - 2026-04-06
 
 ### Added

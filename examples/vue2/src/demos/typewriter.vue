@@ -338,8 +338,6 @@ h1 {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0; }
 }
-	align-items: center;
-}
 
 .cursor-grid {
 	display: grid;
