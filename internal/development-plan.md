@@ -3637,6 +3637,21 @@ export default defineConfig({
 
 **里程碑 M8：v1.5.0 发布** ✅
 
+#### 第九阶段：v1.6.0 Nuxt 模块 (Week 11) ✅ 已完成
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| Nuxt 模块开发 | 8h | P1 | @nuxt/kit, @nuxt/schema | ✅ 已完成 |
+| 运行时插件 | 4h | P1 | - | ✅ 已完成 |
+| 自动导入 composables | 4h | P1 | - | ✅ 已完成 |
+| 指令自动注册 | 2h | P1 | - | ✅ 已完成 |
+| SSR 兼容性处理 | 2h | P1 | - | ✅ 已完成 |
+| 类型定义 | 2h | P1 | - | ✅ 已完成 |
+| 构建脚本 | 2h | P1 | esbuild | ✅ 已完成 |
+| 文档更新 | 2h | P2 | - | ✅ 已完成 |
+
+**里程碑 M9：v1.6.0 发布** ✅
+
 ---
 
 ### 10.2 当前进度总览
@@ -3764,7 +3779,51 @@ export default defineConfig({
 | v-progress | 进度条动画 | ❌ | ✅ |
 | v-counter | 数字滚动动画 | ✅ | ✅ |
 
-### 10.3 当前版本亮点（v1.5.0）
+### 10.3 当前版本亮点（v1.6.0）
+
+#### 🚀 Nuxt 3 模块
+
+官方 Nuxt 3 模块，提供无缝集成体验：
+
+**核心功能：**
+- ✅ 自动注册所有指令为 Vue directives
+- ✅ 自动导入所有 composables
+- ✅ 支持 include/exclude 选择性加载
+- ✅ 支持指令默认配置
+- ✅ SSR 兼容性自动处理
+
+**配置示例：**
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['directix/nuxt'],
+  directix: {
+    enabled: true,
+    include: ['v-click-outside', 'v-copy', 'v-debounce'],
+    exclude: ['v-ripple'],
+    directiveOptions: {
+      'v-permission': {
+        config: { getPermissions: () => ['read', 'write'] }
+      }
+    },
+    autoImportComposables: true
+  }
+})
+```
+
+**使用示例：**
+```vue
+<template>
+  <div v-click-outside="handleClose">
+    <button v-copy="text">Copy</button>
+  </div>
+</template>
+
+<script setup>
+// Composables 自动导入，无需手动 import
+const { copy, copied } = useCopy({ source: text })
+</script>
+```
 
 #### ✨ 组合式 API 完成
 
@@ -3869,21 +3928,15 @@ export default defineConfig({
 - v-progress - 进度条动画
 - v-counter - 数字滚动动画
 
-### 10.5 未来版本规划（v1.6.0+）
+### 10.5 未来版本规划（v1.7.0+）
 
-#### 🔮 可视化配置工具
+#### 🔮 可视化配置工具（计划中）
 
 - 在线指令配置器
 - 实时预览效果
 - 代码生成器
 
-#### 🌐 Nuxt 模块
-
-- 自动导入指令
-- 服务端渲染优化
-- Nuxt 3 原生支持
-
-### 10.5 版本规划
+### 10.6 版本规划
 
 | 版本 | 时间 | 主要内容 | 状态 |
 |------|------|---------|------|
@@ -3893,7 +3946,7 @@ export default defineConfig({
 | v1.3.0 | 2026-03-30 | 新增9个高价值指令（v-hotkey、v-click-delay、v-virtual-list等） | ✅ 已完成 |
 | v1.4.0 | 2026-04-01 | 组合式 API（41个 composables）、完整文档和示例 | ✅ 已完成 |
 | v1.5.0 | 2026-04-05 | 新增 17 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 57 个指令 | ✅ 已完成 |
-| v1.6.0 | TBD | 单元测试覆盖率提升、性能优化、Nuxt 模块 | 📋 计划中 |
+| v1.6.0 | 2026-04-08 | Nuxt 3 模块、自动导入支持 | ✅ 已完成 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 
 ---
@@ -4055,6 +4108,63 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 | 提交规范 | Conventional Commits |
 
 ### C. 版本发布记录
+
+#### v1.6.0 (2026-04-08)
+
+**重大更新 - Nuxt 3 模块：**
+
+**Nuxt 模块功能：**
+- 自动注册所有指令为 Vue directives
+- 自动导入所有 55 个 composables
+- 支持 include/exclude 选择性加载指令
+- 支持指令默认配置 (directiveOptions)
+- SSR 兼容性自动处理
+- 完整的 TypeScript 类型支持
+
+**配置选项：**
+- `enabled` - 启用/禁用模块
+- `include` - 仅包含指定指令
+- `exclude` - 排除指定指令
+- `directiveOptions` - 指令默认配置
+- `autoImportComposables` - 自动导入 composables
+
+**新增包导出：**
+- `directix/nuxt` - Nuxt 模块入口
+
+**Peer Dependencies：**
+- `@nuxt/kit` (可选)
+- `@nuxt/schema` (可选)
+
+#### v1.5.0 (2026-04-06)
+
+**重大更新 - 17 个新指令：**
+
+**高价值指令：**
+- `v-click-wave` - 点击波纹效果
+- `v-context-menu` - 右键菜单
+- `v-fullscreen` - 全屏切换
+
+**实用工具指令：**
+- `v-skeleton` - 骨架屏
+- `v-export` - 数据导出（CSV/JSON/HTML/TXT）
+- `v-highlight` - 关键词高亮
+
+**移动端手势：**
+- `v-emoji` - Emoji 输入过滤
+- `v-pan` - 平移手势
+- `v-pinch` - 缩放手势
+- `v-rotate-gesture` - 旋转手势
+
+**视觉效果：**
+- `v-blur` - 背景模糊遮罩
+- `v-fade` - 淡入淡出过渡
+- `v-parallax` - 视差滚动效果
+- `v-lottie` - Lottie 动画播放
+- `v-typewriter` - 打字机效果
+- `v-progress` - 进度条动画
+- `v-counter` - 数字滚动动画
+
+**总计：57 个指令，57 个 composables**
 
 #### v1.4.0 (2026-04-01)
 
