@@ -1774,6 +1774,49 @@ interface DirectiveInstallOptions {
 
 Each directive accepts different options. See the [documentation](https://github.com/saqqdy/directix#usage-examples) for detailed API.
 
+## Roadmap
+
+### v1.7.0 (Planned - 2026-04-15) - Visual Configuration Tool
+
+- **Online Playground** - Live editing environment with Vue 2/3 support
+- **Visual Configurator** - Interactive parameter configuration panel
+- **Code Generator** - Generate Vue 2/3/Composable/Nuxt code snippets
+- **Configuration Presets** - Quick-start templates for common use cases
+
+### v1.8.0 (Planned - 2026-04-22) - Quality & Ecosystem
+
+- **Test Coverage** - 90%+ unit test coverage, E2E testing with Playwright
+- **Performance Optimization** - Bundle size optimization, tree-shaking improvements
+- **VS Code Extension** - Autocompletion, hover documentation, code snippets
+- **CLI Tool** - `directix create`, `directix init`, `directix doctor`, `directix migrate`
+
+### v1.9.0 (Planned - 2026-04-29) - Documentation & Community
+
+- **Interactive Documentation** - Live editing with instant preview
+- **Real-world Examples** - 10+ practical scenario examples
+- **i18n Support** - English, Chinese, Japanese documentation
+- **Developer Experience** - Improved error messages, DevTools integration
+- **Plugin System** - Community extension support
+
+### v1.10.0 (Planned - 2026-05-06) - Vue 3 Optimization & Security
+
+- **Vue 3 Optimization Preview** - Suspense, Teleport support
+- **Mobile Optimization** - Touch gestures, PWA support
+- **Accessibility (A11y)** - ARIA attributes, keyboard navigation
+- **Security Enhancements** - XSS protection, CSP compatibility
+
+### v1.11.0 (Planned - 2026-05-13) - Stability & Enterprise
+
+- **Stability** - Browser compatibility, edge case fixes
+- **Performance Limits** - Bundle ≤ 25KB, memory optimization
+- **Enterprise Features** - Permissions, audit logs, config center
+- **v2.0 Migration Prep** - Migration tool, breaking changes warnings
+
+### v2.0.0 (Future)
+
+- Vue 3 exclusive optimizations
+- Web Components support
+
 ## Browser Support
 
 | Browser | Version |

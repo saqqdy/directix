@@ -827,6 +827,12 @@ None
 - Accessibility (ARIA, keyboard navigation, screen readers)
 - Security enhancements (XSS protection, CSP compatibility)
 
+### v1.11.0 (Planned - 2026-05-13)
+- Stability and compatibility enhancements
+- Performance limit optimization (bundle size, runtime, memory)
+- Enterprise features (permissions, audit logs, config center, monitoring)
+- v2.0.0 migration preparation (migration tool, breaking changes warnings)
+
 ### v2.0.0 (Future)
 - Vue 3 exclusive optimizations
 - Web Components support
