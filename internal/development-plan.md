@@ -4680,7 +4680,476 @@ export const vCustomDirective = defineDirective({
 | 视频托管 | YouTube / Bilibili | 教程视频平台 |
 | 插件系统 | 事件驱动架构 | 插件生命周期管理 |
 
-### 10.8 未来版本规划（v2.0.0+）
+### 10.8 v1.10.0 开发计划 - Vue 3 优化、移动端、无障碍与安全 (Week 17-18)
+
+#### 核心目标
+
+作为 v2.0.0 之前的过渡版本，提前预览 Vue 3 专属优化特性，同时提升移动端体验、无障碍访问和安全性。
+
+#### 任务清单
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| **Vue 3 专属优化预览** | | | | |
+| Composition API 深度优化 | 8h | P0 | - | 📋 待开发 |
+| Vue 3 响应式系统优化 | 6h | P0 | - | 📋 待开发 |
+| Suspense 支持增强 | 4h | P1 | - | 📋 待开发 |
+| Teleport 指令增强 | 4h | P1 | - | 📋 待开发 |
+| Vue 3 专属 API 利用 | 6h | P1 | - | 📋 待开发 |
+| **移动端优化** | | | | |
+| 触摸手势优化 | 8h | P0 | - | 📋 待开发 |
+| 移动端性能优化 | 6h | P0 | - | 📋 待开发 |
+| PWA 支持集成 | 6h | P1 | - | 📋 待开发 |
+| 手势库扩展 | 8h | P1 | - | 📋 待开发 |
+| 触摸反馈优化 | 4h | P2 | - | 📋 待开发 |
+| **无障碍访问 (A11y)** | | | | |
+| ARIA 属性支持 | 8h | P0 | - | 📋 待开发 |
+| 键盘导航增强 | 6h | P0 | - | 📋 待开发 |
+| 屏幕阅读器兼容 | 6h | P1 | - | 📋 待开发 |
+| 无障碍最佳实践文档 | 4h | P1 | - | 📋 待开发 |
+| 自动 ARIA 生成 | 4h | P2 | - | 📋 待开发 |
+| **安全增强** | | | | |
+| XSS 防护增强 | 6h | P0 | - | 📋 待开发 |
+| CSP 兼容性优化 | 4h | P0 | - | 📋 待开发 |
+| 安全审计工具 | 4h | P1 | - | 📋 待开发 |
+| 依赖漏洞扫描 | 2h | P1 | - | 📋 待开发 |
+| 安全最佳实践文档 | 2h | P1 | - | 📋 待开发 |
+
+**里程碑 M13：v1.10.0 发布** 📋 计划中
+
+#### 功能详解
+
+##### 1. Vue 3 专属优化预览
+
+**Composition API 深度优化：**
+```typescript
+// Vue 3 专属优化示例
+import { watchEffect, computed, shallowRef } from 'vue'
+
+// 使用 shallowRef 优化大对象性能
+export function useLazyOptimized(options: LazyOptions) {
+  const state = shallowRef({
+    loading: false,
+    loaded: false,
+    error: null,
+  })
+
+  // 使用 watchEffect 自动追踪依赖
+  watchEffect((onCleanup) => {
+    const observer = new IntersectionObserver(/* ... */)
+    onCleanup(() => observer.disconnect())
+  })
+
+  return {
+    state: computed(() => state.value),
+    // ...
+  }
+}
+```
+
+**Vue 3 响应式系统优化：**
+```typescript
+// 响应式优化
+import { reactive, readonly, markRaw, toRaw } from 'vue'
+
+// 使用 markRaw 标记不需要响应式的对象
+export function useDirectiveInstance(el: HTMLElement) {
+  const element = markRaw(el) // DOM 元素不需要响应式
+
+  // 使用 reactive 创建响应式状态
+  const state = reactive({
+    bindings: {},
+    modifiers: {},
+  })
+
+  return {
+    element,
+    state: readonly(state),
+  }
+}
+```
+
+**Suspense 支持增强：**
+```vue
+<template>
+  <Suspense>
+    <template #default>
+      <LazyComponent v-lazy="imageUrl" />
+    </template>
+    <template #fallback>
+      <div v-loading="true">Loading...</div>
+    </template>
+  </Suspense>
+</template>
+```
+
+**Teleport 指令增强：**
+```vue
+<template>
+  <!-- 指令内容可传送到任意位置 -->
+  <div v-tooltip="{ content: '提示', teleport: 'body' }">
+    悬停我
+  </div>
+
+  <!-- 支持 Teleport 目标选择器 -->
+  <div v-context-menu="{ menu, teleport: '#menu-container' }">
+    右键菜单
+  </div>
+</template>
+```
+
+##### 2. 移动端优化
+
+**触摸手势优化：**
+```typescript
+// 增强的触摸手势支持
+export interface TouchGestureOptions {
+  // 手势识别阈值
+  threshold: {
+    tap: number        // 点击识别阈值
+    longPress: number  // 长按时间阈值
+    swipe: number      // 滑动距离阈值
+    pinch: number      // 缩放比例阈值
+    rotate: number     // 旋转角度阈值
+  }
+
+  // 手势优先级
+  priority: ('tap' | 'longPress' | 'swipe' | 'pinch' | 'rotate')[]
+
+  // 防抖与节流
+  debounce: number
+  throttle: number
+
+  // 触摸反馈
+  feedback: {
+    haptic: boolean    // 触觉反馈
+    visual: boolean    // 视觉反馈
+    sound: boolean     // 声音反馈
+  }
+}
+```
+
+**移动端性能优化：**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    移动端性能优化策略                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  渲染优化                    事件优化                        │
+│  ┌─────────────────┐        ┌─────────────────┐            │
+│  │ - 虚拟滚动      │        │ - 被动事件监听  │            │
+│  │ - 延迟渲染      │        │ - 事件委托      │            │
+│  │ - CSS 硬件加速  │        │ - 防抖节流      │            │
+│  │ - 图片懒加载    │        │ - 触摸事件优化  │            │
+│  └─────────────────┘        └─────────────────┘            │
+│                                                              │
+│  内存优化                    网络优化                        │
+│  ┌─────────────────┐        ┌─────────────────┐            │
+│  │ - 对象池复用    │        │ - 资源预加载    │            │
+│  │ - 及时清理      │        │ - 缓存策略      │            │
+│  │ - WeakMap 使用  │        │ - 压缩传输      │            │
+│  │ - 内存监控      │        │ - 离线支持      │            │
+│  └─────────────────┘        └─────────────────┘            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**PWA 支持集成：**
+```typescript
+// PWA 配置
+export interface PWAOptions {
+  // Service Worker 配置
+  serviceWorker: {
+    enabled: boolean
+    scope: string
+    updateStrategy: 'auto' | 'manual'
+  }
+
+  // 缓存策略
+  cache: {
+    static: 'cache-first' | 'network-first' | 'stale-while-revalidate'
+    dynamic: 'network-first' | 'cache-first'
+    maxAge: number
+    maxSize: number
+  }
+
+  // 离线支持
+  offline: {
+    enabled: boolean
+    fallbackPage: string
+    offlineIndicator: boolean
+  }
+}
+```
+
+**手势库扩展：**
+```typescript
+// 新增手势类型
+export type GestureType =
+  | 'tap'          // 单击
+  | 'doubleTap'    // 双击
+  | 'longPress'    // 长按
+  | 'swipe'        // 滑动
+  | 'pan'          // 拖拽
+  | 'pinch'        // 双指缩放
+  | 'rotate'       // 双指旋转
+  | 'twoFingerTap' // 双指点击
+  | 'threeFingerTap' // 三指点击
+  | 'pinchIn'      // 双指向内捏合
+  | 'pinchOut'     // 双指向外展开
+  | 'edgeSwipe'    // 边缘滑动
+```
+
+##### 3. 无障碍访问 (A11y)
+
+**ARIA 属性支持：**
+```typescript
+// ARIA 属性自动生成
+export interface ARIAConfig {
+  // 角色
+  role?: string
+
+  // 状态
+  ariaExpanded?: boolean
+  ariaSelected?: boolean
+  ariaChecked?: boolean
+  ariaDisabled?: boolean
+  ariaHidden?: boolean
+  ariaBusy?: boolean
+
+  // 属性
+  ariaLabel?: string
+  ariaLabelledBy?: string
+  ariaDescribedBy?: string
+  ariaControls?: string
+  ariaOwns?: string
+  ariaHasPopup?: 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog'
+
+  // 实时区域
+  ariaLive?: 'off' | 'polite' | 'assertive'
+  ariaAtomic?: boolean
+  ariaRelevant?: 'additions' | 'removals' | 'text' | 'all'
+}
+
+// 指令自动添加 ARIA 属性
+export const vTooltip = defineDirective({
+  mounted(el, binding) {
+    // 自动添加 ARIA 属性
+    el.setAttribute('role', 'tooltip')
+    el.setAttribute('aria-hidden', 'true')
+
+    // 触发元素
+    const trigger = el.previousElementSibling
+    if (trigger) {
+      trigger.setAttribute('aria-describedby', el.id)
+      trigger.setAttribute('aria-haspopup', 'tooltip')
+    }
+  }
+})
+```
+
+**键盘导航增强：**
+```typescript
+// 键盘导航配置
+export interface KeyboardNavigationConfig {
+  // 焦点管理
+  focus: {
+    trap: boolean           // 焦点陷阱
+    initial: string         // 初始焦点
+    returnFocus: boolean    // 关闭时返回焦点
+  }
+
+  // 导航键
+  keys: {
+    next: string[]          // 下一个 (默认: Tab, ArrowDown, ArrowRight)
+    prev: string[]          // 上一个 (默认: Shift+Tab, ArrowUp, ArrowLeft)
+    select: string[]        // 选择 (默认: Enter, Space)
+    close: string[]         // 关闭 (默认: Escape)
+  }
+
+  // 导航模式
+  mode: 'linear' | 'grid' | 'tree'
+
+  // 循环导航
+  loop: boolean
+}
+
+// 示例：v-context-menu 键盘导航
+export const vContextMenu = defineDirective({
+  mounted(el, binding) {
+    const config: KeyboardNavigationConfig = {
+      focus: { trap: true, returnFocus: true },
+      keys: {
+        next: ['ArrowDown'],
+        prev: ['ArrowUp'],
+        select: ['Enter', 'Space'],
+        close: ['Escape'],
+      },
+      mode: 'linear',
+      loop: true,
+    }
+
+    setupKeyboardNavigation(el, config)
+  }
+})
+```
+
+**屏幕阅读器兼容：**
+```typescript
+// 屏幕阅读器公告
+export function announce(message: string, options?: {
+  priority?: 'polite' | 'assertive'
+  timeout?: number
+  clear?: boolean
+}) {
+  const announcer = document.getElementById('sr-announcer') ||
+    createAnnouncer()
+
+  announcer.setAttribute('aria-live', options?.priority || 'polite')
+  announcer.textContent = message
+
+  if (options?.clear !== false) {
+    setTimeout(() => {
+      announcer.textContent = ''
+    }, options?.timeout || 1000)
+  }
+}
+
+// 使用示例
+export const vCopy = defineDirective({
+  mounted(el, binding) {
+    el.addEventListener('click', async () => {
+      await copyToClipboard(binding.value)
+      // 屏幕阅读器公告
+      announce('已复制到剪贴板')
+    })
+  }
+})
+```
+
+##### 4. 安全增强
+
+**XSS 防护增强：**
+```typescript
+// XSS 防护配置
+export interface XSSProtectionConfig {
+  // 允许的标签
+  allowedTags: string[]
+
+  // 允许的属性
+  allowedAttributes: Record<string, string[]>
+
+  // 允许的协议
+  allowedProtocols: string[]
+
+  // 自定义过滤规则
+  customFilters: ((html: string) => string)[]
+
+  // 危险模式检测
+  detectDangerousPatterns: boolean
+}
+
+// 增强的 sanitize 指令
+export const vSanitize = defineDirective({
+  mounted(el, binding) {
+    const config: XSSProtectionConfig = {
+      allowedTags: ['b', 'i', 'u', 'strong', 'em', 'p', 'br'],
+      allowedAttributes: {
+        '*': ['class', 'id'],
+        'a': ['href', 'title'],
+      },
+      allowedProtocols: ['http', 'https', 'mailto'],
+      detectDangerousPatterns: true,
+      ...binding.value,
+    }
+
+    const sanitized = sanitizeHTML(el.innerHTML, config)
+    el.innerHTML = sanitized
+  }
+})
+```
+
+**CSP 兼容性优化：**
+```typescript
+// CSP 安全配置
+export interface CSPConfig {
+  // 禁用内联脚本
+  noInlineScripts: boolean
+
+  // 禁用内联样式
+  noInlineStyles: boolean
+
+  // 禁用 eval
+  noEval: boolean
+
+  // 使用 nonce
+  nonce?: string
+}
+
+// CSP 兼容的样式注入
+export function injectStyles(css: string, options?: CSPConfig) {
+  if (options?.nonce) {
+    const style = document.createElement('style')
+    style.setAttribute('nonce', options.nonce)
+    style.textContent = css
+    document.head.appendChild(style)
+  } else {
+    // 使用 CSS 文件
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = getStylesheetURL(css)
+    document.head.appendChild(link)
+  }
+}
+```
+
+**安全审计工具：**
+```typescript
+// 安全审计 API
+export const SecurityAudit = {
+  // 扫描潜在安全问题
+  scan(): SecurityReport {
+    return {
+      vulnerabilities: this.findVulnerabilities(),
+      warnings: this.findWarnings(),
+      recommendations: this.getRecommendations(),
+    }
+  },
+
+  // 检查依赖漏洞
+  async checkDependencies(): Promise<DependencyVulnerability[]> {
+    const result = await auditDependencies()
+    return result.vulnerabilities
+  },
+
+  // 检查 CSP 配置
+  checkCSP(): CSPReport {
+    return {
+      policies: this.parseCSPMeta(),
+      violations: this.findCSPViolations(),
+      recommendations: this.getCSPRecommendations(),
+    }
+  },
+
+  // 生成安全报告
+  generateReport(format: 'json' | 'html' | 'markdown'): string {
+    // ...
+  }
+}
+```
+
+#### 技术栈
+
+| 功能 | 技术选型 | 说明 |
+|------|---------|------|
+| Vue 3 优化 | Vue 3 响应式 API | shallowRef, markRaw 等 |
+| PWA | vite-plugin-pwa | PWA 支持插件 |
+| 手势识别 | @use-gesture/vue | 手势库 |
+| A11y | @vue-a11y/* | 无障碍工具集 |
+| XSS 防护 | DOMPurify | HTML 消毒库 |
+| 安全审计 | npm audit / snyk | 漏洞扫描工具 |
+
+### 10.9 未来版本规划（v2.0.0+）
 
 #### 🔮 长期规划
 
@@ -4689,7 +5158,7 @@ export const vCustomDirective = defineDirective({
 - 性能进一步优化
 - 国际化支持 (i18n)
 
-### 10.9 版本规划
+### 10.10 版本规划
 
 | 版本 | 时间 | 主要内容 | 状态 |
 |------|------|---------|------|
@@ -4703,6 +5172,7 @@ export const vCustomDirective = defineDirective({
 | v1.7.0 | 2026-04-15 | 可视化配置工具、在线 Playground、代码生成器 | 📋 计划中 |
 | v1.8.0 | 2026-04-22 | 测试覆盖率 90%+、性能优化、VS Code 插件、CLI 工具 | 📋 计划中 |
 | v1.9.0 | 2026-04-29 | 文档完善、国际化、开发者体验、社区功能 | 📋 计划中 |
+| v1.10.0 | 2026-05-06 | Vue 3 优化预览、移动端优化、无障碍访问、安全增强 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 
 ---
@@ -4864,6 +5334,34 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 | 提交规范 | Conventional Commits |
 
 ### C. 版本发布记录
+
+#### v1.10.0 (2026-05-06)
+
+**重大更新 - Vue 3 优化、移动端、无障碍与安全：**
+
+**Vue 3 专属优化预览：**
+- Composition API 深度优化
+- Vue 3 响应式系统优化（shallowRef, markRaw）
+- Suspense 支持增强
+- Teleport 指令增强
+
+**移动端优化：**
+- 触摸手势优化（阈值、优先级、反馈）
+- 移动端性能优化
+- PWA 支持集成
+- 手势库扩展（双指/三指点击、边缘滑动等）
+
+**无障碍访问 (A11y)：**
+- ARIA 属性自动生成
+- 键盘导航增强（焦点陷阱、循环导航）
+- 屏幕阅读器兼容
+- 无障碍最佳实践文档
+
+**安全增强：**
+- XSS 防护增强
+- CSP 兼容性优化
+- 安全审计工具
+- 依赖漏洞扫描
 
 #### v1.9.0 (2026-04-29)
 
