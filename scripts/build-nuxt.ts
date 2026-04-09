@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { build } from 'esbuild'
@@ -9,6 +9,7 @@ const __dirname = dirname(__filename)
 const rootDir = resolve(__dirname, '..')
 const distDir = resolve(rootDir, 'dist')
 const nuxtDistDir = resolve(distDir, 'nuxt')
+const runtimeDistDir = resolve(nuxtDistDir, 'runtime')
 
 const pkg = JSON.parse(readFileSync(resolve(rootDir, 'package.json'), 'utf-8'))
 
@@ -22,6 +23,10 @@ const banner
 
 async function buildNuxtModule() {
 	console.log('Building Nuxt module...')
+
+	// Ensure directories exist
+	mkdirSync(nuxtDistDir, { recursive: true })
+	mkdirSync(runtimeDistDir, { recursive: true })
 
 	// Build ESM
 	await build({
@@ -56,6 +61,20 @@ const _importMetaUrl = require('url').pathToFileURL(__filename).toString();
 		minify: false,
 	})
 	console.log('✓ Built dist/nuxt/index.cjs')
+
+	// Build runtime plugin
+	await build({
+		entryPoints: [resolve(rootDir, 'src/nuxt/runtime/plugin.ts')],
+		bundle: true,
+		platform: 'neutral',
+		format: 'esm',
+		outfile: resolve(runtimeDistDir, 'plugin.mjs'),
+		external: ['vue', '#app', '#imports', 'directix'],
+		banner: { js: banner },
+		sourcemap: true,
+		minify: false,
+	})
+	console.log('✓ Built dist/nuxt/runtime/plugin.mjs')
 
 	// Create type declaration file
 	const dtsContent = `${banner}

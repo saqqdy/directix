@@ -128,11 +128,6 @@ export {
 	vWatermark,
 } from './directives'
 
-// Export Nuxt module
-export { default as directixNuxtModule } from './nuxt'
-
-export type { ModuleOptions as DirectixNuxtModuleOptions } from './nuxt'
-
 // Export core utilities
 export * from '@directix/core'
 // Export shared utilities (excluding tools with the same name as directives)
