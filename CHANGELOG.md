@@ -814,7 +814,13 @@ None
 - VS Code extension (autocompletion, hover docs, snippets)
 - CLI tool (create directive, init project, doctor, migrate)
 
+### v1.9.0 (Planned - 2026-04-29)
+- Interactive documentation with live editing
+- 10+ real-world scenario examples
+- i18n support (EN/ZH-CN/JA)
+- Developer experience improvements (error messages, DevTools integration)
+- Plugin system for community extensions
+
 ### v2.0.0 (Future)
 - Vue 3 exclusive optimizations
 - Web Components support
-- Internationalization (i18n)
