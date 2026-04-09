@@ -4126,7 +4126,263 @@ docs/
     └── config-generator.md             # 配置生成器 API 文档
 ```
 
-### 10.6 未来版本规划（v2.0.0+）
+### 10.6 v1.8.0 开发计划 - 测试覆盖、性能优化与生态集成 (Week 13-14)
+
+#### 核心目标
+
+全面提升项目质量、性能表现和开发体验，构建完善的生态系统。
+
+#### 任务清单
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| **测试覆盖率提升** | | | | |
+| 单元测试框架优化 | 4h | P0 | Vitest | 📋 待开发 |
+| 核心指令测试用例完善 | 16h | P0 | - | 📋 待开发 |
+| Composables 测试用例完善 | 12h | P0 | - | 📋 待开发 |
+| 测试覆盖率达到 90%+ | 8h | P0 | - | 📋 待开发 |
+| E2E 测试框架搭建 | 6h | P1 | Playwright | 📋 待开发 |
+| E2E 测试用例编写 | 8h | P1 | - | 📋 待开发 |
+| CI/CD 自动化测试集成 | 4h | P0 | GitHub Actions | 📋 待开发 |
+| **性能优化** | | | | |
+| 打包体积分析与优化 | 6h | P0 | rollup-plugin-visualizer | 📋 待开发 |
+| Tree-shaking 优化 | 4h | P0 | - | 📋 待开发 |
+| 运行时性能基准测试 | 4h | P1 | - | 📋 待开发 |
+| 核心指令性能优化 | 8h | P1 | - | 📋 待开发 |
+| 懒加载与按需加载优化 | 4h | P2 | - | 📋 待开发 |
+| Bundle 大小监控 CI | 2h | P1 | - | 📋 待开发 |
+| **VS Code 插件** | | | | |
+| 插件架构设计 | 4h | P0 | - | 📋 待开发 |
+| 指令自动补全 | 8h | P0 | - | 📋 待开发 |
+| 指令悬浮提示 | 6h | P0 | - | 📋 待开发 |
+| 指令文档跳转 | 4h | P1 | - | 📋 待开发 |
+| 代码片段 (Snippets) | 4h | P1 | - | 📋 待开发 |
+| 插件发布 | 2h | P0 | - | 📋 待开发 |
+| **CLI 工具** | | | | |
+| CLI 架构设计 | 4h | P0 | - | 📋 待开发 |
+| 指令快速创建命令 | 6h | P0 | - | 📋 待开发 |
+| 项目初始化模板 | 4h | P1 | - | 📋 待开发 |
+| 配置迁移工具 | 4h | P2 | - | 📋 待开发 |
+
+**里程碑 M11：v1.8.0 发布** 📋 计划中
+
+#### 功能详解
+
+##### 1. 测试覆盖率提升
+
+**目标：**
+- 单元测试覆盖率 ≥ 90%
+- E2E 测试覆盖核心场景
+- CI/CD 自动化测试
+
+**测试框架：**
+```typescript
+// vitest.config.ts 优化
+export default defineConfig({
+  test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules/**',
+        'tests/**',
+        '**/*.d.ts',
+        '**/*.config.*',
+        'docs/**',
+        'examples/**',
+      ],
+      thresholds: {
+        lines: 90,
+        functions: 90,
+        branches: 85,
+        statements: 90,
+      },
+    },
+  },
+})
+```
+
+**测试分类：**
+| 类型 | 覆盖范围 | 工具 |
+|------|---------|------|
+| 单元测试 | 指令、Composables、工具函数 | Vitest |
+| 集成测试 | Vue 2/3 兼容性 | Vitest + @vue/test-utils |
+| E2E 测试 | 用户交互场景 | Playwright |
+
+##### 2. 性能优化
+
+**打包体积目标：**
+- 单指令 ≤ 1.5KB gzip
+- 全量包 ≤ 30KB gzip
+
+**优化措施：**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    性能优化策略                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  打包优化                    运行时优化                      │
+│  ┌─────────────────┐        ┌─────────────────┐            │
+│  │ - 代码分割      │        │ - 延迟初始化    │            │
+│  │ - Tree-shaking  │        │ - 事件委托      │            │
+│  │ - 压缩优化      │        │ - 防抖节流优化  │            │
+│  │ - 依赖精简      │        │ - 内存管理      │            │
+│  └─────────────────┘        └─────────────────┘            │
+│                                                              │
+│  监控                        基准测试                        │
+│  ┌─────────────────┐        ┌─────────────────┐            │
+│  │ - Bundle 大小   │        │ - 性能基准      │            │
+│  │ - CI 阈值检查   │        │ - 对比分析      │            │
+│  │ - 变更报告      │        │ - 回归检测      │            │
+│  └─────────────────┘        └─────────────────┘            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**性能基准测试：**
+```typescript
+// tests/benchmark/index.ts
+import { Bench } from 'tinybench'
+
+const bench = new Bench({ time: 1000 })
+
+bench
+  .add('v-debounce (1000 calls)', () => {
+    // 性能测试代码
+  })
+  .add('v-throttle (1000 calls)', () => {
+    // 性能测试代码
+  })
+
+await bench.run()
+console.table(bench.table())
+```
+
+##### 3. VS Code 插件
+
+**插件功能：**
+
+| 功能 | 描述 |
+|------|------|
+| 自动补全 | 输入 `v-` 自动提示所有可用指令 |
+| 悬浮提示 | 鼠标悬浮显示指令用法和参数 |
+| 文档跳转 | 点击指令跳转到官方文档 |
+| 代码片段 | 快速插入指令模板代码 |
+| 参数提示 | 指令参数类型提示 |
+
+**补全示例：**
+```vue
+<template>
+  <!-- 输入 v-de 自动补全 -->
+  <input v-debounce="handleInput" />
+  
+  <!-- 悬浮提示 -->
+  <!-- 
+    v-debounce
+    防抖指令，延迟执行事件处理函数
+    
+    @param handler - 事件处理函数
+    @param wait - 延迟时间 (ms)，默认 300
+    @param leading - 是否在延迟开始前调用
+    @param trailing - 是否在延迟结束后调用
+    
+    示例: v-debounce="{ handler: fn, wait: 500 }"
+  -->
+</template>
+```
+
+**代码片段：**
+```json
+{
+  "Directix Debounce": {
+    "prefix": "vdebounce",
+    "body": [
+      "v-debounce=\"{ handler: ${1:handleInput}, wait: ${2:300} }\""
+    ],
+    "description": "Debounce directive with options"
+  }
+}
+```
+
+##### 4. CLI 工具
+
+**命令列表：**
+
+```bash
+# 创建新指令
+directix create directive v-my-directive
+
+# 创建新 composable
+directix create composable useMyFeature
+
+# 初始化项目模板
+directix init my-project --template vue3
+
+# 检查依赖和配置
+directix doctor
+
+# 迁移配置
+directix migrate --from vueuse
+```
+
+**CLI 架构：**
+```
+directix-cli/
+├── src/
+│   ├── commands/
+│   │   ├── create.ts        # 创建命令
+│   │   ├── init.ts          # 初始化命令
+│   │   ├── doctor.ts        # 诊断命令
+│   │   └── migrate.ts       # 迁移命令
+│   ├── templates/
+│   │   ├── directive.ts     # 指令模板
+│   │   ├── composable.ts    # Composable 模板
+│   │   └── project/         # 项目模板
+│   └── index.ts
+├── package.json
+└── README.md
+```
+
+**创建指令模板：**
+```typescript
+// templates/directive.ts
+export const directiveTemplate = (name: string) => `
+import { defineDirective } from 'directix'
+
+export const ${name} = defineDirective({
+  name: '${name}',
+  ssr: false,
+
+  mounted(el, binding) {
+    // 实现逻辑
+  },
+
+  updated(el, binding) {
+    // 更新逻辑
+  },
+
+  unmounted(el) {
+    // 清理逻辑
+  },
+})
+
+export default ${name}
+`
+```
+
+#### 技术栈
+
+| 功能 | 技术选型 | 说明 |
+|------|---------|------|
+| 单元测试 | Vitest | Vite 原生测试框架 |
+| E2E 测试 | Playwright | 跨浏览器测试 |
+| 覆盖率 | v8 coverage | 代码覆盖率工具 |
+| 性能测试 | tinybench | 基准测试库 |
+| VS Code 插件 | vscode-extension-api | 官方插件 API |
+| CLI 框架 | cac / commander | 命令行框架 |
+| 模板引擎 | handlebars | 代码模板生成 |
+
+### 10.7 未来版本规划（v2.0.0+）
 
 #### 🔮 长期规划
 
@@ -4135,7 +4391,7 @@ docs/
 - 性能进一步优化
 - 国际化支持 (i18n)
 
-### 10.7 版本规划
+### 10.8 版本规划
 
 | 版本 | 时间 | 主要内容 | 状态 |
 |------|------|---------|------|
@@ -4147,6 +4403,7 @@ docs/
 | v1.5.0 | 2026-04-05 | 新增 17 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 57 个指令 | ✅ 已完成 |
 | v1.6.0 | 2026-04-08 | Nuxt 3 模块、自动导入支持 | ✅ 已完成 |
 | v1.7.0 | 2026-04-15 | 可视化配置工具、在线 Playground、代码生成器 | 📋 计划中 |
+| v1.8.0 | 2026-04-22 | 测试覆盖率 90%+、性能优化、VS Code 插件、CLI 工具 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 
 ---
@@ -4308,6 +4565,37 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 | 提交规范 | Conventional Commits |
 
 ### C. 版本发布记录
+
+#### v1.8.0 (2026-04-22)
+
+**重大更新 - 测试覆盖、性能优化与生态集成：**
+
+**测试覆盖率提升：**
+- 单元测试覆盖率达到 90%+
+- 所有 57 个指令完整测试用例
+- 所有 57 个 Composables 完整测试用例
+- E2E 测试覆盖核心交互场景
+- CI/CD 自动化测试流程
+
+**性能优化：**
+- 单指令体积 ≤ 1.5KB gzip
+- 全量包体积 ≤ 30KB gzip
+- Tree-shaking 优化
+- 运行时性能优化
+- Bundle 大小监控 CI
+
+**VS Code 插件：**
+- 指令自动补全
+- 悬浮提示文档
+- 代码片段 (Snippets)
+- 快速跳转文档
+
+**CLI 工具：**
+- `directix create directive` - 创建新指令
+- `directix create composable` - 创建新 composable
+- `directix init` - 初始化项目模板
+- `directix doctor` - 诊断配置问题
+- `directix migrate` - 配置迁移工具
 
 #### v1.7.0 (2026-04-15)
 

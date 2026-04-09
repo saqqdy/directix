@@ -801,13 +801,20 @@ None
 
 ## Roadmap
 
-### v1.6.0 (Planned)
-- Nuxt module for auto-import
-- Unit test coverage improvement
-- Performance optimization
+### v1.7.0 (Planned - 2026-04-15)
+- Visual configuration tool
+- Online Playground with live preview
+- Code generator (Vue 2/3/Composable/Nuxt)
+- Configuration presets and templates
+- Documentation embedded Playground
+
+### v1.8.0 (Planned - 2026-04-22)
+- Test coverage improvement (90%+)
+- Performance optimization (bundle size, runtime)
+- VS Code extension (autocompletion, hover docs, snippets)
+- CLI tool (create directive, init project, doctor, migrate)
 
 ### v2.0.0 (Future)
 - Vue 3 exclusive optimizations
 - Web Components support
-- Visual configuration tool
-- Online playground
+- Internationalization (i18n)
