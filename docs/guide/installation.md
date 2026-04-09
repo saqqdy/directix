@@ -118,5 +118,6 @@ DIRECTIX_VUE_VERSION=3
 ## Next Steps
 
 - [Quick Start](/guide/quick-start) - Learn how to use Directix
+- [Nuxt Module](/guide/nuxt) - Use Directix with Nuxt 3
 - [Event Directives](/guide/events) - Explore event-related directives
 - [Form Directives](/guide/forms) - Explore form-related directives

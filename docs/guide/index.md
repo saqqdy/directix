@@ -4,12 +4,13 @@
 
 ## Why Directix?
 
-- **🎯 Comprehensive** - 50+ commonly used directives for everyday development
+- **🎯 Comprehensive** - 57+ commonly used directives for everyday development
 - **🔄 Vue 2/3 Compatible** - Single codebase supports both versions seamlessly
 - **📦 Tree-shakable** - Import only what you need, minimal bundle size
 - **🔒 TypeScript** - Full TypeScript support with complete type definitions
 - **🚀 SSR Friendly** - Works with Nuxt and other SSR frameworks
 - **📦 Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
+- **🔷 Nuxt Module** - Official Nuxt 3 module with auto-import support
 
 ## Quick Example
 

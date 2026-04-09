@@ -118,5 +118,6 @@ DIRECTIX_VUE_VERSION=3
 ## 下一步
 
 - [快速上手](/zh/guide/quick-start) - 学习如何使用 Directix
+- [Nuxt 模块](/zh/guide/nuxt) - 在 Nuxt 3 中使用 Directix
 - [事件指令](/zh/guide/events) - 探索事件相关指令
 - [表单指令](/zh/guide/forms) - 探索表单相关指令
