@@ -2,3 +2,7 @@ node_modules/
 dist/
 .pnpm-store
 pnpm-lock.yaml
+
+# Nuxt
+.nuxt/
+.output/
