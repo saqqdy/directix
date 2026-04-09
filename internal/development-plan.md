@@ -3652,6 +3652,29 @@ export default defineConfig({
 
 **里程碑 M9：v1.6.0 发布** ✅
 
+#### 第十阶段：v1.7.0 可视化配置工具 (Week 12) 📋 计划中
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| Playground 架构设计 | 4h | P0 | - | 📋 待开发 |
+| Vue SFC Playground 集成 | 4h | P0 | @vue/repl | 📋 待开发 |
+| 代码编辑器集成 | 4h | P0 | Monaco Editor | 📋 待开发 |
+| 实时预览面板 | 6h | P0 | - | 📋 待开发 |
+| 指令参数配置面板 | 8h | P0 | - | 📋 待开发 |
+| 参数可视化编辑器 | 6h | P1 | - | 📋 待开发 |
+| 配置预设模板 | 4h | P1 | - | 📋 待开发 |
+| Vue 2/3 代码生成 | 6h | P0 | - | 📋 待开发 |
+| 组合式 API 代码生成 | 4h | P0 | - | 📋 待开发 |
+| Nuxt 代码生成 | 2h | P1 | - | 📋 待开发 |
+| TypeScript 类型生成 | 4h | P1 | - | 📋 待开发 |
+| 文档站点嵌入 Playground | 4h | P0 | - | 📋 待开发 |
+| 指令文档页面配置器入口 | 2h | P1 | - | 📋 待开发 |
+| Playground 独立部署 | 2h | P1 | - | 📋 待开发 |
+| CDN 资源优化 | 2h | P2 | - | 📋 待开发 |
+| 响应式布局适配 | 2h | P2 | - | 📋 待开发 |
+
+**里程碑 M10：v1.7.0 发布** 📋 计划中
+
 ---
 
 ### 10.2 当前进度总览
@@ -3928,15 +3951,191 @@ const { copy, copied } = useCopy({ source: text })
 - v-progress - 进度条动画
 - v-counter - 数字滚动动画
 
-### 10.5 未来版本规划（v1.7.0+）
+### 10.5 v1.7.0 开发计划 - 可视化配置工具 (Week 12)
 
-#### 🔮 可视化配置工具（计划中）
+#### 核心目标
 
-- 在线指令配置器
-- 实时预览效果
-- 代码生成器
+开发在线指令配置器，帮助用户快速配置指令参数、实时预览效果并生成可用的代码片段。
 
-### 10.6 版本规划
+#### 任务清单
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| **配置器基础设施** | | | | |
+| Playground 架构设计 | 4h | P0 | - | 📋 待开发 |
+| Vue SFC Playground 集成 | 4h | P0 | @vue/repl | 📋 待开发 |
+| 代码编辑器集成 (Monaco/CodeMirror) | 4h | P0 | - | 📋 待开发 |
+| 实时预览面板 | 6h | P0 | - | 📋 待开发 |
+| **指令配置器** | | | | |
+| 指令参数配置面板 | 8h | P0 | - | 📋 待开发 |
+| 参数可视化编辑器 | 6h | P1 | - | 📋 待开发 |
+| 配置预设模板 | 4h | P1 | - | 📋 待开发 |
+| **代码生成器** | | | | |
+| Vue 2/3 代码生成 | 6h | P0 | - | 📋 待开发 |
+| 组合式 API 代码生成 | 4h | P0 | - | 📋 待开发 |
+| Nuxt 代码生成 | 2h | P1 | - | 📋 待开发 |
+| TypeScript 类型生成 | 4h | P1 | - | 📋 待开发 |
+| **文档集成** | | | | |
+| 文档站点嵌入 Playground | 4h | P0 | - | 📋 待开发 |
+| 指令文档页面配置器入口 | 2h | P1 | - | 📋 待开发 |
+| **部署与优化** | | | | |
+| Playground 独立部署 | 2h | P1 | - | 📋 待开发 |
+| CDN 资源优化 | 2h | P2 | - | 📋 待开发 |
+| 响应式布局适配 | 2h | P2 | - | 📋 待开发 |
+
+**里程碑 M10：v1.7.0 发布** 📋 计划中
+
+#### 功能详解
+
+##### 1. 在线 Playground
+
+**核心功能：**
+- 基于 `@vue/repl` 构建实时编辑环境
+- 支持选择 Vue 2 或 Vue 3 环境
+- 自动导入 Directix 指令和 composables
+- 支持保存和分享代码片段
+
+**用户流程：**
+```
+选择指令 → 配置参数 → 实时预览 → 生成代码 → 复制/下载
+```
+
+##### 2. 指令配置器
+
+**配置面板功能：**
+- 参数类型智能识别（字符串、数字、布尔、对象、数组、函数）
+- 可视化表单控件（滑块、颜色选择器、开关、下拉选择）
+- 参数验证和提示
+- 常用配置预设
+
+**示例配置面板：**
+```vue
+<template>
+  <!-- v-debounce 配置器示例 -->
+  <DirectiveConfig directive="debounce">
+    <ParamField name="wait" type="number" :min="0" :max="5000" :default="300" />
+    <ParamField name="leading" type="boolean" :default="false" />
+    <ParamField name="trailing" type="boolean" :default="true" />
+  </DirectiveConfig>
+</template>
+```
+
+##### 3. 代码生成器
+
+**生成内容：**
+- Vue 2/3 模板语法代码
+- 组合式 API 使用代码
+- TypeScript 类型定义
+- Nuxt 模块配置代码
+
+**输出格式示例：**
+```vue
+<!-- 生成的 Vue 3 代码 -->
+<template>
+  <input v-debounce="{ handler: handleInput, wait: 300 }" />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const searchText = ref('')
+
+function handleInput(event: Event) {
+  console.log('搜索:', (event.target as HTMLInputElement).value)
+}
+</script>
+```
+
+```typescript
+// 生成的组合式 API 代码
+import { useDebounce } from 'directix'
+
+const { run: debouncedSearch, cancel } = useDebounce({
+  handler: (query: string) => {
+    console.log('搜索:', query)
+  },
+  wait: 300
+})
+```
+
+#### 技术方案
+
+##### Playground 架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Directix Playground                       │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
+│  │  配置面板     │  │  代码编辑器   │  │    预览面板      │  │
+│  │              │  │              │  │                  │  │
+│  │ - 指令选择   │  │ - Vue SFC    │  │ - 实时渲染      │  │
+│  │ - 参数配置   │  │ - 语法高亮   │  │ - 交互测试      │  │
+│  │ - 预设模板   │  │ - 自动补全   │  │ - 状态查看      │  │
+│  │              │  │              │  │                  │  │
+│  └──────────────┘  └──────────────┘  └──────────────────┘  │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │                    代码输出区                           │ │
+│  │  [Vue 2] [Vue 3] [Composable] [TypeScript] [Nuxt]      │ │
+│  │  ┌────────────────────────────────────────────────────┐│ │
+│  │  │  生成的代码...                                      ││ │
+│  │  └────────────────────────────────────────────────────┘│ │
+│  │  [复制代码] [下载文件] [分享链接]                       │ │
+│  └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+##### 依赖技术栈
+
+| 功能 | 技术选型 | 说明 |
+|------|---------|------|
+| Playground 核心 | @vue/repl | Vue 官方在线编译器 |
+| 代码编辑器 | Monaco Editor | VS Code 同款编辑器 |
+| 语法高亮 | Shiki | 高性能语法高亮 |
+| 代码格式化 | Prettier | 代码美化 |
+| 剪贴板 | Clipboard API | 复制功能 |
+| 文件下载 | FileSaver.js | 下载功能 |
+
+#### 文件结构
+
+```
+docs/
+├── .vitepress/
+│   └── theme/
+│       └── components/
+│           ├── Playground.vue          # Playground 主组件
+│           ├── ConfigPanel.vue         # 配置面板
+│           ├── CodeEditor.vue          # 代码编辑器
+│           ├── PreviewPanel.vue        # 预览面板
+│           ├── CodeOutput.vue          # 代码输出区
+│           └── presets/                # 预设模板
+│               ├── debounce.ts
+│               ├── throttle.ts
+│               ├── click-outside.ts
+│               └── ...
+│
+├── playground/                         # Playground 独立页面
+│   ├── index.md                        # Playground 入口
+│   └── directive/                      # 指令配置页
+│       ├── click-outside.md
+│       ├── debounce.md
+│       └── ...
+│
+└── api/
+    └── config-generator.md             # 配置生成器 API 文档
+```
+
+### 10.6 未来版本规划（v2.0.0+）
+
+#### 🔮 长期规划
+
+- Vue 3 专属优化版本
+- Web Components 支持
+- 性能进一步优化
+- 国际化支持 (i18n)
+
+### 10.7 版本规划
 
 | 版本 | 时间 | 主要内容 | 状态 |
 |------|------|---------|------|
@@ -3947,6 +4146,7 @@ const { copy, copied } = useCopy({ source: text })
 | v1.4.0 | 2026-04-01 | 组合式 API（41个 composables）、完整文档和示例 | ✅ 已完成 |
 | v1.5.0 | 2026-04-05 | 新增 17 个指令（v-skeleton、v-context-menu、v-export、v-fullscreen 等），总计 57 个指令 | ✅ 已完成 |
 | v1.6.0 | 2026-04-08 | Nuxt 3 模块、自动导入支持 | ✅ 已完成 |
+| v1.7.0 | 2026-04-15 | 可视化配置工具、在线 Playground、代码生成器 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
 
 ---
@@ -4108,6 +4308,34 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 | 提交规范 | Conventional Commits |
 
 ### C. 版本发布记录
+
+#### v1.7.0 (2026-04-15)
+
+**重大更新 - 可视化配置工具：**
+
+**Playground 功能：**
+- 在线指令配置器，可视化配置指令参数
+- 实时预览效果，所见即所得
+- 代码生成器，支持 Vue 2/3/Composable/Nuxt
+- 配置预设模板，快速上手
+- 分享和保存配置
+
+**配置器特性：**
+- 参数类型智能识别
+- 可视化表单控件（滑块、颜色选择器、开关）
+- 参数验证和提示
+- TypeScript 类型生成
+
+**技术实现：**
+- 基于 @vue/repl 构建实时编辑环境
+- Monaco Editor 代码编辑器
+- Prettier 代码格式化
+- 响应式布局支持
+
+**文档集成：**
+- 指令文档页面嵌入 Playground 入口
+- 独立 Playground 页面
+- 代码片段一键复制
 
 #### v1.6.0 (2026-04-08)
 
