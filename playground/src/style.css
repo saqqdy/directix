@@ -1,0 +1,456 @@
+:root {
+  --primary-color: #42b883;
+  --primary-dark: #35495e;
+  --bg-color: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --border-color: #e1e4e8;
+  --text-color: #24292f;
+  --text-secondary: #656d76;
+  --code-bg: #f6f8fa;
+  --success-color: #1a7f37;
+  --warning-color: #bf8700;
+  --error-color: #cf222e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  color: var(--text-color);
+  background: var(--bg-color);
+}
+
+.playground {
+  display: grid;
+  grid-template-columns: 280px 1fr 400px;
+  grid-template-rows: 60px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.playground-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--primary-dark);
+  color: white;
+}
+
+.playground-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.playground-header h1 img {
+  height: 32px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.header-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #3aa876;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.directive-list {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+.directive-list-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.directive-list-header input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.directive-category {
+  padding: 8px 0;
+}
+
+.directive-category-title {
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.directive-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.directive-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.directive-item.active {
+  background: rgba(66, 184, 131, 0.1);
+  border-right: 3px solid var(--primary-color);
+}
+
+.directive-item code {
+  font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--primary-color);
+}
+
+.directive-item span {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab {
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-color);
+}
+
+.tab.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.code-editor {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background: var(--code-bg);
+}
+
+.code-editor pre {
+  font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.config-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color);
+  border-left: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.config-panel-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.config-panel-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.config-panel-header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.config-form {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.config-field {
+  margin-bottom: 16px;
+}
+
+.config-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-color);
+}
+
+.config-field .description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.config-field input[type="text"],
+.config-field input[type="number"],
+.config-field select,
+.config-field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.config-field input:focus,
+.config-field select:focus,
+.config-field textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.config-field input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.range-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.range-input input[type="range"] {
+  flex: 1;
+}
+
+.range-input .value {
+  min-width: 40px;
+  text-align: right;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.generate-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.generate-btn:hover {
+  background: #3aa876;
+}
+
+.code-output {
+  border-top: 1px solid var(--border-color);
+  background: var(--code-bg);
+}
+
+.code-output-header {
+  display: flex;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.code-output-tab {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.code-output-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.code-output pre {
+  padding: 12px;
+  font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-state h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.empty-state p {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* Vue 2/3 Toggle */
+.vue-version-toggle {
+  display: flex;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.vue-version-toggle button {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.vue-version-toggle button.active {
+  background: white;
+  color: var(--text-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Syntax highlighting */
+.token-keyword {
+  color: #d73a49;
+}
+
+.token-string {
+  color: #032f62;
+}
+
+.token-function {
+  color: #6f42c1;
+}
+
+.token-comment {
+  color: #6a737d;
+}
+
+.token-tag {
+  color: #22863a;
+}
+
+.token-attr-name {
+  color: #6f42c1;
+}
+
+.token-attr-value {
+  color: #032f62;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .playground {
+    grid-template-columns: 240px 1fr 320px;
+  }
+}
+
+@media (max-width: 900px) {
+  .playground {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px auto 1fr auto;
+  }
+
+  .directive-list {
+    max-height: 200px;
+  }
+
+  .config-panel {
+    max-height: 300px;
+  }
+}

@@ -1,0 +1,22 @@
+{
+	"name": "@directix/playground",
+	"type": "module",
+	"version": "1.7.0",
+	"private": true,
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"deploy": "bash scripts/deploy.sh"
+	},
+	"dependencies": {
+		"@vue/repl": "^4.4.0",
+		"directix": "workspace:*",
+		"vue": "^3.5.32"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.2.4",
+		"typescript": "^5.9.3",
+		"vite": "^6.4.2"
+	}
+}
