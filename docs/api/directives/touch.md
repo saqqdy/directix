@@ -326,3 +326,6 @@ function prevSlide() {
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="touch" description="Touch gesture detection directive supporting swipe, pinch, rotate, tap, and long press." />

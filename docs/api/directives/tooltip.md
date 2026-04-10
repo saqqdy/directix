@@ -221,3 +221,6 @@ onMounted(() => {
   <button ref="buttonRef">Hover me</button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="tooltip" description="Display tooltips on hover, focus, or click with customizable positioning and styling." />

@@ -135,3 +135,6 @@ update({ animation: 'pulse' })
 | `hide` | `() => void` | Hide skeleton |
 | `update` | `(options: Partial<SkeletonOptions>) => void` | Update options |
 | `isLoading` | `Ref<boolean>` | Current loading state |
+## Code Generator
+
+<DirectiveConfigurator name="skeleton" description="Skeleton loading placeholder." />

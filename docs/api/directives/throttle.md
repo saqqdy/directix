@@ -247,3 +247,7 @@ const { run: throttledScroll } = useThrottle({
   </div>
 </template>
 ```
+
+## Code Generator
+
+<DirectiveConfigurator name="throttle" description="Throttle event handlers to limit execution frequency" />

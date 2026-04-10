@@ -270,3 +270,7 @@ watch(searchQuery, (query) => {
   <input v-model="searchQuery" placeholder="Search..." />
 </template>
 ```
+
+## Code Generator
+
+<DirectiveConfigurator name="debounce" description="Debounce event handlers to limit execution frequency" />

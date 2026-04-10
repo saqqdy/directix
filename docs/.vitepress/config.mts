@@ -32,6 +32,7 @@ export default defineConfig({
 				lightModeSwitchTitle: 'Switch to light theme',
 				nav: [
 					{ activeMatch: '/guide/', link: '/guide/', text: 'Guide' },
+					{ link: '/playground', text: 'Playground' },
 					{ activeMatch: '/api/', link: '/api/', text: 'API' },
 					{ activeMatch: '/examples/', link: '/examples/', text: 'Examples' },
 					{
@@ -308,6 +309,7 @@ export default defineConfig({
 				lightModeSwitchTitle: '切换到浅色模式',
 				nav: [
 					{ activeMatch: '/zh/guide/', link: '/zh/guide/', text: '指南' },
+					{ link: '/zh/playground', text: 'Playground' },
 					{ activeMatch: '/zh/api/', link: '/zh/api/', text: 'API' },
 					{ activeMatch: '/zh/examples/', link: '/zh/examples/', text: '示例' },
 					{

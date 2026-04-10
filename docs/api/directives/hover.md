@@ -225,3 +225,6 @@ onMounted(() => bind(buttonRef.value))
   </button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="hover" description="Track hover state with callbacks and CSS classes." />

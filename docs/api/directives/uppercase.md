@@ -118,3 +118,6 @@ const { transformed } = useUppercase({ text })
   <p>{{ transformed }}</p>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="uppercase" description="Transform input text to uppercase." />

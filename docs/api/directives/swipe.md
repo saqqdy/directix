@@ -178,3 +178,6 @@ onMounted(() => bind(container.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="swipe" description="Detect swipe gestures on elements. Supports directional swipes with configurable thresholds." />

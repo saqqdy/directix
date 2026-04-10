@@ -235,3 +235,6 @@ onMounted(() => bind(container.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="scroll" description="Track scroll position and direction." />

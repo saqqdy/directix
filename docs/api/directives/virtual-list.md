@@ -210,3 +210,6 @@ const {
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="virtual-list" description="Render large lists efficiently using virtual scrolling. Only visible items are rendered for optimal performance." />

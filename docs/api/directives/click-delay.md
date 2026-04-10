@@ -156,3 +156,6 @@ const { click, isPending } = useClickDelay({
   </button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="click-delay" description="Prevent repeated clicks within a specified time period. Perfect for preventing double submissions and spam clicks." />

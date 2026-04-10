@@ -231,3 +231,6 @@ onMounted(() => bind(target.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="intersect" description="Observe element intersection with the viewport using IntersectionObserver." />

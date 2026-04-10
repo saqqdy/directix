@@ -174,3 +174,6 @@ const { dataUrl, style, disable, enable } = useWatermark({
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="watermark" description="Add watermark overlay to elements. Supports text and image watermarks." />

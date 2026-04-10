@@ -193,3 +193,6 @@ const { state, distance, events, containerRef } = usePullRefresh({
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="pull-refresh" description="Implement pull-to-refresh functionality for mobile apps. Triggers refresh action when user pulls down." />

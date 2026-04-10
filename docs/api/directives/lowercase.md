@@ -114,3 +114,6 @@ const { transformed } = useLowercase({ text })
   <p>{{ transformed }}</p>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="lowercase" description="Transform input text to lowercase." />

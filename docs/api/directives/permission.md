@@ -256,3 +256,6 @@ const { granted } = usePermission({
   <button v-if="granted">Admin Only Action</button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="permission" description="Permission-based element control for access management." />

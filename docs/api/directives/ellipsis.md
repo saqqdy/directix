@@ -98,3 +98,6 @@ const { truncated, isTruncated, original, calculateForWidth, wouldTruncate } = u
 ```
 
 See [v-truncate](./truncate.md#composable-api) for detailed composable API documentation.
+## Code Generator
+
+<DirectiveConfigurator name="ellipsis" description="Apply multi-line text ellipsis with CSS. Truncates text after specified number of lines." />

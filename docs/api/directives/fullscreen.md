@@ -123,3 +123,6 @@ toggle()
 | `enter` | `() => Promise<void>` | Enter fullscreen mode |
 | `exit` | `() => Promise<void>` | Exit fullscreen mode |
 | `toggle` | `() => Promise<void>` | Toggle fullscreen mode |
+## Code Generator
+
+<DirectiveConfigurator name="fullscreen" description="Toggle fullscreen mode for elements." />

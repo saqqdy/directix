@@ -206,3 +206,6 @@ onMounted(() => bind(imageRef.value))
   }" />
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="lazy" description="Lazy load images when they enter the viewport." />

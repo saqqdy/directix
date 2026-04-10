@@ -142,3 +142,6 @@ resume()
 | `resume` | `() => void` | Resume typing |
 | `isTyping` | `Ref<boolean>` | Whether currently typing |
 | `text` | `Ref<string>` | Current displayed text |
+## Code Generator
+
+<DirectiveConfigurator name="typewriter" description="Typewriter text animation." />

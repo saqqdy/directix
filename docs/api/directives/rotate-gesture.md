@@ -146,3 +146,6 @@ onMounted(() => bind(elementRef.value))
 | `angle` | `Ref<number>` | Current rotation angle |
 | `isRotating` | `Ref<boolean>` | Whether rotation is in progress |
 | `bind` | `(element: HTMLElement) => () => void` | Bind to element |
+## Code Generator
+
+<DirectiveConfigurator name="rotate-gesture" description="Two-finger rotation gesture." />

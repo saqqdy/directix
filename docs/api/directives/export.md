@@ -124,3 +124,6 @@ exportTXT(data, { filename: 'output' })
 | `exportJSON` | `(data: any[], options?: ExportOptions) => void` | Export as JSON |
 | `exportHTML` | `(data: any[], options?: ExportOptions) => void` | Export as HTML |
 | `exportTXT` | `(data: any[], options?: ExportOptions) => void` | Export as TXT |
+## Code Generator
+
+<DirectiveConfigurator name="export" description="Export data to CSV, JSON, HTML, or TXT." />

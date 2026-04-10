@@ -202,3 +202,6 @@ const safeHtml = sanitize(userInput)
   <p>{{ safeHtml }}</p>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="sanitize" description="Sanitize HTML content to prevent XSS attacks." />

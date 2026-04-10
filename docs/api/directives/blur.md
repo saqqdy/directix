@@ -100,3 +100,6 @@ onMounted(() => bind(containerRef.value))
 | `hide()` | `() => void` | Hide blur effect |
 | `toggle()` | `() => void` | Toggle visibility |
 | `bind(el)` | `(element: HTMLElement) => () => void` | Bind to element, returns unbind function |
+## Code Generator
+
+<DirectiveConfigurator name="blur" description="Add background blur overlay effect to elements." />

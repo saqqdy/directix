@@ -243,3 +243,6 @@ function handleButtonClick() {
   <span v-if="isFocused">Input is focused</span>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="focus" description="Auto focus an element when mounted." />

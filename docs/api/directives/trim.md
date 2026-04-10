@@ -139,3 +139,6 @@ const { trimmed, wasTrimmed } = useTrim({ text })
   <p>{{ trimmed }}</p>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="trim" description="Trim whitespace from input values with configurable position." />

@@ -137,3 +137,6 @@ onMounted(() => bind(elementRef.value))
 | `scale` | `Ref<number>` | Current scale factor |
 | `isPinching` | `Ref<boolean>` | Whether pinch is in progress |
 | `bind` | `(element: HTMLElement) => () => void` | Bind to element |
+## Code Generator
+
+<DirectiveConfigurator name="pinch" description="Two-finger pinch/zoom gesture." />

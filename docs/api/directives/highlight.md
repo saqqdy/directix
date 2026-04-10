@@ -112,3 +112,6 @@ updateKeywords(['new', 'keywords'])
 | `highlight` | `(text: string) => string` | Highlight text manually |
 | `clear` | `() => void` | Clear all highlights |
 | `updateKeywords` | `(keywords: string[]) => void` | Update keywords to highlight |
+## Code Generator
+
+<DirectiveConfigurator name="highlight" description="Highlight keywords in text content." />

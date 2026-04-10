@@ -215,3 +215,6 @@ async function fetchData() {
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="loading" description="Show a loading overlay on elements." />

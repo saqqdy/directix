@@ -112,3 +112,6 @@ const { offset, progress, enabled, bind } = useParallax({
 | `progress` | `Ref<number>` | Scroll progress (0-1) |
 | `enabled` | `Ref<boolean>` | Whether parallax is active |
 | `bind` | `(element: HTMLElement) => () => void` | Bind to element |
+## Code Generator
+
+<DirectiveConfigurator name="parallax" description="Parallax scrolling effect." />

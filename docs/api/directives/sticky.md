@@ -196,3 +196,6 @@ onMounted(() => bind(headerRef.value))
   </header>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="sticky" description="Make elements sticky when scrolling." />

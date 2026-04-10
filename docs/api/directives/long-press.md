@@ -219,3 +219,6 @@ onMounted(() => bind(buttonRef.value))
   </button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="long-press" description="Detect long press gestures on elements." />

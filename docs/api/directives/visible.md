@@ -195,3 +195,6 @@ onMounted(() => bind(modal.value))
   <div ref="modal" v-show="visible">Modal Content</div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="visible" description="Toggle element visibility with animation support." />

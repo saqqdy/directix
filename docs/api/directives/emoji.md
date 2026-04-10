@@ -101,3 +101,6 @@ const filtered = filterEmojis('Hello 😊 World 👍')
 | `stripEmojis` | `(text: string) => string` | Strip emojis from text |
 | `containsEmoji` | `(text: string) => boolean` | Check if text contains emoji |
 | `filterEmojis` | `(text: string) => { text: string, emojis: string[] }` | Filter and return emojis |
+## Code Generator
+
+<DirectiveConfigurator name="emoji" description="Filter or restrict emoji input." />

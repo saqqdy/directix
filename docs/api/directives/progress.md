@@ -139,3 +139,6 @@ fail()
 | `finish` | `() => void` | Set to 100 |
 | `fail` | `() => void` | Mark as failed |
 | `value` | `Ref<number>` | Current progress value |
+## Code Generator
+
+<DirectiveConfigurator name="progress" description="Progress bar animation." />

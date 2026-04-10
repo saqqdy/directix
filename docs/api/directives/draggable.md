@@ -277,3 +277,6 @@ onMounted(() => bind(target.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="draggable" description="Make elements draggable within a container or boundary." />

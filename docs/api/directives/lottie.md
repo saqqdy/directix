@@ -123,3 +123,6 @@ goToAndPlay(50, true)
 | `setDirection` | `(direction: 1 \| -1) => void` | Set playback direction |
 | `goToAndStop` | `(frame: number, isFrame?: boolean) => void` | Go to frame and stop |
 | `goToAndPlay` | `(frame: number, isFrame?: boolean) => void` | Go to frame and play |
+## Code Generator
+
+<DirectiveConfigurator name="lottie" description="Lottie animation player." />

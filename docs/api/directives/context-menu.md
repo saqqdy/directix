@@ -134,3 +134,6 @@ setItems(newItems)
 | `show` | `(position: { x: number, y: number }) => void` | Show menu at position |
 | `hide` | `() => void` | Hide menu |
 | `setItems` | `(items: ContextMenuItem[]) => void` | Update menu items |
+## Code Generator
+
+<DirectiveConfigurator name="context-menu" description="Add right-click context menu to elements." />

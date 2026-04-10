@@ -191,3 +191,6 @@ onMounted(() => bind(buttonRef.value))
   <button ref="buttonRef">Click for ripple</button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="ripple" description="Add Material Design ripple effect to elements." />

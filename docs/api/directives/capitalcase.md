@@ -120,3 +120,6 @@ const { capitalized } = useCapitalcase({ text: title, every: true })
   <h1>{{ capitalized }}</h1>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="capitalcase" description="Transform input text to capital case (first letter of each word capitalized)." />

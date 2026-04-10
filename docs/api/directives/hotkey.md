@@ -211,3 +211,6 @@ const { enable, disable, add, remove } = useHotkey({
 add({ key: 'esc', handler: (e) => closeModal() })
 </script>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="hotkey" description="Bind keyboard shortcuts to elements. Supports modifier keys and multiple hotkey formats." />

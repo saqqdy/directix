@@ -213,3 +213,6 @@ onMounted(() => bind(target.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="resize" description="Observe element resize using ResizeObserver." />

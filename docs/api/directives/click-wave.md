@@ -134,3 +134,6 @@ onMounted(() => bind(buttonRef.value))
   <button ref="buttonRef">Click for wave</button>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="click-wave" description="Add click wave effect to elements." />

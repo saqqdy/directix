@@ -128,3 +128,6 @@ onMounted(() => bind(elementRef.value))
 | `deltaY` | `Ref<number>` | Current delta Y |
 | `direction` | `Ref<string>` | Current direction |
 | `bind` | `(element: HTMLElement) => () => void` | Bind to element |
+## Code Generator
+
+<DirectiveConfigurator name="pan" description="Pan/drag gesture detection." />

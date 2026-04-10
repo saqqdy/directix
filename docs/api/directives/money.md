@@ -169,3 +169,6 @@ parseMoney('$1,234.56') // 1234.56
 const formatEuro = createMoneyFormatter({ symbol: '€', symbolPosition: 'after' })
 formatEuro(1234.56) // '1,234.56€'
 ```
+## Code Generator
+
+<DirectiveConfigurator name="money" description="Format input values as currency with customizable options." />

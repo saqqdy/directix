@@ -248,3 +248,6 @@ onMounted(() => bind(containerRef.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="infinite-scroll" description="Infinite scroll loading for lists and feeds." />

@@ -237,3 +237,7 @@ onMounted(() => bind(dropdown.value))
   </div>
 </template>
 ```
+
+## Code Generator
+
+<DirectiveConfigurator name="click-outside" description="Detect clicks outside an element" />

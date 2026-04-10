@@ -126,3 +126,6 @@ update(2000)
 | `reset` | `() => void` | Reset to start value |
 | `update` | `(value: number) => void` | Update end value |
 | `currentValue` | `Ref<number>` | Current animated value |
+## Code Generator
+
+<DirectiveConfigurator name="counter" description="Display animated number counter." />

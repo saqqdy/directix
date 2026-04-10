@@ -282,3 +282,6 @@ onMounted(() => bind(containerRef.value))
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="mutation" description="Observe DOM mutations using MutationObserver." />

@@ -204,3 +204,6 @@ const { formatted, running, completed, pause, resume } = useCountdown({
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="countdown" description="Display a countdown timer to a target time. Supports multiple formats and completion callbacks." />

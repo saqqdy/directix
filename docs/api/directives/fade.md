@@ -114,3 +114,6 @@ toggle()
 | `fadeOut` | `() => void` | Fade element out |
 | `toggle` | `() => void` | Toggle fade state |
 | `isVisible` | `Ref<boolean>` | Current visibility state |
+## Code Generator
+
+<DirectiveConfigurator name="fade" description="Add fade in/out transition effect to elements." />

@@ -160,3 +160,6 @@ const { truncated, isTruncated } = useEllipsis({
   </span>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="truncate" description="Truncate text content with ellipsis and optional expand functionality." />

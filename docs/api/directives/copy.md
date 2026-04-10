@@ -227,3 +227,7 @@ const { copy, copied, isSupported } = useCopy({ source: text })
   </button>
 </template>
 ```
+
+## Code Generator
+
+<DirectiveConfigurator name="copy" description="Copy text to clipboard with a simple directive" />

@@ -278,3 +278,6 @@ function openCustomImage() {
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="image-preview" description="Create a modal image preview with mobile-optimized gestures including pinch zoom, double tap, and swipe." />

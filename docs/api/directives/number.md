@@ -171,3 +171,6 @@ parseNumber('1,234,567') // 1234567
 const formatPercent = createNumberFormatter({ suffix: '%', precision: 1 })
 formatPercent(85.5) // '85.5%'
 ```
+## Code Generator
+
+<DirectiveConfigurator name="number" description="Format and validate numeric input with customizable options." />

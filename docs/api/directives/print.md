@@ -162,3 +162,6 @@ async function handlePrint() {
   </div>
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="print" description="Print specific elements with customizable options. Perfect for generating printable documents." />

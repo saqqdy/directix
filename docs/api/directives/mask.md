@@ -235,3 +235,6 @@ onMounted(() => bind(inputRef.value))
   <input ref="inputRef" type="text" />
 </template>
 ```
+## Code Generator
+
+<DirectiveConfigurator name="mask" description="Input mask formatting for structured input." />
