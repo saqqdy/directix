@@ -27,6 +27,7 @@
 	],
 	"scripts": {
 		"dev": "vite",
+		"dev:playground": "pnpm --dir playground dev",
 		"gen:version": "tsx scripts/version",
 		"tag:version": "tsx scripts/tag",
 		"build": "vite build && tsx scripts/minify && tsx scripts/build-nuxt",

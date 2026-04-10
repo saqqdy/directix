@@ -58,6 +58,7 @@ html, body, #app {
 
 .header-actions {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
@@ -69,24 +70,32 @@ html, body, #app {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-primary {
   background: var(--primary-color);
   color: white;
+  box-shadow: 0 1px 3px rgba(66, 184, 131, 0.3);
 }
 
 .btn-primary:hover {
   background: #3aa876;
+  box-shadow: 0 2px 6px rgba(66, 184, 131, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: rgba(255, 255, 255, 0.1);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .directive-list {
@@ -344,18 +353,6 @@ html, body, #app {
   overflow-x: auto;
 }
 
-.copy-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 4px 8px;
-  font-size: 11px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -376,32 +373,6 @@ html, body, #app {
 .empty-state p {
   font-size: 13px;
   margin-bottom: 16px;
-}
-
-/* Vue 2/3 Toggle */
-.vue-version-toggle {
-  display: flex;
-  background: var(--bg-secondary);
-  border-radius: 6px;
-  padding: 4px;
-}
-
-.vue-version-toggle button {
-  padding: 6px 12px;
-  border: none;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.vue-version-toggle button.active {
-  background: white;
-  color: var(--text-color);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Syntax highlighting */

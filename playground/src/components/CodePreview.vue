@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { ref, computed, watch, shallowRef, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, shallowRef, onMounted, onUnmounted, nextTick } from 'vue'
 import { generateCode } from '../utils/code-generator'
 import type { DirectiveConfig, GeneratedCode } from '../types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   directive: DirectiveConfig
   values: Record<string, any>
   vueVersion: 'vue2' | 'vue3'
-}>()
+  mode?: 'code' | 'preview' | 'docs'
+}>(), {
+  mode: 'code'
+})
 
-const activeTab = ref<'code' | 'preview'>('code')
 const codeTab = ref<'vue3' | 'vue2' | 'composable' | 'nuxt' | 'types'>('vue3')
 const copied = ref(false)
 const iframeKey = ref(0)
@@ -65,14 +67,63 @@ const highlightedCode = computed(() => {
 })
 
 function highlightSyntax(code: string): string {
-  return code
-    .replace(/\b(import|from|export|const|let|var|function|return|if|else|async|await)\b/g, '<span class="token-keyword">$1</span>')
-    .replace(/'([^']*)'/g, '<span class="token-string">\'$1\'</span>')
-    .replace(/"([^"]*)"/g, '<span class="token-string">"$1"</span>')
-    .replace(/(\/\/.*$)/gm, '<span class="token-comment">$1</span>')
-    .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="token-comment">$1</span>')
-    .replace(/(&lt;\/?)([\w-]+)/g, '$1<span class="token-tag">$2</span>')
-    .replace(/\b(v-[\w-]+|@[\w-]+|:[\w-]+)\b/g, '<span class="token-attr-name">$1</span>')
+  if (!code) return ''
+
+  // First, escape HTML special characters
+  let result = code
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+  // Apply syntax highlighting using unique markers first, then replace with span tags
+  // This avoids regex conflicts with the HTML we're generating
+
+  // 1. Comments
+  result = result.replace(
+    /(\/\/.*$)/gm,
+    '[[COMMENT_START]]$&[[COMMENT_END]]'
+  )
+
+  // 2. Keywords
+  result = result.replace(
+    /\b(import|from|export|const|let|var|function|return|if|else|async|await|ref|computed|watch|onMounted|onUnmounted|defineComponent|setup)\b/g,
+    '[[KEYWORD_START]]$&[[KEYWORD_END]]'
+  )
+
+  // 3. Single-quoted strings
+  result = result.replace(
+    /'([^']*)'/g,
+    '[[STRING_START]]$&[[STRING_END]]'
+  )
+
+  // 4. Double-quoted strings
+  result = result.replace(
+    /"([^"]*)"/g,
+    '[[STRING_START]]$&[[STRING_END]]'
+  )
+
+  // Now replace markers with actual span tags
+  result = result
+    .replace(/\[\[COMMENT_START\]\]/g, '<span class="token-comment">')
+    .replace(/\[\[COMMENT_END\]\]/g, '</span>')
+    .replace(/\[\[KEYWORD_START\]\]/g, '<span class="token-keyword">')
+    .replace(/\[\[KEYWORD_END\]\]/g, '</span>')
+    .replace(/\[\[STRING_START\]\]/g, '<span class="token-string">')
+    .replace(/\[\[STRING_END\]\]/g, '</span>')
+
+  // 5. Vue template tags
+  result = result.replace(
+    /(&lt;\/?)([\w-]+)/g,
+    '$1<span class="token-tag">$2</span>'
+  )
+
+  // 6. Vue directives
+  result = result.replace(
+    /\b(v-[\w-]+)\b/g,
+    '<span class="token-attr-name">$&</span>'
+  )
+
+  return result
 }
 
 // Monaco Editor CDN loader
@@ -174,6 +225,7 @@ watch(editorLanguage, async (newLang) => {
 // Toggle Monaco Editor
 watch(useMonaco, async (use) => {
   if (use) {
+    await nextTick()
     await initMonaco()
   } else {
     disposeMonaco()
@@ -252,18 +304,8 @@ const previewHtml = computed(() => {
 
 <template>
 	<div class="code-preview">
-		<!-- Mode Tabs -->
-		<div class="mode-tabs">
-			<button class="mode-tab" :class="[{ active: activeTab === 'code' }]" @click="activeTab = 'code'">
-				Code
-			</button>
-			<button class="mode-tab" :class="[{ active: activeTab === 'preview' }]" @click="activeTab = 'preview'">
-				Preview
-			</button>
-		</div>
-
 		<!-- Code View -->
-		<div v-show="activeTab === 'code'" class="code-view">
+		<div v-show="mode === 'code'" class="code-view">
 			<div class="code-output-header">
 				<button
 					v-if="directive.supportsVue3"
@@ -308,9 +350,23 @@ const previewHtml = computed(() => {
 				</label>
 
 				<button class="copy-btn" @click="copyCode">
+					<svg v-if="!copied" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+						<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+					</svg>
+					<svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="20 6 9 17 4 12"></polyline>
+					</svg>
 					{{ copied ? 'Copied!' : 'Copy' }}
 				</button>
-				<button class="copy-btn" @click="downloadCode">Download</button>
+				<button class="copy-btn" @click="downloadCode">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+						<polyline points="7 10 12 15 17 10"></polyline>
+						<line x1="12" y1="15" x2="12" y2="3"></line>
+					</svg>
+					Download
+				</button>
 			</div>
 
 			<!-- Monaco Editor View -->
@@ -327,10 +383,16 @@ const previewHtml = computed(() => {
 		</div>
 
 		<!-- Preview View -->
-		<div v-show="activeTab === 'preview'" class="preview-view">
+		<div v-show="mode === 'preview'" class="preview-view">
 			<div class="preview-toolbar">
 				<span class="preview-info">Live Preview</span>
-				<button class="copy-btn" @click="refreshPreview">Refresh</button>
+				<button class="copy-btn" @click="refreshPreview">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="23 4 23 10 17 10"></polyline>
+						<path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+					</svg>
+					Refresh
+				</button>
 			</div>
 			<iframe
 				:key="iframeKey"
@@ -338,6 +400,29 @@ const previewHtml = computed(() => {
 				class="preview-frame"
 				sandbox="allow-scripts"
 			></iframe>
+		</div>
+
+		<!-- Documentation View -->
+		<div v-show="mode === 'docs'" class="docs-view">
+			<div class="docs-content">
+				<h2>v-{{ directive.name }}</h2>
+				<p class="docs-description">{{ directive.description }}</p>
+
+				<div v-if="directive.parameters.length > 0" class="docs-section">
+					<h3>Parameters</h3>
+					<ul class="docs-params">
+						<li v-for="param in directive.parameters" :key="param.name">
+							<code>{{ param.name }}</code>
+							<span class="param-type">{{ param.type }}</span>
+							<span v-if="param.required" class="param-required">required</span>
+							<p v-if="param.description">{{ param.description }}</p>
+							<p v-if="param.default !== undefined" class="param-default">
+								Default: <code>{{ param.default }}</code>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -347,33 +432,6 @@ const previewHtml = computed(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-.mode-tabs {
-  display: flex;
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.mode-tab {
-  padding: 10px 20px;
-  background: transparent;
-  border: none;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-}
-
-.mode-tab:hover {
-  color: var(--text-color);
-}
-
-.mode-tab.active {
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
 }
 
 .code-view {
@@ -386,6 +444,8 @@ const previewHtml = computed(() => {
 .code-output-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
   padding: 8px 12px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
@@ -427,18 +487,25 @@ const previewHtml = computed(() => {
 }
 
 .copy-btn {
-  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
   font-size: 12px;
+  font-weight: 500;
   background: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   margin-left: 8px;
   transition: all 0.2s;
+  color: var(--text-color);
 }
 
 .copy-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
 }
 
 .code-editor {
@@ -455,6 +522,29 @@ const previewHtml = computed(() => {
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
+}
+
+/* Syntax highlighting tokens for v-html content */
+.code-editor :deep(.token-keyword) {
+  color: #d73a49;
+  font-weight: 500;
+}
+
+.code-editor :deep(.token-string) {
+  color: #032f62;
+}
+
+.code-editor :deep(.token-comment) {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.code-editor :deep(.token-tag) {
+  color: #22863a;
+}
+
+.code-editor :deep(.token-attr-name) {
+  color: #6f42c1;
 }
 
 .code-editor-monaco {
@@ -506,5 +596,91 @@ const previewHtml = computed(() => {
   flex: 1;
   border: none;
   background: white;
+}
+
+.docs-view {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.docs-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.docs-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.docs-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.docs-params {
+  list-style: none;
+  padding: 0;
+}
+
+.docs-params li {
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.docs-params code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 13px;
+  color: var(--primary-color);
+}
+
+.param-type {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: rgba(66, 184, 131, 0.1);
+  color: var(--primary-color);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.param-required {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: rgba(207, 34, 46, 0.1);
+  color: var(--error-color);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.docs-params li p {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.param-default {
+  color: var(--text-secondary);
+}
+
+.param-default code {
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 </style>
