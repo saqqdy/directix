@@ -29,6 +29,19 @@
 | Vue 3 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue3) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue3) |
 | Vue 2 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue2) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue2) |
 
+## Playground
+
+试试交互式 [Playground](https://saqqdy.github.io/directix/playground/) 来配置指令并生成代码：
+
+- **57+ 指令** - 覆盖所有 Directix 指令
+- **Vue 2 & Vue 3** - 为任一版本生成代码
+- **组合式函数** - 生成 Composable API 代码
+- **TypeScript 支持** - 完整类型定义
+- **Monaco 编辑器** - 功能完整的代码编辑器，支持语法高亮
+- **实时预览** - 实时查看指令效果
+
+每个指令文档页面也包含代码生成器，可快速获取代码片段。
+
 ## 安装
 
 ```bash
@@ -1008,12 +1021,14 @@ interface DirectiveInstallOptions {
 
 ## 开发路线图
 
-### v1.7.0 (计划 - 2026-04-15) - 可视化配置工具
+### v1.7.0 (2026-04-15) - 可视化配置工具 ✅
 
 - **在线 Playground** - 支持 Vue 2/3 的实时编辑环境
 - **可视化配置器** - 交互式参数配置面板
 - **代码生成器** - 生成 Vue 2/3/Composable/Nuxt 代码片段
 - **配置预设** - 常用场景的快速启动模板
+- **Monaco 编辑器** - CDN 加载的代码编辑器，支持语法高亮
+- **实时预览** - 实时查看指令效果
 
 ### v1.8.0 (计划 - 2026-04-22) - 质量提升与生态
 

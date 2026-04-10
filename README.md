@@ -29,6 +29,19 @@ Try it online with StackBlitz or CodeSandbox:
 | Vue 3 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue3) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue3) |
 | Vue 2 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/saqqdy/directix/tree/master/examples/vue2) | [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/saqqdy/directix/tree/master/examples/vue2) |
 
+## Playground
+
+Try the interactive [Playground](https://saqqdy.github.io/directix/playground/) to configure directives and generate code:
+
+- **57+ Directives** - Full coverage of all Directix directives
+- **Vue 2 & Vue 3** - Generate code for either version
+- **Composables** - Generate composable API code
+- **TypeScript Ready** - Full type definitions included
+- **Monaco Editor** - Full-featured code editor with syntax highlighting
+- **Live Preview** - See directive effects in real-time
+
+Each directive documentation page also includes a code generator for quick code snippets.
+
 ## Installation
 
 ```bash
@@ -1776,12 +1789,14 @@ Each directive accepts different options. See the [documentation](https://github
 
 ## Roadmap
 
-### v1.7.0 (Planned - 2026-04-15) - Visual Configuration Tool
+### v1.7.0 (2026-04-15) - Visual Configuration Tool ✅
 
 - **Online Playground** - Live editing environment with Vue 2/3 support
 - **Visual Configurator** - Interactive parameter configuration panel
 - **Code Generator** - Generate Vue 2/3/Composable/Nuxt code snippets
 - **Configuration Presets** - Quick-start templates for common use cases
+- **Monaco Editor** - CDN-loaded code editor with syntax highlighting
+- **Live Preview** - Real-time directive effect preview
 
 ### v1.8.0 (Planned - 2026-04-22) - Quality & Ecosystem
 

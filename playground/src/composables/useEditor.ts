@@ -8,7 +8,19 @@ export interface EditorOptions {
 	onChange?: (value: string) => void
 }
 
-export function useEditor(options: EditorOptions = {}) {
+export interface EditorReturn {
+	content: ReturnType<typeof ref<string>>
+	currentLanguage: ReturnType<typeof ref<string>>
+	currentTheme: ReturnType<typeof ref<'light' | 'dark'>>
+	isReadOnly: ReturnType<typeof ref<boolean>>
+	isReady: ReturnType<typeof ref<boolean>>
+	detectedLanguage: ReturnType<typeof computed<string>>
+	setContent: (value: string) => void
+	getContent: () => string
+	reset: () => void
+}
+
+export function useEditor(options: EditorOptions = {}): EditorReturn {
 	const {
 		initialValue = '',
 		language = 'vue',
@@ -42,7 +54,7 @@ export function useEditor(options: EditorOptions = {}) {
 	})
 
 	// Update content
-	function setContent(value: string) {
+	function setContent(value: string): void {
 		content.value = value
 		onChange?.(value)
 	}
@@ -53,7 +65,7 @@ export function useEditor(options: EditorOptions = {}) {
 	}
 
 	// Reset to initial value
-	function reset() {
+	function reset(): void {
 		content.value = initialValue
 		onChange?.(initialValue)
 	}
@@ -91,14 +103,20 @@ export const highlightTokens = {
 }
 
 // Theme management
-export function useEditorTheme() {
+export interface EditorThemeReturn {
+	theme: ReturnType<typeof ref<'light' | 'dark'>>
+	toggleTheme: () => void
+	setTheme: (newTheme: 'light' | 'dark') => void
+}
+
+export function useEditorTheme(): EditorThemeReturn {
 	const theme = ref<'light' | 'dark'>('light')
 
-	function toggleTheme() {
+	function toggleTheme(): void {
 		theme.value = theme.value === 'light' ? 'dark' : 'light'
 	}
 
-	function setTheme(newTheme: 'light' | 'dark') {
+	function setTheme(newTheme: 'light' | 'dark'): void {
 		theme.value = newTheme
 	}
 

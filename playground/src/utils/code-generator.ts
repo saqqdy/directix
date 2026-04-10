@@ -7,7 +7,7 @@ interface GeneratorOptions {
 }
 
 export function generateCode(options: GeneratorOptions): GeneratedCode {
-	const { directive, values, vueVersion } = options
+	const { directive, values } = options
 
 	return {
 		vue3: generateVueCode(directive, values, 'vue3'),
@@ -122,7 +122,7 @@ function generateBindingValue(
 function generateScriptContent(
 	directive: DirectiveConfig,
 	values: Record<string, any>,
-	version: 'vue2' | 'vue3',
+	_version: 'vue2' | 'vue3',
 ): string {
 	const lines: string[] = []
 

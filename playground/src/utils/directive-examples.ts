@@ -1,5 +1,7 @@
+import type { DirectiveExample } from '../types'
+
 // Extended examples for all directives
-export const directiveExamples: Record<string, { title: string, description: string, code: string, composableCode?: string }[]> = {
+export const directiveExamples: Record<string, DirectiveExample[]> = {
 	'click-outside': [
 		{
 			title: 'Dropdown Menu',
@@ -483,6 +485,6 @@ loadMore()
 }
 
 // Helper function to get examples for a directive
-export function getDirectiveExamples(name: string) {
+export function getDirectiveExamples(name: string): DirectiveExample[] {
 	return directiveExamples[name] || []
 }
