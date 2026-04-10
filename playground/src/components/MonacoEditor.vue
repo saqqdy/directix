@@ -134,16 +134,16 @@ defineExpose({ focus, getValue, setValue })
 </script>
 
 <template>
-  <div class="editor-wrapper">
-    <div v-if="loading" class="editor-loading">
-      <div class="loading-spinner"></div>
-      <span>Loading editor...</span>
-    </div>
-    <div v-else-if="error" class="editor-error">
-      <span>⚠️ {{ error }}</span>
-    </div>
-    <div ref="container" class="monaco-editor-container" :class="{ hidden: loading || error }"></div>
-  </div>
+	<div class="editor-wrapper">
+		<div v-if="loading" class="editor-loading">
+			<div class="loading-spinner"></div>
+			<span>Loading editor...</span>
+		</div>
+		<div v-else-if="error" class="editor-error">
+			<span>⚠️ {{ error }}</span>
+		</div>
+		<div ref="container" class="monaco-editor-container" :class="{ hidden: loading || error }"></div>
+	</div>
 </template>
 
 <style scoped>

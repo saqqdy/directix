@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Props {
   name: string
@@ -76,7 +76,7 @@ const generatedCode = computed(() => {
 
 function generateTemplate(name: string, params: Record<string, any>, version: 'vue2' | 'vue3'): string {
   const bindingStr = Object.entries(params)
-    .filter(([k, v]) => v !== undefined)
+    .filter(([, v]) => v !== undefined)
     .map(([k, v]) => {
       if (typeof v === 'string') return `${k}: '${v}'`
       if (typeof v === 'boolean') return `${k}: ${v}`
@@ -125,7 +125,7 @@ function generateComposable(name: string, params: Record<string, any>): string {
   const composableName = 'use' + name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')
 
   const paramsStr = Object.entries(params)
-    .filter(([k, v]) => v !== undefined)
+    .filter(([, v]) => v !== undefined)
     .map(([k, v]) => {
       if (typeof v === 'string') return `  ${k}: '${v}'`
       return `  ${k}: ${v}`
