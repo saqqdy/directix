@@ -1789,6 +1789,11 @@ Each directive accepts different options. See the [documentation](https://github
 
 ## Roadmap
 
+### v1.7.1 (2026-04-11) - Bug Fixes & Improvements ✅
+
+- **Playground Fixes** - Monaco Editor loading, syntax highlighting, Vue version sync
+- **UI Improvements** - Removed redundant controls, unified documentation layout
+
 ### v1.7.0 (2026-04-15) - Visual Configuration Tool ✅
 
 - **Online Playground** - Live editing environment with Vue 2/3 support

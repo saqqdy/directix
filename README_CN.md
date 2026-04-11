@@ -1021,6 +1021,11 @@ interface DirectiveInstallOptions {
 
 ## 开发路线图
 
+### v1.7.1 (2026-04-11) - 问题修复与优化 ✅
+
+- **Playground 修复** - Monaco 编辑器加载、语法高亮、Vue 版本同步
+- **UI 优化** - 移除冗余控件、统一文档页面布局
+
 ### v1.7.0 (2026-04-15) - 可视化配置工具 ✅
 
 - **在线 Playground** - 支持 Vue 2/3 的实时编辑环境

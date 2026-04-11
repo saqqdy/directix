@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.1] - 2026-04-11
+
+### Fixed
+
+- **Playground** - Fixed Monaco Editor not loading content properly
+- **Playground** - Fixed syntax highlighting showing raw HTML tags in code preview
+- **Playground** - Fixed Vue version toggle not syncing with code display
+- **Playground** - Removed redundant vue-version-toggle in header (duplicated with internal tabs)
+
+### Changed
+
+- **Documentation** - Unified playground page layout with other documentation pages
+- **Documentation** - Improved Playground component styling to match site design
+- **Playground** - Simplified UI by removing duplicate controls
+- **TypeScript** - Fixed unused variable warnings in DirectiveConfigurator.vue
+
+---
+
 ## [1.7.0] - 2026-04-15
 
 ### Added
