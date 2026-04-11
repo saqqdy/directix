@@ -875,6 +875,9 @@ None
 
 ## Roadmap
 
+### v1.7.1 (2026-04-11) ✅ Released
+- Playground bug fixes and UI improvements
+
 ### v1.7.0 (2026-04-15) ✅ Released
 - Visual configuration tool
 - Online Playground with live preview
