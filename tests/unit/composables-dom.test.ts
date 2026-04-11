@@ -313,7 +313,6 @@ describe('DOM composables', () => {
 
 			// Mock Image constructor to capture onload handler
 			const OriginalImage = globalThis.Image
-			const capturedOnload: (() => void) | null = null
 
 			class MockImage {
 				onload: (() => void) | null = null
