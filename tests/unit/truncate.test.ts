@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ObjectDirective } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { vTruncate } from '../../src/directives/truncate'
 
 // Cast to ObjectDirective to access hooks

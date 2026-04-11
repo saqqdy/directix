@@ -310,6 +310,22 @@ describe('DOM composables', () => {
 
 		it('should handle image load success', async () => {
 			const onLoad = vi.fn()
+
+			// Mock Image constructor to capture onload handler
+			const OriginalImage = globalThis.Image
+			const capturedOnload: (() => void) | null = null
+
+			class MockImage {
+				onload: (() => void) | null = null
+				onerror: (() => void) | null = null
+				src = ''
+				constructor() {
+					// Return this instance to be captured
+				}
+			}
+
+			globalThis.Image = MockImage as any
+
 			const { bind, load } = useLazy({
 				src: 'https://example.com/image.jpg',
 				onLoad,
@@ -319,19 +335,46 @@ describe('DOM composables', () => {
 			document.body.appendChild(element)
 			bind(element)
 
+			// Mock the Image constructor to capture and trigger onload
+			const imgInstances: MockImage[] = []
+			globalThis.Image = class {
+				onload: (() => void) | null = null
+				onerror: (() => void) | null = null
+				src = ''
+				constructor() {
+					imgInstances.push(this as any)
+				}
+			} as any
+
 			load()
 
-			// Trigger onload manually
-			element.src = 'https://example.com/image.jpg'
-			element.dispatchEvent(new Event('load'))
+			// Trigger onload on the internal Image instance
+			if (imgInstances.length > 0 && imgInstances[0].onload) {
+				imgInstances[0].onload()
+			}
 
 			expect(onLoad).toHaveBeenCalled()
 
+			// Restore original Image
+			globalThis.Image = OriginalImage
 			document.body.removeChild(element)
 		})
 
 		it('should handle image load error', async () => {
 			const onError = vi.fn()
+
+			// Mock Image constructor to capture onerror handler
+			const OriginalImage = globalThis.Image
+			const imgInstances: { onload: (() => void) | null, onerror: (() => void) | null, src: string }[] = []
+			globalThis.Image = class {
+				onload: (() => void) | null = null
+				onerror: (() => void) | null = null
+				src = ''
+				constructor() {
+					imgInstances.push(this as any)
+				}
+			} as any
+
 			const { bind, load } = useLazy({
 				src: 'https://example.com/invalid.jpg',
 				error: '/error.jpg',
@@ -345,11 +388,15 @@ describe('DOM composables', () => {
 
 			load()
 
-			// Simulate error
-			element.dispatchEvent(new Event('error'))
+			// Trigger onerror on the internal Image instance
+			if (imgInstances.length > 0 && imgInstances[0].onerror) {
+				imgInstances[0].onerror()
+			}
 
 			expect(onError).toHaveBeenCalled()
 
+			// Restore original Image
+			globalThis.Image = OriginalImage
 			document.body.removeChild(element)
 		})
 

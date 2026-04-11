@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ObjectDirective } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { vLottie } from '../../src/directives/lottie'
 
 // Cast to ObjectDirective to access hooks
