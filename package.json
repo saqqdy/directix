@@ -2,7 +2,7 @@
 	"name": "directix",
 	"description": "A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3",
 	"type": "module",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"packageManager": "pnpm@9.15.9",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
