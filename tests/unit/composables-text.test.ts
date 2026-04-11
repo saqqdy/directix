@@ -2,17 +2,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 import {
 	createUppercaser,
-	formatNumber,
 	formatMoney,
-	parseNumber,
+	formatNumber,
 	parseMoney,
+	parseNumber,
 	useCapitalcase,
 	useEllipsis,
 	useLowercase,
 	useMoney,
 	useNumber,
-	useTruncate,
 	useTrim,
+	useTruncate,
 	useUppercase,
 } from '../../src/composables'
 
@@ -334,7 +334,7 @@ describe('text formatting composables', () => {
 	describe('useNumber', () => {
 		it('should format number with default options', () => {
 			const value = ref(1234567)
-			const { formatted, value: numValue } = useNumber({ value })
+			const { value: numValue, formatted } = useNumber({ value })
 
 			expect(formatted.value).toBe('1,234,567')
 			expect(numValue.value).toBe(1234567)
@@ -434,7 +434,7 @@ describe('text formatting composables', () => {
 	describe('useMoney', () => {
 		it('should format money with default options', () => {
 			const value = ref(1234.56)
-			const { formatted, value: numValue } = useMoney({ value })
+			const { value: numValue, formatted } = useMoney({ value })
 
 			expect(formatted.value).toBe('$1,234.56')
 			expect(numValue.value).toBe(1234.56)

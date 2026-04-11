@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref, nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { useTypewriter } from '../../src/composables/use-typewriter'
 
 describe('useTypewriter', () => {

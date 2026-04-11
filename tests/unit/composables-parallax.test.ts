@@ -1,5 +1,5 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { useParallax } from '../../src/composables/use-parallax'
 
 describe('useParallax', () => {
@@ -77,7 +77,7 @@ describe('useParallax', () => {
 		it('should support custom transform', () => {
 			const element = document.createElement('div')
 			const { bind } = useParallax({
-				transform: (offset) => `translate3d(0, ${offset}px, 0)`,
+				transform: offset => `translate3d(0, ${offset}px, 0)`,
 			})
 
 			bind(element)

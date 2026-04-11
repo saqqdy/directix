@@ -1,6 +1,6 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
-import { useEllipsis, truncateText, wouldTextTruncate } from '../../src/composables/use-ellipsis'
+import { truncateText, useEllipsis, wouldTextTruncate } from '../../src/composables/use-ellipsis'
 
 describe('useEllipsis', () => {
 	beforeEach(() => {

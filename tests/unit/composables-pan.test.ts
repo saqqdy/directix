@@ -1,5 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { usePan } from '../../src/composables/use-pan'
 
 describe('usePan', () => {

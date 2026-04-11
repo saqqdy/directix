@@ -1,5 +1,5 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { useEmoji } from '../../src/composables/use-emoji'
 
 describe('useEmoji', () => {
@@ -78,7 +78,7 @@ describe('useEmoji', () => {
 		it('should bind to input element', () => {
 			const input = document.createElement('input')
 			input.type = 'text'
-			const { bind, value } = useEmoji()
+			const { value, bind } = useEmoji()
 
 			const unbind = bind(input)
 
@@ -104,7 +104,7 @@ describe('useEmoji', () => {
 			input.type = 'text'
 			input.value = 'Hello 😊 World'
 
-			const { bind, value } = useEmoji()
+			const { value, bind } = useEmoji()
 
 			bind(input)
 

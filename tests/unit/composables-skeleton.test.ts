@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { useSkeleton } from '../../src/composables/use-skeleton'
 
@@ -217,7 +217,7 @@ describe('useSkeleton', () => {
 
 			const skeleton = parent.querySelector('.v-skeleton') as HTMLElement
 			// Color can be converted to rgb format by the browser
-			expect(skeleton?.style.background).toMatch(/#cccccc|rgb\(204, 204, 204\)/)
+			expect(skeleton?.style.background).toMatch(/#c{6}|rgb\(204, 204, 204\)/)
 		})
 
 		it('should support custom class', () => {

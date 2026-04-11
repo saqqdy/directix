@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 import {
+	createWatermarkUrl,
 	useLoading,
 	useMask,
 	useSanitize,
 	useWatermark,
-	createWatermarkUrl,
 } from '../../src/composables'
 
 describe('UI composables', () => {

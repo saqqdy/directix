@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref, nextTick } from 'vue'
-import { useClickDelay, createDelayedClick } from '../../src/composables/use-click-delay'
+import { nextTick, ref } from 'vue'
+import { createDelayedClick, useClickDelay } from '../../src/composables/use-click-delay'
 
 describe('useClickDelay', () => {
 	beforeEach(() => {

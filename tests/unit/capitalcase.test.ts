@@ -177,8 +177,8 @@ describe('v-capitalcase additional coverage', () => {
 			const wrapper = mount(TestComponent)
 			const input = wrapper.find('input')
 
-			await input.setValue("hello-world's test")
-			expect((input.element as HTMLInputElement).value).toBe("Hello-world's Test")
+			await input.setValue('hello-world\'s test')
+			expect((input.element as HTMLInputElement).value).toBe('Hello-world\'s Test')
 		})
 	})
 })

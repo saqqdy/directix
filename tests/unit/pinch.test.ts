@@ -6,9 +6,9 @@ import { vPinch } from '../../src/directives/pinch'
 // Helper to create touch events
 function createTouchEvent(
 	type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel',
-	touches: Array<{ clientX: number; clientY: number; identifier: number }>
+	touches: Array<{ clientX: number, clientY: number, identifier: number }>,
 ): TouchEvent {
-	const touchList = touches.map((t) => ({
+	const touchList = touches.map(t => ({
 		clientX: t.clientX,
 		clientY: t.clientY,
 		identifier: t.identifier,

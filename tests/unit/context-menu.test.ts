@@ -1,7 +1,8 @@
+import type { ContextMenuItem } from '../../src/directives'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
-import { vContextMenu, ContextMenuItem } from '../../src/directives'
+import { vContextMenu } from '../../src/directives'
 
 describe('v-context-menu', () => {
 	beforeEach(() => {

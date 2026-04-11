@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
-import { vSwipe, SwipeDirection } from '../../src/directives'
+import { vSwipe } from '../../src/directives'
 
 describe('v-swipe', () => {
 	beforeEach(() => {

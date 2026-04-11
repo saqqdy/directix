@@ -1,5 +1,5 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { ref, nextTick } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { useVirtualList } from '../../src/composables/use-virtual-list'
 
 describe('useVirtualList', () => {

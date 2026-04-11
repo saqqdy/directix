@@ -75,14 +75,18 @@ const TOOLTIP_STYLES = {
 let tooltipContainer: HTMLElement | null = null
 
 function getTooltipContainer(): HTMLElement {
-	if (!tooltipContainer && typeof document !== 'undefined') {
-		tooltipContainer = document.createElement('div')
-		tooltipContainer.id = 'directix-tooltip-container'
-		tooltipContainer.style.cssText = 'position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;'
-		document.body.appendChild(tooltipContainer)
+	// Check if container exists and is still in the DOM
+	if (tooltipContainer && document.body.contains(tooltipContainer)) {
+		return tooltipContainer
 	}
 
-	return tooltipContainer!
+	// Create new container
+	tooltipContainer = document.createElement('div')
+	tooltipContainer.id = 'directix-tooltip-container'
+	tooltipContainer.style.cssText = 'position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;'
+	document.body.appendChild(tooltipContainer)
+
+	return tooltipContainer
 }
 
 function createTooltip(options: TooltipOptions): HTMLElement {
@@ -367,6 +371,7 @@ export const vTooltip = defineDirective<TooltipBinding, HTMLElement>({
 
 				;(el as any).__tooltip = newState
 				setupTriggerHandlers(el, newState)
+				el.setAttribute('aria-describedby', 'v-tooltip')
 
 				if (newOptions.trigger === 'manual') {
 					showTooltip(el, newState)

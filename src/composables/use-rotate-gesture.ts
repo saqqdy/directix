@@ -60,6 +60,7 @@ function getAngle(touches: TouchList): number {
  * Get center point
  */
 function getCenter(touches: TouchList): { x: number, y: number } {
+	if (touches.length === 0) return { x: 0, y: 0 }
 	if (touches.length < 2) return { x: touches[0].clientX, y: touches[0].clientY }
 	return {
 		x: (touches[0].clientX + touches[1].clientX) / 2,

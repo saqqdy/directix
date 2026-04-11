@@ -230,9 +230,7 @@ export function useDraggable(options: UseDraggableOptions = {}): UseDraggableRet
 
 		const { clientX, clientY } = getClientCoords(e)
 		let deltaX = clientX - startX,
-			deltaY = clientY - startY,
-			newX = offsetX + deltaX,
-			newY = offsetY + deltaY
+			deltaY = clientY - startY
 
 		// Apply axis constraint
 		const currentAxis = unref(axis)
@@ -248,6 +246,10 @@ export function useDraggable(options: UseDraggableOptions = {}): UseDraggableRet
 			deltaX = Math.round(deltaX / currentGrid[0]) * currentGrid[0]
 			deltaY = Math.round(deltaY / currentGrid[1]) * currentGrid[1]
 		}
+
+		// eslint-disable-next-line one-var
+		let newX = offsetX + deltaX,
+			newY = offsetY + deltaY
 
 		// Apply boundary constraints
 		if (unref(constrain) || boundary) {

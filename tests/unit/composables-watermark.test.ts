@@ -1,6 +1,6 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
-import { useWatermark, createWatermarkUrl } from '../../src/composables/use-watermark'
+import { createWatermarkUrl, useWatermark } from '../../src/composables/use-watermark'
 
 // Mock canvas context
 const mockCanvasContext = {

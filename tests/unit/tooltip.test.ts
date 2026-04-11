@@ -281,7 +281,7 @@ describe('v-tooltip', () => {
 			await button.trigger('mouseenter')
 			await nextTick()
 
-			let container = document.getElementById('directix-tooltip-container')
+			const container = document.getElementById('directix-tooltip-container')
 			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
 
 			// Trigger hide
@@ -515,8 +515,8 @@ describe('v-tooltip', () => {
 			await button.trigger('mouseenter')
 			await nextTick()
 
-			let container = document.getElementById('directix-tooltip-container')
-			let content = container?.querySelector('.v-tooltip__content')
+			let container = document.getElementById('directix-tooltip-container'),
+				content = container?.querySelector('.v-tooltip__content')
 			expect(content?.textContent).toBe('Initial')
 
 			await wrapper.setData({ content: 'Updated' })

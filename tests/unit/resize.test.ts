@@ -5,8 +5,8 @@ import { vResize } from '../../src/directives/resize'
 import { setupResizeObserver } from '../utils'
 
 describe('v-resize', () => {
-	let observer: ReturnType<typeof setupResizeObserver>
-	let originalResizeObserver: typeof ResizeObserver
+	let observer: ReturnType<typeof setupResizeObserver>,
+		originalResizeObserver: typeof ResizeObserver
 
 	beforeEach(() => {
 		observer = setupResizeObserver()
