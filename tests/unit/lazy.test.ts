@@ -227,3 +227,47 @@ describe('v-lazy', () => {
 		})
 	})
 })
+
+// Additional tests for improved coverage
+describe('v-lazy additional coverage', () => {
+	describe('custom observer', () => {
+		it('should use custom IntersectionObserver', async () => {
+			const customObserver = {
+				observe: vi.fn(),
+				unobserve: vi.fn(),
+				disconnect: vi.fn(),
+			}
+
+			const TestComponent = defineComponent({
+				directives: { lazy: vLazy },
+				template: `<img v-lazy="{ src: 'image.jpg', observer: customObserver }" />`,
+				data() {
+					return { customObserver }
+				},
+			})
+
+			const wrapper = mount(TestComponent, { attachTo: document.body })
+			const img = wrapper.find('img').element
+
+			expect(customObserver.observe).toHaveBeenCalledWith(img)
+
+			wrapper.unmount()
+		})
+	})
+
+	describe('non-img element', () => {
+		it('should set background image for non-img elements', async () => {
+			const TestComponent = defineComponent({
+				directives: { lazy: vLazy },
+				template: `<div v-lazy="{ src: 'image.jpg' }"></div>`,
+			})
+
+			const wrapper = mount(TestComponent, { attachTo: document.body })
+			const div = wrapper.find('div').element
+
+			expect(div.classList.contains('v-lazy')).toBe(true)
+
+			wrapper.unmount()
+		})
+	})
+})

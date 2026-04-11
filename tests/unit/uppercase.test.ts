@@ -139,3 +139,74 @@ describe('v-uppercase', () => {
 		})
 	})
 })
+
+// Additional tests for improved coverage
+describe('v-uppercase additional coverage', () => {
+	describe('non-input elements', () => {
+		it('should transform text content in non-input elements', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<span v-uppercase>hello world</span>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('HELLO WORLD')
+		})
+
+		it('should transform only first character in non-input elements when first is true', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<span v-uppercase="{ first: true }">hello world</span>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('Hello world')
+		})
+	})
+
+	describe('binding values', () => {
+		it('should work with binding value true', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<input v-uppercase="true" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello')
+			expect((input.element as HTMLInputElement).value).toBe('HELLO')
+		})
+
+		it('should not transform when binding value is false', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<input v-uppercase="false" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello')
+			expect((input.element as HTMLInputElement).value).toBe('hello')
+		})
+	})
+
+	describe('cleanup', () => {
+		it('should cleanup on unmount', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<input v-if="show" v-uppercase />`,
+				data() {
+					return { show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('input').exists()).toBe(true)
+
+			await wrapper.setData({ show: false })
+			expect(wrapper.find('input').exists()).toBe(false)
+		})
+	})
+})

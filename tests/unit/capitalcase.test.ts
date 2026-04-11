@@ -79,3 +79,106 @@ describe('v-capitalcase', () => {
 		})
 	})
 })
+
+// Additional tests for improved coverage
+describe('v-capitalcase additional coverage', () => {
+	describe('non-input elements', () => {
+		it('should transform text content in non-input elements', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<span v-capitalcase>hello world</span>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('Hello World')
+		})
+	})
+
+	describe('binding values', () => {
+		it('should work with binding value true', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-capitalcase="true" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello world')
+			expect((input.element as HTMLInputElement).value).toBe('Hello World')
+		})
+
+		it('should not transform when binding value is false', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-capitalcase="false" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello world')
+			expect((input.element as HTMLInputElement).value).toBe('hello world')
+		})
+
+		it('should not transform when onInput is false', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-capitalcase="{ onInput: false }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello world')
+			expect((input.element as HTMLInputElement).value).toBe('hello world')
+		})
+	})
+
+	describe('cleanup', () => {
+		it('should cleanup on unmount', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-if="show" v-capitalcase />`,
+				data() {
+					return { show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('input').exists()).toBe(true)
+
+			await wrapper.setData({ show: false })
+			expect(wrapper.find('input').exists()).toBe(false)
+		})
+	})
+
+	describe('special cases', () => {
+		it('should normalize multiple spaces', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-capitalcase />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue('hello   world')
+			// Multiple spaces are normalized to single space
+			expect((input.element as HTMLInputElement).value).toBe('Hello World')
+		})
+
+		it('should handle special characters', async () => {
+			const TestComponent = defineComponent({
+				directives: { capitalcase: vCapitalcase },
+				template: `<input v-capitalcase />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			await input.setValue("hello-world's test")
+			expect((input.element as HTMLInputElement).value).toBe("Hello-world's Test")
+		})
+	})
+})
