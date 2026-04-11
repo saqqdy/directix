@@ -52,8 +52,8 @@ describe('v-draggable', () => {
 				template: `<div v-draggable="true">Drag me</div>`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
 		})
 
 		it('should accept options object', () => {
@@ -64,8 +64,8 @@ describe('v-draggable', () => {
 				template: `<div v-draggable="{ axis: 'x' }">Drag me</div>`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
 		})
 
 		it('should not change position if already positioned', () => {
@@ -117,8 +117,8 @@ describe('v-draggable', () => {
 				template: `<div v-draggable="{ axis: 'x' }">Drag me</div>`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
 		})
 
 		it('should accept y axis', () => {
@@ -129,8 +129,8 @@ describe('v-draggable', () => {
 				template: `<div v-draggable="{ axis: 'y' }">Drag me</div>`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
 		})
 
 		it('should accept both axis', () => {
@@ -141,8 +141,8 @@ describe('v-draggable', () => {
 				template: `<div v-draggable="{ axis: 'both' }">Drag me</div>`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
 		})
 	})
 
@@ -291,11 +291,10 @@ describe('v-draggable', () => {
 			document.dispatchEvent(moveEvent)
 
 			expect(element.style.transform).toContain('translate')
-			// Should only have X translation
+			// Should only have X translation - Y should be 0
 			const match = element.style.transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/)
-			if (match) {
-				expect(parseFloat(match[2])).toBe(0) // Y should be 0
-			}
+			expect(match).not.toBeNull()
+			expect(parseFloat(match![2])).toBe(0)
 		})
 
 		it('should constrain to y axis when axis is y', async () => {
@@ -316,11 +315,10 @@ describe('v-draggable', () => {
 			document.dispatchEvent(moveEvent)
 
 			expect(element.style.transform).toContain('translate')
-			// Should only have Y translation
+			// Should only have Y translation - X should be 0
 			const match = element.style.transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/)
-			if (match) {
-				expect(parseFloat(match[1])).toBe(0) // X should be 0
-			}
+			expect(match).not.toBeNull()
+			expect(parseFloat(match![1])).toBe(0)
 		})
 	})
 
@@ -393,8 +391,8 @@ describe('v-draggable', () => {
 			// Click on content should not start drag
 			await wrapper.find('.content').trigger('mousedown')
 
-			// The drag should still start because we're clicking within the draggable element
-			// but the handle is checked
+			// The drag should not start when clicking outside handle
+			expect(wrapper.find('div').classes()).not.toContain('v-draggable--dragging')
 		})
 	})
 

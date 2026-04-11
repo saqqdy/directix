@@ -43,7 +43,7 @@ describe('gesture composables', () => {
 
 		it('should detect swipe direction', () => {
 			const handler = vi.fn()
-			const { direction, bind } = useSwipe({ handler })
+			const { direction: _direction, bind } = useSwipe({ handler })
 
 			const element = document.createElement('div')
 			bind(element)
@@ -219,6 +219,7 @@ describe('gesture composables', () => {
 			element.dispatchEvent(touchEndEvent)
 
 			// Custom event should be dispatched
+			expect(swipeHandler).toHaveBeenCalled()
 		})
 
 		it('should handle reactive threshold changes', async () => {
@@ -230,6 +231,8 @@ describe('gesture composables', () => {
 
 			threshold.value = 100
 			await nextTick()
+
+			expect(threshold.value).toBe(100)
 		})
 
 		it('should cleanup on unbind', () => {
@@ -241,6 +244,7 @@ describe('gesture composables', () => {
 			unbind()
 
 			// Element should be cleaned up
+			expect(element.classList.contains('v-swipe')).toBe(false)
 		})
 
 		it('should handle touchcancel event', () => {
@@ -259,6 +263,8 @@ describe('gesture composables', () => {
 				changedTouches: [touch],
 			})
 			element.dispatchEvent(touchCancelEvent)
+
+			expect(element).toBeDefined()
 		})
 	})
 
@@ -281,7 +287,7 @@ describe('gesture composables', () => {
 
 		it('should detect swipe gesture', () => {
 			const onSwipe = vi.fn()
-			const { gesture, bind } = useTouch({ onSwipe })
+			const { gesture: _gesture, bind } = useTouch({ onSwipe })
 
 			const element = document.createElement('div')
 			bind(element)
@@ -352,7 +358,7 @@ describe('gesture composables', () => {
 
 		it('should detect tap gesture', () => {
 			const onTap = vi.fn()
-			const { gesture, bind } = useTouch({ onTap, tapDuration: 300 })
+			const { gesture: _gesture, bind } = useTouch({ onTap, tapDuration: 300 })
 
 			const element = document.createElement('div')
 			bind(element)
@@ -389,7 +395,7 @@ describe('gesture composables', () => {
 
 		it('should detect long press gesture', async () => {
 			const onLongPress = vi.fn()
-			const { gesture, bind } = useTouch({
+			const { gesture: _gesture, bind } = useTouch({
 				onLongPress,
 				longPressDuration: 500,
 			})
@@ -465,7 +471,7 @@ describe('gesture composables', () => {
 
 		it('should detect pinch gesture', () => {
 			const onPinch = vi.fn()
-			const { gesture, bind } = useTouch({ onPinch })
+			const { gesture: _gesture, bind } = useTouch({ onPinch })
 
 			const element = document.createElement('div')
 			bind(element)
@@ -513,7 +519,7 @@ describe('gesture composables', () => {
 
 		it('should detect rotate gesture', () => {
 			const onRotate = vi.fn()
-			const { gesture, bind } = useTouch({ onRotate })
+			const { gesture: _gesture, bind } = useTouch({ onRotate })
 
 			const element = document.createElement('div')
 			bind(element)
@@ -646,6 +652,8 @@ describe('gesture composables', () => {
 				changedTouches: [touch],
 			})
 			element.dispatchEvent(touchCancelEvent)
+
+			expect(element).toBeDefined()
 		})
 
 		it('should cleanup on unbind', () => {
@@ -657,6 +665,7 @@ describe('gesture composables', () => {
 			unbind()
 
 			// Should remove all event listeners
+			expect(element.classList.contains('v-touch')).toBe(false)
 		})
 
 		it('should provide gesture event with details', () => {
@@ -691,12 +700,12 @@ describe('gesture composables', () => {
 			})
 			element.dispatchEvent(touchEndEvent)
 
-			if (onSwipe.mock.calls.length > 0) {
-				const event = onSwipe.mock.calls[0][0]
-				expect(event.type).toBe('swipe')
-				expect(event.direction).toBeDefined()
-				expect(event.distance).toBeDefined()
-			}
+			expect(onSwipe).toHaveBeenCalled()
+			expect(onSwipe.mock.calls.length).toBeGreaterThan(0)
+			const event = onSwipe.mock.calls[0][0]
+			expect(event.type).toBe('swipe')
+			expect(event.direction).toBeDefined()
+			expect(event.distance).toBeDefined()
 		})
 
 		it('should handle multi-touch gestures correctly', () => {

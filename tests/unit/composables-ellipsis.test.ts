@@ -32,7 +32,7 @@ describe('useEllipsis', () => {
 		})
 
 		it('should truncate with maxWidth', () => {
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated, isTruncated: _isTruncated } = useEllipsis({
 				text: 'This is a very long text',
 				maxWidth: 100,
 			})
@@ -53,7 +53,7 @@ describe('useEllipsis', () => {
 		})
 
 		it('should support lines option', () => {
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated, isTruncated: _isTruncated } = useEllipsis({
 				text: 'This is a very long text that spans multiple lines',
 				lines: 2,
 			})
@@ -127,7 +127,7 @@ describe('useEllipsis', () => {
 	describe('reactive options', () => {
 		it('should support reactive text', () => {
 			const text = ref('Hello World')
-			const { truncated, original } = useEllipsis({ text })
+			const { truncated: _truncated, original } = useEllipsis({ text })
 
 			expect(original.value).toBe('Hello World')
 		})

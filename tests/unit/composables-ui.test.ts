@@ -63,7 +63,7 @@ describe('UI composables', () => {
 		})
 
 		it('should bind to element and show loading overlay', () => {
-			const { loading, bind } = useLoading({ initial: true })
+			const { loading: _loading, bind } = useLoading({ initial: true })
 
 			const element = document.createElement('div')
 			document.body.appendChild(element)
@@ -76,7 +76,7 @@ describe('UI composables', () => {
 		})
 
 		it('should remove loading overlay when stopped', async () => {
-			const { loading, start, stop, bind } = useLoading()
+			const { loading: _loading, start, stop, bind } = useLoading()
 
 			const element = document.createElement('div')
 			document.body.appendChild(element)
@@ -94,7 +94,7 @@ describe('UI composables', () => {
 		})
 
 		it('should use custom loading class', () => {
-			const { loading, bind } = useLoading({
+			const { loading: _loading, bind } = useLoading({
 				initial: true,
 				loadingClass: 'custom-loading',
 			})
@@ -109,7 +109,7 @@ describe('UI composables', () => {
 		})
 
 		it('should show loading text', () => {
-			const { loading, bind } = useLoading({
+			const { loading: _loading, bind } = useLoading({
 				initial: true,
 				text: 'Loading...',
 			})
@@ -126,7 +126,7 @@ describe('UI composables', () => {
 
 		it('should use custom spinner', () => {
 			const customSpinner = '<div class="my-spinner"></div>'
-			const { loading, bind } = useLoading({
+			const { loading: _loading, bind } = useLoading({
 				initial: true,
 				spinner: customSpinner,
 			})
@@ -142,7 +142,7 @@ describe('UI composables', () => {
 
 		it('should handle reactive text changes', async () => {
 			const text = ref('Loading...')
-			const { loading, bind } = useLoading({
+			const { loading: _loading, bind } = useLoading({
 				initial: true,
 				text,
 			})
@@ -161,7 +161,7 @@ describe('UI composables', () => {
 		})
 
 		it('should make element position relative if static', () => {
-			const { loading, bind } = useLoading({ initial: true })
+			const { loading: _loading, bind } = useLoading({ initial: true })
 
 			const element = document.createElement('div')
 			document.body.appendChild(element)
@@ -174,7 +174,7 @@ describe('UI composables', () => {
 		})
 
 		it('should return unbind function', () => {
-			const { loading, bind } = useLoading({ initial: true })
+			const { loading: _loading, bind } = useLoading({ initial: true })
 
 			const element = document.createElement('div')
 			document.body.appendChild(element)
@@ -273,6 +273,7 @@ describe('UI composables', () => {
 			input.dispatchEvent(new Event('input', { bubbles: true }))
 
 			// onChange should be called with formatted value
+			expect(onChange).toHaveBeenCalled()
 		})
 
 		it('should call onComplete when mask is filled', () => {
@@ -290,6 +291,7 @@ describe('UI composables', () => {
 			input.dispatchEvent(new Event('input', { bubbles: true }))
 
 			// onComplete should be called
+			expect(onComplete).toHaveBeenCalled()
 		})
 
 		it('should handle reactive mask changes', async () => {
@@ -443,7 +445,7 @@ describe('UI composables', () => {
 
 	describe('useWatermark', () => {
 		// Note: Canvas is not fully supported in jsdom, skip tests that require canvas
-		it.skip('should initialize with default values', () => {
+		it.todo('should initialize with default values', () => {
 			const { disabled } = useWatermark({
 				content: 'Confidential',
 			})
@@ -451,7 +453,7 @@ describe('UI composables', () => {
 			expect(disabled.value).toBe(false)
 		})
 
-		it.skip('should be disabled when disabled option is true', () => {
+		it.todo('should be disabled when disabled option is true', () => {
 			const { disabled } = useWatermark({
 				content: 'Watermark',
 				disabled: true,
@@ -460,7 +462,7 @@ describe('UI composables', () => {
 			expect(disabled.value).toBe(true)
 		})
 
-		it.skip('should enable and disable watermark', () => {
+		it.todo('should enable and disable watermark', () => {
 			const { disabled, enable, disable } = useWatermark({
 				content: 'Watermark',
 			})
@@ -472,7 +474,7 @@ describe('UI composables', () => {
 			expect(disabled.value).toBe(false)
 		})
 
-		it.skip('should update watermark options', () => {
+		it.todo('should update watermark options', () => {
 			const { style, update } = useWatermark({
 				content: 'Watermark',
 				zIndex: 100,

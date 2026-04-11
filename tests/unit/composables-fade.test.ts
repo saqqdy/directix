@@ -33,7 +33,7 @@ describe('useFade', () => {
 	describe('bind', () => {
 		it('should bind to element', () => {
 			const element = document.createElement('div')
-			const { bind, isVisible } = useFade()
+			const { bind, isVisible: _isVisible } = useFade()
 
 			const unbind = bind(element)
 
@@ -65,7 +65,7 @@ describe('useFade', () => {
 	describe('fadeIn', () => {
 		it('should fade in element', () => {
 			const element = document.createElement('div')
-			const { bind, fadeIn, isVisible } = useFade({ visible: false })
+			const { bind, fadeIn, isVisible: _isVisible } = useFade({ visible: false })
 
 			bind(element)
 			fadeIn()

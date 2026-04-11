@@ -29,8 +29,8 @@ describe('v-mask', () => {
 				template: `<input v-mask="'(###) ###-####'" />`,
 			})
 
-			mount(TestComponent)
-			// Just verify it mounts without error
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('input').exists()).toBe(true)
 		})
 
 		it('should accept options object', async () => {

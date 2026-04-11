@@ -78,7 +78,7 @@ describe('useEmoji', () => {
 		it('should bind to input element', () => {
 			const input = document.createElement('input')
 			input.type = 'text'
-			const { value, bind } = useEmoji()
+			const { value: _value, bind } = useEmoji()
 
 			const unbind = bind(input)
 

@@ -53,7 +53,7 @@ describe('usePinch', () => {
 			element.getBoundingClientRect = vi.fn().mockReturnValue({
 				left: 0, top: 0, width: 100, height: 100,
 			})
-			const { bind, isPinching, scale } = usePinch()
+			const { bind, isPinching, scale: _scale } = usePinch()
 
 			bind(element)
 

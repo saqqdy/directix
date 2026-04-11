@@ -251,9 +251,10 @@ describe('v-money', () => {
 				template: `<input v-money value="1234.56" />`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
 			vi.runAllTimers()
 			await nextTick()
+			expect(wrapper.find('input').exists()).toBe(true)
 		})
 	})
 

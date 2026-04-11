@@ -68,12 +68,6 @@ describe('useResize', () => {
 
 			bind(element)
 
-			// Simulate resize event
-			const mockEntry = {
-				target: element,
-				contentRect: { width: 200, height: 100 } as DOMRectReadOnly,
-			} as ResizeObserverEntry
-
 			// Trigger resize via the ResizeObserver callback
 			// This requires mocking ResizeObserver callback
 			expect(element.getBoundingClientRect).toHaveBeenCalled()

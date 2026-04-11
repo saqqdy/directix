@@ -47,7 +47,7 @@ describe('useRotateGesture', () => {
 
 		it('should handle touchmove with two fingers', () => {
 			const element = document.createElement('div')
-			const { bind, isRotating, angle } = useRotateGesture()
+			const { bind, isRotating } = useRotateGesture()
 
 			bind(element)
 
@@ -204,7 +204,9 @@ describe('useRotateGesture', () => {
 	describe('rotation event data', () => {
 		it('should provide correct event data', () => {
 			let eventData: any
-			const onRotate = vi.fn(e => { eventData = e })
+			const onRotate = vi.fn(e => {
+				eventData = e
+			})
 			const element = document.createElement('div')
 			const { bind } = useRotateGesture({ onRotate })
 

@@ -13,8 +13,8 @@ export function createTestComponent(
 	directive: Directive,
 	directiveName: string = 'test',
 	data: Record<string, any> = {},
-	methods: Record<string, Function> = {},
-) {
+	methods: Record<string, (...args: any[]) => any> = {},
+): ReturnType<typeof defineComponent> {
 	return defineComponent({
 		directives: { [directiveName]: directive },
 		template,
@@ -130,7 +130,15 @@ export function createMockTouchEvent(
 /**
  * Setup mock IntersectionObserver
  */
-export function setupIntersectionObserver(mock: Partial<IntersectionObserver> = {}) {
+export function setupIntersectionObserver(
+	mock: Partial<IntersectionObserver> = {},
+): {
+	MockIntersectionObserver: ReturnType<typeof vi.fn>
+	observe: ReturnType<typeof vi.fn>
+	unobserve: ReturnType<typeof vi.fn>
+	disconnect: ReturnType<typeof vi.fn>
+	triggerIntersection: (entry: Partial<IntersectionObserverEntry>, index?: number) => void
+} {
 	const observe = vi.fn()
 	const unobserve = vi.fn()
 	const disconnect = vi.fn()
@@ -173,7 +181,15 @@ export function setupIntersectionObserver(mock: Partial<IntersectionObserver> = 
 /**
  * Setup mock ResizeObserver
  */
-export function setupResizeObserver(mock: Partial<ResizeObserver> = {}) {
+export function setupResizeObserver(
+	mock: Partial<ResizeObserver> = {},
+): {
+	MockResizeObserver: ReturnType<typeof vi.fn>
+	observe: ReturnType<typeof vi.fn>
+	unobserve: ReturnType<typeof vi.fn>
+	disconnect: ReturnType<typeof vi.fn>
+	triggerResize: (entry: Partial<ResizeObserverEntry>, index?: number) => void
+} {
 	const observe = vi.fn()
 	const unobserve = vi.fn()
 	const disconnect = vi.fn()
@@ -224,7 +240,15 @@ export function setupResizeObserver(mock: Partial<ResizeObserver> = {}) {
 /**
  * Setup mock MutationObserver
  */
-export function setupMutationObserver(mock: Partial<MutationObserver> = {}) {
+export function setupMutationObserver(
+	mock: Partial<MutationObserver> = {},
+): {
+	MockMutationObserver: ReturnType<typeof vi.fn>
+	observe: ReturnType<typeof vi.fn>
+	unobserve: ReturnType<typeof vi.fn>
+	disconnect: ReturnType<typeof vi.fn>
+	triggerMutation: (entry: Partial<MutationRecord>, index?: number) => void
+} {
 	const observe = vi.fn()
 	const unobserve = vi.fn()
 	const disconnect = vi.fn()
@@ -269,7 +293,7 @@ export function setupMutationObserver(mock: Partial<MutationObserver> = {}) {
 /**
  * Setup mock clipboard
  */
-export function setupClipboard() {
+export function setupClipboard(): { writeText: ReturnType<typeof vi.fn>, readText: ReturnType<typeof vi.fn> } {
 	const writeText = vi.fn().mockResolvedValue(undefined)
 	const readText = vi.fn().mockResolvedValue('')
 
@@ -286,7 +310,10 @@ export function setupClipboard() {
 /**
  * Mock requestAnimationFrame
  */
-export function mockRAF() {
+export function mockRAF(): {
+	triggerRAF: (time?: number) => void
+	triggerNextRAF: (time?: number) => void
+} {
 	let rafId = 0
 	const callbacks = new Map<number, FrameRequestCallback>()
 
@@ -320,7 +347,10 @@ export function mockRAF() {
 /**
  * Mock performance.now
  */
-export function mockPerformanceNow() {
+export function mockPerformanceNow(): {
+	advanceTime: (ms: number) => void
+	resetTime: () => void
+} {
 	let now = 0
 
 	vi.stubGlobal('performance', {
@@ -350,7 +380,10 @@ export function flushPromises(): Promise<void> {
 /**
  * Suppress console warnings during tests
  */
-export function suppressConsoleWarn() {
+export function suppressConsoleWarn(): {
+	restore: () => void
+	getCalls: () => any[][]
+} {
 	const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
 	return {
 		restore: () => warn.mockRestore(),
@@ -361,7 +394,10 @@ export function suppressConsoleWarn() {
 /**
  * Suppress console errors during tests
  */
-export function suppressConsoleError() {
+export function suppressConsoleError(): {
+	restore: () => void
+	getCalls: () => any[][]
+} {
 	const error = vi.spyOn(console, 'error').mockImplementation(() => {})
 	return {
 		restore: () => error.mockRestore(),

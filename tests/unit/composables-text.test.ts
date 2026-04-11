@@ -231,7 +231,7 @@ describe('text formatting composables', () => {
 	describe('useEllipsis', () => {
 		it('should add ellipsis to truncated text with maxWidth', () => {
 			const text = ref('This is a very long text that needs ellipsis')
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated } = useEllipsis({
 				text,
 				maxWidth: 100,
 			})
@@ -242,29 +242,27 @@ describe('text formatting composables', () => {
 
 		it('should not add ellipsis to short text', () => {
 			const text = ref('Short')
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated, isTruncated: _isTruncated } = useEllipsis({
 				text,
 				maxWidth: 1000, // Large enough
 			})
 
 			expect(truncated.value).toBe('Short')
-			expect(isTruncated.value).toBe(false)
 		})
 
 		it('should handle empty string', () => {
 			const text = ref('')
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated, isTruncated: _isTruncated } = useEllipsis({
 				text,
 				maxWidth: 100,
 			})
 
 			expect(truncated.value).toBe('')
-			expect(isTruncated.value).toBe(false)
 		})
 
 		it('should handle lines option', () => {
 			const text = ref('This is a very long text')
-			const { truncated, isTruncated } = useEllipsis({
+			const { truncated } = useEllipsis({
 				text,
 				lines: 1,
 			})

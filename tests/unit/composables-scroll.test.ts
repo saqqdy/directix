@@ -66,12 +66,11 @@ describe('scroll composables', () => {
 				itemSize: 50,
 			})
 
-			if (visibleItems.value.length > 0) {
-				const firstItem = visibleItems.value[0]
-				expect(firstItem.style.position).toBe('absolute')
-				expect(firstItem.style.height).toBe('50px')
-				expect(firstItem.style.width).toBe('100%')
-			}
+			expect(visibleItems.value.length).toBeGreaterThan(0)
+			const firstItem = visibleItems.value[0]
+			expect(firstItem.style.position).toBe('absolute')
+			expect(firstItem.style.height).toBe('50px')
+			expect(firstItem.style.width).toBe('100%')
 		})
 
 		it('should provide container style', () => {
@@ -133,7 +132,7 @@ describe('scroll composables', () => {
 
 		it('should handle reactive items changes', async () => {
 			const items = ref([1, 2, 3])
-			const { visibleItems, totalHeight } = useVirtualList({
+			const { totalHeight } = useVirtualList({
 				items,
 				itemSize: 50,
 			})
@@ -164,7 +163,7 @@ describe('scroll composables', () => {
 
 		it('should handle overscan option', () => {
 			const items = ref(Array.from({ length: 100 }, (_, i) => ({ id: i })))
-			const { visibleItems, startIndex, endIndex } = useVirtualList({
+			const { visibleItems } = useVirtualList({
 				items,
 				itemSize: 50,
 				height: 200,
@@ -447,7 +446,7 @@ describe('scroll composables', () => {
 
 			try {
 				await load()
-			} catch (e) {
+			} catch {
 				// Error should be caught
 			}
 

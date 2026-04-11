@@ -254,9 +254,10 @@ describe('v-number', () => {
 				template: `<input v-number value="1234567" />`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
 			vi.runAllTimers()
 			await nextTick()
+			expect(wrapper.find('input').exists()).toBe(true)
 		})
 	})
 

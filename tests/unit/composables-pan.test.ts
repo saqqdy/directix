@@ -275,6 +275,7 @@ describe('usePan additional coverage', () => {
 
 			// Event should not be prevented
 			// (We can't easily test preventDefault behavior in Vitest)
+			expect(element.classList.contains('v-pan')).toBe(true)
 
 			document.dispatchEvent(new MouseEvent('mouseup'))
 			element.remove()

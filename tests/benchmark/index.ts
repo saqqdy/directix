@@ -5,7 +5,7 @@
 import { Bench } from 'tinybench'
 
 // Mock DOM environment for benchmarking
-const mockElement = {
+const _mockElement = {
 	addEventListener: () => {},
 	removeEventListener: () => {},
 	classList: { add: () => {}, remove: () => {} },
@@ -20,8 +20,8 @@ const bench = new Bench({ time: 1000, iterations: 100 })
 // Debounce benchmark
 bench.add('debounce - 1000 calls', () => {
 	let timeout: ReturnType<typeof setTimeout> | null = null
-	const debounce = (fn: Function, wait: number) => {
-		return (...args: any[]) => {
+	const debounce = (fn: (...args: unknown[]) => void, wait: number): ((...args: unknown[]) => void) => {
+		return (...args: unknown[]) => {
 			if (timeout) clearTimeout(timeout)
 			timeout = setTimeout(() => fn(...args), wait)
 		}
@@ -36,8 +36,8 @@ bench.add('debounce - 1000 calls', () => {
 // Throttle benchmark
 bench.add('throttle - 1000 calls', () => {
 	let lastTime = 0
-	const throttle = (fn: Function, limit: number) => {
-		return (...args: any[]) => {
+	const throttle = (fn: (...args: unknown[]) => void, limit: number): ((...args: unknown[]) => void) => {
+		return (...args: unknown[]) => {
 			const now = Date.now()
 			if (now - lastTime >= limit) {
 				fn(...args)
@@ -54,7 +54,7 @@ bench.add('throttle - 1000 calls', () => {
 
 // Format number benchmark
 bench.add('formatNumber - 1000 calls', () => {
-	const formatNumber = (value: number, options: { precision?: number, thousandSeparator?: string, decimalSeparator?: string } = {}) => {
+	const formatNumber = (value: number, options: { precision?: number, thousandSeparator?: string, decimalSeparator?: string } = {}): string => {
 		const { precision = 0, thousandSeparator = ',', decimalSeparator = '.' } = options
 		const fixed = precision > 0 ? value.toFixed(precision) : String(Math.round(value))
 		const [intPart, decPart] = fixed.split('.')
@@ -69,7 +69,7 @@ bench.add('formatNumber - 1000 calls', () => {
 
 // Format money benchmark
 bench.add('formatMoney - 1000 calls', () => {
-	const formatMoney = (value: number, options: { symbol?: string, precision?: number, thousandSeparator?: string, decimalSeparator?: string } = {}) => {
+	const formatMoney = (value: number, options: { symbol?: string, precision?: number, thousandSeparator?: string, decimalSeparator?: string } = {}): string => {
 		const { symbol = '$', precision = 2, thousandSeparator = ',', decimalSeparator = '.' } = options
 		const fixed = value.toFixed(precision)
 		const [intPart, decPart] = fixed.split('.')
@@ -84,21 +84,21 @@ bench.add('formatMoney - 1000 calls', () => {
 
 // Text transform benchmark
 bench.add('uppercase - 1000 calls', () => {
-	const transform = (text: string) => text.toUpperCase()
+	const transform = (text: string): string => text.toUpperCase()
 	for (let i = 0; i < 1000; i++) {
 		transform('hello world, this is a test string for benchmarking')
 	}
 })
 
 bench.add('lowercase - 1000 calls', () => {
-	const transform = (text: string) => text.toLowerCase()
+	const transform = (text: string): string => text.toLowerCase()
 	for (let i = 0; i < 1000; i++) {
 		transform('HELLO WORLD, THIS IS A TEST STRING FOR BENCHMARKING')
 	}
 })
 
 bench.add('capitalcase - 1000 calls', () => {
-	const transform = (text: string) => text.replace(/\b\w/g, char => char.toUpperCase())
+	const transform = (text: string): string => text.replace(/\b\w/g, char => char.toUpperCase())
 	for (let i = 0; i < 1000; i++) {
 		transform('hello world, this is a test string for benchmarking')
 	}
@@ -106,7 +106,7 @@ bench.add('capitalcase - 1000 calls', () => {
 
 // Truncate benchmark
 bench.add('truncate - 1000 calls', () => {
-	const truncate = (text: string, length: number, suffix: string = '...') => {
+	const truncate = (text: string, length: number, suffix: string = '...'): string => {
 		if (text.length <= length) return text
 		return text.slice(0, length) + suffix
 	}
@@ -117,7 +117,7 @@ bench.add('truncate - 1000 calls', () => {
 
 // Sanitize HTML benchmark
 bench.add('sanitize - remove scripts - 1000 calls', () => {
-	const sanitize = (html: string) => {
+	const sanitize = (html: string): string => {
 		return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
 	}
 	for (let i = 0; i < 1000; i++) {
@@ -127,7 +127,7 @@ bench.add('sanitize - remove scripts - 1000 calls', () => {
 
 // Mask pattern benchmark
 bench.add('mask - phone number - 1000 calls', () => {
-	const mask = (value: string, pattern: string) => {
+	const mask = (value: string, pattern: string): string => {
 		const digits = value.replace(/\D/g, '')
 		let result = '',
 			digitIndex = 0
@@ -150,20 +150,20 @@ bench.add('mask - phone number - 1000 calls', () => {
 })
 
 // Run benchmarks
-async function runBenchmarks() {
-	console.log('🏃 Running Directix Performance Benchmarks...\n')
+async function runBenchmarks(): Promise<void> {
+	console.info('🏃 Running Directix Performance Benchmarks...\n')
 
 	await bench.warmup()
 	await bench.run()
 
-	console.table(bench.table())
+	console.info(bench.table() as string)
 
 	// Summary
-	console.log('\n📊 Summary:')
+	console.info('\n📊 Summary:')
 	const results = bench.results
 	const avgLatency = results.reduce((sum, r) => sum + (r?.latency?.mean || 0), 0) / results.length
-	console.log(`Average latency: ${avgLatency.toFixed(4)} ms`)
-	console.log(`Total benchmarks: ${results.length}`)
+	console.info(`Average latency: ${avgLatency.toFixed(4)} ms`)
+	console.info(`Total benchmarks: ${results.length}`)
 }
 
 runBenchmarks().catch(console.error)

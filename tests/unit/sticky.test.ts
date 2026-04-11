@@ -54,7 +54,8 @@ describe('v-sticky', () => {
 				template: `<div v-sticky="50">Sticky header</div>`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').classes()).toContain('v-sticky')
 		})
 
 		it('should accept options object', () => {
@@ -65,7 +66,8 @@ describe('v-sticky', () => {
 				template: `<div v-sticky="{ top: 50, zIndex: 1000 }">Sticky header</div>`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').classes()).toContain('v-sticky')
 		})
 	})
 

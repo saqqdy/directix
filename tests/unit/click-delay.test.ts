@@ -162,7 +162,7 @@ describe('v-click-delay', () => {
 	})
 
 	describe('disabled option', () => {
-		it('should not bind events when disabled', () => {
+		it('should not bind events when disabled', async () => {
 			const handler = vi.fn()
 			const TestComponent = defineComponent({
 				directives: { clickDelay: vClickDelay },
@@ -175,8 +175,9 @@ describe('v-click-delay', () => {
 			const wrapper = mount(TestComponent)
 
 			// Click should not be handled by directive
-			wrapper.find('button').trigger('click')
+			await wrapper.find('button').trigger('click')
 			// The handler is not bound, so it won't be called
+			expect(handler).not.toHaveBeenCalled()
 		})
 
 		it('should enable when disabled changes to false', async () => {

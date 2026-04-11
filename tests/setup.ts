@@ -17,7 +17,7 @@ class MockMutationObserver {
 		this.callback = callback
 	}
 
-	observe(target: Node, options?: MutationObserverInit): void {
+	observe(target: Node, _options?: MutationObserverInit): void {
 		this.nodes.add(target)
 	}
 
@@ -46,7 +46,7 @@ class MockResizeObserver {
 		this.callback = callback
 	}
 
-	observe(target: Element, options?: ResizeObserverOptions): void {
+	observe(target: Element, _options?: ResizeObserverOptions): void {
 		this.elements.add(target)
 	}
 

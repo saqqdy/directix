@@ -40,7 +40,7 @@ describe('useSkeleton', () => {
 			parent.appendChild(element)
 			document.body.appendChild(parent)
 
-			const { bind, isLoading } = useSkeleton({ loading: true })
+			const { bind } = useSkeleton({ loading: true })
 
 			bind(element)
 

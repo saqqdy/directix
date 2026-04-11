@@ -174,6 +174,8 @@ describe('element composables', () => {
 			})
 
 			bind(element)
+
+			expect(element).toBeDefined()
 		})
 
 		it('should support box option', () => {
@@ -185,6 +187,8 @@ describe('element composables', () => {
 			})
 
 			bind(element)
+
+			expect(element).toBeDefined()
 		})
 
 		it('should support onResize callback', () => {
@@ -227,6 +231,8 @@ describe('element composables', () => {
 
 			const unbind = bind(element)
 			unbind()
+
+			expect(typeof unbind).toBe('function')
 		})
 
 		it('should handle reactive debounce', async () => {
@@ -242,6 +248,8 @@ describe('element composables', () => {
 
 			debounce.value = 200
 			await nextTick()
+
+			expect(debounce.value).toBe(200)
 		})
 	})
 
@@ -415,6 +423,8 @@ describe('element composables', () => {
 			axis.value = 'x'
 			await nextTick()
 
+			expect(axis.value).toBe('x')
+
 			document.body.removeChild(element)
 		})
 
@@ -428,6 +438,8 @@ describe('element composables', () => {
 
 			disabled.value = true
 			await nextTick()
+
+			expect(disabled.value).toBe(true)
 
 			document.body.removeChild(element)
 		})

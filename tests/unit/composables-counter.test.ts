@@ -96,7 +96,7 @@ describe('counter composables', () => {
 		it('should animate to target value', async () => {
 			const value = ref(100)
 			const duration = 1000
-			const { currentValue, bind, isAnimating } = useCounter({
+			const { bind, isAnimating } = useCounter({
 				value,
 				duration,
 			})
@@ -127,7 +127,7 @@ describe('counter composables', () => {
 
 		it('should stop animation when stop is called', () => {
 			const value = ref(100)
-			const { isAnimating, start, stop, bind } = useCounter({
+			const { isAnimating, stop, bind } = useCounter({
 				value,
 				duration: 1000,
 			})
@@ -142,7 +142,7 @@ describe('counter composables', () => {
 
 		it('should setValue and restart animation', async () => {
 			const value = ref(100)
-			const { currentValue, setValue, start, stop, bind } = useCounter({
+			const { setValue, stop, bind } = useCounter({
 				value,
 				duration: 1000,
 			})
@@ -201,7 +201,7 @@ describe('counter composables', () => {
 
 		it('should handle reactive value changes', async () => {
 			const value = ref(100)
-			const { currentValue, bind, isAnimating } = useCounter({
+			const { bind, isAnimating } = useCounter({
 				value,
 				duration: 1000,
 			})

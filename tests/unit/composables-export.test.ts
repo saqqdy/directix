@@ -7,7 +7,7 @@ const mockBlob = vi.fn()
 const mockCreateObjectURL = vi.fn().mockReturnValue('blob:test')
 const mockRevokeObjectURL = vi.fn()
 
-global.Blob = mockBlob as any
+globalThis.Blob = mockBlob as any
 URL.createObjectURL = mockCreateObjectURL
 URL.revokeObjectURL = mockRevokeObjectURL
 

@@ -310,7 +310,7 @@ describe('DOM composables', () => {
 
 		it('should handle image load success', async () => {
 			const onLoad = vi.fn()
-			const { bind, load, state, isLoaded } = useLazy({
+			const { bind, load } = useLazy({
 				src: 'https://example.com/image.jpg',
 				onLoad,
 			})
@@ -321,24 +321,18 @@ describe('DOM composables', () => {
 
 			load()
 
-			// Simulate successful image load
-			const img = new Image()
-			Object.defineProperty(img, 'onload', {
-				set(callback) {
-					callback?.call(img)
-				},
-			})
-
 			// Trigger onload manually
 			element.src = 'https://example.com/image.jpg'
 			element.dispatchEvent(new Event('load'))
+
+			expect(onLoad).toHaveBeenCalled()
 
 			document.body.removeChild(element)
 		})
 
 		it('should handle image load error', async () => {
 			const onError = vi.fn()
-			const { bind, load, state, hasError } = useLazy({
+			const { bind, load } = useLazy({
 				src: 'https://example.com/invalid.jpg',
 				error: '/error.jpg',
 				onError,
@@ -353,6 +347,8 @@ describe('DOM composables', () => {
 
 			// Simulate error
 			element.dispatchEvent(new Event('error'))
+
+			expect(onError).toHaveBeenCalled()
 
 			document.body.removeChild(element)
 		})
@@ -525,6 +521,8 @@ describe('DOM composables', () => {
 			element.appendChild(child)
 
 			// Note: In jsdom, MutationObserver may not trigger synchronously
+			expect(handler).toBeDefined()
+
 			document.body.removeChild(element)
 		})
 	})

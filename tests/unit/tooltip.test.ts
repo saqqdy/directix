@@ -43,7 +43,8 @@ describe('v-tooltip', () => {
 				template: `<button v-tooltip="'Simple tooltip'">Hover me</button>`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('button').attributes('aria-describedby')).toBe('v-tooltip')
 		})
 
 		it('should accept options object', () => {
@@ -52,7 +53,8 @@ describe('v-tooltip', () => {
 				template: `<button v-tooltip="{ content: 'Tooltip', placement: 'bottom' }">Hover me</button>`,
 			})
 
-			mount(TestComponent)
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('button').attributes('aria-describedby')).toBe('v-tooltip')
 		})
 	})
 

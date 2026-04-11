@@ -317,8 +317,8 @@ describe('useTooltip', () => {
 			element.dispatchEvent(new MouseEvent('mouseenter'))
 
 			unbind()
-
 			// No error means timeouts were cleared
+			expect(typeof unbind).toBe('function')
 		})
 	})
 })

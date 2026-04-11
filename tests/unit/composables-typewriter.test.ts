@@ -85,107 +85,107 @@ describe('useTypewriter', () => {
 
 	describe('options', () => {
 		it('should accept speed option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				speed: 200,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept delay option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				delay: 500,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept cursor option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				cursor: '_',
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept cursor: false', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				cursor: false,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept cursorBlink option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				cursorBlink: false,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept loop option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				loop: true,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept deleteSpeed option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				deleteSpeed: 50,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept deleteDelay option', () => {
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				deleteDelay: 100,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 	})
 
 	describe('callbacks', () => {
 		it('should accept onComplete callback', () => {
 			const onComplete = vi.fn()
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				onComplete,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 
 		it('should accept onType callback', () => {
 			const onType = vi.fn()
-			const { start } = useTypewriter({
+			const { start, isTyping } = useTypewriter({
 				text: 'Hi',
 				onType,
 			})
 
 			start()
-			// Just verify it doesn't throw
+			expect(isTyping.value).toBe(true)
 		})
 	})
 

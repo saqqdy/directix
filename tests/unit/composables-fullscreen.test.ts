@@ -71,7 +71,7 @@ describe('useFullscreen', () => {
 			const requestFullscreenSpy = vi.fn().mockResolvedValue(undefined)
 			element.requestFullscreen = requestFullscreenSpy
 
-			const { bind, enter, isFullscreen } = useFullscreen()
+			const { bind, enter, isFullscreen: _isFullscreen } = useFullscreen()
 			bind(element)
 
 			await enter()
@@ -132,7 +132,7 @@ describe('useFullscreen', () => {
 			const requestFullscreenSpy = vi.fn().mockResolvedValue(undefined)
 			element.requestFullscreen = requestFullscreenSpy
 
-			const { bind, toggle, isFullscreen } = useFullscreen()
+			const { bind, toggle, isFullscreen: _isFullscreen } = useFullscreen()
 			bind(element)
 
 			await toggle()

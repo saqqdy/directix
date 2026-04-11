@@ -38,7 +38,7 @@ describe('useVirtualList', () => {
 	describe('visible items', () => {
 		it('should return visible items based on scroll position', () => {
 			const items = ref(Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Item ${i}` })))
-			const { visibleItems, startIndex, endIndex } = useVirtualList({
+			const { visibleItems, startIndex } = useVirtualList({
 				items,
 				itemSize: 50,
 				height: 200,
@@ -51,7 +51,7 @@ describe('useVirtualList', () => {
 
 		it('should update visible items on scroll', async () => {
 			const items = ref(Array.from({ length: 100 }, (_, i) => ({ id: i })))
-			const { visibleItems, containerRef, scrollTop, startIndex, endIndex } = useVirtualList({
+			const { containerRef } = useVirtualList({
 				items,
 				itemSize: 50,
 				height: 200,
@@ -103,8 +103,10 @@ describe('useVirtualList', () => {
 			containerRef.value = null
 
 			// Should not throw
-			scrollToIndex(0)
-			scrollTo(0)
+			expect(() => {
+				scrollToIndex(0)
+				scrollTo(0)
+			}).not.toThrow()
 		})
 	})
 

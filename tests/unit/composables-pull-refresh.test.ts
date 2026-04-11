@@ -282,7 +282,7 @@ describe('usePullRefresh', () => {
 		it('should support reactive distance', () => {
 			const distance = ref(60)
 			const handler = vi.fn()
-			const { events, containerRef, state } = usePullRefresh({ handler, distance })
+			const { containerRef, state } = usePullRefresh({ handler, distance })
 
 			containerRef.value = document.createElement('div')
 

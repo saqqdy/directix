@@ -73,7 +73,6 @@ describe('v-watermark', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const element = wrapper.find('div').element
 
 			// JSDOM doesn't compute styles the same way, but we can check that the directive runs
 			expect(wrapper.find('.v-watermark').exists()).toBe(true)

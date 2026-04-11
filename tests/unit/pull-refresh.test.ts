@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 import { vPullRefresh } from '../../src/directives/pull-refresh'
 
-// Mock Touch
-class MockTouch {
+// Mock Touch - used for testing touch events
+class _MockTouch {
 	identifier = 0
 	target = document.body
 	clientX = 0
