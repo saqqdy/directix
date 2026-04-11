@@ -54,8 +54,8 @@ describe('v-click-wave', () => {
 
 			const wave = button.find('.v-click-wave__effect')
 			expect(wave.exists()).toBe(true)
-			expect(wave.element.style.position).toBe('absolute')
-			expect(wave.element.style.borderRadius).toBe('50%')
+			expect((wave.element as HTMLElement).style.position).toBe('absolute')
+			expect((wave.element as HTMLElement).style.borderRadius).toBe('50%')
 		})
 
 		it('should set element position to relative if static', async () => {
@@ -70,7 +70,7 @@ describe('v-click-wave', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const element = wrapper.find('div').element
+			const element = wrapper.find('div').element as HTMLElement
 
 			expect(element.style.position).toBe('relative')
 			expect(element.style.overflow).toBe('hidden')
@@ -111,7 +111,7 @@ describe('v-click-wave', () => {
 			await nextTick()
 
 			const wave = button.find('.v-click-wave__effect')
-			expect(wave.element.style.backgroundColor).toBe('red')
+			expect((wave.element as HTMLElement).style.backgroundColor).toBe('red')
 		})
 
 		it('should use currentColor as default', async () => {
@@ -128,7 +128,7 @@ describe('v-click-wave', () => {
 
 			const wave = button.find('.v-click-wave__effect')
 			// Browser normalizes to lowercase
-			expect(wave.element.style.backgroundColor.toLowerCase()).toBe('currentcolor')
+			expect((wave.element as HTMLElement).style.backgroundColor.toLowerCase()).toBe('currentcolor')
 		})
 
 		it('should accept color in options object', async () => {
@@ -144,7 +144,7 @@ describe('v-click-wave', () => {
 			await nextTick()
 
 			const wave = button.find('.v-click-wave__effect')
-			expect(wave.element.style.backgroundColor).toBe('blue')
+			expect((wave.element as HTMLElement).style.backgroundColor).toBe('blue')
 		})
 	})
 
@@ -289,7 +289,7 @@ describe('v-click-wave', () => {
 			await nextTick()
 
 			const wave = button.find('.v-click-wave__effect')
-			expect(wave.element.style.backgroundColor).toBe('red')
+			expect((wave.element as HTMLElement).style.backgroundColor).toBe('red')
 
 			// Update options
 			await wrapper.setData({ options: { color: 'blue' } })
@@ -301,7 +301,7 @@ describe('v-click-wave', () => {
 			const waves = button.findAll('.v-click-wave__effect')
 			// Check the latest wave has the new color
 			const lastWave = waves[waves.length - 1]
-			expect(lastWave.element.style.backgroundColor).toBe('blue')
+			expect((lastWave.element as HTMLElement).style.backgroundColor).toBe('blue')
 		})
 
 		it('should enable/disable dynamically', async () => {

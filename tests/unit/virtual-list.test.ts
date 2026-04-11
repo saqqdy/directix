@@ -76,7 +76,7 @@ describe('v-virtual-list', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const content = wrapper.find('.v-virtual-list__content').element
+			const content = wrapper.find('.v-virtual-list__content').element as HTMLElement
 
 			// Total height should be 100 items * 100px = 10000px
 			expect(content.style.height).toBe('10000px')
@@ -109,7 +109,7 @@ describe('v-virtual-list', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const container = wrapper.find('.v-virtual-list').element
+			const container = wrapper.find('.v-virtual-list').element as HTMLElement
 
 			expect(container.style.height).toBe('600px')
 		})

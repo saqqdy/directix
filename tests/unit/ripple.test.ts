@@ -49,7 +49,7 @@ describe('v-ripple', () => {
 
 			const ripple = button.find('.v-ripple__wave')
 			expect(ripple.exists()).toBe(true)
-			expect(ripple.element.style.position).toBe('absolute')
+			expect((ripple.element as HTMLElement).style.position).toBe('absolute')
 		})
 	})
 

@@ -335,7 +335,7 @@ export function mockRAF(): {
 			})
 		},
 		triggerNextRAF: (time: number = 0) => {
-			const [id, callback] = callbacks.entries().next().value || []
+			const [id, callback] = callbacks.entries().next().value || [undefined, undefined]
 			if (callback) {
 				callback(time)
 				callbacks.delete(id)

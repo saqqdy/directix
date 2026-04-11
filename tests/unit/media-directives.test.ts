@@ -165,7 +165,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const progressBar = element.querySelector('.v-progress__bar')
+			const progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar).not.toBeNull()
 			expect(progressBar?.style.backgroundColor).toBe('rgb(255, 0, 0)')
 		})
@@ -182,13 +182,13 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			let progressBar = element.querySelector('.v-progress__bar')
+			let progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.width).toBe('25%')
 
 			await wrapper.setData({ progress: 75 })
 			await nextTick()
 
-			progressBar = element.querySelector('.v-progress__bar')
+			progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.width).toBe('75%')
 		})
 
@@ -228,7 +228,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const progressBar = element.querySelector('.v-progress__bar')
+			const progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.backgroundImage).toContain('linear-gradient')
 		})
 
@@ -241,7 +241,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const progressBar = element.querySelector('.v-progress__bar')
+			const progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.animation).toContain('v-progress-stripes')
 		})
 
@@ -254,7 +254,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const container = element.querySelector('.v-progress')
+			const container = element.querySelector('.v-progress') as HTMLElement | null
 			expect(container?.style.bottom).toBe('0px')
 		})
 
@@ -316,7 +316,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const progressBar = element.querySelector('.v-progress__bar')
+			const progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.width).toBe('100%')
 		})
 
@@ -329,7 +329,7 @@ describe('media directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const progressBar = element.querySelector('.v-progress__bar')
+			const progressBar = element.querySelector('.v-progress__bar') as HTMLElement | null
 			expect(progressBar?.style.width).toBe('25%')
 		})
 

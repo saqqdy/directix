@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { ObjectDirective } from 'vue'
 import { vImagePreview } from '../../src/directives/image-preview'
+
+// Cast to ObjectDirective to access hooks
+const imagePreviewDirective = vImagePreview as ObjectDirective
 
 describe('vImagePreview', () => {
 	beforeEach(() => {
@@ -17,7 +21,7 @@ describe('vImagePreview', () => {
 			const el = document.createElement('img')
 			el.src = 'test.jpg'
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect(el.style.cursor).toBe('zoom-in')
 		})
@@ -26,7 +30,7 @@ describe('vImagePreview', () => {
 			const el = document.createElement('img')
 			el.src = 'test.jpg'
 
-			vImagePreview.mounted!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect(el.style.cursor).toBe('')
 		})
@@ -35,7 +39,7 @@ describe('vImagePreview', () => {
 			const el = document.createElement('img')
 			el.src = 'test.jpg'
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect((el as any).__imagePreview).toBeDefined()
 		})
@@ -47,7 +51,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -59,7 +63,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -72,7 +76,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { onOpen }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { onOpen }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -86,7 +90,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -98,7 +102,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { showCloseButton: false }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { showCloseButton: false }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -110,7 +114,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -122,7 +126,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { showZoomIndicator: false }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { showZoomIndicator: false }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -134,7 +138,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -148,7 +152,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 			expect(document.querySelector('.v-image-preview-overlay')).not.toBeNull()
@@ -164,7 +168,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 			expect(document.querySelector('.v-image-preview-overlay')).not.toBeNull()
@@ -182,7 +186,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { onClose }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { onClose }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -199,7 +203,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { zIndex: 10000 }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { zIndex: 10000 }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -212,7 +216,7 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { class: 'custom-class' }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { class: 'custom-class' }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -225,7 +229,7 @@ describe('vImagePreview', () => {
 			el.src = 'thumbnail.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: { previewSrc: 'full.jpg' }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: { previewSrc: 'full.jpg' }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -237,7 +241,7 @@ describe('vImagePreview', () => {
 			const el = document.createElement('div')
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: 'image.jpg', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: 'image.jpg', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			el.click()
 
@@ -251,8 +255,8 @@ describe('vImagePreview', () => {
 			const el = document.createElement('img')
 			el.src = 'test.jpg'
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
-			vImagePreview.updated!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			imagePreviewDirective.updated!(el, { value: { disabled: true }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect(el.style.cursor).toBe('')
 		})
@@ -263,8 +267,8 @@ describe('vImagePreview', () => {
 			const el = document.createElement('img')
 			el.src = 'test.jpg'
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
-			vImagePreview.unmounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			imagePreviewDirective.unmounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect((el as any).__imagePreview).toBeUndefined()
 		})
@@ -274,12 +278,12 @@ describe('vImagePreview', () => {
 			el.src = 'test.jpg'
 			document.body.appendChild(el)
 
-			vImagePreview.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 			el.click()
 
 			expect(document.querySelector('.v-image-preview-overlay')).not.toBeNull()
 
-			vImagePreview.unmounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any)
+			imagePreviewDirective.unmounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
 
 			expect(document.querySelector('.v-image-preview-overlay')).toBeNull()
 		})

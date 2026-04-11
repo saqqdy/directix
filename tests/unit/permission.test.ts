@@ -57,7 +57,7 @@ describe('v-permission', () => {
 			const wrapper = mount(TestComponent, { attachTo: document.body })
 			const div = wrapper.find('div')
 			expect(div.exists()).toBe(true)
-			expect(div.element.style.display).toBe('none')
+			expect((div.element as HTMLElement).style.display).toBe('none')
 
 			wrapper.unmount()
 		})
@@ -98,7 +98,7 @@ describe('v-permission', () => {
 			const wrapper = mount(TestComponent, { attachTo: document.body })
 			const div = wrapper.find('div')
 			expect(div.exists()).toBe(true) // Element exists but hidden
-			expect(div.element.style.display).toBe('none') // Lacks 'delete'
+			expect((div.element as HTMLElement).style.display).toBe('none') // Lacks 'delete'
 
 			wrapper.unmount()
 		})
@@ -126,7 +126,7 @@ describe('v-permission', () => {
 			const wrapper = mount(TestComponent, { attachTo: document.body })
 			const div = wrapper.find('div')
 			expect(div.exists()).toBe(true) // Element exists but hidden
-			expect(div.element.style.display).toBe('none')
+			expect((div.element as HTMLElement).style.display).toBe('none')
 
 			wrapper.unmount()
 		})
@@ -157,7 +157,7 @@ describe('v-permission', () => {
 			const div = wrapper.find('div')
 
 			expect(div.exists()).toBe(true)
-			expect(div.element.style.display).toBe('none')
+			expect((div.element as HTMLElement).style.display).toBe('none')
 			expect(div.element.classList.contains('v-permission--hidden')).toBe(true)
 
 			wrapper.unmount()
@@ -200,7 +200,7 @@ describe('v-permission', () => {
 
 			expect(customCheck).toHaveBeenCalled()
 			expect(div.exists()).toBe(true)
-			expect(div.element.style.display).toBe('none')
+			expect((div.element as HTMLElement).style.display).toBe('none')
 
 			wrapper.unmount()
 		})
@@ -354,13 +354,13 @@ describe('v-permission', () => {
 			const wrapper = mount(TestComponent, { attachTo: document.body })
 			const div = wrapper.find('div')
 			expect(div.exists()).toBe(true)
-			expect(div.element.style.display).not.toBe('none')
+			expect((div.element as HTMLElement).style.display).not.toBe('none')
 
 			// Change to permission user doesn't have
 			await wrapper.setData({ permission: 'admin' })
 			await nextTick()
 
-			expect(div.element.style.display).toBe('none')
+			expect((div.element as HTMLElement).style.display).toBe('none')
 
 			wrapper.unmount()
 		})

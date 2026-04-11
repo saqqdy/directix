@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import type { ObjectDirective } from 'vue'
 import { vTruncate } from '../../src/directives/truncate'
+
+// Cast to ObjectDirective to access hooks
+const truncateDirective = vTruncate as ObjectDirective
 
 describe('vTruncate', () => {
 	afterEach(() => {
@@ -12,15 +16,15 @@ describe('vTruncate', () => {
 		})
 
 		it('should have mounted hook', () => {
-			expect(vTruncate.mounted).toBeDefined()
+			expect(truncateDirective.mounted).toBeDefined()
 		})
 
 		it('should have updated hook', () => {
-			expect(vTruncate.updated).toBeDefined()
+			expect(truncateDirective.updated).toBeDefined()
 		})
 
 		it('should have unmounted hook', () => {
-			expect(vTruncate.unmounted).toBeDefined()
+			expect(truncateDirective.unmounted).toBeDefined()
 		})
 	})
 
@@ -29,7 +33,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text that needs to be truncated'
 
-			vTruncate.mounted!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			// Length 20 with ellipsis "..." (3 chars) means 17 chars of text + "..."
 			expect(el.textContent?.length).toBe(20)
@@ -40,7 +44,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'Short text'
 
-			vTruncate.mounted!(el, { value: 100, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 100, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.textContent).toBe('Short text')
 		})
@@ -49,7 +53,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'Original text'
 
-			vTruncate.mounted!(el, { value: 5, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 5, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect((el as any).__truncate.originalText).toBe('Original text')
 		})
@@ -58,7 +62,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text that needs to be truncated'
 
-			vTruncate.mounted!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.getAttribute('title')).toBe('This is a very long text that needs to be truncated')
 		})
@@ -67,12 +71,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text that needs to be truncated'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { length: 20, showTitle: false },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.getAttribute('title')).toBeNull()
 		})
@@ -83,7 +87,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, { value: { length: 15 }, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: { length: 15 }, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			// Length 15: 12 chars text + "..."
 			expect(el.textContent?.length).toBe(15)
@@ -94,12 +98,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { length: 15, position: 'start' },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			// Length 15: "..." + 12 chars from end
 			expect(el.textContent?.length).toBe(15)
@@ -110,12 +114,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { length: 15, position: 'middle' },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			// Length 15: 6 chars + "..." + 6 chars
 			expect(el.textContent?.length).toBe(15)
@@ -128,12 +132,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { length: 15, ellipsis: '…' },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			// Custom ellipsis is 1 char, so 14 chars of text + "…"
 			expect(el.textContent?.length).toBe(15)
@@ -144,12 +148,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { useCss: true },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.style.overflow).toBe('hidden')
 			expect(el.style.textOverflow).toBe('ellipsis')
@@ -160,12 +164,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { useCss: true },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.getAttribute('title')).toBe('This is a very long text')
 		})
@@ -174,12 +178,12 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, {
+			truncateDirective.mounted!(el, {
 				value: { useCss: true, showTitle: false },
 				modifiers: {},
 				dir: vTruncate,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.getAttribute('title')).toBeNull()
 		})
@@ -190,10 +194,10 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 			expect(el.textContent?.length).toBe(10)
 
-			vTruncate.updated!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.updated!(el, { value: 20, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 			expect(el.textContent?.length).toBe(20)
 		})
 
@@ -201,10 +205,10 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, { value: 15, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 15, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 			const textContent = el.textContent
 
-			vTruncate.updated!(el, { value: 15, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.updated!(el, { value: 15, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.textContent).toBe(textContent)
 		})
@@ -213,7 +217,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.updated!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.updated!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.textContent?.length).toBe(10)
 		})
@@ -224,8 +228,8 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'This is a very long text'
 
-			vTruncate.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
-			vTruncate.unmounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
+			truncateDirective.unmounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect((el as any).__truncate).toBeUndefined()
 		})
@@ -236,7 +240,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = ''
 
-			vTruncate.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.textContent).toBe('')
 		})
@@ -244,7 +248,7 @@ describe('vTruncate', () => {
 		it('should handle null textContent', () => {
 			const el = document.createElement('p')
 
-			vTruncate.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 10, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			expect(el.textContent).toBe('')
 		})
@@ -253,7 +257,7 @@ describe('vTruncate', () => {
 			const el = document.createElement('p')
 			el.textContent = 'Hi'
 
-			vTruncate.mounted!(el, { value: 5, modifiers: {}, dir: vTruncate, instance: null } as any)
+			truncateDirective.mounted!(el, { value: 5, modifiers: {}, dir: vTruncate, instance: null } as any, null as any, null as any)
 
 			// Text is shorter than the truncation length
 			expect(el.textContent).toBe('Hi')

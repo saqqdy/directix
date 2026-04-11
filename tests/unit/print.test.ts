@@ -20,7 +20,7 @@ describe('v-print', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			expect(wrapper.find('button').element.style.cursor).toBe('pointer')
+			expect((wrapper.find('button').element as HTMLElement).style.cursor).toBe('pointer')
 		})
 
 		it('should accept options object', () => {
@@ -55,7 +55,7 @@ describe('v-print', () => {
 			const button = wrapper.find('button')
 
 			// Directive sets cursor to pointer
-			expect(button.element.style.cursor).toBe('pointer')
+			expect((button.element as HTMLElement).style.cursor).toBe('pointer')
 		})
 	})
 
@@ -84,7 +84,7 @@ describe('v-print', () => {
 
 			const wrapper = mount(TestComponent)
 			// Should not have cursor pointer when immediate
-			expect(wrapper.find('div').element.style.cursor).toBe('')
+			expect((wrapper.find('div').element as HTMLElement).style.cursor).toBe('')
 		})
 	})
 
@@ -236,7 +236,7 @@ describe('v-print', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			expect(wrapper.find('button').element.style.cursor).toBe('pointer')
+			expect((wrapper.find('button').element as HTMLElement).style.cursor).toBe('pointer')
 
 			await wrapper.setData({ show: false })
 			await nextTick()

@@ -39,11 +39,11 @@ vi.stubGlobal('MutationObserver', MockMutationObserver)
 
 // Real ResizeObserver mock with proper observe method
 class MockResizeObserver {
-	private callback: ResizeObserverCallback
 	private elements: Set<Element> = new Set()
+	private _callback: ResizeObserverCallback
 
 	constructor(callback: ResizeObserverCallback) {
-		this.callback = callback
+		this._callback = callback
 	}
 
 	observe(target: Element, _options?: ResizeObserverOptions): void {
@@ -56,6 +56,11 @@ class MockResizeObserver {
 
 	disconnect(): void {
 		this.elements.clear()
+	}
+
+	// Helper to simulate resize in tests
+	simulateResize(entries: ResizeObserverEntry[]): void {
+		this._callback(entries, this as unknown as ResizeObserver)
 	}
 }
 

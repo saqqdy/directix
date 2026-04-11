@@ -138,7 +138,7 @@ describe('v-watermark', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const watermark = wrapper.find('.v-watermark').element
+			const watermark = wrapper.find('.v-watermark').element as HTMLElement
 
 			expect(watermark.style.zIndex).toBe('5000')
 		})

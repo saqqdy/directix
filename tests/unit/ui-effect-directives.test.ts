@@ -23,7 +23,7 @@ describe('UI effect directives', () => {
 			const element = wrapper.find('div').element
 
 			expect(element.classList.contains('v-blur')).toBe(true)
-			expect(element.querySelector('.v-blur-overlay')).not.toBeNull()
+			expect(element.querySelector('.v-blur-overlay') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should not add blur overlay when visible is false', async () => {
@@ -36,7 +36,7 @@ describe('UI effect directives', () => {
 			const element = wrapper.find('div').element
 
 			expect(element.classList.contains('v-blur')).toBe(true)
-			expect(element.querySelector('.v-blur-overlay')).toBeNull()
+			expect(element.querySelector('.v-blur-overlay') as HTMLElement | null).toBeNull()
 		})
 
 		it('should use number as radius', async () => {
@@ -48,7 +48,7 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const overlay = element.querySelector('.v-blur-overlay')
+			const overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay).not.toBeNull()
 			// Verify overlay exists with correct class
 			expect(overlay?.classList.contains('v-blur-overlay')).toBe(true)
@@ -63,7 +63,7 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const overlay = element.querySelector('.v-blur-overlay')
+			const overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay).not.toBeNull()
 			// Verify overlay exists
 			expect(overlay?.classList.contains('v-blur-overlay')).toBe(true)
@@ -81,12 +81,12 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			expect(element.querySelector('.v-blur-overlay')).toBeNull()
+			expect(element.querySelector('.v-blur-overlay') as HTMLElement | null).toBeNull()
 
 			await wrapper.setData({ isBlurred: true })
 			await nextTick()
 
-			expect(element.querySelector('.v-blur-overlay')).not.toBeNull()
+			expect(element.querySelector('.v-blur-overlay') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should hide blur on visibility change to false', async () => {
@@ -101,13 +101,13 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			expect(element.querySelector('.v-blur-overlay')).not.toBeNull()
+			expect(element.querySelector('.v-blur-overlay') as HTMLElement | null).not.toBeNull()
 
 			await wrapper.setData({ isBlurred: false })
 			await nextTick()
 
 			// Blur should start fading out
-			const overlay = element.querySelector('.v-blur-overlay')
+			const overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay?.style.opacity).toBe('0')
 		})
 
@@ -174,7 +174,7 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const overlay = element.querySelector('.v-blur-overlay')
+			const overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay?.classList.contains('custom-blur')).toBe(true)
 		})
 
@@ -187,7 +187,7 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			const overlay = element.querySelector('.v-blur-overlay')
+			const overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay?.style.zIndex).toBe('1000')
 		})
 
@@ -203,13 +203,13 @@ describe('UI effect directives', () => {
 			const wrapper = mount(TestComponent)
 			const element = wrapper.find('div').element
 
-			let overlay = element.querySelector('.v-blur-overlay')
+			let overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay).not.toBeNull()
 
 			await wrapper.setData({ radius: 15 })
 			await nextTick()
 
-			overlay = element.querySelector('.v-blur-overlay')
+			overlay = element.querySelector('.v-blur-overlay') as HTMLElement | null
 			expect(overlay).not.toBeNull()
 		})
 	})

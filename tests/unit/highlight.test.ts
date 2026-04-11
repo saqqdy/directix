@@ -107,8 +107,8 @@ describe('v-highlight', () => {
 			const wrapper = mount(TestComponent)
 			const mark = wrapper.find('mark')
 
-			expect(mark.element.style.background).toBe('yellow')
-			expect(mark.element.style.color).toBe('black')
+			expect((mark.element as HTMLElement).style.background).toBe('yellow')
+			expect((mark.element as HTMLElement).style.color).toBe('black')
 		})
 	})
 

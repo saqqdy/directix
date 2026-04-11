@@ -8,15 +8,15 @@ function createTouchEvent(
 	type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel',
 	touches: Array<{ clientX: number, clientY: number, identifier: number }>,
 ): TouchEvent {
-	const touchList = touches.map(t => ({
+	const touchList = touches.map(t => new Touch({
 		clientX: t.clientX,
 		clientY: t.clientY,
 		identifier: t.identifier,
 		target: document.body,
-	})) as unknown as Touch[]
+	}))
 
 	return new TouchEvent(type, {
-		touches: touchList as unknown as TouchList,
+		touches: touchList,
 		bubbles: true,
 		cancelable: true,
 	})

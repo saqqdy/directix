@@ -37,7 +37,7 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const progressBar = wrapper.find('.v-progress__bar').element
+			const progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 
 			expect(progressBar.style.width).toBe('50%')
 		})
@@ -49,7 +49,7 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const progressBar = wrapper.find('.v-progress__bar').element
+			const progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 
 			expect(progressBar.style.width).toBe('75%')
 		})
@@ -63,7 +63,7 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const progressBar = wrapper.find('.v-progress__bar').element
+			const progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 
 			// JSDOM converts hex to rgb
 			expect(progressBar.style.backgroundColor).toMatch(/#ff0000|rgb\(255, 0, 0\)/)
@@ -76,7 +76,7 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const container = wrapper.find('.v-progress').element
+			const container = wrapper.find('.v-progress').element as HTMLElement
 
 			expect(container.style.height).toBe('10px')
 		})
@@ -100,7 +100,7 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const progressBar = wrapper.find('.v-progress__bar').element
+			const progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 
 			expect(progressBar.classList.contains('v-progress--indeterminate')).toBe(true)
 		})
@@ -117,14 +117,14 @@ describe('v-progress', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			let progressBar = wrapper.find('.v-progress__bar').element
+			let progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 
 			expect(progressBar.style.width).toBe('30%')
 
 			await wrapper.setData({ value: 70 })
 			await nextTick()
 
-			progressBar = wrapper.find('.v-progress__bar').element
+			progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
 			expect(progressBar.style.width).toBe('70%')
 		})
 

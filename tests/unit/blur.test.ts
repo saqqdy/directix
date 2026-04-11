@@ -48,7 +48,7 @@ describe('v-blur', () => {
 			expect(wrapper.find('.v-blur-overlay').exists()).toBe(true)
 			// JSDOM doesn't support backdrop-filter CSS property
 			// Just verify the overlay is created with correct z-index
-			const overlay = wrapper.find('.v-blur-overlay').element
+			const overlay = wrapper.find('.v-blur-overlay').element as HTMLElement
 			expect(overlay.style.zIndex).toBe('999')
 		})
 
@@ -101,7 +101,7 @@ describe('v-blur', () => {
 			await nextTick()
 
 			// Blur should start fading out
-			const overlay = wrapper.find('.v-blur-overlay').element
+			const overlay = wrapper.find('.v-blur-overlay').element as HTMLElement
 			expect(overlay.style.opacity).toBe('0')
 
 			// Advance past duration
@@ -131,7 +131,7 @@ describe('v-blur', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const overlay = wrapper.find('.v-blur-overlay').element
+			const overlay = wrapper.find('.v-blur-overlay').element as HTMLElement
 
 			expect(overlay.style.zIndex).toBe('9999')
 		})
@@ -143,7 +143,7 @@ describe('v-blur', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const overlay = wrapper.find('.v-blur-overlay').element
+			const overlay = wrapper.find('.v-blur-overlay').element as HTMLElement
 
 			expect(overlay.style.background).toBe('rgba(0, 0, 0, 0.5)')
 		})

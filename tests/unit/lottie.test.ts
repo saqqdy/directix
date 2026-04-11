@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { ObjectDirective } from 'vue'
 import { vLottie } from '../../src/directives/lottie'
+
+// Cast to ObjectDirective to access hooks
+const lottieDirective = vLottie as ObjectDirective
 
 // Mock lottie-web module
 vi.mock('lottie-web', () => ({
@@ -32,7 +36,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.classList.contains('v-lottie-container')).toBe(true)
 		})
@@ -41,7 +45,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -50,7 +54,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect((el as any).__lottie).toBeDefined()
 		})
@@ -59,7 +63,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: { animationData, class: 'custom-class' }, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: { animationData, class: 'custom-class' }, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			const container = el.querySelector('.v-lottie')
 			expect(container?.classList.contains('custom-class')).toBe(true)
@@ -70,7 +74,7 @@ describe('vLottie', () => {
 		it('should handle string value (URL)', () => {
 			const el = document.createElement('div')
 
-			vLottie.mounted!(el, { value: 'https://example.com/animation.json', modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: 'https://example.com/animation.json', modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -79,7 +83,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -88,12 +92,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, autoplay: true, loop: false },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -104,12 +108,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, speed: 2 },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -118,12 +122,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, direction: -1 },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -132,12 +136,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, renderer: 'canvas' },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -146,12 +150,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, segments: [0, 100] },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -160,7 +164,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			const container = el.querySelector('.v-lottie') as HTMLElement
 			expect(container?.style.display).toBe('flex')
@@ -170,12 +174,12 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, {
+			lottieDirective.mounted!(el, {
 				value: { animationData, preserveAspectRatio: false },
 				modifiers: {},
 				dir: vLottie,
 				instance: null,
-			} as any)
+			} as any, null as any, null as any)
 
 			const container = el.querySelector('.v-lottie') as HTMLElement
 			expect(container?.style.display).toBe('')
@@ -187,7 +191,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			// Wait for async animation initialization
 			await new Promise(resolve => setTimeout(resolve, 0))
@@ -200,7 +204,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -211,7 +215,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -222,7 +226,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -233,7 +237,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -244,7 +248,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -255,7 +259,7 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -268,8 +272,8 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: { animationData, speed: 1 }, modifiers: {}, dir: vLottie, instance: null } as any)
-			vLottie.updated!(el, { value: { animationData, speed: 2 }, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: { animationData, speed: 1 }, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
+			lottieDirective.updated!(el, { value: { animationData, speed: 2 }, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -278,8 +282,8 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: { animationData, direction: 1 }, modifiers: {}, dir: vLottie, instance: null } as any)
-			vLottie.updated!(el, { value: { animationData, direction: -1 }, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: { animationData, direction: 1 }, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
+			lottieDirective.updated!(el, { value: { animationData, direction: -1 }, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.querySelector('.v-lottie')).not.toBeNull()
 		})
@@ -290,8 +294,8 @@ describe('vLottie', () => {
 			const el = document.createElement('div')
 			const animationData = { v: '5.0.0', layers: [] }
 
-			vLottie.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
-			vLottie.unmounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any)
+			lottieDirective.mounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
+			lottieDirective.unmounted!(el, { value: animationData, modifiers: {}, dir: vLottie, instance: null } as any, null as any, null as any)
 
 			expect(el.classList.contains('v-lottie-container')).toBe(false)
 			expect((el as any).__lottie).toBeUndefined()

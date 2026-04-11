@@ -168,7 +168,7 @@ describe('v-typewriter', () => {
 			const wrapper = mount(TestComponent)
 			const cursor = wrapper.find('.v-typewriter__cursor')
 
-			expect(cursor.element.style.animation).toContain('v-typewriter-blink')
+			expect((cursor.element as HTMLElement).style.animation).toContain('v-typewriter-blink')
 		})
 
 		it('should disable blink when cursorBlink is false', () => {
@@ -180,7 +180,7 @@ describe('v-typewriter', () => {
 			const wrapper = mount(TestComponent)
 			const cursor = wrapper.find('.v-typewriter__cursor')
 
-			expect(cursor.element.style.animation).toBe('')
+			expect((cursor.element as HTMLElement).style.animation).toBe('')
 		})
 	})
 

@@ -94,22 +94,22 @@ describe('v-ellipsis', () => {
 			const p = wrapper.find('p')
 
 			// Initial state - truncated
-			expect(p.element.style.textOverflow).toBe('ellipsis')
+			expect((p.element as HTMLElement).style.textOverflow).toBe('ellipsis')
 
 			// Click to expand
 			await p.trigger('click')
 			await nextTick()
 
 			// Expanded - webkitLineClamp cleared, overflow cleared
-			expect(p.element.style.webkitLineClamp).toBe('')
-			expect(p.element.style.overflow).toBe('')
+			expect((p.element as HTMLElement).style.webkitLineClamp).toBe('')
+			expect((p.element as HTMLElement).style.overflow).toBe('')
 
 			// Click to collapse
 			await p.trigger('click')
 			await nextTick()
 
 			// Collapsed again
-			expect(p.element.style.overflow).toBe('hidden')
+			expect((p.element as HTMLElement).style.overflow).toBe('hidden')
 		})
 
 		it('should not add click handler when not expandable', async () => {

@@ -39,7 +39,7 @@ describe('v-visible', () => {
 
 			const wrapper = mount(TestComponent)
 
-			expect(wrapper.find('div').element.style.display).toBe('none')
+			expect((wrapper.find('div').element as HTMLElement).style.display).toBe('none')
 		})
 
 		it('should update visibility on value change', async () => {
@@ -59,7 +59,7 @@ describe('v-visible', () => {
 			await nextTick()
 
 			expect(wrapper.find('div').classes()).toContain('v-hidden')
-			expect(wrapper.find('div').element.style.display).toBe('none')
+			expect((wrapper.find('div').element as HTMLElement).style.display).toBe('none')
 		})
 	})
 

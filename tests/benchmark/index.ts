@@ -4,16 +4,19 @@
  */
 import { Bench } from 'tinybench'
 
-// Mock DOM environment for benchmarking
-const _mockElement = {
-	addEventListener: () => {},
-	removeEventListener: () => {},
-	classList: { add: () => {}, remove: () => {} },
-	style: {} as CSSStyleDeclaration,
-	getBoundingClientRect: () => ({ top: 0, left: 0, width: 100, height: 100 }),
-	appendChild: () => {},
-	removeChild: () => {},
-} as unknown as HTMLElement
+// Mock DOM environment for benchmarking (used for reference only)
+void (() => {
+	const mockElement = {
+		addEventListener: () => {},
+		removeEventListener: () => {},
+		classList: { add: () => {}, remove: () => {} },
+		style: {} as CSSStyleDeclaration,
+		getBoundingClientRect: () => ({ top: 0, left: 0, width: 100, height: 100 }),
+		appendChild: () => {},
+		removeChild: () => {},
+	} as unknown as HTMLElement
+	void mockElement
+})()
 
 const bench = new Bench({ time: 1000, iterations: 100 })
 
@@ -153,15 +156,22 @@ bench.add('mask - phone number - 1000 calls', () => {
 async function runBenchmarks(): Promise<void> {
 	console.info('🏃 Running Directix Performance Benchmarks...\n')
 
-	await bench.warmup()
 	await bench.run()
 
-	console.info(bench.table() as string)
+	const table = bench.table()
+	if (table) {
+		console.info(table)
+	}
 
 	// Summary
 	console.info('\n📊 Summary:')
 	const results = bench.results
-	const avgLatency = results.reduce((sum, r) => sum + (r?.latency?.mean || 0), 0) / results.length
+	const avgLatency = results.reduce((sum, r) => {
+		if (r && 'latency' in r && r.latency) {
+			return sum + (r.latency.mean || 0)
+		}
+		return sum
+	}, 0) / results.length
 	console.info(`Average latency: ${avgLatency.toFixed(4)} ms`)
 	console.info(`Total benchmarks: ${results.length}`)
 }

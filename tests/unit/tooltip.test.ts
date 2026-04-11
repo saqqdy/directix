@@ -118,7 +118,7 @@ describe('v-tooltip', () => {
 
 			const container = document.getElementById('directix-tooltip-container')
 			expect(container).not.toBeNull()
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should hide tooltip on mouseleave', async () => {
@@ -135,13 +135,13 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 
 			// Hide tooltip
 			await button.trigger('mouseleave')
 			await nextTick()
 
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			// After mouseleave, tooltip should have opacity 0
 			expect(tooltip?.style.opacity).toBe('0')
 		})
@@ -161,7 +161,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should hide tooltip on second click', async () => {
@@ -178,13 +178,13 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 
 			// Second click - hide
 			await button.trigger('click')
 			await nextTick()
 
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.style.opacity).toBe('0')
 		})
 	})
@@ -203,7 +203,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should hide tooltip on blur', async () => {
@@ -220,13 +220,13 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 
 			// Hide tooltip
 			await button.trigger('blur')
 			await nextTick()
 
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.style.opacity).toBe('0')
 		})
 	})
@@ -242,7 +242,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 		})
 	})
 
@@ -260,14 +260,14 @@ describe('v-tooltip', () => {
 
 			// Tooltip should not appear immediately (container might not exist yet)
 			let container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip') ?? null).toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null ?? null).toBeNull()
 
 			// Advance past delay
 			vi.advanceTimersByTime(200)
 			await nextTick()
 
 			container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 		})
 
 		it('should respect hide delay', async () => {
@@ -284,19 +284,19 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 
 			// Trigger hide
 			await button.trigger('mouseleave')
 
 			// Tooltip should still be visible
-			expect(container?.querySelector('.v-tooltip')).not.toBeNull()
+			expect(container?.querySelector('.v-tooltip') as HTMLElement | null).not.toBeNull()
 
 			// Advance past hide delay
 			vi.advanceTimersByTime(200)
 			await nextTick()
 
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.style.opacity).toBe('0')
 		})
 	})
@@ -315,7 +315,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.classList.contains('v-tooltip--top')).toBe(true)
 		})
 
@@ -332,7 +332,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.classList.contains('v-tooltip--bottom')).toBe(true)
 		})
 
@@ -349,7 +349,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.classList.contains('v-tooltip--left')).toBe(true)
 		})
 
@@ -366,7 +366,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.classList.contains('v-tooltip--right')).toBe(true)
 		})
 	})
@@ -385,7 +385,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip')
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null
 			expect(tooltip?.classList.contains('custom-tooltip')).toBe(true)
 		})
 
@@ -402,7 +402,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null as HTMLElement
 			expect(tooltip?.style.zIndex).toBe('5000')
 		})
 
@@ -436,7 +436,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null as HTMLElement
 			expect(tooltip?.style.maxWidth).toBe('200px')
 		})
 
@@ -453,7 +453,7 @@ describe('v-tooltip', () => {
 			await nextTick()
 
 			const container = document.getElementById('directix-tooltip-container')
-			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement
+			const tooltip = container?.querySelector('.v-tooltip') as HTMLElement | null as HTMLElement
 			expect(tooltip?.style.maxWidth).toBe('50%')
 		})
 	})

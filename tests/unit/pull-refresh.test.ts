@@ -3,26 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 import { vPullRefresh } from '../../src/directives/pull-refresh'
 
-// Mock Touch - used for testing touch events
-class _MockTouch {
-	identifier = 0
-	target = document.body
-	clientX = 0
-	clientY = 0
-	pageX = 0
-	pageY = 0
-	screenX = 0
-	screenY = 0
-	radiusX = 0
-	radiusY = 0
-	rotationAngle = 0
-	force = 0
-
-	constructor(options: Partial<TouchInit>) {
-		Object.assign(this, options)
-	}
-}
-
 describe('v-pull-refresh', () => {
 	beforeEach(() => {
 		vi.useFakeTimers()

@@ -41,7 +41,7 @@ describe('v-draggable', () => {
 
 			const wrapper = mount(TestComponent)
 
-			expect(wrapper.find('div').element.style.position).toBe('absolute')
+			expect((wrapper.find('div').element as HTMLElement).style.position).toBe('absolute')
 		})
 
 		it('should accept boolean true', () => {
@@ -80,7 +80,7 @@ describe('v-draggable', () => {
 
 			const wrapper = mount(TestComponent)
 
-			expect(wrapper.find('div').element.style.position).toBe('')
+			expect((wrapper.find('div').element as HTMLElement).style.position).toBe('')
 		})
 	})
 
@@ -93,7 +93,7 @@ describe('v-draggable', () => {
 
 			const wrapper = mount(TestComponent)
 
-			expect(wrapper.find('div').element.style.position).toBe('')
+			expect((wrapper.find('div').element as HTMLElement).style.position).toBe('')
 		})
 
 		it('should not make element draggable when binding is false', () => {
@@ -104,7 +104,7 @@ describe('v-draggable', () => {
 
 			const wrapper = mount(TestComponent)
 
-			expect(wrapper.find('div').element.style.position).toBe('')
+			expect((wrapper.find('div').element as HTMLElement).style.position).toBe('')
 		})
 	})
 
@@ -508,7 +508,7 @@ describe('v-draggable', () => {
 
 			await wrapper.setData({ currentOptions: { axis: 'y' } })
 
-			expect(wrapper.find('div').element.style.position).toBe('absolute')
+			expect((wrapper.find('div').element as HTMLElement).style.position).toBe('absolute')
 		})
 
 		it('should update handle when options change', async () => {
