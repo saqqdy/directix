@@ -145,8 +145,13 @@ function copyCode() {
 </script>
 
 <template>
-	<div class="playground-widget">
-		<div class="playground-toolbar">
+	<div class="directive-configurator">
+		<div class="config-header">
+			<span class="config-title">Quick Code Generator</span>
+			<span class="config-desc" v-if="currentDirective">v-{{ currentDirective.name }} - {{ currentDirective.description }}</span>
+		</div>
+
+		<div class="config-toolbar">
 			<select v-model="selectedDirective" class="directive-select">
 				<optgroup v-for="cat in categories" :key="cat" :label="cat">
 					<option
@@ -161,13 +166,15 @@ function copyCode() {
 
 			<div class="toolbar-group">
 				<button
-					class="toggle-btn" :class="[{ active: vueVersion === 'vue2' }]"
+					class="toolbar-btn"
+					:class="{ active: vueVersion === 'vue2' }"
 					@click="vueVersion = 'vue2'"
 				>
 					Vue 2
 				</button>
 				<button
-					class="toggle-btn" :class="[{ active: vueVersion === 'vue3' }]"
+					class="toolbar-btn"
+					:class="{ active: vueVersion === 'vue3' }"
 					@click="vueVersion = 'vue3'"
 				>
 					Vue 3
@@ -176,142 +183,135 @@ function copyCode() {
 
 			<div class="toolbar-group">
 				<button
-					class="toggle-btn" :class="[{ active: activeTab === 'template' }]"
+					class="toolbar-btn"
+					:class="{ active: activeTab === 'template' }"
 					@click="activeTab = 'template'"
 				>
 					Template
 				</button>
 				<button
-					class="toggle-btn" :class="[{ active: activeTab === 'composable' }]"
+					class="toolbar-btn"
+					:class="{ active: activeTab === 'composable' }"
 					@click="activeTab = 'composable'"
 				>
 					Composable
 				</button>
 			</div>
+
+			<button class="copy-btn" @click="copyCode">
+				{{ copied ? 'Copied' : 'Copy Code' }}
+			</button>
 		</div>
 
-		<div class="playground-description" v-if="currentDirective">
-			<strong>v-{{ currentDirective.name }}</strong> - {{ currentDirective.description }}
-		</div>
-
-		<div class="playground-code">
-			<div class="code-header">
-				<span class="code-filename">
-					{{ activeTab === 'composable' ? 'composable.ts' : 'Component.vue' }}
-				</span>
-				<button class="copy-button" @click="copyCode">
-					{{ copied ? '✓ Copied' : 'Copy' }}
-				</button>
-			</div>
-			<pre class="code-content"><code>{{ generatedCode }}</code></pre>
+		<div class="code-output">
+			<pre><code>{{ generatedCode }}</code></pre>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-.playground-widget {
-  margin: 16px 0;
+.directive-configurator {
+  margin: 24px 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   overflow: hidden;
   background: var(--vp-c-bg-soft);
 }
 
-.playground-toolbar {
+.config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--vp-c-bg);
+  border-bottom: 1px solid var(--vp-c-divider);
+  gap: 16px;
+}
+
+.config-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.config-desc {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+.config-toolbar {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 8px 16px;
   background: var(--vp-c-bg);
   border-bottom: 1px solid var(--vp-c-divider);
   flex-wrap: wrap;
 }
 
 .directive-select {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--vp-c-bg);
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
 }
 
 .toolbar-group {
   display: flex;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
-.toggle-btn {
-  padding: 8px 12px;
-  border: none;
+.toolbar-btn {
+  padding: 6px 10px;
+  font-size: 12px;
   background: transparent;
-  font-size: 13px;
+  border: none;
+  color: var(--vp-c-text-2);
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.toggle-btn:hover {
+.toolbar-btn:hover {
   background: var(--vp-c-bg-soft);
 }
 
-.toggle-btn.active {
+.toolbar-btn.active {
   background: var(--vp-c-brand-1);
   color: white;
 }
 
-.playground-description {
-  padding: 12px 16px;
-  background: var(--vp-c-bg-soft);
-  border-bottom: 1px solid var(--vp-c-divider);
-  font-size: 14px;
-}
-
-.playground-code {
-  position: relative;
-}
-
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  background: var(--vp-code-block-bg);
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.code-filename {
+.copy-btn {
+  padding: 6px 12px;
   font-size: 12px;
-  color: var(--vp-c-text-2);
-  font-family: monospace;
-}
-
-.copy-button {
-  padding: 4px 12px;
-  font-size: 12px;
+  background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
-  background: var(--vp-c-bg);
   cursor: pointer;
-  transition: all 0.2s;
+  margin-left: auto;
 }
 
-.copy-button:hover {
+.copy-btn:hover {
   background: var(--vp-c-bg-soft);
 }
 
-.code-content {
-  margin: 0;
+.code-output {
   padding: 16px;
   background: var(--vp-code-block-bg);
   overflow-x: auto;
+}
+
+.code-output pre {
+  margin: 0;
   font-family: var(--vp-font-family-mono);
   font-size: 13px;
   line-height: 1.6;
 }
 
-.code-content code {
+.code-output code {
   color: var(--vp-c-text-1);
 }
 </style>

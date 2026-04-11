@@ -1,5 +1,4 @@
 ---
-layout: page
 title: Playground
 description: 交互式配置和生成 Directix 指令代码
 ---

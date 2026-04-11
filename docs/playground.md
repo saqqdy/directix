@@ -1,5 +1,4 @@
 ---
-layout: page
 title: Playground
 description: Interactive playground for configuring and generating Directix directive code
 ---
@@ -27,16 +26,16 @@ Configure directives interactively and generate code for Vue 2, Vue 3, composabl
 ## Categories
 
 | Category | Description | Directives |
-|----------|-------------|------------|
-| **Event** | Event handling directives | v-click-outside, v-debounce, v-throttle, v-long-press, v-hover, v-hotkey, v-click-delay |
-| **Form** | Form input directives | v-copy, v-focus, v-mask, v-trim |
-| **Format** | Text formatting directives | v-uppercase, v-lowercase, v-capitalcase, v-number, v-money, v-truncate, v-ellipsis |
-| **Visibility** | Visibility control | v-lazy, v-intersect, v-visible, v-loading |
-| **Scroll** | Scroll behavior | v-scroll, v-infinite-scroll, v-sticky |
-| **Security** | Security features | v-permission, v-sanitize |
-| **UI** | UI enhancements | v-ripple, v-click-wave, v-tooltip, v-draggable, v-context-menu, v-fullscreen, v-skeleton, v-blur, v-fade |
-| **Data** | Data visualization | v-counter, v-progress, v-countdown |
-| **Utility** | Utility directives | v-watermark, v-print, v-export, v-highlight |
+| -------- | ----------- | ---------- |
+| Event | Event handling directives | `v-click-outside`, `v-debounce`, `v-throttle`, `v-long-press`, `v-hover`, `v-hotkey`, `v-click-delay` |
+| Form | Form input directives | `v-copy`, `v-focus`, `v-mask`, `v-trim` |
+| Format | Text formatting directives | `v-uppercase`, `v-lowercase`, `v-capitalcase`, `v-number`, `v-money`, `v-truncate`, `v-ellipsis` |
+| Visibility | Visibility control | `v-lazy`, `v-intersect`, `v-visible`, `v-loading` |
+| Scroll | Scroll behavior | `v-scroll`, `v-infinite-scroll`, `v-sticky` |
+| Security | Security features | `v-permission`, `v-sanitize` |
+| UI | UI enhancements | `v-ripple`, `v-click-wave`, `v-tooltip`, `v-draggable`, `v-context-menu`, `v-fullscreen`, `v-skeleton`, `v-blur`, `v-fade` |
+| Data | Data visualization | `v-counter`, `v-progress`, `v-countdown` |
+| Utility | Utility directives | `v-watermark`, `v-print`, `v-export`, `v-highlight` |
 
 ## Usage Example
 
@@ -57,7 +56,7 @@ function handleSearch(event) {
 </script>
 ```
 
-## Need Help?
+## Resources
 
 - [Documentation](/guide/) - Full documentation
 - [API Reference](/api/) - Complete API reference
