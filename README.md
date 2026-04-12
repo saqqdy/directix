@@ -1803,7 +1803,7 @@ Each directive accepts different options. See the [documentation](https://github
 - **Monaco Editor** - CDN-loaded code editor with syntax highlighting
 - **Live Preview** - Real-time directive effect preview
 
-### v1.8.0 (Planned - 2026-04-22) - Quality & Ecosystem
+### v1.8.0 (2026-04-22) - Quality & Ecosystem ✅
 
 - **Test Coverage** - 90%+ unit test coverage, E2E testing with Playwright
 - **Performance Optimization** - Bundle size optimization, tree-shaking improvements
