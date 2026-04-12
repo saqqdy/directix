@@ -430,5 +430,40 @@ describe('v-long-press', () => {
 
 			wrapper.unmount()
 		})
+
+		it('should clear tick timer on unmount', async () => {
+			const handler = vi.fn()
+			const onTick = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { longPress: vLongPress },
+				template: `<button v-if="show" v-long-press="{ handler, onTick, duration: 1000, tickInterval: 100 }">Press</button>`,
+				data() {
+					return { show: true, handler, onTick }
+				},
+			})
+
+			const wrapper = mount(TestComponent, { attachTo: document.body })
+			const button = wrapper.find('button').element
+
+			button.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+
+			// Let some ticks happen
+			vi.advanceTimersByTime(200)
+			expect(onTick).toHaveBeenCalled()
+
+			// Unmount before timer completes
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			// Clear previous calls
+			onTick.mockClear()
+
+			// Advance timer - should not tick anymore
+			vi.advanceTimersByTime(300)
+			expect(onTick).not.toHaveBeenCalled()
+
+			wrapper.unmount()
+		})
 	})
 })

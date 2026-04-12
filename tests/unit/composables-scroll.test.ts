@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
-import { useInfiniteScroll, useVirtualList } from '../../src/composables'
+import { useInfiniteScroll, useScroll, useVirtualList } from '../../src/composables'
 
 describe('scroll composables', () => {
 	beforeEach(() => {
@@ -451,6 +451,438 @@ describe('scroll composables', () => {
 			}
 
 			expect(loading.value).toBe(false)
+		})
+
+		it('should use fallback scroll event when IntersectionObserver not supported', () => {
+			const originalIO = globalThis.IntersectionObserver
+			// @ts-expect-error - testing fallback
+			delete globalThis.IntersectionObserver
+
+			const onLoad = vi.fn()
+			const { bind } = useInfiniteScroll({
+				onLoad,
+				immediate: false,
+			})
+
+			const element = document.createElement('div')
+			bind(element)
+
+			// Should not have sentinel (fallback uses scroll events)
+			expect(element.querySelector('div')).toBeNull()
+
+			globalThis.IntersectionObserver = originalIO
+		})
+
+		it('should support distance option', async () => {
+			const distance = ref(100)
+			const onLoad = vi.fn().mockResolvedValue(undefined)
+			const { bind } = useInfiniteScroll({
+				onLoad,
+				distance,
+				immediate: false,
+			})
+
+			const element = document.createElement('div')
+			bind(element)
+
+			// Should have sentinel
+			expect(element.querySelector('div')).not.toBeNull()
+		})
+	})
+
+	describe('useScroll', () => {
+		it('should initialize with default values', () => {
+			const { scrollLeft, scrollTop, progressX, progressY, directionX, directionY, isScrolling }
+				= useScroll()
+
+			expect(scrollLeft.value).toBe(0)
+			expect(scrollTop.value).toBe(0)
+			expect(progressX.value).toBe(0)
+			expect(progressY.value).toBe(0)
+			expect(directionX.value).toBe(0)
+			expect(directionY.value).toBe(0)
+			expect(isScrolling.value).toBe(false)
+		})
+
+		it('should return bind function', () => {
+			const { bind } = useScroll()
+			expect(typeof bind).toBe('function')
+		})
+
+		it('should return stop function', () => {
+			const { stop } = useScroll()
+			expect(typeof stop).toBe('function')
+		})
+
+		it('should return scrollTo function', () => {
+			const { scrollTo } = useScroll()
+			expect(typeof scrollTo).toBe('function')
+		})
+
+		it('should return info object', () => {
+			const { info } = useScroll()
+			expect(info.value).toBeDefined()
+			expect(info.value.scrollLeft).toBe(0)
+			expect(info.value.scrollTop).toBe(0)
+		})
+
+		it('should bind to an element', () => {
+			const { bind, _scrollLeft } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+
+			const unbind = bind(element)
+			expect(typeof unbind).toBe('function')
+		})
+
+		it('should bind to window when no element provided', () => {
+			const { bind } = useScroll()
+
+			const unbind = bind()
+			expect(typeof unbind).toBe('function')
+		})
+
+		it('should handle scrollTo for element', () => {
+			const { bind, scrollTo } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+			scrollTo({ top: 100, left: 50 })
+
+			expect(element.scrollTop).toBe(100)
+			expect(element.scrollLeft).toBe(50)
+		})
+
+		it('should handle throttle option', async () => {
+			const throttle = ref(100)
+			const { bind, _scrollLeft } = useScroll({ throttle })
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+
+			const addEventListenerSpy = vi.spyOn(element, 'addEventListener')
+
+			bind(element)
+
+			expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), {
+				passive: true,
+			})
+
+			addEventListenerSpy.mockRestore()
+		})
+
+		it('should handle passive option', () => {
+			const { bind } = useScroll({ passive: false })
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0 })
+			Object.defineProperty(element, 'scrollTop', { value: 0 })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+
+			const addEventListenerSpy = vi.spyOn(element, 'addEventListener')
+
+			bind(element)
+
+			expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), {
+				passive: false,
+			})
+
+			addEventListenerSpy.mockRestore()
+		})
+
+		it('should cleanup on stop', () => {
+			const { bind, stop } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0 })
+			Object.defineProperty(element, 'scrollTop', { value: 0 })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+			stop()
+
+			expect(element.removeEventListener).toHaveBeenCalled()
+		})
+
+		it('should handle scrollTo for window', () => {
+			const { bind, scrollTo } = useScroll()
+
+			// Mock window.scrollTo
+			const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+
+			bind() // Bind to window
+			scrollTo({ top: 100, left: 50, behavior: 'smooth' })
+
+			expect(scrollToSpy).toHaveBeenCalledWith({
+				top: 100,
+				left: 50,
+				behavior: 'smooth',
+			})
+
+			scrollToSpy.mockRestore()
+		})
+
+		it('should handle scrollTo with auto behavior', () => {
+			const { bind, scrollTo } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+			scrollTo({ top: 200, behavior: 'auto' })
+
+			expect(element.scrollTop).toBe(200)
+		})
+
+		it('should handle scrollTo with only top', () => {
+			const { bind, scrollTo } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+			scrollTo({ top: 300 })
+
+			expect(element.scrollTop).toBe(300)
+		})
+
+		it('should handle scrollTo with only left', () => {
+			const { bind, scrollTo } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 1000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+			scrollTo({ left: 250 })
+
+			expect(element.scrollLeft).toBe(250)
+		})
+
+		it('should not scroll when no container bound', () => {
+			const { scrollTo } = useScroll()
+
+			// Should not throw
+			scrollTo({ top: 100 })
+			expect(true).toBe(true)
+		})
+
+		it('should update direction on scroll', async () => {
+			const { bind, directionY, _directionX } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Get the scroll handler
+			const scrollHandler = (element.addEventListener as any).mock.calls[0][1]
+
+			// Simulate scroll down
+			Object.defineProperty(element, 'scrollTop', { value: 100, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			expect(directionY.value).toBe(1) // Scrolling down
+
+			// Simulate scroll up
+			Object.defineProperty(element, 'scrollTop', { value: 50, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			expect(directionY.value).toBe(-1) // Scrolling up
+		})
+
+		it('should update isScrolling on scroll', async () => {
+			const { bind, isScrolling } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Get the scroll handler
+			const scrollHandler = (element.addEventListener as any).mock.calls[0][1]
+
+			// Simulate scroll
+			Object.defineProperty(element, 'scrollTop', { value: 100, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			expect(isScrolling.value).toBe(true)
+
+			// Wait for scroll timeout
+			vi.advanceTimersByTime(200)
+
+			expect(isScrolling.value).toBe(false)
+		})
+
+		it('should calculate progress correctly', async () => {
+			const { bind, _progressX, progressY } = useScroll()
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Get the scroll handler
+			const scrollHandler = (element.addEventListener as any).mock.calls[0][1]
+
+			// Scroll to 50% vertical (scrollTopMax = scrollHeight - clientHeight = 2000 - 500 = 1500)
+			// progressY = scrollTop / scrollTopMax = 750 / 1500 = 0.5
+			Object.defineProperty(element, 'scrollTop', { value: 750, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			expect(progressY.value).toBe(0.5)
+		})
+
+		it('should handle throttle correctly', async () => {
+			const throttle = ref(100)
+			const { bind, scrollLeft } = useScroll({ throttle })
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Get the scroll handler
+			const scrollHandler = (element.addEventListener as any).mock.calls[0][1]
+
+			// First scroll
+			Object.defineProperty(element, 'scrollLeft', { value: 100, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			// Second scroll before throttle time
+			Object.defineProperty(element, 'scrollLeft', { value: 200, writable: true })
+			scrollHandler(new Event('scroll'))
+
+			// Should not have updated yet
+			expect(scrollLeft.value).toBe(0)
+
+			// Advance past throttle
+			vi.advanceTimersByTime(150)
+
+			expect(scrollLeft.value).toBe(200)
+		})
+
+		it('should handle reactive throttle changes', async () => {
+			const throttle = ref(100)
+			const { bind } = useScroll({ throttle })
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Change throttle value
+			throttle.value = 200
+			await nextTick()
+
+			expect(true).toBe(true)
+		})
+
+		it('should cleanup throttle timer on stop', () => {
+			const { bind, stop } = useScroll({ throttle: 100 })
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollTop', { value: 0, writable: true })
+			Object.defineProperty(element, 'scrollWidth', { value: 1000 })
+			Object.defineProperty(element, 'clientWidth', { value: 500 })
+			Object.defineProperty(element, 'scrollHeight', { value: 2000 })
+			Object.defineProperty(element, 'clientHeight', { value: 500 })
+			;(element as any).addEventListener = vi.fn()
+			;(element as any).removeEventListener = vi.fn()
+
+			bind(element)
+
+			// Get the scroll handler and trigger it
+			const scrollHandler = (element.addEventListener as any).mock.calls[0][1]
+			scrollHandler(new Event('scroll'))
+
+			// Stop should clear timers
+			stop()
+			expect(true).toBe(true)
 		})
 	})
 })

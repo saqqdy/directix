@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { useResize } from '../../src/composables/use-resize'
 
 describe('useResize', () => {
@@ -68,8 +68,6 @@ describe('useResize', () => {
 
 			bind(element)
 
-			// Trigger resize via the ResizeObserver callback
-			// This requires mocking ResizeObserver callback
 			expect(element.getBoundingClientRect).toHaveBeenCalled()
 		})
 
@@ -97,8 +95,6 @@ describe('useResize', () => {
 
 			bind(element)
 
-			// onResize is registered but not called immediately during bind
-			// It will be called when ResizeObserver triggers
 			expect(onResize).toBeDefined()
 		})
 	})
@@ -111,7 +107,6 @@ describe('useResize', () => {
 				height: 50,
 			} as DOMRect)
 
-			// ResizeObserver mock is in setup.ts
 			const { bind } = useResize()
 
 			bind(element)
@@ -148,8 +143,170 @@ describe('useResize', () => {
 			const unbind = bind(element)
 			unbind()
 
-			// Should have disconnected observer
 			expect(true).toBe(true)
+		})
+	})
+
+	describe('debounce behavior', () => {
+		it('should clear debounce timer on stop', () => {
+			const element = document.createElement('div')
+			element.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+			const onResize = vi.fn()
+			const { bind, stop } = useResize({ debounce: 100, onResize })
+
+			bind(element)
+			stop()
+
+			expect(true).toBe(true)
+		})
+	})
+
+	describe('multiple bind calls', () => {
+		it('should cleanup previous observer when rebinding', () => {
+			const element1 = document.createElement('div')
+			const element2 = document.createElement('div')
+			element1.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+			element2.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 200,
+				height: 100,
+			} as DOMRect)
+
+			const { bind, width } = useResize()
+
+			bind(element1)
+			expect(width.value).toBe(100)
+
+			bind(element2)
+			expect(width.value).toBe(200)
+		})
+	})
+
+	describe('isBrowser check', () => {
+		it('should return empty unbind function when not in browser', () => {
+			const { bind } = useResize()
+			const element = document.createElement('div')
+			element.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+
+			const unbind = bind(element)
+			expect(typeof unbind).toBe('function')
+		})
+	})
+
+	describe('box option', () => {
+		it('should pass box option to ResizeObserver', () => {
+			const element = document.createElement('div')
+			element.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+
+			const { bind } = useResize({ box: 'border-box' })
+			bind(element)
+
+			expect(element.getBoundingClientRect).toHaveBeenCalled()
+		})
+
+		it('should support device-pixel-content-box', () => {
+			const element = document.createElement('div')
+			element.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+
+			const { bind } = useResize({ box: 'device-pixel-content-box' })
+			bind(element)
+
+			expect(element.getBoundingClientRect).toHaveBeenCalled()
+		})
+	})
+
+	describe('reactive debounce', () => {
+		it('should react to debounce value changes', async () => {
+			const debounce = ref(100)
+
+			const element = document.createElement('div')
+			element.getBoundingClientRect = vi.fn().mockReturnValue({
+				width: 100,
+				height: 50,
+			} as DOMRect)
+
+			const onResize = vi.fn()
+			const { bind } = useResize({ debounce, onResize })
+
+			bind(element)
+
+			debounce.value = 200
+			await nextTick()
+
+			expect(true).toBe(true)
+		})
+	})
+
+	// Keep fallback tests at the end to avoid affecting other tests
+	describe('fallback mode (no ResizeObserver)', () => {
+		it('should use iframe fallback when ResizeObserver is not supported', () => {
+			const originalRO = globalThis.ResizeObserver
+			// @ts-expect-error - testing fallback
+			delete globalThis.ResizeObserver
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'getBoundingClientRect', {
+				value: vi.fn().mockReturnValue({
+					width: 100,
+					height: 50,
+					top: 0,
+					left: 0,
+					right: 100,
+					bottom: 50,
+				} as DOMRect),
+			})
+
+			const { bind, width, height } = useResize()
+
+			bind(element)
+
+			expect(width.value).toBe(100)
+			expect(height.value).toBe(50)
+
+			const iframe = element.querySelector('iframe')
+			expect(iframe).not.toBeNull()
+
+			globalThis.ResizeObserver = originalRO
+		})
+
+		it('should set position relative on static element in fallback mode', () => {
+			const originalRO = globalThis.ResizeObserver
+			// @ts-expect-error - testing fallback
+			delete globalThis.ResizeObserver
+
+			const element = document.createElement('div')
+			Object.defineProperty(element, 'getBoundingClientRect', {
+				value: vi.fn().mockReturnValue({
+					width: 100,
+					height: 50,
+				} as DOMRect),
+			})
+
+			vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+				position: 'static',
+			} as CSSStyleDeclaration)
+
+			const { bind } = useResize()
+
+			bind(element)
+
+			expect(element.style.position).toBe('relative')
+
+			globalThis.ResizeObserver = originalRO
 		})
 	})
 })

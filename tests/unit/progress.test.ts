@@ -104,6 +104,23 @@ describe('v-progress', () => {
 
 			expect(progressBar.classList.contains('v-progress--indeterminate')).toBe(true)
 		})
+
+		it('should set position relative on static elements', () => {
+			const TestComponent = defineComponent({
+				directives: { progress: vProgress },
+				template: `<div v-progress="50">Content</div>`,
+			})
+
+			// Mock getComputedStyle to return static position
+			vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+				position: 'static',
+			} as CSSStyleDeclaration)
+
+			const wrapper = mount(TestComponent)
+			const element = wrapper.find('div').element as HTMLElement
+
+			expect(element.style.position).toBe('relative')
+		})
 	})
 
 	describe('progress update', () => {
@@ -183,6 +200,47 @@ describe('v-progress', () => {
 			await nextTick()
 
 			expect(wrapper.find('.v-progress').exists()).toBe(false)
+		})
+	})
+
+	describe('indeterminate state change', () => {
+		it('should start indeterminate animation when indeterminate becomes true', async () => {
+			const TestComponent = defineComponent({
+				directives: { progress: vProgress },
+				template: `<div v-progress="{ value: 50, indeterminate }">Content</div>`,
+				data() {
+					return { indeterminate: false }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			let progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
+
+			expect(progressBar.classList.contains('v-progress--indeterminate')).toBe(false)
+
+			await wrapper.setData({ indeterminate: true })
+			await nextTick()
+
+			progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
+			expect(progressBar.classList.contains('v-progress--indeterminate')).toBe(true)
+		})
+
+		it('should stop indeterminate animation when indeterminate becomes false', async () => {
+			const TestComponent = defineComponent({
+				directives: { progress: vProgress },
+				template: `<div v-progress="{ value: 50, indeterminate }">Content</div>`,
+				data() {
+					return { indeterminate: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ indeterminate: false })
+			await nextTick()
+
+			const progressBar = wrapper.find('.v-progress__bar').element as HTMLElement
+			expect(progressBar.classList.contains('v-progress--indeterminate')).toBe(false)
 		})
 	})
 })

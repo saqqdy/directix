@@ -72,6 +72,16 @@ describe('useEmoji', () => {
 
 			expect(onEmoji).toHaveBeenCalled()
 		})
+
+		it('should call onEmoji with replacement function', () => {
+			const onEmoji = vi.fn()
+			const replacement = (emoji: string) => `[${emoji}]`
+			const { stripEmojis } = useEmoji({ onEmoji, replacement })
+
+			stripEmojis('Hello 😊')
+
+			expect(onEmoji).toHaveBeenCalled()
+		})
 	})
 
 	describe('bind', () => {

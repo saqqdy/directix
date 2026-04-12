@@ -288,4 +288,276 @@ describe('vImagePreview', () => {
 			expect(document.querySelector('.v-image-preview-overlay')).toBeNull()
 		})
 	})
+
+	describe('mouse interactions', () => {
+		it('should handle mousedown for dragging', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const img = document.querySelector('.v-image-preview-overlay img') as HTMLImageElement
+			const imageContainer = img.parentElement as HTMLElement
+
+			// Simulate mousedown
+			img.dispatchEvent(new MouseEvent('mousedown', {
+				clientX: 100,
+				clientY: 100,
+				bubbles: true,
+			}))
+
+			// Cursor should change to grabbing on the container
+			expect(imageContainer.style.cursor).toBe('grabbing')
+		})
+
+		it('should handle mousemove for dragging', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const img = document.querySelector('.v-image-preview-overlay img') as HTMLImageElement
+
+			// Start dragging
+			img.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+
+			// Move mouse
+			document.dispatchEvent(new MouseEvent('mousemove', { clientX: 150, clientY: 150 }))
+
+			// End dragging
+			document.dispatchEvent(new MouseEvent('mouseup'))
+
+			expect(img.style.cursor).toBe('grab')
+		})
+	})
+
+	describe('wheel zoom', () => {
+		it('should zoom on wheel', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Simulate wheel zoom in
+			overlay.dispatchEvent(new WheelEvent('wheel', {
+				deltaY: -100,
+				bubbles: true,
+				cancelable: true,
+			}))
+
+			const zoomIndicator = document.querySelector('.v-image-preview-zoom')
+			expect(zoomIndicator?.textContent).not.toBe('100%')
+		})
+
+		it('should not zoom when enablePinchZoom is false', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: { enablePinchZoom: false }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+			const imageContainer = overlay.querySelector('div') as HTMLElement
+
+			// Get initial transform
+			const initialTransform = imageContainer?.style.transform || ''
+
+			// Simulate wheel
+			overlay.dispatchEvent(new WheelEvent('wheel', {
+				deltaY: -100,
+				bubbles: true,
+				cancelable: true,
+			}))
+
+			// Transform should not change significantly
+			expect(imageContainer?.style.transform || '').toBe(initialTransform)
+		})
+	})
+
+	describe('touch interactions', () => {
+		it('should handle touchstart', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Simulate touchstart
+			const touchEvent = new TouchEvent('touchstart', {
+				touches: [new Touch({ identifier: 0, target: overlay, clientX: 100, clientY: 100 })],
+				bubbles: true,
+			})
+			overlay.dispatchEvent(touchEvent)
+
+			expect(overlay).toBeDefined()
+		})
+
+		it('should handle pinch zoom with two fingers', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Simulate two finger touch
+			const touch1 = new Touch({ identifier: 0, target: overlay, clientX: 100, clientY: 100 })
+			const touch2 = new Touch({ identifier: 1, target: overlay, clientX: 150, clientY: 100 })
+
+			overlay.dispatchEvent(new TouchEvent('touchstart', {
+				touches: [touch1, touch2],
+				bubbles: true,
+			}))
+
+			// Simulate pinch out
+			const touch1Moved = new Touch({ identifier: 0, target: overlay, clientX: 80, clientY: 100 })
+			const touch2Moved = new Touch({ identifier: 1, target: overlay, clientX: 170, clientY: 100 })
+
+			overlay.dispatchEvent(new TouchEvent('touchmove', {
+				touches: [touch1Moved, touch2Moved],
+				bubbles: true,
+				cancelable: true,
+			}))
+
+			const zoomIndicator = document.querySelector('.v-image-preview-zoom')
+			// Zoom should have increased
+			expect(zoomIndicator?.textContent).not.toBe('100%')
+		})
+	})
+
+	describe('scale constraints', () => {
+		it('should respect minScale option', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: { minScale: 0.8 }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Zoom out with wheel
+			overlay.dispatchEvent(new WheelEvent('wheel', {
+				deltaY: 100,
+				bubbles: true,
+				cancelable: true,
+			}))
+
+			const zoomIndicator = document.querySelector('.v-image-preview-zoom')
+			const zoomValue = parseInt(zoomIndicator?.textContent || '100')
+			expect(zoomValue).toBeGreaterThanOrEqual(80)
+		})
+
+		it('should respect maxScale option', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: { maxScale: 2 }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Zoom in multiple times
+			for (let i = 0; i < 10; i++) {
+				overlay.dispatchEvent(new WheelEvent('wheel', {
+					deltaY: -100,
+					bubbles: true,
+					cancelable: true,
+				}))
+			}
+
+			const zoomIndicator = document.querySelector('.v-image-preview-zoom')
+			const zoomValue = parseInt(zoomIndicator?.textContent || '100')
+			expect(zoomValue).toBeLessThanOrEqual(200)
+		})
+	})
+
+	describe('close button', () => {
+		it('should close on close button click', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			expect(document.querySelector('.v-image-preview-overlay')).not.toBeNull()
+
+			const closeBtn = document.querySelector('.v-image-preview-close') as HTMLButtonElement
+			closeBtn.click()
+
+			vi.advanceTimersByTime(300)
+
+			expect(document.querySelector('.v-image-preview-overlay')).toBeNull()
+		})
+	})
+
+	describe('click to reset', () => {
+		it('should reset transform when clicking while zoomed', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const overlay = document.querySelector('.v-image-preview-overlay') as HTMLElement
+
+			// Zoom in with wheel
+			overlay.dispatchEvent(new WheelEvent('wheel', {
+				deltaY: -100,
+				bubbles: true,
+				cancelable: true,
+			}))
+
+			// Click overlay (should reset, not close)
+			overlay.click()
+
+			const zoomIndicator = document.querySelector('.v-image-preview-zoom')
+			expect(zoomIndicator?.textContent).toBe('100%')
+		})
+	})
+
+	describe('alt text', () => {
+		it('should use alt from element', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			el.alt = 'Test image'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: '', modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const img = document.querySelector('.v-image-preview-overlay img') as HTMLImageElement
+			expect(img.alt).toBe('Test image')
+		})
+
+		it('should use custom alt from options', () => {
+			const el = document.createElement('img')
+			el.src = 'test.jpg'
+			el.alt = 'Original alt'
+			document.body.appendChild(el)
+
+			imagePreviewDirective.mounted!(el, { value: { alt: 'Custom alt' }, modifiers: {}, dir: vImagePreview, instance: null } as any, null as any, null as any)
+			el.click()
+
+			const img = document.querySelector('.v-image-preview-overlay img') as HTMLImageElement
+			expect(img.alt).toBe('Custom alt')
+		})
+	})
 })

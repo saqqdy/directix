@@ -81,6 +81,24 @@ describe('v-fade', () => {
 			// Should start fading out
 			expect(element.style.opacity).toBe('0')
 		})
+
+		it('should set display none after fade out completes', async () => {
+			const TestComponent = defineComponent({
+				directives: { fade: vFade },
+				template: `<div v-fade="'out'">Content</div>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const element = wrapper.find('div').element
+
+			expect(element.style.opacity).toBe('0')
+
+			// Advance past duration to complete fade out
+			vi.advanceTimersByTime(300)
+			await nextTick()
+
+			expect(element.style.display).toBe('none')
+		})
 	})
 
 	describe('visibility toggle', () => {
@@ -193,6 +211,64 @@ describe('v-fade', () => {
 
 			expect(onComplete).toHaveBeenCalled()
 		})
+
+		it('should call onComplete when fade out completes', async () => {
+			const onComplete = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { fade: vFade },
+				template: `<div v-fade="{ visible: isVisible, onComplete }">Content</div>`,
+				data() {
+					return { isVisible: true, onComplete }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ isVisible: false })
+			await nextTick()
+
+			// Advance past duration
+			vi.advanceTimersByTime(300)
+			await nextTick()
+
+			expect(onComplete).toHaveBeenCalled()
+		})
+
+		it('should call onStart when fade begins', async () => {
+			const onStart = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { fade: vFade },
+				template: `<div v-fade="{ visible: isVisible, onStart }">Content</div>`,
+				data() {
+					return { isVisible: false, onStart }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ isVisible: true })
+			await nextTick()
+
+			expect(onStart).toHaveBeenCalledWith('in')
+		})
+
+		it('should call onStart when fade out begins', async () => {
+			const onStart = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { fade: vFade },
+				template: `<div v-fade="{ visible: isVisible, onStart }">Content</div>`,
+				data() {
+					return { isVisible: true, onStart }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ isVisible: false })
+			await nextTick()
+
+			expect(onStart).toHaveBeenCalledWith('out')
+		})
 	})
 
 	describe('cleanup', () => {
@@ -213,6 +289,33 @@ describe('v-fade', () => {
 			await nextTick()
 
 			expect(wrapper.find('.v-fade').exists()).toBe(false)
+		})
+
+		it('should cancel animation frame on unmount', async () => {
+			// Use a different mock that doesn't execute callback immediately
+			vi.spyOn(window, 'requestAnimationFrame').mockImplementation((_cb: FrameRequestCallback) => {
+				return 123 // Return a non-zero frame ID
+			})
+			const cancelAnimationFrameSpy = vi.spyOn(window, 'cancelAnimationFrame')
+
+			const TestComponent = defineComponent({
+				directives: { fade: vFade },
+				template: `<div v-if="show" v-fade="'in'">Content</div>`,
+				data() {
+					return { show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			// Unmount while animation frame is pending
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			// cancelAnimationFrame should be called with the frame ID
+			expect(cancelAnimationFrameSpy).toHaveBeenCalledWith(123)
+
+			cancelAnimationFrameSpy.mockRestore()
 		})
 	})
 })

@@ -119,4 +119,46 @@ describe('v-skeleton', () => {
 			expect(wrapper.find('div').exists()).toBe(false)
 		})
 	})
+
+	describe('animation options', () => {
+		it('should handle wave animation without error', () => {
+			const TestComponent = defineComponent({
+				directives: { skeleton: vSkeleton },
+				template: `<div v-skeleton="{ loading: true, animation: 'wave' }">Content</div>`,
+			})
+
+			// Should mount without errors
+			expect(() => mount(TestComponent)).not.toThrow()
+		})
+
+		it('should handle pulse animation without error', () => {
+			const TestComponent = defineComponent({
+				directives: { skeleton: vSkeleton },
+				template: `<div v-skeleton="{ loading: true, animation: 'pulse' }">Content</div>`,
+			})
+
+			// Should mount without errors
+			expect(() => mount(TestComponent)).not.toThrow()
+		})
+
+		it('should handle none animation without error', () => {
+			const TestComponent = defineComponent({
+				directives: { skeleton: vSkeleton },
+				template: `<div v-skeleton="{ loading: true, animation: 'none' }">Content</div>`,
+			})
+
+			// Should mount without errors
+			expect(() => mount(TestComponent)).not.toThrow()
+		})
+
+		it('should handle false animation (no animation) without error', () => {
+			const TestComponent = defineComponent({
+				directives: { skeleton: vSkeleton },
+				template: `<div v-skeleton="{ loading: true, animation: false }">Content</div>`,
+			})
+
+			// Should mount without errors
+			expect(() => mount(TestComponent)).not.toThrow()
+		})
+	})
 })

@@ -71,6 +71,33 @@ describe('v-resize', () => {
 
 			expect(observer.observe).toHaveBeenCalled()
 		})
+
+		it('should pass resize info to handler', () => {
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize="handler">Resize me</div>`,
+				data() {
+					return { handler }
+				},
+			})
+
+			mount(TestComponent)
+
+			observer.triggerResize({
+				contentRect: { width: 200, height: 100 } as DOMRectReadOnly,
+			})
+
+			expect(handler).toHaveBeenCalledWith(
+				expect.objectContaining({
+					contentRect: expect.objectContaining({
+						width: 200,
+						height: 100,
+					}),
+				}),
+			)
+		})
 	})
 
 	describe('disabled option', () => {
@@ -170,6 +197,30 @@ describe('v-resize', () => {
 
 			expect(handler).toHaveBeenCalled()
 		})
+
+		it('should clear debounce timer on unmount', async () => {
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-if="show" v-resize="{ handler, debounce: 100 }">Resize me</div>`,
+				data() {
+					return { handler, show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			observer.triggerResize({
+				contentRect: { width: 200, height: 100 } as DOMRectReadOnly,
+			})
+
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			vi.advanceTimersByTime(100)
+			expect(handler).not.toHaveBeenCalled()
+		})
 	})
 
 	describe('updated hook', () => {
@@ -260,6 +311,156 @@ describe('v-resize additional coverage', () => {
 
 			vi.advanceTimersByTime(100)
 			expect(handler).not.toHaveBeenCalled()
+		})
+	})
+
+	describe('options validation', () => {
+		it('should accept handler as function', () => {
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize="handler">Resize me</div>`,
+				data() {
+					return { handler }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
+		})
+	})
+
+	describe('onFallback option', () => {
+		it('should store onFallback callback', () => {
+			const handler = vi.fn()
+			const onFallback = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize="{ handler, onFallback }">Resize me</div>`,
+				data() {
+					return { handler, onFallback }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
+		})
+	})
+
+	describe('fallback mode (no ResizeObserver)', () => {
+		it('should use fallback when ResizeObserver is not supported', () => {
+			// Save and remove ResizeObserver
+			const originalRO = globalThis.ResizeObserver
+			// @ts-expect-error - testing fallback
+			delete globalThis.ResizeObserver
+
+			const handler = vi.fn()
+			const onFallback = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize="{ handler, onFallback }">Resize me</div>`,
+				data() {
+					return { handler, onFallback }
+				},
+			})
+
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+			mount(TestComponent)
+
+			expect(warnSpy).toHaveBeenCalledWith('[Directix] v-resize: ResizeObserver not supported, using fallback')
+
+			// Restore ResizeObserver
+			globalThis.ResizeObserver = originalRO
+			warnSpy.mockRestore()
+		})
+
+		it('should cleanup fallback iframe on unmount', async () => {
+			const originalRO = globalThis.ResizeObserver
+			// @ts-expect-error - testing fallback
+			delete globalThis.ResizeObserver
+
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-if="show" v-resize="handler">Resize me</div>`,
+				data() {
+					return { handler, show: true }
+				},
+			})
+
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').exists()).toBe(true)
+
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			expect(wrapper.find('div').exists()).toBe(false)
+
+			globalThis.ResizeObserver = originalRO
+			warnSpy.mockRestore()
+		})
+	})
+
+	describe('normalizeOptions errors', () => {
+		it('should throw error when no binding provided', () => {
+			// This is a edge case that's hard to test through mount
+			// because Vue doesn't allow undefined directive values easily
+			// We test the internal function behavior via the directive behavior
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize>Resize me</div>`,
+			})
+
+			// Mount should throw an error
+			expect(() => mount(TestComponent)).toThrow('[Directix] v-resize: handler is required')
+		})
+	})
+
+	describe('updated hook', () => {
+		it('should handle missing state gracefully', async () => {
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-resize="handler">Resize me</div>`,
+				data() {
+					return { handler }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			// Force update with same handler
+			await wrapper.setData({ handler })
+			expect(wrapper.find('div').exists()).toBe(true)
+		})
+	})
+
+	describe('unmounted hook', () => {
+		it('should handle missing state gracefully', async () => {
+			const handler = vi.fn()
+
+			const TestComponent = defineComponent({
+				directives: { resize: vResize },
+				template: `<div v-if="show" v-resize="handler">Resize me</div>`,
+				data() {
+					return { handler, show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			// Should not throw
+			expect(wrapper.find('div').exists()).toBe(false)
 		})
 	})
 })

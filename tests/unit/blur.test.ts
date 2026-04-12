@@ -120,7 +120,6 @@ describe('v-blur', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			// Just verify the overlay is created
 			expect(wrapper.find('.v-blur-overlay').exists()).toBe(true)
 		})
 
@@ -157,6 +156,42 @@ describe('v-blur', () => {
 			const wrapper = mount(TestComponent)
 
 			expect(wrapper.find('.custom-blur').exists()).toBe(true)
+		})
+
+		it('should lock scroll when lockScroll is true', async () => {
+			const TestComponent = defineComponent({
+				directives: { blur: vBlur },
+				template: `<div v-blur="{ visible: isVisible, lockScroll: true }">Content</div>`,
+				data() {
+					return { isVisible: false }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ isVisible: true })
+			await nextTick()
+
+			expect(document.body.style.overflow).toBe('hidden')
+		})
+
+		it('should restore scroll when blur is hidden', async () => {
+			document.body.style.overflow = 'auto'
+
+			const TestComponent = defineComponent({
+				directives: { blur: vBlur },
+				template: `<div v-blur="{ visible: isVisible, lockScroll: true }">Content</div>`,
+				data() {
+					return { isVisible: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+
+			await wrapper.setData({ isVisible: false })
+			await nextTick()
+
+			expect(document.body.style.overflow).toBe('auto')
 		})
 	})
 

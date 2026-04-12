@@ -349,10 +349,9 @@ describe('v-debounce', () => {
 			// the options.handler is updated in place
 			const handler1 = vi.fn()
 
-			// We test this by creating two separate mounted instances
 			const TestComponent = defineComponent({
 				directives: { debounce: vDebounce },
-				template: `<input v-debounce="currentHandler" />`,
+				template: `<input v-debounce="{ handler: currentHandler, wait: 300 }" />`,
 				data() {
 					return {
 						currentHandler: handler1,
@@ -366,9 +365,13 @@ describe('v-debounce', () => {
 			vi.advanceTimersByTime(300)
 			expect(handler1).toHaveBeenCalledTimes(1)
 
-			// The updated hook is tested when we use different binding object
-			// This covers the branch where handler is updated in place
-			wrapper.unmount()
+			// Change only the handler - the directive updates the handler reference
+			// without recreating the debounced function
+			await wrapper.setData({ currentHandler: vi.fn() })
+			await nextTick()
+
+			// The directive should handle this without errors
+			expect(wrapper.find('input').exists()).toBe(true)
 		})
 	})
 

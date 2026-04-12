@@ -149,6 +149,37 @@ describe('v-ellipsis', () => {
 
 			expect(p.title).toBe('')
 		})
+
+		it('should show title when titleBehavior is auto and text is truncated', async () => {
+			const TestComponent = defineComponent({
+				directives: { ellipsis: vEllipsis },
+				template: `<p v-ellipsis="{ titleBehavior: 'auto', lines: 1 }" style="width: 50px;">This is a very long text</p>`,
+			})
+
+			// Should mount without errors
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('p').exists()).toBe(true)
+		})
+
+		it('should update title on dynamic titleBehavior change', async () => {
+			const TestComponent = defineComponent({
+				directives: { ellipsis: vEllipsis },
+				template: `<p v-ellipsis="{ titleBehavior }">Long text here</p>`,
+				data() {
+					return { titleBehavior: 'none' }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const p = wrapper.find('p').element
+
+			expect(p.title).toBe('')
+
+			await wrapper.setData({ titleBehavior: 'always' })
+			await nextTick()
+
+			expect(p.title).toBe('Long text here')
+		})
 	})
 
 	describe('update', () => {

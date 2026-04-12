@@ -1,7 +1,7 @@
 import type { ObjectDirective } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 import { vTrim } from '../../src/directives/trim'
 
 describe('v-trim', () => {
@@ -106,6 +106,236 @@ describe('v-trim', () => {
 			await input.trigger('input')
 			await input.trigger('blur')
 			expect((input.element as HTMLInputElement).value).toBe('')
+		})
+	})
+
+	describe('position options', () => {
+		it('should trim only start when position is "start"', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ position: 'start', onInput: false }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello world  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('hello world  ')
+		})
+
+		it('should trim only end when position is "end"', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="'end'" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello world  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('  hello world')
+		})
+
+		it('should trim both sides when position is "both"', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ position: 'both' }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello world  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('hello world')
+		})
+	})
+
+	describe('onInput option', () => {
+		it('should not trim on input when onInput is false', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ onInput: false }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello world  '
+			await input.trigger('input')
+			// Should not change on input
+			expect((input.element as HTMLInputElement).value).toBe('  hello world  ')
+		})
+	})
+
+	describe('onBlur option', () => {
+		it('should not trim on blur when onBlur is false', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ onBlur: false }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello world  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			// Should only have trimmed end on input
+			expect((input.element as HTMLInputElement).value).toBe('  hello world')
+		})
+	})
+
+	describe('custom chars option', () => {
+		it('should trim custom characters', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ chars: '-' }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '--hello world--'
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('hello world')
+		})
+
+		it('should trim both whitespace and custom characters', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="{ chars: '-' }" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = ' -hello world- '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('hello world')
+		})
+	})
+
+	describe('non-input elements', () => {
+		it('should trim text content of non-input elements', () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<span v-trim>  hello world  </span>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('hello world')
+		})
+
+		it('should handle non-input elements with no text', () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<span v-trim></span>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('')
+		})
+
+		it('should work with div elements', () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<div v-trim>  test  </div>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('div').text()).toBe('test')
+		})
+	})
+
+	describe('boolean binding', () => {
+		it('should trim when bound to true', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="true" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('hello')
+		})
+
+		it('should not trim when bound to false', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim="false" />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			;(input.element as HTMLInputElement).value = '  hello  '
+			await input.trigger('input')
+			await input.trigger('blur')
+			expect((input.element as HTMLInputElement).value).toBe('  hello  ')
+		})
+	})
+
+	describe('cleanup', () => {
+		it('should remove event listeners on unmount', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-if="show" v-trim />`,
+				data() {
+					return { show: true }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('input').exists()).toBe(true)
+
+			await wrapper.setData({ show: false })
+			await nextTick()
+
+			expect(wrapper.find('input').exists()).toBe(false)
+		})
+	})
+
+	describe('initial value', () => {
+		it('should trim initial value on mount', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<input v-trim value="  hello  " />`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const input = wrapper.find('input')
+
+			// Initial value should be trimmed
+			expect((input.element as HTMLInputElement).value).toBe('hello')
+		})
+	})
+
+	describe('textarea support', () => {
+		it('should work with textarea elements', async () => {
+			const TestComponent = defineComponent({
+				directives: { trim: vTrim },
+				template: `<textarea v-trim></textarea>`,
+			})
+
+			const wrapper = mount(TestComponent)
+			const textarea = wrapper.find('textarea')
+
+			;(textarea.element as HTMLTextAreaElement).value = '  hello world  '
+			await textarea.trigger('input')
+			await textarea.trigger('blur')
+			expect((textarea.element as HTMLTextAreaElement).value).toBe('hello world')
 		})
 	})
 })

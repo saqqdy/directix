@@ -70,6 +70,16 @@ describe('useEllipsis', () => {
 			expect(truncated.value).toBe('Hello World')
 			expect(isTruncated.value).toBe(false)
 		})
+
+		it('should truncate text that exceeds line limit', () => {
+			const { truncated, isTruncated } = useEllipsis({
+				text: 'This is a very long text that spans multiple lines and needs to be truncated. It contains many words that will definitely exceed the average characters per line limit and should trigger truncation for multiple lines.',
+				lines: 2,
+			})
+
+			expect(truncated.value).toBeDefined()
+			expect(isTruncated.value).toBe(true)
+		})
 	})
 
 	describe('calculateForWidth', () => {

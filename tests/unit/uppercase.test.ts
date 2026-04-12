@@ -190,6 +190,26 @@ describe('v-uppercase additional coverage', () => {
 			await input.setValue('hello')
 			expect((input.element as HTMLInputElement).value).toBe('hello')
 		})
+
+		it('should update when options change', async () => {
+			const TestComponent = defineComponent({
+				directives: { uppercase: vUppercase },
+				template: `<span v-uppercase="options">{{ text }}</span>`,
+				data() {
+					return {
+						text: 'hello',
+						options: { first: true },
+					}
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			expect(wrapper.find('span').text()).toBe('Hello')
+
+			// Change options to transform all characters
+			await wrapper.setData({ options: { first: false } })
+			expect(wrapper.find('span').text()).toBe('HELLO')
+		})
 	})
 
 	describe('cleanup', () => {

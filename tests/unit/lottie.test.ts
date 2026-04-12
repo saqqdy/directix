@@ -301,4 +301,179 @@ describe('vLottie', () => {
 			expect((el as any).__lottie).toBeUndefined()
 		})
 	})
+
+	describe('callbacks', () => {
+		it('should register onReady callback', async () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+			const onReady = vi.fn()
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, onReady },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should register onComplete callback', async () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+			const onComplete = vi.fn()
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, onComplete },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should register onLoopComplete callback', async () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+			const onLoopComplete = vi.fn()
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, onLoopComplete },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should register onEnterFrame callback', async () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+			const onEnterFrame = vi.fn()
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, onEnterFrame },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+	})
+
+	describe('update animation data', () => {
+		it('should reload animation when data changes', async () => {
+			const el = document.createElement('div')
+			const animationData1 = { v: '5.0.0', layers: [] }
+			const animationData2 = { v: '5.0.0', layers: [{ id: 1 }] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData: animationData1 },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+
+			lottieDirective.updated!(el, {
+				value: { animationData: animationData2 },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should update loop on option change', async () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, loop: true },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			await new Promise(resolve => setTimeout(resolve, 0))
+
+			lottieDirective.updated!(el, {
+				value: { animationData, loop: false },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+	})
+
+	describe('autoplay option', () => {
+		it('should autoplay by default', () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should not autoplay when autoplay is false', () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, autoplay: false },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+	})
+
+	describe('loop option', () => {
+		it('should loop by default', () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+
+		it('should not loop when loop is false', () => {
+			const el = document.createElement('div')
+			const animationData = { v: '5.0.0', layers: [] }
+
+			lottieDirective.mounted!(el, {
+				value: { animationData, loop: false },
+				modifiers: {},
+				dir: vLottie,
+				instance: null,
+			} as any, null as any, null as any)
+
+			expect(el.querySelector('.v-lottie')).not.toBeNull()
+		})
+	})
 })

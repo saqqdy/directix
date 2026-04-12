@@ -137,25 +137,23 @@ describe('v-touch', () => {
 
 		it('should call direction-specific callbacks', async () => {
 			const onSwipeLeft = vi.fn()
+			const onSwipeRight = vi.fn()
+			const onSwipeUp = vi.fn()
+			const onSwipeDown = vi.fn()
 			const TestComponent = defineComponent({
 				directives: { touch: vTouch },
-				template: `<div v-touch="{ onSwipeLeft }">Touch me</div>`,
+				template: `<div v-touch="{ onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown }">Touch me</div>`,
 				data() {
-					return { onSwipeLeft }
+					return { onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown }
 				},
 			})
 
 			const wrapper = mount(TestComponent)
 			const div = wrapper.find('div')
 
-			await div.trigger('touchstart', {
-				touches: [{ clientX: 100, clientY: 50 }],
-			})
-
-			await div.trigger('touchend', {
-				changedTouches: [{ clientX: 50, clientY: 50 }],
-			})
-
+			// Swipe left
+			await div.trigger('touchstart', { touches: [{ clientX: 100, clientY: 50 }] })
+			await div.trigger('touchend', { changedTouches: [{ clientX: 50, clientY: 50 }] })
 			expect(onSwipeLeft).toHaveBeenCalled()
 		})
 	})
@@ -258,6 +256,34 @@ describe('v-touch', () => {
 
 			expect(onLongPress).not.toHaveBeenCalled()
 		})
+
+		it('should not trigger tap after long press', async () => {
+			const onTap = vi.fn()
+			const onLongPress = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onTap, onLongPress, longPressTimeout: 500 }">Touch me</div>`,
+				data() {
+					return { onTap, onLongPress }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			await div.trigger('touchstart', {
+				touches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			vi.advanceTimersByTime(500)
+
+			await div.trigger('touchend', {
+				changedTouches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			expect(onLongPress).toHaveBeenCalled()
+			expect(onTap).not.toHaveBeenCalled()
+		})
 	})
 
 	describe('touch callbacks', () => {
@@ -303,6 +329,98 @@ describe('v-touch', () => {
 			})
 
 			expect(onTouchEnd).toHaveBeenCalled()
+		})
+
+		it('should call onTouchMove', async () => {
+			const onTouchMove = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onTouchMove }">Touch me</div>`,
+				data() {
+					return { onTouchMove }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			await div.trigger('touchstart', {
+				touches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			await div.trigger('touchmove', {
+				touches: [{ clientX: 60, clientY: 60 }],
+			})
+
+			expect(onTouchMove).toHaveBeenCalled()
+		})
+	})
+
+	describe('pinch detection', () => {
+		it('should detect pinch gesture', async () => {
+			const onPinch = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onPinch }">Touch me</div>`,
+				data() {
+					return { onPinch }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			// Start with two fingers close together
+			await div.trigger('touchstart', {
+				touches: [
+					{ clientX: 100, clientY: 100 },
+					{ clientX: 110, clientY: 100 },
+				],
+			})
+
+			// Move fingers apart (pinch out)
+			await div.trigger('touchmove', {
+				touches: [
+					{ clientX: 80, clientY: 100 },
+					{ clientX: 130, clientY: 100 },
+				],
+			})
+
+			expect(onPinch).toHaveBeenCalled()
+		})
+	})
+
+	describe('rotate detection', () => {
+		it('should detect rotate gesture', async () => {
+			const onRotate = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onRotate }">Touch me</div>`,
+				data() {
+					return { onRotate }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			// Start with two fingers
+			await div.trigger('touchstart', {
+				touches: [
+					{ clientX: 100, clientY: 100 },
+					{ clientX: 200, clientY: 100 },
+				],
+			})
+
+			// Rotate fingers
+			await div.trigger('touchmove', {
+				touches: [
+					{ clientX: 150, clientY: 50 },
+					{ clientX: 150, clientY: 150 },
+				],
+			})
+
+			expect(onRotate).toHaveBeenCalled()
 		})
 	})
 
@@ -470,6 +588,57 @@ describe('v-touch', () => {
 
 			expect(onLongPress).not.toHaveBeenCalled()
 		})
+
+		it('should respect tapThreshold option', async () => {
+			const onTap = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onTap, tapThreshold: 5 }">Touch me</div>`,
+				data() {
+					return { onTap }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			await div.trigger('touchstart', {
+				touches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			// Move 8px - above threshold
+			await div.trigger('touchend', {
+				changedTouches: [{ clientX: 58, clientY: 50 }],
+			})
+
+			expect(onTap).not.toHaveBeenCalled()
+		})
+
+		it('should respect tapTimeout option', async () => {
+			const onTap = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onTap, tapTimeout: 100 }">Touch me</div>`,
+				data() {
+					return { onTap }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			await div.trigger('touchstart', {
+				touches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			vi.advanceTimersByTime(150)
+
+			await div.trigger('touchend', {
+				changedTouches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			expect(onTap).not.toHaveBeenCalled()
+		})
 	})
 
 	describe('update', () => {
@@ -553,6 +722,32 @@ describe('v-touch', () => {
 			vi.advanceTimersByTime(600)
 
 			expect(onLongPress).not.toHaveBeenCalled()
+		})
+	})
+
+	describe('touchcancel', () => {
+		it('should handle touchcancel event', async () => {
+			const onTouchEnd = vi.fn()
+			const TestComponent = defineComponent({
+				directives: { touch: vTouch },
+				template: `<div v-touch="{ onTouchEnd }">Touch me</div>`,
+				data() {
+					return { onTouchEnd }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			const div = wrapper.find('div')
+
+			await div.trigger('touchstart', {
+				touches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			await div.trigger('touchcancel', {
+				changedTouches: [{ clientX: 50, clientY: 50 }],
+			})
+
+			expect(onTouchEnd).toHaveBeenCalled()
 		})
 	})
 })

@@ -218,4 +218,30 @@ describe('v-export', () => {
 			expect(wrapper.find('.v-export').exists()).toBe(false)
 		})
 	})
+
+	describe('error handling', () => {
+		it('should call onError callback when export fails', async () => {
+			const onError = vi.fn()
+			const data = [{ name: 'John', age: 30 }]
+
+			// Mock Blob to throw an error
+			mockBlob.mockImplementation(() => {
+				throw new Error('Export failed')
+			})
+
+			const TestComponent = defineComponent({
+				directives: { export: vExport },
+				template: `<button v-export="{ data, onError }">Export</button>`,
+				data() {
+					return { data, onError }
+				},
+			})
+
+			const wrapper = mount(TestComponent)
+			await wrapper.find('button').trigger('click')
+
+			expect(onError).toHaveBeenCalled()
+			expect(onError.mock.calls[0][0].message).toBe('Export failed')
+		})
+	})
 })
