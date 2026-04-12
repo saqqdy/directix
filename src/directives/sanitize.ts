@@ -235,10 +235,10 @@ export const vSanitize = defineDirective<SanitizeBinding, HTMLElement>({
 
 		const options = normalizeOptions(binding.value)
 
-		if (options.disabled) return
-
-		// Store options
+		// Store options even when disabled so updated hook can work
 		;(el as any).__sanitize = { options }
+
+		if (options.disabled) return
 
 		// Sanitize initial content
 		const content = el.innerHTML
@@ -253,9 +253,19 @@ export const vSanitize = defineDirective<SanitizeBinding, HTMLElement>({
 
 		if (!state) return
 
+		const prevDisabled = state.options.disabled
 		state.options = normalizeOptions(binding.value)
 
-		if (state.options.disabled || !state.options.sanitizeOnUpdate) return
+		if (state.options.disabled || !state.options.sanitizeOnUpdate) {
+			// If was previously disabled and now enabled, sanitize
+			if (prevDisabled && !state.options.disabled) {
+				const content = el.innerHTML
+				if (content) {
+					el.innerHTML = sanitizeHtml(content, state.options)
+				}
+			}
+			return
+		}
 
 		// Sanitize updated content
 		const content = el.innerHTML

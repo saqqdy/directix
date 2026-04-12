@@ -175,7 +175,8 @@ export const vFade = defineDirective<FadeBinding, HTMLElement>({
 			// Force reflow
 			String(el.offsetHeight)
 			// Fade in
-			requestAnimationFrame(() => {
+			state.animationFrame = requestAnimationFrame(() => {
+				state.animationFrame = null
 				el.style.opacity = String(options.maxOpacity || 1)
 				state.currentOpacity = options.maxOpacity || 1
 			})
@@ -184,7 +185,8 @@ export const vFade = defineDirective<FadeBinding, HTMLElement>({
 			el.style.opacity = String(options.maxOpacity || 1)
 			el.style.display = ''
 			// Fade out
-			requestAnimationFrame(() => {
+			state.animationFrame = requestAnimationFrame(() => {
+				state.animationFrame = null
 				el.style.opacity = String(options.minOpacity || 0)
 				setTimeout(() => {
 					el.style.display = 'none'
