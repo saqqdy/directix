@@ -25,6 +25,7 @@ coverage/
 /test/unit/coverage/
 /test/e2e/reports/
 selenium-debug.log
+playwright-report/
 
 # Temp files
 *.bak
