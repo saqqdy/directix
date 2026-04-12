@@ -1,0 +1,79 @@
+{
+	"publisher": "saqqdy",
+	"name": "directix-vscode",
+	"displayName": "Directix - Vue Directives IntelliSense",
+	"icon": "icon.png",
+	"description": "IntelliSense for Directix Vue directives library",
+	"version": "1.0.0",
+	"main": "./dist/extension.js",
+	"categories": [
+		"Programming Languages",
+		"Snippets",
+		"Other"
+	],
+	"scripts": {
+		"vscode:prepublish": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+		"build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+		"watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
+		"lint": "eslint src --ext ts"
+	},
+	"activationEvents": [
+		"onLanguage:vue",
+		"onLanguage:html"
+	],
+	"devDependencies": {
+		"@types/node": "^22.19.17",
+		"@types/vscode": "^1.115.0",
+		"@typescript-eslint/eslint-plugin": "^7.18.0",
+		"@typescript-eslint/parser": "^7.18.0",
+		"esbuild": "^0.28.0",
+		"eslint": "^8.57.1",
+		"typescript": "^5.9.3"
+	},
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"keywords": [
+		"vue",
+		"vue3",
+		"vue2",
+		"directives",
+		"directix",
+		"intellisense"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/saqqdy/directix.git",
+		"directory": "packages/vscode-extension"
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "directix.openDocs",
+				"title": "Open Directix Documentation"
+			}
+		],
+		"snippets": [
+			{
+				"language": "vue",
+				"path": "./snippets/snippets.json"
+			}
+		],
+		"configuration": {
+			"title": "Directix",
+			"properties": {
+				"directix.enableIntelliSense": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable Directix IntelliSense"
+				},
+				"directix.showDocumentation": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show documentation in hover"
+				}
+			}
+		}
+	}
+}

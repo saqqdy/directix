@@ -1,0 +1,137 @@
+{
+	"Directix v-copy": {
+		"prefix": "vcopy",
+		"body": "v-copy=\"${1:'text to copy'}\"",
+		"description": "Copy text to clipboard on click"
+	},
+	"Directix v-debounce": {
+		"prefix": "vdebounce",
+		"body": "v-debounce=\"{ handler: ${1:handleInput}, wait: ${2:300} }\"",
+		"description": "Debounce event handler"
+	},
+	"Directix v-throttle": {
+		"prefix": "vthrottle",
+		"body": "v-throttle=\"{ handler: ${1:handleClick}, limit: ${2:300} }\"",
+		"description": "Throttle event handler"
+	},
+	"Directix v-click-outside": {
+		"prefix": "vclickoutside",
+		"body": "v-click-outside=\"${1:handleClickOutside}\"",
+		"description": "Detect clicks outside element"
+	},
+	"Directix v-long-press": {
+		"prefix": "vlongpress",
+		"body": "v-long-press=\"{ handler: ${1:handleLongPress}, duration: ${2:500} }\"",
+		"description": "Detect long press gesture"
+	},
+	"Directix v-hover": {
+		"prefix": "vhover",
+		"body": "v-hover=\"{ onEnter: ${1:handleEnter}, onLeave: ${2:handleLeave} }\"",
+		"description": "Detect hover state"
+	},
+	"Directix v-focus": {
+		"prefix": "vfocus",
+		"body": "v-focus",
+		"description": "Auto-focus element"
+	},
+	"Directix v-lazy": {
+		"prefix": "vlazy",
+		"body": "v-lazy=\"${1:imageUrl}\"",
+		"description": "Lazy load images"
+	},
+	"Directix v-loading": {
+		"prefix": "vloading",
+		"body": "v-loading=\"${1:isLoading}\"",
+		"description": "Show loading state"
+	},
+	"Directix v-ripple": {
+		"prefix": "vripple",
+		"body": "v-ripple${1:[\"'${2:rgba(255, 255, 255, 0.3)}'\"]}",
+		"description": "Material ripple effect"
+	},
+	"Directix v-intersect": {
+		"prefix": "vintersect",
+		"body": "v-intersect=\"${1:handleIntersect}\"",
+		"description": "Intersection Observer"
+	},
+	"Directix v-resize": {
+		"prefix": "vresize",
+		"body": "v-resize=\"${1:handleResize}\"",
+		"description": "Resize Observer"
+	},
+	"Directix v-scroll": {
+		"prefix": "vscroll",
+		"body": "v-scroll=\"${1:handleScroll}\"",
+		"description": "Scroll event handler"
+	},
+	"Directix v-watermark": {
+		"prefix": "vwatermark",
+		"body": "v-watermark=\"'${1:Confidential}'\"",
+		"description": "Add watermark"
+	},
+	"Directix v-tooltip": {
+		"prefix": "vtooltip",
+		"body": "v-tooltip=\"'${1:Tooltip text}'\"",
+		"description": "Tooltip directive"
+	},
+	"Directix v-permission": {
+		"prefix": "vpermission",
+		"body": "v-permission=\"'${1:admin}'\"",
+		"description": "Permission control"
+	},
+	"Directix v-hotkey": {
+		"prefix": "vhotkey",
+		"body": "v-hotkey=\"{ '${1:ctrl+s}': ${2:handleSave} }\"",
+		"description": "Keyboard shortcuts"
+	},
+	"Directix v-mask": {
+		"prefix": "vmask",
+		"body": "v-mask=\"'${1:###-##-####}'\"",
+		"description": "Input mask"
+	},
+	"Directix v-money": {
+		"prefix": "vmoney",
+		"body": "v-money",
+		"description": "Money format"
+	},
+	"Directix v-number": {
+		"prefix": "vnumber",
+		"body": "v-number",
+		"description": "Number format"
+	},
+	"Directix v-infinite-scroll": {
+		"prefix": "vinfinitescroll",
+		"body": "v-infinite-scroll=\"${1:loadMore}\"",
+		"description": "Infinite scroll"
+	},
+	"Directix v-draggable": {
+		"prefix": "vdraggable",
+		"body": "v-draggable",
+		"description": "Draggable element"
+	},
+	"Directix v-visible": {
+		"prefix": "vvisible",
+		"body": "v-visible=\"${1:isVisible}\"",
+		"description": "Visibility control"
+	},
+	"Directix v-sanitize": {
+		"prefix": "vsanitize",
+		"body": "v-sanitize",
+		"description": "HTML sanitization"
+	},
+	"Directix v-skeleton": {
+		"prefix": "vskeleton",
+		"body": "v-skeleton=\"${1:isLoading}\"",
+		"description": "Skeleton loading"
+	},
+	"Directix v-ellipsis": {
+		"prefix": "vellipsis",
+		"body": "v-ellipsis=\"${1:1}\"",
+		"description": "Text ellipsis"
+	},
+	"Directix v-truncate": {
+		"prefix": "vtruncate",
+		"body": "v-truncate=\"${1:50}\"",
+		"description": "Text truncation"
+	}
+}
