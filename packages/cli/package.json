@@ -1,0 +1,44 @@
+{
+	"name": "directix-cli",
+	"description": "CLI tool for Directix Vue directives library",
+	"type": "module",
+	"version": "1.0.0",
+	"bin": {
+		"directix": "./dist/index.js"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup src/index.ts --format esm --dts",
+		"dev": "tsup src/index.ts --format esm --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"cac": "^6.7.14",
+		"chalk": "^5.3.0",
+		"fs-extra": "^11.2.0",
+		"ora": "^8.0.1",
+		"prompts": "^2.4.2"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^11.0.4",
+		"@types/prompts": "^2.4.9",
+		"tsup": "^8.0.0",
+		"typescript": "^5.9.0"
+	},
+	"keywords": [
+		"directix",
+		"vue",
+		"vue3",
+		"vue2",
+		"directives",
+		"cli"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/saqqdy/directix.git",
+		"directory": "packages/cli"
+	}
+}
