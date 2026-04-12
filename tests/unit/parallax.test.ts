@@ -195,7 +195,7 @@ describe('v-parallax', () => {
 			const calls = addEventListenerSpy.mock.calls
 			const scrollCall = calls.find(call => call[0] === 'scroll')
 			expect(scrollCall).toBeDefined()
-			expect(scrollCall?.[2]?.passive).toBe(true)
+			expect((scrollCall?.[2] as AddEventListenerOptions | undefined)?.passive).toBe(true)
 
 			addEventListenerSpy.mockRestore()
 		})
@@ -214,7 +214,7 @@ describe('v-parallax', () => {
 			const calls = addEventListenerSpy.mock.calls
 			const resizeCall = calls.find(call => call[0] === 'resize')
 			expect(resizeCall).toBeDefined()
-			expect(resizeCall?.[2]?.passive).toBe(true)
+			expect((resizeCall?.[2] as AddEventListenerOptions | undefined)?.passive).toBe(true)
 
 			addEventListenerSpy.mockRestore()
 		})

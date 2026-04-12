@@ -131,7 +131,7 @@ describe('useParallax', () => {
 				} as DOMRect),
 			})
 
-			const { bind, _isActive } = useParallax()
+			const { bind } = useParallax()
 
 			bind(element)
 

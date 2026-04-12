@@ -9,9 +9,35 @@ const mockIntersectionObserver = vi.fn(() => ({
 	observe: mockObserve,
 	disconnect: mockDisconnect,
 	unobserve: mockUnobserve,
+	root: null,
+	rootMargin: '0px',
+	thresholds: [],
+	takeRecords: vi.fn(() => []),
 }))
 
-window.IntersectionObserver = mockIntersectionObserver
+window.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver
+
+// Helper to create a partial IntersectionObserverEntry
+function createMockEntry(options: { isIntersecting: boolean; intersectionRatio: number }): Partial<IntersectionObserverEntry> {
+	return {
+		isIntersecting: options.isIntersecting,
+		intersectionRatio: options.intersectionRatio,
+		boundingClientRect: {} as DOMRectReadOnly,
+		intersectionRect: {} as DOMRectReadOnly,
+		rootBounds: null,
+		target: document.createElement('div'),
+		time: 0,
+	}
+}
+
+// Helper to get callback from mock calls
+function getCallback(): IntersectionObserverCallback {
+	const calls = mockIntersectionObserver.mock.calls as unknown as [IntersectionObserverCallback, IntersectionObserverInit][]
+	if (calls.length === 0) {
+		throw new Error('IntersectionObserver was not called')
+	}
+	return calls[0][0]
+}
 
 describe('useIntersect', () => {
 	let element: HTMLElement
@@ -62,13 +88,14 @@ describe('useIntersect', () => {
 			bind(element)
 
 			// Get the callback passed to IntersectionObserver
-			const callback = mockIntersectionObserver.mock.calls[0][0]
+			const callback = getCallback()
 
 			// Simulate intersection
-			const entry = { isIntersecting: true, intersectionRatio: 0.5 }
-			callback([entry])
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			const observer = {} as IntersectionObserver
+			callback([entry as IntersectionObserverEntry], observer)
 
-			expect(handler).toHaveBeenCalledWith(entry, expect.any(Object))
+			expect(handler).toHaveBeenCalledWith(entry, observer)
 		})
 
 		it('should call onEnter when intersecting', () => {
@@ -77,9 +104,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			const entry = { isIntersecting: true, intersectionRatio: 0.5 }
-			callback([entry])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(onEnter).toHaveBeenCalled()
 		})
@@ -90,9 +117,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			const entry = { isIntersecting: false, intersectionRatio: 0 }
-			callback([entry])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: false, intersectionRatio: 0 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(onLeave).toHaveBeenCalled()
 		})
@@ -103,9 +130,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			const entry = { isIntersecting: true, intersectionRatio: 0.5 }
-			callback([entry])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(onChange).toHaveBeenCalledWith(true, entry)
 		})
@@ -117,8 +144,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			callback([{ isIntersecting: true, intersectionRatio: 0.5 }])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(isIntersecting.value).toBe(true)
 		})
@@ -128,8 +156,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			callback([{ isIntersecting: true, intersectionRatio: 0.75 }])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.75 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(ratio.value).toBe(0.75)
 		})
@@ -178,15 +207,18 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
+			const callback = getCallback()
 
 			// First trigger
-			callback([{ isIntersecting: true, intersectionRatio: 0.5 }])
+			const entry1 = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry1 as IntersectionObserverEntry], {} as IntersectionObserver)
 			expect(onEnter).toHaveBeenCalledTimes(1)
 
 			// Second trigger should be ignored
-			callback([{ isIntersecting: false, intersectionRatio: 0 }])
-			callback([{ isIntersecting: true, intersectionRatio: 0.5 }])
+			const entry2 = createMockEntry({ isIntersecting: false, intersectionRatio: 0 })
+			const entry3 = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry2 as IntersectionObserverEntry], {} as IntersectionObserver)
+			callback([entry3 as IntersectionObserverEntry], {} as IntersectionObserver)
 			expect(onEnter).toHaveBeenCalledTimes(1)
 		})
 	})
@@ -206,8 +238,9 @@ describe('useIntersect', () => {
 
 			bind(element)
 
-			const callback = mockIntersectionObserver.mock.calls[0][0]
-			callback([{ isIntersecting: true, intersectionRatio: 0.5 }])
+			const callback = getCallback()
+			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
+			callback([entry as IntersectionObserverEntry], {} as IntersectionObserver)
 
 			expect(isIntersecting.value).toBe(true)
 

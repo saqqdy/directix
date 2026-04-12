@@ -75,7 +75,7 @@ describe('useEmoji', () => {
 
 		it('should call onEmoji with replacement function', () => {
 			const onEmoji = vi.fn()
-			const replacement = (emoji: string) => `[${emoji}]`
+			const replacement = '[emoji]'
 			const { stripEmojis } = useEmoji({ onEmoji, replacement })
 
 			stripEmojis('Hello 😊')

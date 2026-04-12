@@ -288,7 +288,7 @@ describe('v-pull-refresh', () => {
 			element.dispatchEvent(touchMoveEvent)
 
 			// Content should have transform applied
-			const content = wrapper.find('.v-pull-refresh__content').element
+			const content = wrapper.find('.v-pull-refresh__content').element as HTMLElement
 			expect(content.style.transform).toBeDefined()
 		})
 
@@ -314,7 +314,7 @@ describe('v-pull-refresh', () => {
 			element.dispatchEvent(touchMoveEvent)
 
 			// Should not have transform applied
-			const content = wrapper.find('.v-pull-refresh__content').element
+			const content = wrapper.find('.v-pull-refresh__content').element as HTMLElement
 			expect(content.style.transform).toBe('')
 		})
 

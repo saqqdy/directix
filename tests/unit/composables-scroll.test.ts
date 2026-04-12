@@ -527,7 +527,7 @@ describe('scroll composables', () => {
 		})
 
 		it('should bind to an element', () => {
-			const { bind, _scrollLeft } = useScroll()
+			const { bind } = useScroll()
 
 			const element = document.createElement('div')
 			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
@@ -570,7 +570,7 @@ describe('scroll composables', () => {
 
 		it('should handle throttle option', async () => {
 			const throttle = ref(100)
-			const { bind, _scrollLeft } = useScroll({ throttle })
+			const { bind } = useScroll({ throttle })
 
 			const element = document.createElement('div')
 			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
@@ -716,7 +716,7 @@ describe('scroll composables', () => {
 		})
 
 		it('should update direction on scroll', async () => {
-			const { bind, directionY, _directionX } = useScroll()
+			const { bind, directionY } = useScroll()
 
 			const element = document.createElement('div')
 			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })
@@ -777,7 +777,7 @@ describe('scroll composables', () => {
 		})
 
 		it('should calculate progress correctly', async () => {
-			const { bind, _progressX, progressY } = useScroll()
+			const { bind, progressY } = useScroll()
 
 			const element = document.createElement('div')
 			Object.defineProperty(element, 'scrollLeft', { value: 0, writable: true })

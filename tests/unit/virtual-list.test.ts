@@ -191,7 +191,7 @@ describe('v-virtual-list', () => {
 			})
 
 			const wrapper = mount(TestComponent)
-			const firstItem = wrapper.find('.v-virtual-list__item').element
+			const firstItem = wrapper.find('.v-virtual-list__item').element as HTMLElement
 
 			expect(firstItem.dataset.key).toBe('item-0')
 		})

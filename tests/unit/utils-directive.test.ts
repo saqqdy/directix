@@ -12,7 +12,7 @@ describe('src/utils/directive.ts', () => {
 		describe('function binding', () => {
 			it('should normalize function binding with handlerKey', () => {
 				const handler = vi.fn()
-				const normalize = createNormalizer({
+				const normalize = createNormalizer<{ capture: boolean; disabled: boolean; handler?: typeof handler }>({
 					defaults: { capture: true, disabled: false },
 					handlerKey: 'handler',
 				})
@@ -40,7 +40,7 @@ describe('src/utils/directive.ts', () => {
 
 		describe('string binding', () => {
 			it('should normalize string binding with valueKey', () => {
-				const normalize = createNormalizer({
+				const normalize = createNormalizer<{ disabled: boolean; value?: string }>({
 					defaults: { disabled: false },
 					valueKey: 'value',
 				})
@@ -146,7 +146,7 @@ describe('src/utils/directive.ts', () => {
 
 		describe('complex scenarios', () => {
 			it('should handle all options together', () => {
-				const normalize = createNormalizer({
+				const normalize = createNormalizer<{ disabled: boolean; capture: boolean; interval: number; handler?: typeof fn; value?: string }>({
 					defaults: { disabled: false, capture: false, interval: 300 },
 					handlerKey: 'handler',
 					valueKey: 'value',
@@ -182,19 +182,18 @@ describe('src/utils/directive.ts', () => {
 	describe('normalizeHandlerOptions', () => {
 		it('should normalize function binding', () => {
 			const handler = vi.fn()
-			const result = normalizeHandlerOptions(handler, { disabled: false })
+			const result = normalizeHandlerOptions(handler, {})
 
 			expect(result).toEqual({
 				handler,
-				disabled: false,
 			})
 		})
 
 		it('should normalize object binding', () => {
 			const handler = vi.fn()
-			const result = normalizeHandlerOptions(
+			const result = normalizeHandlerOptions<{ handler?: typeof handler; disabled: boolean; custom: string }>(
 				{ handler, disabled: true, custom: 'value' },
-				{ disabled: false },
+				{ disabled: false, custom: '' },
 			)
 
 			expect(result).toEqual({
@@ -205,23 +204,22 @@ describe('src/utils/directive.ts', () => {
 		})
 
 		it('should handle undefined binding', () => {
-			const result = normalizeHandlerOptions(undefined, { disabled: false })
+			const result = normalizeHandlerOptions(undefined, {})
 
-			expect(result).toEqual({ disabled: false })
+			expect(result).toEqual({})
 		})
 
 		it('should handle null binding', () => {
-			const result = normalizeHandlerOptions(null as any, { disabled: false })
+			const result = normalizeHandlerOptions(null as any, {})
 
-			expect(result).toEqual({ disabled: false })
+			expect(result).toEqual({})
 		})
 
 		it('should preserve default handler', () => {
 			const defaultHandler = vi.fn()
-			const result = normalizeHandlerOptions(undefined, { disabled: false, handler: defaultHandler })
+			const result = normalizeHandlerOptions(undefined, { handler: defaultHandler })
 
 			expect(result).toEqual({
-				disabled: false,
 				handler: defaultHandler,
 			})
 		})
@@ -231,12 +229,11 @@ describe('src/utils/directive.ts', () => {
 			const bindingHandler = vi.fn()
 			const result = normalizeHandlerOptions(
 				{ handler: bindingHandler },
-				{ disabled: false, handler: defaultHandler },
+				{ handler: defaultHandler },
 			)
 
 			expect(result).toEqual({
 				handler: bindingHandler,
-				disabled: false,
 			})
 		})
 	})
@@ -294,7 +291,7 @@ describe('src/utils/directive.ts', () => {
 				arg: '200',
 			} as any
 
-			const result = normalizeTimeOptions(
+			const result = normalizeTimeOptions<{ handler?: typeof handler; disabled?: boolean; wait?: number }>(
 				{ handler, disabled: true },
 				mockBinding,
 				{ wait: 300 },

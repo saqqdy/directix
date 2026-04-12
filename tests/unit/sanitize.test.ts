@@ -253,7 +253,7 @@ describe('v-sanitize', () => {
 				},
 			})
 
-			const _wrapper = mount(TestComponent)
+			mount(TestComponent)
 
 			expect(customHandler).toHaveBeenCalled()
 		})

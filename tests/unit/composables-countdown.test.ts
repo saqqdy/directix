@@ -183,7 +183,9 @@ describe('useCountdown', () => {
 				autoStart: false,
 			})
 
-			const _initialSeconds = time.value.seconds
+			// Check that time is reactive
+			expect(time.value).toBeDefined()
+			expect(time.value.seconds).toBeLessThanOrEqual(10)
 
 			target.value = Date.now() + 20000
 

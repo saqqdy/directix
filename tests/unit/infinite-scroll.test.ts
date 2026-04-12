@@ -483,7 +483,7 @@ describe('v-infinite-scroll', () => {
 			delete globalThis.IntersectionObserver
 
 			const handler = vi.fn().mockResolvedValue(undefined)
-			const _scrollHandler = vi.fn()
+			// Scroll handler is tested indirectly
 
 			// Create a scrollable container
 			const container = document.createElement('div')
@@ -501,7 +501,7 @@ describe('v-infinite-scroll', () => {
 				},
 			})
 
-			const _wrapper = mount(TestComponent, {
+			mount(TestComponent, {
 				attachTo: container,
 			})
 

@@ -10,9 +10,13 @@ const mockIntersectionObserver = vi.fn(() => ({
 	observe: mockObserve,
 	disconnect: mockDisconnect,
 	unobserve: mockUnobserve,
+	root: null,
+	rootMargin: '0px',
+	thresholds: [],
+	takeRecords: vi.fn(() => []),
 }))
 
-window.IntersectionObserver = mockIntersectionObserver
+window.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver
 
 describe('useInfiniteScroll', () => {
 	let element: HTMLElement
