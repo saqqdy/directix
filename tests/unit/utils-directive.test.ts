@@ -12,7 +12,7 @@ describe('src/utils/directive.ts', () => {
 		describe('function binding', () => {
 			it('should normalize function binding with handlerKey', () => {
 				const handler = vi.fn()
-				const normalize = createNormalizer<{ capture: boolean; disabled: boolean; handler?: typeof handler }>({
+				const normalize = createNormalizer<{ capture: boolean, disabled: boolean, handler?: typeof handler }>({
 					defaults: { capture: true, disabled: false },
 					handlerKey: 'handler',
 				})
@@ -40,7 +40,7 @@ describe('src/utils/directive.ts', () => {
 
 		describe('string binding', () => {
 			it('should normalize string binding with valueKey', () => {
-				const normalize = createNormalizer<{ disabled: boolean; value?: string }>({
+				const normalize = createNormalizer<{ disabled: boolean, value?: string }>({
 					defaults: { disabled: false },
 					valueKey: 'value',
 				})
@@ -146,7 +146,7 @@ describe('src/utils/directive.ts', () => {
 
 		describe('complex scenarios', () => {
 			it('should handle all options together', () => {
-				const normalize = createNormalizer<{ disabled: boolean; capture: boolean; interval: number; handler?: typeof fn; value?: string }>({
+				const normalize = createNormalizer<{ disabled: boolean, capture: boolean, interval: number, handler?: typeof fn, value?: string }>({
 					defaults: { disabled: false, capture: false, interval: 300 },
 					handlerKey: 'handler',
 					valueKey: 'value',
@@ -191,7 +191,7 @@ describe('src/utils/directive.ts', () => {
 
 		it('should normalize object binding', () => {
 			const handler = vi.fn()
-			const result = normalizeHandlerOptions<{ handler?: typeof handler; disabled: boolean; custom: string }>(
+			const result = normalizeHandlerOptions<{ handler?: typeof handler, disabled: boolean, custom: string }>(
 				{ handler, disabled: true, custom: 'value' },
 				{ disabled: false, custom: '' },
 			)
@@ -291,7 +291,7 @@ describe('src/utils/directive.ts', () => {
 				arg: '200',
 			} as any
 
-			const result = normalizeTimeOptions<{ handler?: typeof handler; disabled?: boolean; wait?: number }>(
+			const result = normalizeTimeOptions<{ handler?: typeof handler, disabled?: boolean, wait?: number }>(
 				{ handler, disabled: true },
 				mockBinding,
 				{ wait: 300 },

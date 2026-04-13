@@ -18,7 +18,7 @@ const mockIntersectionObserver = vi.fn(() => ({
 window.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver
 
 // Helper to create a partial IntersectionObserverEntry
-function createMockEntry(options: { isIntersecting: boolean; intersectionRatio: number }): Partial<IntersectionObserverEntry> {
+function createMockEntry(options: { isIntersecting: boolean, intersectionRatio: number }): Partial<IntersectionObserverEntry> {
 	return {
 		isIntersecting: options.isIntersecting,
 		intersectionRatio: options.intersectionRatio,

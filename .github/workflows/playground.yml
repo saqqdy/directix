@@ -5,9 +5,9 @@ on:
     branches:
       - master
     paths:
-      - 'playground/**'
-      - 'src/**'
-      - '.github/workflows/playground.yml'
+      - "playground/**"
+      - "src/**"
+      - .github/workflows/playground.yml
   workflow_dispatch: {}
 
 permissions:

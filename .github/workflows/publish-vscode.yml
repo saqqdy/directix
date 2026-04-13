@@ -1,0 +1,69 @@
+name: Publish VS Code Extension
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to publish (leave empty to use package.json version)
+        required: false
+        default: ""
+
+jobs:
+  publish:
+    name: Publish to Marketplace
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+        id: pnpm-cache
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build extension
+        run: cd packages/vscode-extension && pnpm build
+
+      - name: Publish to VS Code Marketplace
+        run: |
+          cd packages/vscode-extension
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            pnpm vsce publish ${{ github.event.inputs.version }} -p ${{ secrets.VSCE_PAT }}
+          else
+            pnpm vsce publish -p ${{ secrets.VSCE_PAT }}
+          fi
+
+      - name: Create .vsix file
+        run: |
+          cd packages/vscode-extension
+          pnpm vsce package
+
+      - name: Upload .vsix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: directix-vscode-extension
+          path: packages/vscode-extension/*.vsix
+          retention-days: 90
