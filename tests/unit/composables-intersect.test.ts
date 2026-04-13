@@ -92,10 +92,11 @@ describe('useIntersect', () => {
 
 			// Simulate intersection
 			const entry = createMockEntry({ isIntersecting: true, intersectionRatio: 0.5 })
-			const observer = {} as IntersectionObserver
-			callback([entry as IntersectionObserverEntry], observer)
+			// Get the actual observer instance from the mock
+			const observerInstance = mockIntersectionObserver.mock.results[0]?.value as IntersectionObserver
+			callback([entry as IntersectionObserverEntry], observerInstance)
 
-			expect(handler).toHaveBeenCalledWith(entry, observer)
+			expect(handler).toHaveBeenCalledWith(entry, observerInstance)
 		})
 
 		it('should call onEnter when intersecting', () => {

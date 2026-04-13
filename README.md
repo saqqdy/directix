@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/directix.svg)](https://www.npmjs.com/package/directix)
 [![npm downloads](https://img.shields.io/npm/dm/directix.svg)](https://www.npmjs.com/package/directix)
 [![GitHub license](https://img.shields.io/github/license/saqqdy/directix)](https://github.com/saqqdy/directix/blob/master/LICENSE)
+[![CI](https://github.com/saqqdy/directix/actions/workflows/ci.yml/badge.svg)](https://github.com/saqqdy/directix/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/saqqdy/directix/branch/master/graph/badge.svg)](https://codecov.io/gh/saqqdy/directix)
 
 **English** | **[中文文档](README_CN.md)**
 
