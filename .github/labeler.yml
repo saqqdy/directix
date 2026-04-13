@@ -1,0 +1,78 @@
+# Labeler configuration for PR labeling
+# See: https://github.com/actions/labeler
+
+# Core library changes
+core:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**/*'
+
+# Documentation changes
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/**/*'
+          - 'README.md'
+          - 'README_CN.md'
+          - 'CHANGELOG.md'
+
+# Test changes
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tests/**/*'
+          - '**/*.test.ts'
+          - '**/*.spec.ts'
+
+# Playground changes
+playground:
+  - changed-files:
+      - any-glob-to-any-file: 'playground/**/*'
+
+# Examples changes
+examples:
+  - changed-files:
+      - any-glob-to-any-file: 'examples/**/*'
+
+# CI/CD changes
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - '.github/labeler.yml'
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'pnpm-lock.yaml'
+          - '**/package.json'
+
+# TypeScript types
+typescript:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.ts'
+          - '**/*.d.ts'
+
+# Vue components
+vue:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.vue'
+
+# Nuxt module
+nuxt:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/nuxt/**/*'
+          - 'packages/nuxt/**/*'
+
+# CLI tool
+cli:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/cli/**/*'
+
+# VS Code extension
+vscode:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/vscode-extension/**/*'
