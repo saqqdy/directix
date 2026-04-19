@@ -1,0 +1,87 @@
+# Directix 视频教程
+
+本目录包含 Directix 官方视频教程的脚本、大纲和配套资源。
+
+## 教程系列
+
+### 入门系列 (Getting Started)
+
+| 编号 | 标题 | 时长 | 文件 |
+|------|------|------|------|
+| 01 | Directix 介绍与快速上手 | 8分钟 | [01-introduction.md](./01-introduction.md) |
+| 02 | 安装与配置 | 6分钟 | [02-installation.md](./02-installation.md) |
+| 03 | 常用事件指令 | 12分钟 | [03-event-directives.md](./03-event-directives.md) |
+| 04 | 表单指令详解 | 10分钟 | [04-form-directives.md](./04-form-directives.md) |
+| 05 | 可见性与懒加载 | 10分钟 | [05-visibility-directives.md](./05-visibility-directives.md) |
+
+### 进阶系列 (Advanced)
+
+| 编号 | 标题 | 时长 | 文件 |
+|------|------|------|------|
+| 06 | 自定义指令与 Composables | 12分钟 | [06-composables.md](./06-composables.md) |
+| 07 | 权限管理与安全指令 | 10分钟 | [07-security-directives.md](./07-security-directives.md) |
+| 08 | 性能优化最佳实践 | 15分钟 | [08-performance.md](./08-performance.md) |
+| 09 | Vue DevTools 调试技巧 | 8分钟 | [09-devtools.md](./09-devtools.md) |
+| 10 | 插件系统与社区扩展 | 12分钟 | [10-plugin-system.md](./10-plugin-system.md) |
+
+### 实战系列 (Practical)
+
+| 编号 | 标题 | 时长 | 文件 |
+|------|------|------|------|
+| 11 | 构建表单验证系统 | 15分钟 | [11-form-validation.md](./11-form-validation.md) |
+| 12 | 实现无限滚动列表 | 12分钟 | [12-infinite-scroll.md](./12-infinite-scroll.md) |
+| 13 | 打造图片画廊组件 | 15分钟 | [13-image-gallery.md](./13-image-gallery.md) |
+| 14 | 手势交互实战 | 12分钟 | [14-gesture-interaction.md](./14-gesture-interaction.md) |
+| 15 | 国际化应用开发 | 10分钟 | [15-i18n.md](./15-i18n.md) |
+
+## 总时长
+
+- 入门系列：46 分钟
+- 进阶系列：57 分钟
+- 实战系列：64 分钟
+- **总计：167 分钟（约 2.8 小时）**
+
+## 目标受众
+
+- **入门系列**：Vue 开发新手，希望快速了解 Directix 功能
+- **进阶系列**：有 Directix 基础，希望深入使用高级功能
+- **实战系列**：希望在实际项目中应用 Directix 的开发者
+
+## 配套资源
+
+每个视频教程包含：
+
+1. **视频脚本** - 详细的讲解内容和演示步骤
+2. **代码示例** - 可直接运行的示例代码
+3. **思维导图** - 知识点总结（可选）
+4. **练习题** - 巩固学习效果（可选）
+
+## 发布平台
+
+- Bilibili（中文）
+- YouTube（英文）
+- 官方文档站嵌入
+
+## 制作规范
+
+### 视频规格
+
+- 分辨率：1920x1080 (1080p)
+- 帧率：30fps
+- 编码：H.264
+- 音频：AAC, 128kbps
+
+### 录制要求
+
+- 清晰的代码演示，字号不小于 18px
+- 平滑的操作演示，避免跳跃剪辑
+- 清晰的语音讲解，无背景噪音
+- 适当的背景音乐（可选）
+
+### 开场与结尾
+
+每个视频包含：
+- 统一的开场动画（3秒）
+- 视频标题和章节目录
+- 结尾总结和下集预告
+- 统一的片尾动画（5秒）

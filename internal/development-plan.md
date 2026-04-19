@@ -4396,7 +4396,7 @@ export default ${name}
 | 交互式文档升级 | 8h | P0 | - | ✅ 已完成 |
 | 实际场景示例（10+案例） | 12h | P0 | - | ✅ 已完成 |
 | 最佳实践指南 | 6h | P1 | - | ✅ 已完成 |
-| 视频教程制作 | 16h | P2 | - | 📋 待开发 |
+| 视频教程制作 | 16h | P2 | - | ✅ 已完成 |
 | API 文档自动生成 | 4h | P1 | TypeDoc | ✅ 已完成 |
 | **国际化与本地化** | | | | |
 | i18n 架构设计 | 4h | P0 | - | ✅ 已完成 |
@@ -5990,7 +5990,7 @@ npx directix migrate --from 1.x --to 2.0
 | v1.6.0 | 2026-04-08 | Nuxt 3 模块、自动导入支持 | ✅ 已完成 |
 | v1.7.0 | 2026-04-15 | 可视化配置工具、在线 Playground、代码生成器 | ✅ 已完成 |
 | v1.8.0 | 2026-04-22 | 测试覆盖率 90%+、性能优化、VS Code 插件、CLI 工具 | ✅ 已完成 |
-| v1.9.0 | 2026-04-19 | i18n 国际化、统一警告系统、插件系统、10+ 场景示例 | ✅ 已完成 |
+| v1.9.0 | 2026-04-19 | i18n 国际化、统一警告系统、插件系统、社区插件仓库、DevTools 集成、性能监控 | ✅ 已完成 |
 | v1.10.0 | 2026-05-06 | Vue 3 优化预览、移动端优化、无障碍访问、安全增强 | 📋 计划中 |
 | v1.11.0 | 2026-05-13 | 稳定性增强、性能极限优化、企业级功能、v2.0 迁移准备 | 📋 计划中 |
 | v2.0.0 | TBD | Vue 3 专属优化、Web Components 支持 | 📋 计划中 |
@@ -6221,27 +6221,27 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 - ✅ 交互式文档升级，Playground 代码生成器
 - ✅ 10+ 实际场景示例（表单验证、权限管理、图片画廊等）
 - ✅ 最佳实践指南
-- 📋 视频教程（待开发）
+- ✅ 视频教程（15集，约2.8小时）
 
 **国际化支持：**
 - ✅ 完整 i18n 架构（@directix/i18n 包）
 - ✅ 英文/中文/日文文档支持
 - ✅ 指令消息国际化
-- ✅ 时区/地区适配
+- ✅ 时区/地区适配（getTimezoneInfo、formatDateLocale、formatCurrencyLocale）
 
 **开发者体验：**
 - ✅ 统一警告系统（@directix/core/warning）
 - ✅ 警告信息分级（debug/info/warn/error）
 - ✅ 参数验证断言函数（assert/assertType/assertRange）
-- ✅ Vue DevTools 调试集成
-- ✅ 性能监控面板
+- ✅ Vue DevTools 调试集成（@directix/core/devtools）
+- ✅ 性能监控面板（@directix/core/performance）
 
 **社区功能：**
 - ✅ 插件系统（PluginManager、hooks、directive templates）
+- ✅ 社区插件仓库（PluginRegistry、搜索、安装）
 - ✅ 自定义指令模板系统（createDirectiveTemplate/createEventDirective）
 - ✅ 完善的贡献指南
 - ✅ Issue/PR 模板优化
-- ✅ 社区插件仓库
 
 #### v1.8.0 (2026-04-22)
 
