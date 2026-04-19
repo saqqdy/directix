@@ -14,6 +14,7 @@
 			"@/*": ["./src/*"],
 			"@directix/core": ["./packages/core/src"],
 			"@directix/shared": ["./packages/shared/src"],
+			"@directix/i18n": ["./packages/i18n/src"],
 			"#app": ["./node_modules/nuxt/dist/app"],
 			"#imports": ["./node_modules/nuxt/dist/app/imports"]
 		},

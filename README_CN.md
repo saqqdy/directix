@@ -21,6 +21,74 @@
 - ⚡ **零依赖** - 轻量级，打包体积小
 - 🎨 **组合式API** - 每个指令都有对应的组合式函数
 - 🔧 **工具函数导出** - 导出 `configurePermission`、`getPermissionConfig` 等工具函数供高级使用
+- 🌐 **国际化支持** - 内置中文、英文、日文翻译
+- 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
+
+## v1.9.0 新特性
+
+### 国际化 (i18n)
+
+完整的国际化支持，包括指令消息和文档翻译。
+
+```typescript
+import { createI18n, setLocale } from 'directix'
+
+// 初始化语言
+createI18n({
+  locale: 'zh-CN',
+  fallbackLocale: 'en-US',
+  messages: { 'en-US': enUS, 'zh-CN': zhCN, 'ja-JP': jaJP }
+})
+
+// 运行时切换语言
+setLocale('en-US')
+```
+
+### 统一警告系统
+
+改进的开发者体验，结构化的错误消息。
+
+```typescript
+import { warn, directiveWarn, assertType } from 'directix'
+
+// 指令特定警告
+directiveWarn('debounce', 'errors.invalid_wait', { wait: 'abc' })
+
+// 类型断言
+assertType<number>(value, 'number', 'debounce', 'wait')
+```
+
+### 插件系统
+
+可扩展的插件架构，支持社区贡献。
+
+```typescript
+import { definePlugin, getPluginManager } from 'directix'
+
+const myPlugin = definePlugin({
+  meta: { name: 'my-plugin', version: '1.0.0' },
+  install(ctx) {
+    ctx.registerDirective('my-directive', vMyDirective)
+  }
+})
+
+getPluginManager().register(myPlugin)
+```
+
+### 场景示例
+
+10+ 个真实场景示例，展示指令组合使用：
+
+- **表单验证** - v-debounce, v-mask, v-trim, v-focus
+- **权限管理** - v-permission, v-click-outside
+- **图片画廊** - v-lazy, v-image-preview, v-swipe
+- **无限滚动** - v-infinite-scroll, v-virtual-list, v-loading
+- **富文本编辑** - v-sanitize, v-highlight, v-emoji
+- **手势交互** - v-touch, v-swipe, v-pan, v-pinch
+- **数据可视化** - v-progress, v-counter, v-countdown
+- **拖拽排序** - v-draggable, v-intersect
+- **打印导出** - v-print, v-export
+- **全屏媒体** - v-fullscreen, v-lottie
 
 ## 在线演示
 

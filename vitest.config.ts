@@ -57,6 +57,7 @@ export default defineConfig({
 			'@': resolve(__dirname, 'src'),
 			'@directix/core': resolve(__dirname, 'packages/core/src'),
 			'@directix/shared': resolve(__dirname, 'packages/shared/src'),
+			'@directix/i18n': resolve(__dirname, 'packages/i18n/src'),
 		},
 	},
 })

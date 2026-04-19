@@ -16,7 +16,7 @@ const banner
 export default defineConfig({
 	plugins: [
 		dts({
-			include: ['src/**/*.ts', 'packages/**/*.ts'],
+			include: ['src/**/*.ts', 'packages/core/**/*.ts', 'packages/shared/**/*.ts', 'packages/i18n/**/*.ts'],
 			exclude: ['src/nuxt/**'],
 			outDir: 'dist',
 			rollupTypes: true,
@@ -63,6 +63,7 @@ export default defineConfig({
 			'@': resolve(__dirname, 'src'),
 			'@directix/core': resolve(__dirname, 'packages/core/src'),
 			'@directix/shared': resolve(__dirname, 'packages/shared/src'),
+			'@directix/i18n': resolve(__dirname, 'packages/i18n/src'),
 		},
 	},
 })

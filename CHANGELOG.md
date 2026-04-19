@@ -2,6 +2,73 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0] - 2026-04-29
+
+### Added
+
+#### Internationalization (i18n) System
+
+Full i18n support for directive messages and documentation.
+
+- **i18n Architecture** - New `@directix/i18n` package for internationalization
+- **Locale Support** - Built-in support for:
+  - Chinese (zh-CN) - Complete translations
+  - English (en-US) - Complete translations
+  - Japanese (ja-JP) - Complete translations
+- **Message System** - Localized error messages, warnings, and help text
+- **API Documentation** - All directive parameters documented in multiple languages
+
+#### Unified Warning System
+
+Improved developer experience with structured error messages.
+
+- **Warning Module** - New `@directix/core/warning` module
+- **Warning Levels** - Support for debug, info, warn, error levels
+- **Directive Context** - Directive name included in warning messages
+- **Parameter Validation** - Structured validation messages with expected/received values
+- **Assertion Helpers** - `assert`, `assertType`, `assertPositive`, `assertRange`
+- **i18n Integration** - Warnings support internationalization
+
+#### Plugin System
+
+Extensible plugin architecture for community contributions.
+
+- **Plugin Manager** - `PluginManager` class for plugin lifecycle
+- **Plugin API** - `DirectixPlugin` interface for plugin definition
+- **Directive Extensions** - Extend existing directives with custom hooks
+- **Plugin Context** - Rich context for plugin operations
+- **Dependency Resolution** - Automatic dependency checking
+- **Hook System** - beforeInstall, afterInstall, beforeUninstall, afterUninstall hooks
+
+#### Directive Templates
+
+Simplified directive creation with templates.
+
+- **createDirectiveTemplate** - Template-based directive creation
+- **createEventDirective** - Event-based directive template
+- **createStyleDirective** - Style-based directive template
+
+#### Practical Scenario Examples
+
+10+ real-world examples demonstrating directive combinations.
+
+- **Form Validation** - v-debounce, v-mask, v-trim, v-focus
+- **Permission Management** - v-permission, v-click-outside
+- **Image Gallery** - v-lazy, v-image-preview, v-swipe
+- **Infinite Scroll List** - v-infinite-scroll, v-virtual-list, v-loading
+- **Rich Text Editor** - v-sanitize, v-highlight, v-emoji
+- **Gesture Interaction** - v-touch, v-swipe, v-pan, v-pinch
+- **Data Visualization** - v-progress, v-counter, v-countdown
+- **Drag Sort** - v-draggable, v-intersect
+- **Print Export** - v-print, v-export
+- **Fullscreen Media** - v-fullscreen, v-lottie
+
+### Changed
+
+- Enhanced type exports from `@directix/i18n`
+- Updated Vite configuration for i18n package
+- Updated TypeScript configuration with i18n path alias
+
 ## [1.8.0] - 2026-04-22
 
 ### Added

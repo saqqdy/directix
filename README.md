@@ -21,6 +21,74 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
 - 🎨 **Composables** - Every directive has a corresponding composable for Composition API
 - 🔧 **Utility Exports** - Export `configurePermission`, `getPermissionConfig` and other utilities for advanced usage
+- 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
+- 🔌 **Plugin System** - Extensible plugin architecture for community contributions
+
+## What's New in v1.9.0
+
+### Internationalization (i18n)
+
+Full i18n support for directive messages and documentation.
+
+```typescript
+import { createI18n, setLocale } from 'directix'
+
+// Initialize with locale
+createI18n({
+  locale: 'en-US',
+  fallbackLocale: 'en-US',
+  messages: { 'en-US': enUS, 'zh-CN': zhCN, 'ja-JP': jaJP }
+})
+
+// Switch locale at runtime
+setLocale('zh-CN')
+```
+
+### Unified Warning System
+
+Improved developer experience with structured error messages.
+
+```typescript
+import { warn, directiveWarn, assertType } from 'directix'
+
+// Directive-specific warnings
+directiveWarn('debounce', 'errors.invalid_wait', { wait: 'abc' })
+
+// Type assertions
+assertType<number>(value, 'number', 'debounce', 'wait')
+```
+
+### Plugin System
+
+Extensible plugin architecture for community contributions.
+
+```typescript
+import { definePlugin, getPluginManager } from 'directix'
+
+const myPlugin = definePlugin({
+  meta: { name: 'my-plugin', version: '1.0.0' },
+  install(ctx) {
+    ctx.registerDirective('my-directive', vMyDirective)
+  }
+})
+
+getPluginManager().register(myPlugin)
+```
+
+### Scenario Examples
+
+10+ real-world examples demonstrating directive combinations:
+
+- **Form Validation** - v-debounce, v-mask, v-trim, v-focus
+- **Permission Management** - v-permission, v-click-outside
+- **Image Gallery** - v-lazy, v-image-preview, v-swipe
+- **Infinite Scroll** - v-infinite-scroll, v-virtual-list, v-loading
+- **Rich Text Editor** - v-sanitize, v-highlight, v-emoji
+- **Gesture Interaction** - v-touch, v-swipe, v-pan, v-pinch
+- **Data Visualization** - v-progress, v-counter, v-countdown
+- **Drag & Sort** - v-draggable, v-intersect
+- **Print & Export** - v-print, v-export
+- **Fullscreen Media** - v-fullscreen, v-lottie
 
 ## Online Demo
 
