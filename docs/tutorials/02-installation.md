@@ -234,7 +234,7 @@ app.directive('copy', vCopy)
 
 ## 配套代码
 
-本视频示例代码：[examples/vue3](../../examples/vue3/)
+本视频示例代码：[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
 
 ## 练习题
 

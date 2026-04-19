@@ -363,4 +363,4 @@ watch(debouncedValue, () => {
 
 ## 完整代码
 
-[examples/vue3](../../examples/vue3/)
+[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
