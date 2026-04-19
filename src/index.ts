@@ -128,8 +128,15 @@ export {
 	vWatermark,
 } from './directives'
 
+// Export plugin system
+export * from './plugin'
+
 // Export core utilities
 export * from '@directix/core'
+
+// Export i18n
+export * from '@directix/i18n'
+
 // Export shared utilities (excluding tools with the same name as directives)
 export {
 	deepClone,

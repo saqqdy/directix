@@ -24,3 +24,25 @@ export {
 
 // Types
 export * from './types'
+
+// Warning system
+export {
+	assert,
+	assertPositive,
+	assertRange,
+	assertType,
+	debug,
+	directiveError,
+	directiveWarn,
+	error,
+	info,
+	setWarningDevMode,
+	setWarningI18n,
+	setWarningLevel,
+	warn,
+	warnDeprecated,
+	warnInvalidParam,
+	warnMissingParam,
+	warnNotSupported,
+	warnSSRNotSupported,
+} from './warning'
