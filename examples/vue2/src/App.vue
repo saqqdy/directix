@@ -21,6 +21,23 @@ interface Category extends CategoryDefinition {
 // Category definitions (expanded will be set based on current route)
 const categoryDefinitions: CategoryDefinition[] = [
 	{
+		name: 'Scenarios',
+		icon: '🎯',
+		demos: [
+			{ path: '/scenarios', name: 'Overview', desc: 'All scenario examples', version: '1.9.0' },
+			{ path: '/scenarios/form-validation', name: 'Form Validation', desc: 'v-debounce, v-mask, v-trim, v-focus', version: '1.9.0' },
+			{ path: '/scenarios/permission-management', name: 'Permission', desc: 'v-permission, v-click-outside', version: '1.9.0' },
+			{ path: '/scenarios/image-gallery', name: 'Image Gallery', desc: 'v-lazy, v-image-preview, v-swipe', version: '1.9.0' },
+			{ path: '/scenarios/infinite-scroll-list', name: 'Infinite Scroll', desc: 'v-infinite-scroll, v-virtual-list', version: '1.9.0' },
+			{ path: '/scenarios/rich-text-editor', name: 'Rich Text', desc: 'v-sanitize, v-highlight, v-emoji', version: '1.9.0' },
+			{ path: '/scenarios/gesture-interaction', name: 'Gestures', desc: 'v-touch, v-swipe, v-pan, v-pinch', version: '1.9.0' },
+			{ path: '/scenarios/data-visualization', name: 'Data Viz', desc: 'v-progress, v-counter, v-countdown', version: '1.9.0' },
+			{ path: '/scenarios/drag-sort', name: 'Drag & Sort', desc: 'v-draggable, v-intersect', version: '1.9.0' },
+			{ path: '/scenarios/print-export', name: 'Print/Export', desc: 'v-print, v-export', version: '1.9.0' },
+			{ path: '/scenarios/fullscreen-media', name: 'Fullscreen', desc: 'v-fullscreen, v-lottie', version: '1.9.0' },
+		],
+	},
+	{
 		name: 'Event',
 		icon: '⚡',
 		demos: [
@@ -432,6 +449,11 @@ body {
 .nav-version.v1-5-0 {
 	background: #f3e8ff;
 	color: #7c3aed;
+}
+
+.nav-version.v1-9-0 {
+	background: #fef3c7;
+	color: #d97706;
 }
 
 .nav-desc {

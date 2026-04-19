@@ -302,6 +302,62 @@ const routes: RouteConfig[] = [
 		name: 'Typewriter',
 		component: () => import('@/demos/typewriter.vue'),
 	},
+	// v1.9.0 Scenario Examples
+	{
+		path: '/scenarios',
+		name: 'Scenarios',
+		component: () => import('@/scenarios/index.vue'),
+	},
+	{
+		path: '/scenarios/form-validation',
+		name: 'FormValidation',
+		component: () => import('@/scenarios/FormValidation.vue'),
+	},
+	{
+		path: '/scenarios/permission-management',
+		name: 'PermissionManagement',
+		component: () => import('@/scenarios/PermissionManagement.vue'),
+	},
+	{
+		path: '/scenarios/image-gallery',
+		name: 'ImageGallery',
+		component: () => import('@/scenarios/ImageGallery.vue'),
+	},
+	{
+		path: '/scenarios/infinite-scroll-list',
+		name: 'InfiniteScrollList',
+		component: () => import('@/scenarios/InfiniteScrollList.vue'),
+	},
+	{
+		path: '/scenarios/rich-text-editor',
+		name: 'RichTextEditor',
+		component: () => import('@/scenarios/RichTextEditor.vue'),
+	},
+	{
+		path: '/scenarios/gesture-interaction',
+		name: 'GestureInteraction',
+		component: () => import('@/scenarios/GestureInteraction.vue'),
+	},
+	{
+		path: '/scenarios/data-visualization',
+		name: 'DataVisualization',
+		component: () => import('@/scenarios/DataVisualization.vue'),
+	},
+	{
+		path: '/scenarios/drag-sort',
+		name: 'DragSort',
+		component: () => import('@/scenarios/DragSort.vue'),
+	},
+	{
+		path: '/scenarios/print-export',
+		name: 'PrintExport',
+		component: () => import('@/scenarios/PrintExport.vue'),
+	},
+	{
+		path: '/scenarios/fullscreen-media',
+		name: 'FullscreenMedia',
+		component: () => import('@/scenarios/FullscreenMedia.vue'),
+	},
 ]
 
 export default routes
