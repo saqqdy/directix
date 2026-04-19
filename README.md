@@ -75,6 +75,71 @@ const myPlugin = definePlugin({
 getPluginManager().register(myPlugin)
 ```
 
+### Community Plugin Registry
+
+Discover and install community plugins programmatically.
+
+```typescript
+import { getPluginRegistry } from 'directix'
+
+const registry = getPluginRegistry()
+
+// Search plugins
+const results = await registry.search('animation')
+
+// Get all plugins
+const plugins = await registry.getAll()
+
+// Install a plugin
+await registry.install('directix-animate', manager)
+```
+
+### Timezone & Locale Utilities
+
+Region-specific formatting for dates, numbers, and currencies.
+
+```typescript
+import { getTimezoneInfo, formatDateLocale, formatCurrencyLocale } from 'directix'
+
+// Get timezone info
+const tz = getTimezoneInfo() // { id: 'Asia/Shanghai', offset: 8, ... }
+
+// Format date by locale
+formatDateLocale(new Date()) // Auto-detects user locale
+
+// Format currency
+formatCurrencyLocale(99.99) // '$99.99' (US) or '99,99€' (DE)
+```
+
+### Vue DevTools Integration
+
+Debug directives directly in Vue DevTools.
+
+```typescript
+import { enableDevtools, trackDirective } from 'directix'
+
+// Enable DevTools integration
+enableDevtools()
+
+// Track directive usage
+trackDirective('debounce', { element: 'input' })
+```
+
+### Performance Monitoring
+
+Measure directive performance with detailed metrics.
+
+```typescript
+import { enablePerformance, getPerformanceReport } from 'directix'
+
+// Enable monitoring
+enablePerformance()
+
+// Get performance report
+const report = getPerformanceReport()
+// [{ name: 'debounce', mount: { p50: 0.5ms, p95: 1.2ms }, ... }]
+```
+
 ### Scenario Examples
 
 10+ real-world examples demonstrating directive combinations:

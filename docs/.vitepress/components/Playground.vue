@@ -137,10 +137,10 @@ function formatOptions(options: Record<string, any>): string {
 	return Object.entries(options)
 		.filter(([, v]) => v !== undefined && v !== '')
 		.map(([k, v]) => {
-			if (typeof v === 'string') return `${k}: '${v}'`
-			if (Array.isArray(v)) return `${k}: ${JSON.stringify(v)}`
-			if (typeof v === 'object') return `${k}: ${JSON.stringify(v)}`
-			return `${k}: ${v}`
+			if (typeof v === 'string') return k + ': ' + "'" + v + "'"
+			if (Array.isArray(v)) return k + ': ' + JSON.stringify(v)
+			if (typeof v === 'object') return k + ': ' + JSON.stringify(v)
+			return k + ': ' + String(v)
 		})
 		.join(',\n    ')
 }
@@ -149,56 +149,79 @@ function generateTemplateCode(name: string, version: 'vue2' | 'vue3', options: R
 	const directiveName = name
 	const optionsStr = formatOptions(options)
 	const hasOptions = Object.keys(options).length > 0
+	const description = currentDirective.value?.description || name
+
+	const scriptOpen = '<' + 'script' + (version === 'vue3' ? ' setup lang="ts"' : '') + '>'
+	const scriptClose = '<' + '/' + 'script>'
 
 	if (version === 'vue3') {
-		return `<template>
-  <div v-${directiveName}${hasOptions ? `="{\n    ${optionsStr}\n  }"` : ''}>
-    <!-- ${currentDirective.value?.description || name} -->
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-
-${hasOptions ? `// Directive options
-const options = {
-  ${optionsStr}
-}` : '// No configuration needed'}
-</script>`
+		let code = '<template>\n'
+		code += '  <div v-' + directiveName
+		if (hasOptions) {
+			code += '="{\n    ' + optionsStr + '\n  }"'
+		}
+		code += '>\n'
+		code += '    <!-- ' + description + ' -->\n'
+		code += '  </div>\n'
+		code += '</template>\n\n'
+		code += scriptOpen + '\n'
+		code += "import { ref } from 'vue'\n\n"
+		if (hasOptions) {
+			code += '// Directive options\n'
+			code += 'const options = {\n'
+			code += '  ' + optionsStr + '\n'
+			code += '}\n'
+		} else {
+			code += '// No configuration needed\n'
+		}
+		code += scriptClose
+		return code
 	}
 
-	return `<template>
-  <div v-${directiveName}${hasOptions ? `="options"` : ''}>
-    <!-- ${currentDirective.value?.description || name} -->
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      ${hasOptions ? `options: {
-        ${optionsStr}
-      }` : '// No configuration needed'}
-    }
-  }
-}
-</script>`
+	let code = '<template>\n'
+	code += '  <div v-' + directiveName
+	if (hasOptions) {
+		code += '="options"'
+	}
+	code += '>\n'
+	code += '    <!-- ' + description + ' -->\n'
+	code += '  </div>\n'
+	code += '</template>\n\n'
+	code += scriptOpen + '\n'
+	code += 'export default {\n'
+	code += '  data() {\n'
+	code += '    return {\n'
+	if (hasOptions) {
+		code += '      options: {\n'
+		code += '        ' + optionsStr + '\n'
+		code += '      }\n'
+	} else {
+		code += '      // No configuration needed\n'
+	}
+	code += '    }\n'
+	code += '  }\n'
+	code += '}\n'
+	code += scriptClose
+	return code
 }
 
 function generateComposableCode(name: string, options: Record<string, any>): string {
-	const composableName = `use${name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')}`
+	const parts = name.split('-')
+	const composableName = 'use' + parts.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')
 	const optionsStr = formatOptions(options)
 
-	return `import { ${composableName} } from 'directix'
-
-${Object.keys(options).length > 0 ? `const result = ${composableName}({
-  ${optionsStr}
-})` : `const result = ${composableName}()`}
-
-// Available properties depend on the directive
-// Common: enabled, disable, enable
-console.log(result)`
+	let code = "import { " + composableName + " } from 'directix'\n\n"
+	if (Object.keys(options).length > 0) {
+		code += 'const result = ' + composableName + '({\n'
+		code += '  ' + optionsStr + '\n'
+		code += '})\n'
+	} else {
+		code += 'const result = ' + composableName + '()\n'
+	}
+	code += '\n// Available properties depend on the directive\n'
+	code += '// Common: enabled, disable, enable\n'
+	code += 'console.log(result)\n'
+	return code
 }
 
 function copyCode() {
@@ -286,7 +309,7 @@ function copyCode() {
 			<span class="footer-hint">
 				{{ currentDirective?.category }} · {{ currentDirective?.name }}
 			</span>
-			<a :href="'/api/' + currentDirective?.name + '.html'" class="footer-link">
+			<a :href="`/api/${currentDirective?.name}.html`" class="footer-link">
 				View API Docs →
 			</a>
 		</div>

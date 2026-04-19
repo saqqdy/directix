@@ -1,0 +1,72 @@
+{
+	"version": 1,
+	"updated": "2026-04-19",
+	"plugins": [
+		{
+			"name": "directix-animate",
+			"version": "1.0.0",
+			"description": "Animation directives with keyframe support and transitions for Directix",
+			"package": "directix-animate",
+			"author": "community",
+			"keywords": ["animation", "transition", "keyframe", "motion"],
+			"category": "ui",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-animate"
+		},
+		{
+			"name": "directix-form-validators",
+			"version": "1.0.0",
+			"description": "Form validation directives with real-time validation feedback",
+			"package": "directix-form-validators",
+			"author": "community",
+			"keywords": ["form", "validation", "validator", "input"],
+			"category": "form",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-form-validators"
+		},
+		{
+			"name": "directix-scroll-effects",
+			"version": "1.0.0",
+			"description": "Scroll-triggered animation and reveal effects for Directix",
+			"package": "directix-scroll-effects",
+			"author": "community",
+			"keywords": ["scroll", "reveal", "effect", "animation"],
+			"category": "scroll",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-scroll-effects"
+		},
+		{
+			"name": "directix-media",
+			"version": "1.0.0",
+			"description": "Media handling directives for audio, video, and streaming content",
+			"package": "directix-media",
+			"author": "community",
+			"keywords": ["media", "audio", "video", "streaming", "player"],
+			"category": "ui",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-media"
+		},
+		{
+			"name": "directix-chart",
+			"version": "1.0.0",
+			"description": "Chart and data visualization directives for Directix",
+			"package": "directix-chart",
+			"author": "community",
+			"keywords": ["chart", "graph", "visualization", "data", "diagram"],
+			"category": "ui",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-chart"
+		},
+		{
+			"name": "directix-accessibility",
+			"version": "1.0.0",
+			"description": "Accessibility enhancement directives with ARIA support",
+			"package": "directix-accessibility",
+			"author": "community",
+			"keywords": ["a11y", "accessibility", "aria", "keyboard", "screen-reader"],
+			"category": "other",
+			"license": "MIT",
+			"repository": "https://github.com/example/directix-accessibility"
+		}
+	]
+}

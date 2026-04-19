@@ -40,6 +40,16 @@ Extensible plugin architecture for community contributions.
 - **Dependency Resolution** - Automatic dependency checking
 - **Hook System** - beforeInstall, afterInstall, beforeUninstall, afterUninstall hooks
 
+#### Community Plugin Registry
+
+Discover and install community plugins programmatically.
+
+- **PluginRegistry Class** - Browse, search, and install third-party plugins
+- **Plugin Categories** - Event, visibility, scroll, form, UI, security, observer, gesture
+- **Search API** - Search by name, keywords, description, author
+- **Installation Helper** - Programmatic plugin installation with dependency checking
+- **Custom Registry URL** - Support for private/enterprise plugin registries
+
 #### Directive Templates
 
 Simplified directive creation with templates.
@@ -47,6 +57,39 @@ Simplified directive creation with templates.
 - **createDirectiveTemplate** - Template-based directive creation
 - **createEventDirective** - Event-based directive template
 - **createStyleDirective** - Style-based directive template
+
+#### Timezone & Locale Utilities
+
+Region-specific formatting for dates, numbers, and currencies.
+
+- **Timezone Detection** - `getTimezoneInfo()` for user timezone detection
+- **Locale Detection** - `detectLocaleInfo()` for user locale detection
+- **Date Formatting** - `formatDateLocale()` with region-specific patterns
+- **Number Formatting** - `formatNumberLocale()` with proper separators
+- **Currency Formatting** - `formatCurrencyLocale()` with locale symbols
+- **Supported Regions** - CN, US, JP, DE, FR, GB, KR, IN with custom formats
+
+#### Vue DevTools Integration
+
+Debug directives directly in Vue DevTools.
+
+- **DevTools Module** - New `@directix/core/devtools` module
+- **Custom Inspector** - Dedicated Directix panel in DevTools
+- **Directive Tracking** - Track mounted directives and their bindings
+- **Plugin Tracking** - View registered plugins and their status
+- **Event Log** - Real-time directive lifecycle events
+- **Vue 2 & Vue 3** - Support for both Vue versions
+
+#### Performance Monitoring
+
+Measure directive performance with detailed metrics.
+
+- **Performance Module** - New `@directix/core/performance` module
+- **Lifecycle Metrics** - Measure mount, update, unmount phases
+- **Statistical Analysis** - P50, P95, P99 percentiles
+- **Warning Thresholds** - Configurable performance warnings
+- **Sampling Rate** - Control metric collection overhead
+- **Report Generation** - Export performance data for analysis
 
 #### Practical Scenario Examples
 
@@ -68,6 +111,10 @@ Simplified directive creation with templates.
 - Enhanced type exports from `@directix/i18n`
 - Updated Vite configuration for i18n package
 - Updated TypeScript configuration with i18n path alias
+- Extended `PluginRegistryEntry` with `category`, `repository`, `homepage`, `license` fields
+- Added `PluginCategory` and `PluginRegistryData` types
+- `PluginManager` now exposes `getRegistry()` for accessing the plugin registry
+- i18n documentation now includes timezone and locale utilities section
 
 ## [1.8.0] - 2026-04-22
 

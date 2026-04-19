@@ -75,6 +75,71 @@ const myPlugin = definePlugin({
 getPluginManager().register(myPlugin)
 ```
 
+### 社区插件仓库
+
+编程式发现和安装社区插件。
+
+```typescript
+import { getPluginRegistry } from 'directix'
+
+const registry = getPluginRegistry()
+
+// 搜索插件
+const results = await registry.search('动画')
+
+// 获取所有插件
+const plugins = await registry.getAll()
+
+// 安装插件
+await registry.install('directix-animate', manager)
+```
+
+### 时区与地区工具
+
+地区特定的日期、数字和货币格式化。
+
+```typescript
+import { getTimezoneInfo, formatDateLocale, formatCurrencyLocale } from 'directix'
+
+// 获取时区信息
+const tz = getTimezoneInfo() // { id: 'Asia/Shanghai', offset: 8, ... }
+
+// 按地区格式化日期
+formatDateLocale(new Date()) // 自动检测用户地区
+
+// 格式化货币
+formatCurrencyLocale(99.99) // '$99.99' (美国) 或 '99,99€' (德国)
+```
+
+### Vue DevTools 调试集成
+
+在 Vue DevTools 中直接调试指令。
+
+```typescript
+import { enableDevtools, trackDirective } from 'directix'
+
+// 启用 DevTools 集成
+enableDevtools()
+
+// 跟踪指令使用
+trackDirective('debounce', { element: 'input' })
+```
+
+### 性能监控
+
+测量指令性能，获取详细指标。
+
+```typescript
+import { enablePerformance, getPerformanceReport } from 'directix'
+
+// 启用监控
+enablePerformance()
+
+// 获取性能报告
+const report = getPerformanceReport()
+// [{ name: 'debounce', mount: { p50: 0.5ms, p95: 1.2ms }, ... }]
+```
+
 ### 场景示例
 
 10+ 个真实场景示例，展示指令组合使用：
