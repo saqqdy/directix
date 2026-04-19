@@ -99,6 +99,11 @@ export interface PluginConfig {
 }
 
 /**
+ * Plugin category
+ */
+export type PluginCategory = 'event' | 'visibility' | 'scroll' | 'form' | 'ui' | 'security' | 'observer' | 'gesture' | 'other'
+
+/**
  * Plugin registry entry
  */
 export interface PluginRegistryEntry {
@@ -114,8 +119,28 @@ export interface PluginRegistryEntry {
 	author: string
 	/** Keywords */
 	keywords: string[]
+	/** Category */
+	category?: PluginCategory
 	/** Download count */
 	downloads?: number
 	/** GitHub stars */
 	stars?: number
+	/** Repository URL */
+	repository?: string
+	/** Homepage URL */
+	homepage?: string
+	/** License */
+	license?: string
+}
+
+/**
+ * Plugin registry data structure
+ */
+export interface PluginRegistryData {
+	/** Registry version */
+	version: number
+	/** Last updated date */
+	updated: string
+	/** Plugin list */
+	plugins: PluginRegistryEntry[]
 }

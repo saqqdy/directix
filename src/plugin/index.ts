@@ -11,6 +11,9 @@ import { defineDirective } from '@directix/core'
 
 export * from './manager'
 
+// Export plugin registry
+export * from './registry'
+
 // Export plugin types
 export * from './types'
 

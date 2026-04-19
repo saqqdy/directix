@@ -5,7 +5,9 @@
  */
 
 import type { App, Directive } from 'vue'
+import type { PluginRegistry } from './registry'
 import type { DirectiveExtension, DirectixPlugin, PluginConfig, PluginContext, PluginHook, PluginHookCallback } from './types'
+import { getPluginRegistry } from './registry'
 
 /**
  * Plugin manager class
@@ -25,6 +27,13 @@ export class PluginManager {
 			autoLoadOfficial: false,
 			...config,
 		}
+	}
+
+	/**
+	 * Get the plugin registry instance
+	 */
+	getRegistry(): PluginRegistry {
+		return getPluginRegistry(this.config.registryUrl)
 	}
 
 	/**
