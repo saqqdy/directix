@@ -398,7 +398,7 @@ const hotkeys = {
 
 ## 配套代码
 
-本视频示例代码：[examples/event-directives](../../examples/vue3/src/demos/)
+本视频示例代码：[examples/vue3](../../examples/vue3/)
 
 ## 练习题
 

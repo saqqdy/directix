@@ -170,7 +170,7 @@ Directix 官方文档非常完善，有中英日三语支持。每个指令都�
 
 ## 配套代码
 
-本视频示例代码：[examples/quick-start](../../examples/vue3/src/demos/)
+本视频示例代码：[examples/vue3](../../examples/vue3/)
 
 ## 练习题
 

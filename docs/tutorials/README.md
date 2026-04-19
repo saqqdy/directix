@@ -19,27 +19,25 @@
 | 编号 | 标题 | 时长 | 文件 |
 |------|------|------|------|
 | 06 | 自定义指令与 Composables | 12分钟 | [06-composables.md](./06-composables.md) |
-| 07 | 权限管理与安全指令 | 10分钟 | [07-security-directives.md](./07-security-directives.md) |
-| 08 | 性能优化最佳实践 | 15分钟 | [08-performance.md](./08-performance.md) |
 | 09 | Vue DevTools 调试技巧 | 8分钟 | [09-devtools.md](./09-devtools.md) |
-| 10 | 插件系统与社区扩展 | 12分钟 | [10-plugin-system.md](./10-plugin-system.md) |
+
+> 注：07-08、10 教程脚本待补充
 
 ### 实战系列 (Practical)
 
 | 编号 | 标题 | 时长 | 文件 |
 |------|------|------|------|
 | 11 | 构建表单验证系统 | 15分钟 | [11-form-validation.md](./11-form-validation.md) |
-| 12 | 实现无限滚动列表 | 12分钟 | [12-infinite-scroll.md](./12-infinite-scroll.md) |
-| 13 | 打造图片画廊组件 | 15分钟 | [13-image-gallery.md](./13-image-gallery.md) |
-| 14 | 手势交互实战 | 12分钟 | [14-gesture-interaction.md](./14-gesture-interaction.md) |
 | 15 | 国际化应用开发 | 10分钟 | [15-i18n.md](./15-i18n.md) |
+
+> 注：12-14 教程脚本待补充
 
 ## 总时长
 
 - 入门系列：46 分钟
-- 进阶系列：57 分钟
-- 实战系列：64 分钟
-- **总计：167 分钟（约 2.8 小时）**
+- 进阶系列：20 分钟
+- 实战系列：25 分钟
+- **总计：91 分钟（约 1.5 小时）**
 
 ## 目标受众
 

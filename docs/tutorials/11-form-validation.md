@@ -363,4 +363,4 @@ watch(debouncedValue, () => {
 
 ## 完整代码
 
-[examples/vue3/src/demos/form-validation.vue](../../examples/vue3/src/demos/form-validation.vue)
+[examples/vue3](../../examples/vue3/)
