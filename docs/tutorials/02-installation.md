@@ -1,69 +1,69 @@
-# 02 - 安装与配置
+# 02 - Installation & Configuration
 
-**时长：6 分钟**
+**Duration: 6 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：安装与配置
-- 系列：入门系列
-- 难度：初级
-- 前置知识：Vue 项目基础
+- Title: Installation & Configuration
+- Series: Getting Started
+- Level: Beginner
+- Prerequisites: Vue project basics
 
-## 章节目录
+## Chapters
 
-1. 包管理器安装（1.5 分钟）
-2. CDN 方式使用（1 分钟）
-3. Vue 2 与 Vue 3 配置（2 分钟）
-4. 按需引入与全量引入（1.5 分钟）
+1. Package Manager Installation (1.5 min)
+2. CDN Usage (1 min)
+3. Vue 2 vs Vue 3 Configuration (2 min)
+4. On-demand vs Full Import (1.5 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:10）
+### Opening (0:00-0:10)
 
-> **画面：开场动画 + 标题**
+> **Visual: Opening animation + title**
 
-今天我们来学习 Directix 的安装与配置。
+Today we learn how to install and configure Directix.
 
-### 第一章：包管理器安装（0:10-1:40）
+### Chapter 1: Package Manager (0:10-1:40)
 
-> **画面：终端演示**
+> **Visual: Terminal demo**
 
-首先，使用 npm 安装：
+First, install with npm:
 
 ```bash
 npm install directix
 ```
 
-或者使用 yarn：
+Or with yarn:
 
 ```bash
 yarn add directix
 ```
 
-或者使用 pnpm（推荐）：
+Or with pnpm (recommended):
 
 ```bash
 pnpm add directix
 ```
 
-> **画面：展示 package.json**
+> **Visual: package.json**
 
-安装完成后，package.json 会添加 directix 依赖。最新版本是 1.9.0。
+After installation, package.json adds directix dependency. Latest version is 1.9.0.
 
-### 第二章：CDN 方式使用（1:40-2:40）
+### Chapter 2: CDN Usage (1:40-2:40)
 
-> **画面：HTML 文件编辑器**
+> **Visual: HTML editor**
 
-如果你不想用构建工具，可以直接通过 CDN 使用。
+If you don't use build tools, use CDN directly.
 
-**Vue 3 CDN：**
+**Vue 3 CDN:**
 
 ```html
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
 
 <div id="app">
-  <button v-copy="text">复制</button>
+  <button v-copy="text">Copy</button>
 </div>
 
 <script>
@@ -80,14 +80,14 @@ pnpm add directix
 </script>
 ```
 
-**Vue 2 CDN：**
+**Vue 2 CDN:**
 
 ```html
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/directix/dist/index.iife.min.js"></script>
 
 <div id="app">
-  <button v-copy="text">复制</button>
+  <button v-copy="text">Copy</button>
 </div>
 
 <script>
@@ -99,11 +99,11 @@ pnpm add directix
 </script>
 ```
 
-### 第三章：Vue 2 与 Vue 3 配置（2:40-4:40）
+### Chapter 3: Vue 2 & Vue 3 Config (2:40-4:40)
 
-> **画面：VS Code 项目结构**
+> **Visual: VS Code project structure**
 
-**Vue 3 项目配置：**
+**Vue 3 Project:**
 
 ```typescript
 // main.ts
@@ -113,10 +113,10 @@ import Directix from 'directix'
 
 const app = createApp(App)
 
-// 全量注册
+// Full registration
 app.use(Directix)
 
-// 或按需注册
+// Or on-demand registration
 app.use(Directix, {
   directives: ['copy', 'debounce', 'click-outside']
 })
@@ -124,9 +124,9 @@ app.use(Directix, {
 app.mount('#app')
 ```
 
-> **画面：展示 Vue 2 配置**
+> **Visual: Vue 2 config**
 
-**Vue 2.7+ 项目配置：**
+**Vue 2.7+ Project:**
 
 ```typescript
 // main.ts
@@ -141,17 +141,17 @@ new Vue({
 }).$mount('#app')
 ```
 
-> **画面：展示 Vue 2.6 配置**
+> **Visual: Vue 2.6 config**
 
-**Vue 2.6 及以下版本：**
+**Vue 2.6 and below:**
 
-需要额外安装 Composition API：
+Need additional Composition API:
 
 ```bash
 npm install @vue/composition-api
 ```
 
-然后在 main.ts 中：
+Then in main.ts:
 
 ```typescript
 // main.ts
@@ -159,7 +159,7 @@ import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import Directix from 'directix'
 
-// 必须先注册 Composition API
+// Must register Composition API first
 Vue.use(VueCompositionAPI)
 Vue.use(Directix)
 
@@ -168,27 +168,27 @@ new Vue({
 }).$mount('#app')
 ```
 
-> **画面：强调顺序**
+> **Visual: Emphasize order**
 
-注意顺序很重要：先注册 Composition API，再注册 Directix。
+Order matters: register Composition API first, then Directix.
 
-### 第四章：按需引入与全量引入（4:40-6:00）
+### Chapter 4: On-demand vs Full Import (4:40-6:00)
 
-> **画面：展示全量引入**
+> **Visual: Full import**
 
-**全量引入：**
+**Full Import:**
 
 ```typescript
 app.use(Directix)
-// 或
+// or
 app.use(Directix, { all: true })
 ```
 
-这会注册所有 57 个指令，适合开发环境或需要大量指令的项目。
+Registers all 57 directives. Good for development or projects needing many directives.
 
-> **画面：展示按需引入**
+> **Visual: On-demand import**
 
-**按需引入（推荐）：**
+**On-demand Import (Recommended):**
 
 ```typescript
 app.use(Directix, {
@@ -196,53 +196,53 @@ app.use(Directix, {
 })
 ```
 
-只注册需要的指令，打包体积更小。
+Only registers needed directives, smaller bundle.
 
-> **画面：展示单指令引入**
+> **Visual: Single directive import**
 
-**单指令引入：**
+**Single Directive Import:**
 
 ```typescript
-// 只引入单个指令
+// Import just one directive
 import { vCopy } from 'directix'
 
 app.directive('copy', vCopy)
 ```
 
-这种方式最灵活，打包体积最小。
+Most flexible, smallest bundle.
 
-> **画面：展示体积对比**
+> **Visual: Size comparison**
 
-体积对比：
-- 全量引入：约 30KB (gzip)
-- 按需引入：按使用的指令数量
-- 单指令：平均 1-2KB (gzip)
+Size comparison:
+- Full import: ~30KB (gzip)
+- On-demand: depends on directives used
+- Single directive: ~1-2KB (gzip) average
 
-### 总结（5:50-6:00）
+### Summary (5:50-6:00)
 
-> **画面：总结要点**
+> **Visual: Summary points**
 
-今天我们学习了：
-- npm/yarn/pnpm 安装方式
-- CDN 使用方式
-- Vue 2 和 Vue 3 的配置差异
-- 按需引入 vs 全量引入
+Today we learned:
+- npm/yarn/pnpm installation
+- CDN usage
+- Vue 2 and Vue 3 config differences
+- On-demand vs full import
 
-下集我们将学习常用的事件指令。再见！
+Next video covers common event directives. Bye!
 
-> **画面：片尾动画 + 下集预告**
+> **Visual: Closing animation + preview**
 
-## 配套代码
+## Code Examples
 
-本视频示例代码：[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
+[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
 
-## 练习题
+## Exercises
 
-1. 在 Vue 3 项目中安装 Directix，只注册 `v-copy` 和 `v-debounce`
-2. 使用 CDN 方式创建一个简单的 Vue 3 页面，使用 `v-focus` 指令
-3. 在 Vue 2.6 项目中正确配置 Directix（注意 Composition API）
+1. Install Directix in a Vue 3 project, only register `v-copy` and `v-debounce`
+2. Use CDN to create a simple Vue 3 page with `v-focus` directive
+3. Properly configure Directix in a Vue 2.6 project (note Composition API)
 
-## 相关资源
+## Resources
 
-- [安装文档](https://saqqdy.github.io/directix/guide/installation)
-- [Vue 2 支持](https://saqqdy.github.io/directix/guide/installation#vue-2-support)
+- [Installation Docs](https://saqqdy.github.io/directix/guide/installation)
+- [Vue 2 Support](https://saqqdy.github.io/directix/guide/installation#vue-2-support)

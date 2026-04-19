@@ -1,36 +1,36 @@
-# 05 - 可见性与懒加载指令
+# 05 - Visibility & Lazy Loading Directives
 
-**时长：10 分钟**
+**Duration: 10 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：可见性与懒加载指令
-- 系列：入门系列
-- 难度：初级
-- 前置知识：Vue 基础
+- Title: Visibility & Lazy Loading Directives
+- Series: Getting Started
+- Level: Beginner
+- Prerequisites: Vue basics
 
-## 章节目录
+## Chapters
 
-1. v-lazy 图片懒加载（3 分钟）
-2. v-intersect 交叉观察（2.5 分钟）
-3. v-visible 可见性控制（2 分钟）
-4. v-loading 加载状态（2.5 分钟）
+1. v-lazy Image Lazy Loading (3 min)
+2. v-intersect Intersection Observer (2.5 min)
+3. v-visible Visibility Control (2 min)
+4. v-loading Loading State (2.5 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:10）
+### Opening (0:00-0:10)
 
-今天学习 Directix 的可见性相关指令，这些指令基于 IntersectionObserver，能帮你优化页面性能。
+Today we learn Directix's visibility-related directives. Based on IntersectionObserver, they help optimize page performance.
 
-### 第一章：v-lazy 图片懒加载（0:10-3:10）
+### Chapter 1: v-lazy (0:10-3:10)
 
-> **画面：展示图片懒加载效果**
+> **Visual: Image lazy loading effect**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
-  <img v-lazy="imageUrl" alt="图片" />
+  <img v-lazy="imageUrl" alt="Image" />
 </template>
 
 <script setup>
@@ -38,7 +38,7 @@ const imageUrl = 'https://example.com/photo.jpg'
 </script>
 ```
 
-**配置对象：**
+**Configuration Object:**
 
 ```vue
 <template>
@@ -51,7 +51,7 @@ const imageUrl = 'https://example.com/photo.jpg'
 </template>
 ```
 
-**背景图懒加载：**
+**Background Image Lazy Loading:**
 
 ```vue
 <template>
@@ -59,56 +59,56 @@ const imageUrl = 'https://example.com/photo.jpg'
 </template>
 ```
 
-**列表中的懒加载：**
+**Lazy Loading in Lists:**
 
 ```vue
 <template>
   <div class="image-list">
-    <img 
-      v-for="img in images" 
-      :key="img.id" 
-      v-lazy="img.url" 
-      :alt="img.title" 
+    <img
+      v-for="img in images"
+      :key="img.id"
+      v-lazy="img.url"
+      :alt="img.title"
     />
   </div>
 </template>
 
 <script setup>
 const images = ref([
-  { id: 1, url: '/img1.jpg', title: '图片1' },
-  { id: 2, url: '/img2.jpg', title: '图片2' },
-  // ...更多图片
+  { id: 1, url: '/img1.jpg', title: 'Image 1' },
+  { id: 2, url: '/img2.jpg', title: 'Image 2' },
+  // ... more images
 ])
 </script>
 ```
 
-### 第二章：v-intersect 交叉观察（3:10-5:40）
+### Chapter 2: v-intersect (3:10-5:40)
 
-> **画面：展示滚动动画效果**
+> **Visual: Scroll animation effect**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <div v-intersect="onIntersect">
-    滚动到这里会触发
+    Scrolling here triggers
   </div>
 </template>
 
 <script setup>
 const onIntersect = (entry) => {
   if (entry.isIntersecting) {
-    console.log('元素进入视口')
+    console.log('Element entered viewport')
   }
 }
 </script>
 ```
 
-**滚动显示动画：**
+**Scroll Reveal Animation:**
 
 ```vue
 <template>
-  <div 
+  <div
     v-intersect="{
       handler: onVisible,
       threshold: 0.5,
@@ -116,7 +116,7 @@ const onIntersect = (entry) => {
     }"
     :class="{ 'animate-in': isVisible }"
   >
-    渐入动画内容
+    Fade-in animation content
   </div>
 </template>
 
@@ -144,46 +144,46 @@ const onVisible = (entry) => {
 </style>
 ```
 
-### 第三章：v-visible 可见性控制（5:40-7:40）
+### Chapter 3: v-visible (5:40-7:40)
 
-> **画面：展示条件显示效果**
+> **Visual: Conditional display effect**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <div v-visible="shouldShow">
-    根据条件显示/隐藏（保留DOM）
+    Show/hide based on condition (keeps DOM)
   </div>
 </template>
 ```
 
-与 v-show 的区别：v-visible 使用 visibility 属性，元素不可见时仍占空间。
+Difference from v-show: v-visible uses visibility property, element still takes space when hidden.
 
-**结合 IntersectionObserver：**
+**With IntersectionObserver:**
 
 ```vue
 <template>
   <div v-visible:observer="{
     threshold: 0.2,
-    onVisible: () => console.log('可见'),
-    onHidden: () => console.log('不可见')
+    onVisible: () => console.log('Visible'),
+    onHidden: () => console.log('Hidden')
   }">
-    观察可见性
+    Observe visibility
   </div>
 </template>
 ```
 
-### 第四章：v-loading 加载状态（7:40-10:00）
+### Chapter 4: v-loading (7:40-10:00)
 
-> **画面：展示加载动画效果**
+> **Visual: Loading animation effect**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <div v-loading="isLoading">
-    内容区域
+    Content area
   </div>
 </template>
 
@@ -192,40 +192,40 @@ import { ref } from 'vue'
 
 const isLoading = ref(true)
 
-// 模拟加载
+// Simulate loading
 setTimeout(() => {
   isLoading.value = false
 }, 2000)
 </script>
 ```
 
-**自定义加载文本：**
+**Custom Loading Text:**
 
 ```vue
 <template>
   <div v-loading="{
     active: isLoading,
-    text: '加载中，请稍候...',
+    text: 'Loading, please wait...',
     background: 'rgba(255, 255, 255, 0.8)',
     spinner: true
   }">
-    数据内容
+    Data content
   </div>
 </template>
 ```
 
-**全屏加载：**
+**Fullscreen Loading:**
 
 ```vue
 <template>
   <div v-loading:fullscreen="pageLoading">
-    <header>导航</header>
-    <main>内容</main>
+    <header>Navigation</header>
+    <main>Content</main>
   </div>
 </template>
 ```
 
-**结合异步数据：**
+**With Async Data:**
 
 ```vue
 <template>
@@ -252,24 +252,24 @@ onMounted(async () => {
 </script>
 ```
 
-### 总结
+### Summary
 
-今天学习了四个可见性指令：
-- v-lazy - 图片懒加载
-- v-intersect - 交叉观察，滚动动画
-- v-visible - 可见性控制
-- v-loading - 加载状态
+Today we learned four visibility directives:
+- v-lazy - Image lazy loading
+- v-intersect - Intersection observer, scroll animations
+- v-visible - Visibility control
+- v-loading - Loading state
 
-下集开始进阶系列，学习 Composables。
+Next starts the Advanced series, learning Composables.
 
-## 练习题
+## Exercises
 
-1. 创建一个图片画廊，使用 v-lazy 实现图片懒加载
-2. 使用 v-intersect 实现滚动到元素时触发动画
-3. 实现一个数据面板，使用 v-loading 在数据加载时显示加载状态
+1. Create an image gallery with v-lazy for lazy loading
+2. Use v-intersect to trigger animation when scrolling to element
+3. Implement a data panel showing loading state during data fetch
 
-## 相关资源
+## Resources
 
-- [可见性指令文档](https://saqqdy.github.io/directix/guide/visibility)
+- [Visibility Directives Docs](https://saqqdy.github.io/directix/guide/visibility)
 - [v-lazy API](https://saqqdy.github.io/directix/api/directives/lazy)
 - [v-intersect API](https://saqqdy.github.io/directix/api/directives/intersect)

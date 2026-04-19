@@ -1,36 +1,36 @@
-# 09 - Vue DevTools 调试技巧
+# 09 - Vue DevTools Debugging Tips
 
-**时长：8 分钟**
+**Duration: 8 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：Vue DevTools 调试技巧
-- 系列：进阶系列
-- 难度：中级
-- 前置知识：Vue DevTools 基础
+- Title: Vue DevTools Debugging Tips
+- Series: Advanced
+- Level: Intermediate
+- Prerequisites: Vue DevTools basics
 
-## 章节目录
+## Chapters
 
-1. 启用 DevTools 集成（1.5 分钟）
-2. Directix Inspector 面板（2.5 分钟）
-3. 指令生命周期追踪（2 分钟）
-4. 性能问题调试（2 分钟）
+1. Enable DevTools Integration (1.5 min)
+2. Directix Inspector Panel (2.5 min)
+3. Directive Lifecycle Tracking (2 min)
+4. Performance Debugging (2 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:10）
+### Opening (0:00-0:10)
 
-今天学习如何使用 Vue DevTools 调试 Directix 指令。
+Today we learn how to use Vue DevTools to debug Directix directives.
 
-### 第一章：启用 DevTools 集成（0:10-1:40）
+### Chapter 1: Enable DevTools (0:10-1:40)
 
-> **画面：展示 Vue DevTools**
+> **Visual: Vue DevTools**
 
-首先确保已安装 Vue DevTools 浏览器扩展。
+First ensure Vue DevTools browser extension is installed.
 
-> **画面：VS Code 演示**
+> **Visual: VS Code demo**
 
-在应用入口启用集成：
+Enable integration in app entry:
 
 ```typescript
 // main.ts
@@ -41,7 +41,7 @@ import Directix, { enableDevtools } from 'directix'
 const app = createApp(App)
 app.use(Directix)
 
-// 开发环境启用 DevTools 集成
+// Enable DevTools in development
 if (import.meta.env.DEV) {
   enableDevtools()
 }
@@ -49,51 +49,51 @@ if (import.meta.env.DEV) {
 app.mount('#app')
 ```
 
-### 第二章：Directix Inspector 面板（1:40-4:10）
+### Chapter 2: Directix Inspector Panel (1:40-4:10)
 
-> **画面：展示 DevTools Directix 面板**
+> **Visual: DevTools Directix panel**
 
-打开 DevTools，切换到 "Directix" 标签页。你会看到三个部分：
+Open DevTools, switch to "Directix" tab. You'll see three sections:
 
-**1. Directives 视图**
+**1. Directives View**
 
-列出所有当前激活的指令：
+Lists all currently active directives:
 
-- 指令名称
-- 绑定数量
-- 最后更新时间
+- Directive name
+- Binding count
+- Last updated time
 
-点击指令查看详情：
-- 绑定的元素信息
-- 指令参数和修饰符
-- 绑定值
+Click directive for details:
+- Bound element info
+- Directive arguments and modifiers
+- Binding value
 
-**2. Plugins 视图**
+**2. Plugins View**
 
-显示已注册的插件：
+Shows registered plugins:
 
-- 插件名称和版本
-- 注册时间
-- 启用状态
+- Plugin name and version
+- Registration time
+- Enabled status
 
-**3. Events 视图**
+**3. Events View**
 
-实时事件日志：
+Real-time event log:
 
-- 指令挂载/卸载
-- 插件安装/卸载
-- 时间戳
+- Directive mount/unmount
+- Plugin install/uninstall
+- Timestamps
 
-### 第三章：指令生命周期追踪（4:10-6:10）
+### Chapter 3: Lifecycle Tracking (4:10-6:10)
 
-> **画面：展示追踪功能**
+> **Visual: Tracking feature**
 
-在代码中追踪指令：
+Track directives in code:
 
 ```typescript
 import { trackDirective, untrackDirective } from 'directix'
 
-// 自定义指令中集成追踪
+// Integrate tracking in custom directive
 const vMyDirective = {
   mounted(el, binding) {
     trackDirective('my-directive', {
@@ -101,71 +101,71 @@ const vMyDirective = {
       bindings: 1,
       options: binding.value
     })
-    // ... 指令逻辑
+    // ... directive logic
   },
-  
+
   unmounted(el) {
     untrackDirective('my-directive')
   }
 }
 ```
 
-> **画面：展示 Events 面板**
+> **Visual: Events panel**
 
-Events 面板会显示：
+Events panel shows:
 - `directive:mounted:my-directive`
 - `directive:updated:my-directive`
 - `directive:unmounted:my-directive`
 
-### 第四章：性能问题调试（6:10-8:00）
+### Chapter 4: Performance Debugging (6:10-8:00)
 
-> **画面：展示性能监控**
+> **Visual: Performance monitoring**
 
-启用性能监控：
+Enable performance monitoring:
 
 ```typescript
 import { enablePerformance, getSlowestDirectives } from 'directix'
 
-// 启用性能监控
+// Enable performance monitoring
 enablePerformance({
-  warnThreshold: 16, // 超过 16ms 警告
-  sampleRate: 1      // 100% 采样
+  warnThreshold: 16, // Warn over 16ms
+  sampleRate: 1      // 100% sampling
 })
 
-// 开发控制台查看慢指令
+// View slow directives in console
 console.table(getSlowestDirectives())
 ```
 
-> **画面：展示性能数据**
+> **Visual: Performance data**
 
-性能报告包含：
-- 每个指令的 mount/update/unmount 统计
-- P50/P95/P99 延迟
-- 总执行时间和调用次数
+Performance report includes:
+- Per-directive mount/update/unmount stats
+- P50/P95/P99 latency
+- Total execution time and call count
 
-**常见性能问题：**
+**Common Performance Issues:**
 
-1. 指令内部频繁 DOM 操作
-2. 缺少防抖/节流
-3. 重复初始化
+1. Frequent DOM operations in directive
+2. Missing debounce/throttle
+3. Repeated initialization
 
-### 总结
+### Summary
 
-今天学习了：
-- 启用 DevTools 集成
-- 使用 Directix Inspector 面板
-- 追踪指令生命周期
-- 性能问题调试
+Today we learned:
+- Enable DevTools integration
+- Use Directix Inspector panel
+- Track directive lifecycle
+- Debug performance issues
 
-下集学习插件系统与社区扩展。
+Next video covers plugin system and community extensions.
 
-## 练习题
+## Exercises
 
-1. 启用 DevTools 集成，查看当前页面激活的指令
-2. 使用 trackDirective 追踪自定义指令的生命周期
-3. 使用性能监控找出执行时间最长的指令
+1. Enable DevTools integration, view active directives on current page
+2. Use trackDirective to track custom directive lifecycle
+3. Use performance monitoring to find slowest executing directive
 
-## 相关资源
+## Resources
 
-- [DevTools 集成文档](https://saqqdy.github.io/directix/guide/devtools)
-- [性能监控 API](https://saqqdy.github.io/directix/api/performance)
+- [DevTools Integration Docs](https://saqqdy.github.io/directix/guide/devtools)
+- [Performance Monitoring API](https://saqqdy.github.io/directix/api/performance)

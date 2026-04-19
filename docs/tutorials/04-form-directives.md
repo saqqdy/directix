@@ -1,37 +1,37 @@
-# 04 - 表单指令详解
+# 04 - Form Directives Deep Dive
 
-**时长：10 分钟**
+**Duration: 10 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：表单指令详解
-- 系列：入门系列
-- 难度：初级
-- 前置知识：Vue 表单绑定
+- Title: Form Directives Deep Dive
+- Series: Getting Started
+- Level: Beginner
+- Prerequisites: Vue form binding
 
-## 章节目录
+## Chapters
 
-1. v-copy 复制（2 分钟）
-2. v-mask 输入掩码（2 分钟）
-3. v-focus 自动聚焦（1.5 分钟）
-4. v-trim / v-uppercase / v-lowercase（2 分钟）
-5. v-money / v-number 数字处理（2.5 分钟）
+1. v-copy Copy (2 min)
+2. v-mask Input Masking (2 min)
+3. v-focus Auto Focus (1.5 min)
+4. v-trim / v-uppercase / v-lowercase (2 min)
+5. v-money / v-number Number Handling (2.5 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:10）
+### Opening (0:00-0:10)
 
-今天我们来学习 Directix 的表单指令，它们能极大简化表单处理。
+Today we learn Directix's form directives that greatly simplify form handling.
 
-### 第一章：v-copy 复制（0:10-2:10）
+### Chapter 1: v-copy (0:10-2:10)
 
-> **画面：展示复制按钮效果**
+> **Visual: Copy button effect**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
-  <button v-copy="textToCopy">复制</button>
+  <button v-copy="textToCopy">Copy</button>
 </template>
 
 <script setup>
@@ -39,43 +39,43 @@ const textToCopy = ref('Hello Directix!')
 </script>
 ```
 
-**复制元素内容：**
+**Copy Element Content:**
 
 ```vue
 <template>
-  <!-- 复制输入框的值 -->
+  <!-- Copy input value -->
   <input v-model="inputVal" />
-  <button v-copy="inputVal">复制输入值</button>
+  <button v-copy="inputVal">Copy Input Value</button>
 </template>
 ```
 
-**复制成功回调：**
+**Copy Callbacks:**
 
 ```vue
 <template>
   <button v-copy="{
     value: apiKey,
-    onSuccess: () => showToast('已复制到剪贴板'),
-    onError: () => showToast('复制失败')
+    onSuccess: () => showToast('Copied to clipboard'),
+    onError: () => showToast('Copy failed')
   }">
-    复制 API Key
+    Copy API Key
   </button>
 </template>
 ```
 
-### 第二章：v-mask 输入掩码（2:10-4:10）
+### Chapter 2: v-mask (2:10-4:10)
 
-> **画面：展示各种格式化输入效果**
+> **Visual: Various formatted input effects**
 
-**手机号格式化：**
+**Phone Number Format:**
 
 ```vue
 <template>
-  <input v-mask="'### #### ####'" placeholder="手机号" />
+  <input v-mask="'### #### ####'" placeholder="Phone" />
 </template>
 ```
 
-**日期格式化：**
+**Date Format:**
 
 ```vue
 <template>
@@ -83,37 +83,37 @@ const textToCopy = ref('Hello Directix!')
 </template>
 ```
 
-**自定义掩码：**
+**Custom Masks:**
 
 ```vue
 <template>
-  <!-- # = 数字, A = 字母, * = 任意字符 -->
-  <input v-mask="'##-AA-****'" placeholder="自定义" />
-  
-  <!-- IP 地址 -->
-  <input v-mask="'###.###.###.###'" placeholder="IP 地址" />
-  
-  <!-- 信用卡号 -->
-  <input v-mask="'#### #### #### ####'" placeholder="卡号" />
+  <!-- # = digit, A = letter, * = any char -->
+  <input v-mask="'##-AA-****'" placeholder="Custom" />
+
+  <!-- IP Address -->
+  <input v-mask="'###.###.###.###'" placeholder="IP Address" />
+
+  <!-- Credit Card -->
+  <input v-mask="'#### #### #### ####'" placeholder="Card Number" />
 </template>
 ```
 
-### 第三章：v-focus 自动聚焦（4:10-5:40）
+### Chapter 3: v-focus (4:10-5:40)
 
-> **画面：展示搜索框自动聚焦效果**
+> **Visual: Search box auto-focus effect**
 
 ```vue
 <template>
-  <!-- 页面加载后自动聚焦 -->
-  <input v-focus placeholder="搜索..." />
+  <!-- Auto-focus after page load -->
+  <input v-focus placeholder="Search..." />
 </template>
 ```
 
-**条件聚焦：**
+**Conditional Focus:**
 
 ```vue
 <template>
-  <input v-focus="shouldFocus" placeholder="搜索..." />
+  <input v-focus="shouldFocus" placeholder="Search..." />
 </template>
 
 <script setup>
@@ -122,62 +122,62 @@ import { ref, onMounted } from 'vue'
 const shouldFocus = ref(false)
 
 onMounted(() => {
-  // 对话框打开后聚焦
+  // Focus after dialog opens
   shouldFocus.value = true
 })
 </script>
 ```
 
-### 第四章：文本转换指令（5:40-7:40）
+### Chapter 4: Text Transform Directives (5:40-7:40)
 
-> **画面：展示文本转换效果**
+> **Visual: Text transformation effects**
 
-**v-trim 自动去空格：**
+**v-trim Auto-trim Spaces:**
 
 ```vue
 <template>
-  <input v-trim v-model="name" placeholder="去除首尾空格" />
+  <input v-trim v-model="name" placeholder="Trim leading/trailing spaces" />
 </template>
 ```
 
-**v-uppercase 大写转换：**
+**v-uppercase Uppercase:**
 
 ```vue
 <template>
-  <input v-uppercase v-model="code" placeholder="自动大写" />
+  <input v-uppercase v-model="code" placeholder="Auto uppercase" />
 </template>
 ```
 
-**v-lowercase 小写转换：**
+**v-lowercase Lowercase:**
 
 ```vue
 <template>
-  <input v-lowercase v-model="email" placeholder="自动小写" />
+  <input v-lowercase v-model="email" placeholder="Auto lowercase" />
 </template>
 ```
 
-**v-capitalcase 首字母大写：**
+**v-capitalcase Capitalize:**
 
 ```vue
 <template>
-  <input v-capitalcase v-model="name" placeholder="首字母大写" />
+  <input v-capitalcase v-model="name" placeholder="Capitalize first letter" />
 </template>
 ```
 
-### 第五章：数字处理指令（7:40-10:00）
+### Chapter 5: Number Handling (7:40-10:00)
 
-> **画面：展示金额输入效果**
+> **Visual: Currency input effect**
 
-**v-money 金额格式化：**
+**v-money Currency Format:**
 
 ```vue
 <template>
-  <!-- 自动格式化为金额 -->
-  <input v-money v-model="price" placeholder="金额" />
-  
-  <!-- 自定义配置 -->
+  <!-- Auto-format as currency -->
+  <input v-money v-model="price" placeholder="Amount" />
+
+  <!-- Custom configuration -->
   <input v-money="{
-    prefix: '¥',
+    prefix: '$',
     suffix: '',
     precision: 2,
     thousands: ','
@@ -185,56 +185,56 @@ onMounted(() => {
 </template>
 ```
 
-**v-number 数字输入：**
+**v-number Number Input:**
 
 ```vue
 <template>
-  <!-- 只允许数字输入 -->
-  <input v-number v-model="count" placeholder="数量" />
-  
-  <!-- 自定义配置 -->
+  <!-- Only allow numbers -->
+  <input v-number v-model="count" placeholder="Quantity" />
+
+  <!-- Custom configuration -->
   <input v-number="{
     min: 0,
     max: 100,
     precision: 0,
     negative: false
-  }" v-model="age" placeholder="年龄" />
+  }" v-model="age" placeholder="Age" />
 </template>
 ```
 
-**组合使用：**
+**Combined Usage:**
 
 ```vue
 <template>
   <form>
-    <input v-trim v-capitalize v-model="name" placeholder="姓名" />
-    <input v-lowercase v-model="email" placeholder="邮箱" />
-    <input v-money v-model="price" placeholder="价格" />
-    <input v-number="{ min: 1, max: 99 }" v-model="quantity" placeholder="数量" />
-    <button type="submit">提交</button>
+    <input v-trim v-capitalize v-model="name" placeholder="Name" />
+    <input v-lowercase v-model="email" placeholder="Email" />
+    <input v-money v-model="price" placeholder="Price" />
+    <input v-number="{ min: 1, max: 99 }" v-model="quantity" placeholder="Qty" />
+    <button type="submit">Submit</button>
   </form>
 </template>
 ```
 
-### 总结
+### Summary
 
-今天学习了六个表单指令：
-- v-copy - 一键复制
-- v-mask - 输入掩码格式化
-- v-focus - 自动聚焦
-- v-trim/v-uppercase/v-lowercase/v-capitalcase - 文本转换
-- v-money/v-number - 数字处理
+Today we learned six form directives:
+- v-copy - One-click copy
+- v-mask - Input masking and formatting
+- v-focus - Auto focus
+- v-trim/v-uppercase/v-lowercase/v-capitalcase - Text transformation
+- v-money/v-number - Number handling
 
-下集我们将学习可见性与懒加载指令。
+Next video covers visibility and lazy loading directives.
 
-## 练习题
+## Exercises
 
-1. 实现一个 API Key 展示组件，点击复制按钮复制 Key
-2. 创建手机号输入框，使用 v-mask 格式化为 138 0000 0000
-3. 实现一个价格输入框，使用 v-money 显示 ¥ 前缀和两位小数
+1. Implement an API Key display component with copy button
+2. Create phone input with v-mask formatted as 138 0000 0000
+3. Implement a price input with v-money showing ¥ prefix and 2 decimals
 
-## 相关资源
+## Resources
 
-- [表单指令文档](https://saqqdy.github.io/directix/guide/forms)
+- [Form Directives Docs](https://saqqdy.github.io/directix/guide/forms)
 - [v-copy API](https://saqqdy.github.io/directix/api/directives/copy)
 - [v-mask API](https://saqqdy.github.io/directix/api/directives/mask)

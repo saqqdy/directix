@@ -1,177 +1,162 @@
-# 03 - 常用事件指令
+# 03 - Common Event Directives
 
-**时长：12 分钟**
+**Duration: 12 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：常用事件指令
-- 系列：入门系列
-- 难度：初级
-- 前置知识：Vue 事件处理基础
+- Title: Common Event Directives
+- Series: Getting Started
+- Level: Beginner
+- Prerequisites: Vue event handling basics
 
-## 章节目录
+## Chapters
 
-1. v-debounce 防抖（3 分钟）
-2. v-throttle 节流（2 分钟）
-3. v-click-outside 点击外部（2 分钟）
-4. v-long-press 长按（2 分钟）
-5. v-hotkey 快捷键（3 分钟）
+1. v-debounce Debouncing (3 min)
+2. v-throttle Throttling (2 min)
+3. v-click-outside Click Outside (2 min)
+4. v-long-press Long Press (2 min)
+5. v-hotkey Keyboard Shortcuts (3 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:15）
+### Opening (0:00-0:15)
 
-> **画面：开场动画 + 标题**
+> **Visual: Opening animation + title**
 
-大家好，今天我们来学习 Directix 中最常用的事件指令。这些指令能帮你处理各种用户交互场景。
+Hello! Today we learn Directix's most commonly used event directives for handling user interactions.
 
-### 第一章：v-debounce 防抖（0:15-3:15）
+### Chapter 1: v-debounce (0:15-3:15)
 
-> **画面：展示防抖概念动画**
+> **Visual: Debounce concept animation**
 
-首先是最常用的防抖指令。防抖是什么意思呢？用户连续操作时，只在停止操作后执行一次。
+First is the most commonly used debounce directive. What does debounce mean? When user makes continuous operations, execute only once after stopping.
 
-> **画面：VS Code 演示**
+> **Visual: VS Code demo**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
-  <input 
-    v-debounce="handleSearch" 
-    placeholder="搜索..."
+  <input
+    v-debounce="handleSearch"
+    placeholder="Search..."
   />
 </template>
 
 <script setup>
 const handleSearch = (value) => {
-  console.log('搜索:', value)
-  // 执行 API 请求
+  console.log('Search:', value)
+  // Execute API request
 }
 </script>
 ```
 
-**指定延迟时间：**
+**Specify Delay:**
 
 ```vue
 <template>
-  <!-- 默认 300ms -->
+  <!-- Default 300ms -->
   <input v-debounce="search1" />
-  
-  <!-- 自定义延迟 -->
+
+  <!-- Custom delay -->
   <input v-debounce:500="search2" />
-  
-  <!-- 使用修饰符语法 -->
+
+  <!-- Modifier syntax -->
   <input v-debounce:500ms="search3" />
 </template>
 ```
 
-**防抖配置对象：**
+**Configuration Object:**
 
 ```vue
 <template>
   <input v-debounce="{
     handler: handleSearch,
     wait: 500,
-    leading: false,  // 首次是否立即执行
-    trailing: true   // 结束后是否执行
+    leading: false,
+    trailing: true
   }" />
 </template>
 ```
 
-> **画面：展示防抖效果演示**
+> **Visual: Debounce effect demo**
 
-典型应用场景：
-- 搜索输入框
-- 窗口 resize 事件
-- 表单验证
+Typical use cases:
+- Search input boxes
+- Window resize events
+- Form validation
 
-### 第二章：v-throttle 节流（3:15-5:15）
+### Chapter 2: v-throttle (3:15-5:15)
 
-> **画面：展示节流概念动画**
+> **Visual: Throttle concept animation**
 
-节流和防抖类似，但有所不同：节流是每隔固定时间执行一次。
+Throttling is similar but different: execute at fixed intervals.
 
-> **画面：VS Code 演示**
+> **Visual: VS Code demo**
 
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <button v-throttle="handleSubmit">
-    提交
+    Submit
   </button>
 </template>
 
 <script setup>
 const handleSubmit = () => {
-  console.log('提交表单')
-  // 重复点击会被节流
+  console.log('Submit form')
+  // Repeated clicks will be throttled
 }
 </script>
 ```
 
-**指定间隔时间：**
+**Specify Interval:**
 
 ```vue
 <template>
-  <!-- 默认 300ms -->
-  <button v-throttle="submit1">提交</button>
-  
-  <!-- 自定义间隔 -->
-  <button v-throttle:1000="submit2">提交</button>
-  
-  <!-- 使用修饰符语法 -->
-  <button v-throttle:1s="submit3">提交</button>
+  <!-- Default 300ms -->
+  <button v-throttle="submit1">Submit</button>
+
+  <!-- Custom interval -->
+  <button v-throttle:1000="submit2">Submit</button>
+
+  <!-- Modifier syntax -->
+  <button v-throttle:1s="submit3">Submit</button>
 </template>
 ```
 
-**节流配置对象：**
+> **Visual: Compare debounce vs throttle**
 
-```vue
-<template>
-  <button v-throttle="{
-    handler: handleClick,
-    wait: 1000,
-    leading: true,   // 开始边界执行
-    trailing: false  // 结束边界执行
-  }">
-    点击
-  </button>
-</template>
-```
+Debounce vs Throttle:
+- Debounce: Wait for stop, execute once at end
+- Throttle: Fixed interval, continuous execution
 
-> **画面：对比防抖和节流**
+Typical scenarios:
+- Prevent button double-clicks
+- Scroll event handling
+- Mouse movement events
 
-防抖 vs 节流：
-- 防抖：等待停止，最后执行一次
-- 节流：固定间隔，持续执行
+### Chapter 3: v-click-outside (5:15-7:15)
 
-典型场景：
-- 按钮重复点击防护
-- 滚动事件处理
-- 鼠标移动事件
+> **Visual: Dropdown close effect**
 
-### 第三章：v-click-outside 点击外部（5:15-7:15）
+Click outside is very practical, commonly used for closing dropdowns, modals, etc.
 
-> **画面：展示下拉菜单关闭效果**
+> **Visual: VS Code demo**
 
-点击外部是一个非常实用的指令，常用于关闭下拉菜单、模态框等。
-
-> **画面：VS Code 演示**
-
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <div>
-    <button @click="show = !show">切换</button>
-    <div 
-      v-if="show" 
+    <button @click="show = !show">Toggle</button>
+    <div
+      v-if="show"
       v-click-outside="closeMenu"
       class="dropdown"
     >
-      菜单内容
+      Menu content
     </div>
   </div>
 </template>
@@ -187,129 +172,96 @@ const closeMenu = () => {
 </script>
 ```
 
-**排除特定元素：**
+**Exclude Specific Elements:**
 
 ```vue
 <template>
   <div>
-    <!-- 点击这个按钮不会关闭 -->
-    <button ref="trigger">打开</button>
+    <!-- Clicking this button won't close -->
+    <button ref="trigger">Open</button>
     <div v-click-out:trigger="closeMenu">
-      内容
+      Content
     </div>
   </div>
 </template>
 ```
 
-**配置对象：**
+> **Visual: Real-world applications**
 
-```vue
-<template>
-  <div v-click-outside="{
-    handler: closeMenu,
-    exclude: ['button', '.exclude-class'],
-    active: true  // 是否启用
-  }">
-    内容
-  </div>
-</template>
-```
+Typical scenarios:
+- Dropdown menus
+- Modals
+- Sidebars
 
-> **画面：展示实际应用**
+### Chapter 4: v-long-press (7:15-9:15)
 
-典型场景：
-- 下拉菜单
-- 模态框
-- 侧边栏
+> **Visual: Long press effect**
 
-### 第四章：v-long-press 长按（7:15-9:15）
+Long press directive handles user long-pressing elements.
 
-> **画面：展示长按效果**
+> **Visual: VS Code demo**
 
-长按指令用于处理用户长按元素的场景。
-
-> **画面：VS Code 演示**
-
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <button v-long-press="handleLongPress">
-    长按我
+    Long Press Me
   </button>
 </template>
 
 <script setup>
 const handleLongPress = () => {
-  alert('长按触发！')
+  alert('Long press triggered!')
 }
 </script>
 ```
 
-**自定义时长：**
+**Custom Duration:**
 
 ```vue
 <template>
-  <!-- 默认 500ms -->
+  <!-- Default 500ms -->
   <button v-long-press="handler1">500ms</button>
-  
-  <!-- 自定义时长 -->
-  <button v-long-press:1000="handler2">1秒</button>
-  
-  <!-- 修饰符语法 -->
-  <button v-long-press:1s="handler3">1秒</button>
+
+  <!-- Custom duration -->
+  <button v-long-press:1000="handler2">1 second</button>
+
+  <!-- Modifier syntax -->
+  <button v-long-press:1s="handler3">1 second</button>
 </template>
 ```
 
-**配置对象：**
+**Configuration Object:**
 
 ```vue
 <template>
   <button v-long-press="{
     handler: handleLongPress,
     duration: 800,
-    onStart: () => console.log('开始长按'),
-    onFinish: () => console.log('长按完成'),
-    onCancel: () => console.log('长按取消')
+    onStart: () => console.log('Started'),
+    onFinish: () => console.log('Finished'),
+    onCancel: () => console.log('Cancelled')
   }">
-    长按我
+    Long Press Me
   </button>
 </template>
 ```
 
-> **画面：展示进度条效果**
+### Chapter 5: v-hotkey (9:15-12:00)
 
-可以配合进度条显示长按进度：
+> **Visual: Hotkey effect**
 
-```vue
-<template>
-  <button 
-    v-long-press="{
-      handler: submit,
-      duration: 2000,
-      onUpdate: (progress) => percent = progress
-    }"
-  >
-    <div class="progress" :style="{ width: percent + '%' }"></div>
-    长按确认
-  </button>
-</template>
-```
+Hotkey directive adds keyboard shortcut support to your app.
 
-### 第五章：v-hotkey 快捷键（9:15-12:00）
+> **Visual: VS Code demo**
 
-> **画面：展示快捷键效果**
-
-快捷键指令让你的应用支持键盘快捷操作。
-
-> **画面：VS Code 演示**
-
-**基础用法：**
+**Basic Usage:**
 
 ```vue
 <template>
   <div v-hotkey="hotkeys">
-    按 Ctrl+S 保存
+    Press Ctrl+S to save
   </div>
 </template>
 
@@ -317,16 +269,16 @@ const handleLongPress = () => {
 const hotkeys = {
   'ctrl+s': (e) => {
     e.preventDefault()
-    console.log('保存')
+    console.log('Save')
   },
   'ctrl+enter': () => {
-    console.log('提交')
+    console.log('Submit')
   }
 }
 </script>
 ```
 
-**多个快捷键：**
+**Multiple Shortcuts:**
 
 ```vue
 <template>
@@ -337,79 +289,66 @@ const hotkeys = {
     'escape': cancel,
     'enter': submit
   }">
-    编辑区域
+    Edit area
   </div>
 </script>
 ```
 
-**作用范围：**
+**Scope Control:**
 
 ```vue
 <template>
-  <!-- 只在元素聚焦时生效 -->
-  <input 
+  <!-- Only when element focused -->
+  <input
     v-hotkey:focus="{
       'ctrl+a': selectAll,
       'escape': clear
     }"
   />
-  
-  <!-- 全局快捷键 -->
+
+  <!-- Global hotkeys -->
   <div v-hotkey:global="globalHotkeys">
-    应用内容
+    App content
   </div>
 </template>
 ```
 
-**组合键支持：**
+**Supported Modifiers:**
 
-支持以下修饰键：
 - `ctrl` / `control`
 - `alt` / `option`
 - `shift`
 - `meta` / `cmd` / `command`
 
-```vue
-<template>
-  <div v-hotkey="{
-    'ctrl+s': save,
-    'ctrl+shift+s': saveAs,
-    'ctrl+alt+delete': forceQuit,
-    'cmd+s': save,  // Mac 兼容
-  }">
-  </div>
-</template>
-```
+### Summary (11:50-12:00)
 
-### 总结（11:50-12:00）
+> **Visual: Summary points**
 
-> **画面：总结要点**
+Today we learned five common event directives:
+- v-debounce - Debouncing, great for search boxes
+- v-throttle - Throttling, great for button clicks
+- v-click-outside - Close on outside click
+- v-long-press - Long press operations
+- v-hotkey - Keyboard shortcuts
 
-今天我们学习了五个常用事件指令：
-- v-debounce - 防抖，适合搜索框
-- v-throttle - 节流，适合按钮点击
-- v-click-outside - 点击外部关闭
-- v-long-press - 长按操作
-- v-hotkey - 键盘快捷键
+Next video covers form directives. Bye!
 
-下集我们将学习表单指令。再见！
+> **Visual: Closing animation + preview**
 
-> **画面：片尾动画 + 下集预告**
+## Code Examples
 
-## 配套代码
+[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
 
-本视频示例代码：[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
+## Exercises
 
-## 练习题
+1. Create a search box with v-debounce for 300ms debounce
+2. Implement a button with v-throttle to prevent repeated clicks within 1 second
+3. Use v-click-outside for a dropdown menu that closes on outside click
+4. Create a delete button requiring 2-second long press
+5. Add Ctrl+S save shortcut to an editor
 
-1. 创建一个搜索框，使用 v-debounce 实现 300ms 防抖
-2. 实现一个按钮，使用 v-throttle 防止 1 秒内重复点击
-3. 使用 v-click-outside 实现一个下拉菜单，点击外部关闭
-4. 实现一个删除按钮，需要长按 2 秒才能触发删除
-5. 为编辑器添加 Ctrl+S 保存快捷键
+## Resources
 
-## 相关资源
-
-- [事件指令文档](https://saqqdy.github.io/directix/guide/events)
+- [Event Directives Docs](https://saqqdy.github.io/directix/guide/events)
 - [v-debounce API](https://saqqdy.github.io/directix/api/directives/debounce)
 - [v-throttle API](https://saqqdy.github.io/directix/api/directives/throttle)

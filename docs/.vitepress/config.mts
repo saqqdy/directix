@@ -594,5 +594,11 @@ export default defineConfig({
 		socialLinks: [{ icon: 'github', link: 'https://github.com/saqqdy/directix' }],
 	},
 
-	title: 'Directix',
-})
+		title: 'Directix',
+
+		vite: {
+			build: {
+				chunkSizeWarningLimit: 1000,
+			},
+		},
+	})

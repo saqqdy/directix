@@ -1,77 +1,77 @@
-# 01 - Directix 介绍与快速上手
+# 01 - Directix Introduction & Quick Start
 
-**时长：8 分钟**
+**Duration: 8 minutes**
 
-## 视频信息
+## Video Info
 
-- 标题：Directix 介绍与快速上手
-- 系列：入门系列
-- 难度：初级
-- 前置知识：Vue 基础
+- Title: Directix Introduction & Quick Start
+- Series: Getting Started
+- Level: Beginner
+- Prerequisites: Vue basics
 
-## 章节目录
+## Chapters
 
-1. 什么是 Directix？（1 分钟）
-2. 核心特性介绍（2 分钟）
-3. 快速演示（3 分钟）
-4. 学习路线建议（2 分钟）
+1. What is Directix? (1 min)
+2. Core Features Overview (2 min)
+3. Quick Demo (3 min)
+4. Learning Path Suggestions (2 min)
 
-## 详细脚本
+## Detailed Script
 
-### 开场（0:00-0:15）
+### Opening (0:00-0:15)
 
-> **画面：开场动画 + 标题**
+> **Visual: Opening animation + title**
 
-大家好，欢迎来到 Directix 教程系列。今天我们来认识一个强大的 Vue 指令库。
+Hello everyone, welcome to the Directix tutorial series. Today let's discover a powerful Vue directive library.
 
-### 第一章：什么是 Directix？（0:15-1:15）
+### Chapter 1: What is Directix? (0:15-1:15)
 
-> **画面：展示 Directix 官网首页**
+> **Visual: Directix homepage**
 
-Directix 是一个功能全面、易于使用的 Vue 自定义指令库。它最大的特点是同时支持 Vue 2 和 Vue 3。
+Directix is a comprehensive, easy-to-use Vue custom directive library. Its biggest feature is supporting both Vue 2 and Vue 3.
 
-> **画面：展示特性列表动画**
+> **Visual: Feature list animation**
 
-它的核心特性包括：
+Core features:
 
-1. **57+ 常用指令** - 涵盖事件、表单、可见性、滚动等常见场景
-2. **Vue 2/3 兼容** - 一套代码，两个版本都能用
-3. **Tree-shakable** - 按需引入，打包体积小
-4. **TypeScript 支持** - 完整的类型定义
-5. **57 个 Composables** - 每个Directive都有对应的组合式函数
+1. **57+ Common Directives** - Covering events, forms, visibility, scroll, etc.
+2. **Vue 2/3 Compatible** - One codebase, both versions work
+3. **Tree-shakable** - Import only what you need
+4. **TypeScript Support** - Complete type definitions
+5. **57 Composables** - Each directive has a corresponding composable
 
-简单来说，Directix 让你用声明式的方式处理 DOM 操作，不再需要手写复杂的逻辑。
+Simply put, Directix lets you handle DOM operations declaratively, no complex logic needed.
 
-### 第二章：核心特性介绍（1:15-3:15）
+### Chapter 2: Core Features (1:15-3:15)
 
-> **画面：分屏展示 Vue 2 和 Vue 3 代码**
+> **Visual: Split screen Vue 2 vs Vue 3**
 
-首先看兼容性。无论你的项目是 Vue 2 还是 Vue 3，Directix 都能无缝工作。这对于正在迁移的项目特别友好。
+First, compatibility. Whether your project is Vue 2 or Vue 3, Directix works seamlessly. Great for migrating projects.
 
-> **画面：展示 Tree-shaking 示意图**
+> **Visual: Tree-shaking diagram**
 
-第二个重要特性是 Tree-shaking。你只需要引入用到的指令，未使用的代码不会打包进去。
+Second, Tree-shaking. You only import directives you use, unused code won't be bundled.
 
-> **画面：展示 TypeScript 类型提示**
+> **Visual: TypeScript hints**
 
-第三个特性是 TypeScript 支持。所有指令都有完整的类型定义，IDE 会给出智能提示，减少错误。
+Third, TypeScript support. All directives have complete type definitions, IDE gives smart hints.
 
-> **画面：展示 Composables 示例**
+> **Visual: Composables example**
 
-最后是 Composables。每个指令都有对应的 useXxx 函数，让你可以在 Composition API 中使用同样的功能。
+Finally, Composables. Each directive has a corresponding useXxx function for Composition API.
 
-### 第三章：快速演示（3:15-6:15）
+### Chapter 3: Quick Demo (3:15-6:15)
 
-> **画面：切换到 VS Code**
+> **Visual: VS Code**
 
-让我们看几个实际例子。
+Let's see some real examples.
 
-**示例 1：v-copy - 一键复制**
+**Example 1: v-copy - One-click Copy**
 
 ```vue
 <template>
-  <!-- 点击复制文本到剪贴板 -->
-  <button v-copy="textToCopy">复制文本</button>
+  <!-- Click to copy text to clipboard -->
+  <button v-copy="textToCopy">Copy Text</button>
 </template>
 
 <script setup>
@@ -81,34 +81,34 @@ const textToCopy = ref('Hello Directix!')
 </script>
 ```
 
-就这么简单，一行代码实现复制功能。
+Just one line to implement copy functionality.
 
-**示例 2：v-debounce - 防抖输入**
+**Example 2: v-debounce - Debounced Input**
 
 ```vue
 <template>
-  <!-- 输入防抖，500ms 后触发 -->
-  <input v-debounce:500ms="handleSearch" placeholder="搜索..." />
+  <!-- Input debounce, triggers after 500ms -->
+  <input v-debounce:500ms="handleSearch" placeholder="Search..." />
 </template>
 
 <script setup>
 const handleSearch = (value) => {
-  console.log('搜索:', value)
-  // 执行搜索请求
+  console.log('Search:', value)
+  // Execute search request
 }
 </script>
 ```
 
-用户输入后等待 500 毫秒才触发，避免频繁请求。
+Triggers after user stops typing for 500ms, avoiding frequent requests.
 
-**示例 3：v-click-outside - 点击外部关闭**
+**Example 3: v-click-outside - Click Outside to Close**
 
 ```vue
 <template>
   <div>
-    <button @click="show = !show">打开菜单</button>
+    <button @click="show = !show">Toggle</button>
     <div v-if="show" v-click-outside="closeMenu" class="dropdown">
-      菜单内容
+      Menu content
     </div>
   </div>
 </template>
@@ -124,62 +124,62 @@ const closeMenu = () => {
 </script>
 ```
 
-点击菜单外部自动关闭，这是下拉菜单的标准模式。
+Auto-close when clicking outside, standard pattern for dropdowns.
 
-**示例 4：v-lazy - 图片懒加载**
+**Example 4: v-lazy - Image Lazy Loading**
 
 ```vue
 <template>
-  <!-- 图片进入视口才加载 -->
-  <img v-lazy="imageUrl" alt="懒加载图片" />
+  <!-- Load image when it enters viewport -->
+  <img v-lazy="imageUrl" alt="Lazy loaded image" />
 </template>
 ```
 
-图片只在滚动到视口时才加载，提升页面性能。
+Image loads only when scrolled into viewport, improving performance.
 
-### 第四章：学习路线建议（6:15-8:00）
+### Chapter 4: Learning Path (6:15-8:00)
 
-> **画面：展示学习路线图**
+> **Visual: Learning roadmap**
 
-接下来怎么学？我建议按这个顺序：
+How to proceed? I suggest this order:
 
-1. **先看入门系列** - 掌握安装和常用指令
-2. **再看进阶系列** - 学习 Composables、性能优化、调试技巧
-3. **最后看实战系列** - 通过实际项目巩固知识
+1. **Getting Started Series** - Master installation and common directives
+2. **Advanced Series** - Learn Composables, performance optimization, debugging
+3. **Practical Series** - Solidify knowledge through real projects
 
-> **画面：展示文档网站**
+> **Visual: Documentation site**
 
-Directix 官方文档非常完善，有中英日三语支持。每个指令都有详细的 API 文档和示例。
+Directix official docs are comprehensive, with Chinese, English, and Japanese support. Each directive has detailed API docs and examples.
 
-> **画面：展示 Playground**
+> **Visual: Playground**
 
-还有在线 Playground，可以直接体验所有指令。
+There's also an online Playground to try all directives directly.
 
-### 总结（7:45-8:00）
+### Summary (7:45-8:00)
 
-> **画面：总结要点**
+> **Visual: Summary points**
 
-今天我们了解了：
-- Directix 是什么
-- 它的核心特性
-- 几个常用指令的用法
+Today we learned:
+- What Directix is
+- Its core features
+- Usage of several common directives
 
-下集我们将详细讲解安装与配置。我们下期见！
+Next video covers installation and configuration. See you then!
 
-> **画面：片尾动画 + 下集预告**
+> **Visual: Closing animation + next video preview**
 
-## 配套代码
+## Code Examples
 
-本视频示例代码：[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
+[GitHub - examples/vue3](https://github.com/saqqdy/directix/tree/master/examples/vue3)
 
-## 练习题
+## Exercises
 
-1. 使用 `v-copy` 实现一个复制密码的功能
-2. 使用 `v-debounce` 优化搜索输入，设置 300ms 防抖
-3. 使用 `v-click-outside` 实现一个模态框点击外部关闭
+1. Use `v-copy` to implement a copy password feature
+2. Use `v-debounce` to optimize search input with 300ms debounce
+3. Use `v-click-outside` to implement a modal that closes on outside click
 
-## 相关资源
+## Resources
 
-- [官方文档](https://saqqdy.github.io/directix/)
-- [GitHub 仓库](https://github.com/saqqdy/directix)
-- [在线 Playground](https://saqqdy.github.io/directix/playground/)
+- [Official Docs](https://saqqdy.github.io/directix/)
+- [GitHub Repo](https://github.com/saqqdy/directix)
+- [Online Playground](https://saqqdy.github.io/directix/playground/)
