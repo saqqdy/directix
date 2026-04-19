@@ -11,31 +11,38 @@ Configure directives interactively and generate code for Vue 2, Vue 3, composabl
 
 ## Quick Start
 
-1. **Select a Directive** - Choose from the dropdown menu
+1. **Select a Directive** - Choose from 57+ directives organized by category
 2. **Choose Vue Version** - Toggle between Vue 2 and Vue 3
-3. **Select Output Format** - Template syntax or Composable
+3. **Select Output Format** - Directive syntax or Composable function
 4. **Copy Code** - Click copy and paste into your project
 
 ## Features
 
 - **57+ Directives** - Full coverage of all Directix directives
+- **41+ Composables** - Composable API for every directive
 - **Vue 2 & Vue 3** - Generate code for either version
-- **Composables** - Generate composable API code
 - **TypeScript Ready** - Full type definitions included
+- **15 Categories** - Organized by use case
 
 ## Categories
 
 | Category | Description | Directives |
 | -------- | ----------- | ---------- |
-| Event | Event handling directives | `v-click-outside`, `v-debounce`, `v-throttle`, `v-long-press`, `v-hover`, `v-hotkey`, `v-click-delay` |
-| Form | Form input directives | `v-copy`, `v-focus`, `v-mask`, `v-trim` |
-| Format | Text formatting directives | `v-uppercase`, `v-lowercase`, `v-capitalcase`, `v-number`, `v-money`, `v-truncate`, `v-ellipsis` |
-| Visibility | Visibility control | `v-lazy`, `v-intersect`, `v-visible`, `v-loading` |
-| Scroll | Scroll behavior | `v-scroll`, `v-infinite-scroll`, `v-sticky` |
-| Security | Security features | `v-permission`, `v-sanitize` |
-| UI | UI enhancements | `v-ripple`, `v-click-wave`, `v-tooltip`, `v-draggable`, `v-context-menu`, `v-fullscreen`, `v-skeleton`, `v-blur`, `v-fade` |
-| Data | Data visualization | `v-counter`, `v-progress`, `v-countdown` |
-| Utility | Utility directives | `v-watermark`, `v-print`, `v-export`, `v-highlight` |
+| **Event** | Event handling | `v-click-outside`, `v-debounce`, `v-throttle`, `v-long-press`, `v-hover`, `v-hotkey`, `v-click-delay`, `v-click-wave`, `v-context-menu`, `v-copy` |
+| **Visibility** | Visibility control | `v-lazy`, `v-intersect`, `v-visible`, `v-loading`, `v-blur`, `v-skeleton` |
+| **Scroll** | Scroll behavior | `v-scroll`, `v-infinite-scroll`, `v-sticky`, `v-parallax`, `v-progress` |
+| **Interaction** | User interaction | `v-ripple` |
+| **Format** | Text formatting | `v-uppercase`, `v-lowercase`, `v-capitalcase`, `v-number`, `v-money`, `v-truncate`, `v-ellipsis`, `v-trim` |
+| **UI** | UI enhancements | `v-tooltip`, `v-draggable`, `v-image-preview`, `v-countdown`, `v-watermark`, `v-print` |
+| **Form** | Form handling | `v-focus`, `v-mask` |
+| **Security** | Security features | `v-permission`, `v-sanitize` |
+| **Observer** | DOM observation | `v-resize`, `v-mutation` |
+| **Performance** | Performance optimization | `v-virtual-list` |
+| **Mobile** | Touch & gestures | `v-touch`, `v-swipe`, `v-pan`, `v-pinch`, `v-rotate-gesture`, `v-pull-refresh` |
+| **Animation** | Animations | `v-fade`, `v-typewriter`, `v-counter`, `v-lottie` |
+| **Data** | Data handling | `v-export`, `v-highlight` |
+| **Media** | Media controls | `v-fullscreen` |
+| **Input** | Input processing | `v-emoji` |
 
 ## Usage Example
 
@@ -56,8 +63,16 @@ function handleSearch(event) {
 </script>
 ```
 
+## v1.9.0 New Features
+
+- 🌐 **i18n Support** - Internationalization for directive messages
+- 🔌 **Plugin System** - Extensible plugin architecture
+- ⚠️ **Unified Warnings** - Consistent warning system with log levels
+- 📚 **10 Scenario Examples** - Real-world usage patterns
+
 ## Resources
 
 - [Documentation](/guide/) - Full documentation
 - [API Reference](/api/) - Complete API reference
 - [Examples](/examples/) - Real-world examples
+- [GitHub](https://github.com/saqqdy/directix) - Source code
