@@ -11,6 +11,8 @@
 - **🚀 SSR Friendly** - Works with Nuxt and other SSR frameworks
 - **📦 Multiple Formats** - ESM, CJS, and IIFE (CDN) formats available
 - **🔷 Nuxt Module** - Official Nuxt 3 module with auto-import support
+- **🌐 i18n Support** - Built-in internationalization with multiple languages
+- **🔌 Plugin System** - Extensible plugin architecture for community contributions
 
 ## Quick Example
 

@@ -256,6 +256,12 @@ export default defineConfig({
 							],
 							text: 'Demos',
 						},
+						{
+							items: [
+								{ link: '/examples/scenarios', text: 'Scenario Examples' },
+							],
+							text: 'Scenarios',
+						},
 					],
 					'/guide/': [
 						{
@@ -264,6 +270,8 @@ export default defineConfig({
 								{ link: '/guide/installation', text: 'Installation' },
 								{ link: '/guide/quick-start', text: 'Quick Start' },
 								{ link: '/guide/nuxt', text: 'Nuxt Module' },
+								{ link: '/guide/i18n', text: 'Internationalization' },
+								{ link: '/guide/plugin', text: 'Plugin System' },
 								{ link: '/guide/vscode-extension', text: 'VS Code Extension' },
 							],
 							text: 'Getting Started',
@@ -534,6 +542,12 @@ export default defineConfig({
 							],
 							text: '演示',
 						},
+						{
+							items: [
+								{ link: '/zh/examples/scenarios', text: '场景示例' },
+							],
+							text: '场景',
+						},
 					],
 					'/zh/guide/': [
 						{
@@ -542,6 +556,8 @@ export default defineConfig({
 								{ link: '/zh/guide/installation', text: '安装' },
 								{ link: '/zh/guide/quick-start', text: '快速上手' },
 								{ link: '/zh/guide/nuxt', text: 'Nuxt 模块' },
+								{ link: '/zh/guide/i18n', text: '国际化' },
+								{ link: '/zh/guide/plugin', text: '插件系统' },
 								{ link: '/zh/guide/vscode-extension', text: 'VS Code 插件' },
 							],
 							text: '开始',
