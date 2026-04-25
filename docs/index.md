@@ -40,13 +40,13 @@ features:
   - icon: 🌐
     title: i18n Support
     details: Built-in internationalization system with English, Chinese, and Japanese translations.
-  - icon: 🔌
-    title: Plugin System
-    details: Extensible plugin architecture with hooks for lifecycle events. Create custom directives easily.
-  - icon: 📚
-    title: 10+ Scenarios
-    details: Real-world usage examples for form validation, drag-sort, image gallery, and more.
-  - icon: ⚠️
-    title: Unified Warnings
-    details: Consistent warning system with configurable log levels for better debugging experience.
+  - icon: ♿
+    title: Accessibility (A11y)
+    details: Full ARIA support, screen reader announcements, keyboard navigation, and focus management.
+  - icon: 🔐
+    title: Security Enhanced
+    details: XSS protection, CSP compatibility, HTML sanitization, and security audit tools.
+  - icon: 📱
+    title: Mobile Optimized
+    details: 12+ touch gestures, haptic feedback, PWA support, and passive event optimization.
 ---

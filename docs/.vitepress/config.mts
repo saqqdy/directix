@@ -285,6 +285,7 @@ export default defineConfig({
 								{ link: '/guide/scroll', text: 'Scroll Directives' },
 								{ link: '/guide/forms', text: 'Form Directives' },
 								{ link: '/guide/security', text: 'Security Directives' },
+								{ link: '/guide/a11y', text: 'Accessibility (A11y)' },
 								{ link: '/guide/observers', text: 'Observer Directives' },
 							],
 							text: 'Categories',
@@ -573,6 +574,7 @@ export default defineConfig({
 								{ link: '/zh/guide/scroll', text: '滚动指令' },
 								{ link: '/zh/guide/forms', text: '表单指令' },
 								{ link: '/zh/guide/security', text: '安全指令' },
+								{ link: '/zh/guide/a11y', text: '无障碍 (A11y)' },
 								{ link: '/zh/guide/observers', text: '观察者指令' },
 							],
 							text: '分类',
@@ -594,11 +596,11 @@ export default defineConfig({
 		socialLinks: [{ icon: 'github', link: 'https://github.com/saqqdy/directix' }],
 	},
 
-		title: 'Directix',
+	title: 'Directix',
 
-		vite: {
-			build: {
-				chunkSizeWarningLimit: 1000,
-			},
+	vite: {
+		build: {
+			chunkSizeWarningLimit: 1000,
 		},
-	})
+	},
+})
