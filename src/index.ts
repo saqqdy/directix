@@ -131,6 +131,100 @@ export {
 // Export plugin system
 export * from './plugin'
 
+// Export v1.10.0 utilities
+// A11y (Accessibility) utilities
+export {
+	announce,
+	applyAriaAttributes,
+	clearAnnouncer,
+	clearAriaAttributes,
+	computedWithCleanup,
+	ensureTeleportTarget,
+	generateAriaId,
+	getAutoAriaConfig,
+	teleportContent,
+	useDirectiveInstance,
+	useFocusTrap,
+	useKeyboardNavigation,
+	useLazyOptimized,
+	useSuspenseDirective,
+	watchEffectBinding,
+} from './utils'
+
+// Re-export Vue 3 optimization & A11y types
+export type {
+	AnnounceOptions,
+	ARIAConfig,
+	ARIALivePriority,
+	ARIAPopupType,
+	ARIARole,
+	AutoAriaOptions,
+	ComputedWithCleanupOptions,
+	DirectiveInstanceOptions,
+	FocusTrapOptions,
+	KeyboardNavigationConfig,
+	OptimizedLazyOptions,
+	OptimizedLazyState,
+	SuspenseDirectiveState,
+	TeleportEnhanceOptions,
+	UseDirectiveInstanceReturn,
+	UseFocusTrapReturn,
+	UseKeyboardNavigationReturn,
+	UseLazyOptimizedReturn,
+	UseSuspenseDirectiveReturn,
+	WatchEffectBindingOptions,
+} from './utils'
+
+// Security utilities
+export {
+	createSafeContentHandler,
+	escapeHtml,
+	getCSPNonce,
+	injectScriptCSP,
+	injectStylesCSP,
+	isUrlSafe,
+	SafeContentHandler,
+	sanitizeHtml,
+	sanitizeUrl,
+	SecurityAudit,
+	stripHtml,
+	unescapeHtml,
+} from './utils'
+
+// Security types
+export type {
+	CSPConfig,
+	DependencyVulnerability,
+	SecurityReport,
+	SecurityVulnerability,
+	XSSProtectionConfig,
+} from './utils'
+
+// Mobile/touch optimization utilities
+export {
+	addNonPassiveListener,
+	addPassiveListener,
+	getDevicePixelRatio,
+	isMobileDevice,
+	isTouchDevice,
+	ObjectPool,
+	triggerHaptic,
+	useEnhancedTouch,
+	usePWA,
+} from './utils'
+
+// Mobile types
+export type {
+	ExtendedGestureType,
+	ExtendedTouchEvent,
+	PWAConfig,
+	TouchFeedbackConfig,
+	TouchGestureThresholds,
+	UseEnhancedTouchOptions,
+	UseEnhancedTouchReturn,
+	UsePWAReturn,
+} from './utils'
+
 // Export core utilities
 export * from '@directix/core'
 
