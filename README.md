@@ -24,6 +24,94 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
+## What's New in v1.10.0
+
+### Vue 3 Optimization Preview
+
+Vue 3-specific optimizations leveraging the reactive system for better performance.
+
+```typescript
+import { useLazyOptimized, useSuspenseDirective, teleportContent } from 'directix'
+
+// Optimized lazy loading with shallowRef
+const { state, observe } = useLazyOptimized({
+  onLoad: (entry) => console.log('Visible!')
+})
+
+// Suspense-ready async directive
+const { state, load } = useSuspenseDirective({
+  loader: () => fetchData()
+})
+
+// Teleport content to target
+teleportContent(element, { to: '#modal-container' })
+```
+
+### Mobile Optimization
+
+Enhanced touch gestures with haptic feedback and PWA support.
+
+```typescript
+import { useEnhancedTouch, triggerHaptic, usePWA } from 'directix'
+
+// 12+ gesture types with haptic feedback
+const { activeGesture, bind } = useEnhancedTouch({
+  feedback: { haptic: true, visual: true },
+  onSwipe: (e) => console.log(`Swiped ${e.direction}`),
+  onPinch: (e) => console.log(`Scale: ${e.scale}`),
+})
+
+// PWA support
+const { isOnline, needsUpdate } = usePWA({ serviceWorker: { enabled: true } })
+```
+
+### Accessibility (A11y)
+
+Comprehensive ARIA support, screen reader announcements, and keyboard navigation.
+
+```typescript
+import { 
+  applyAriaAttributes, 
+  announce, 
+  useKeyboardNavigation, 
+  useFocusTrap 
+} from 'directix'
+
+// Apply ARIA attributes
+applyAriaAttributes(element, {
+  role: 'button',
+  ariaLabel: 'Submit',
+  ariaDisabled: true,
+})
+
+// Screen reader announcements
+announce('Form submitted successfully')
+
+// Keyboard navigation with focus trap
+const { bind } = useKeyboardNavigation({ focusTrap: true, rovingTabindex: true })
+```
+
+### Security Enhancement
+
+Advanced XSS protection, CSP compatibility, and security audit tools.
+
+```typescript
+import { sanitizeHtml, SecurityAudit, getCSPNonce } from 'directix'
+
+// Advanced HTML sanitization
+const clean = sanitizeHtml(userInput, {
+  allowedTags: ['b', 'i', 'p'],
+  detectDangerousPatterns: true,
+})
+
+// Security audit
+const report = SecurityAudit.generateReport(htmlContent)
+console.log(SecurityAudit.formatReport(report, 'json'))
+
+// Check dependencies for vulnerabilities
+const vulns = await SecurityAudit.checkDependencies()
+```
+
 ## What's New in v1.9.0
 
 ### Internationalization (i18n)

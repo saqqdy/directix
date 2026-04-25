@@ -2,6 +2,100 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2026-05-06
+
+### Added
+
+#### Vue 3 Optimization Preview
+
+Vue 3-specific optimizations as a preview before v2.0.0, leveraging Vue 3's reactive system for better performance.
+
+- **useLazyOptimized** - Lazy loading with `shallowRef` for reduced reactivity overhead
+- **useDirectiveInstance** - Directive instance management with `markRaw` for DOM elements and `reactive` for state
+- **computedWithCleanup** - Computed refs with automatic cleanup on dependency changes
+- **watchEffectBinding** - watchEffect integration for directive binding tracking
+- **useSuspenseDirective** - Suspense-ready composable for async directives with loading/error/data state
+- **ensureTeleportTarget** - Auto-create teleport target elements
+- **teleportContent** - Teleport content to target with automatic cleanup
+
+#### Mobile Optimization
+
+Enhanced mobile support with advanced gesture recognition and performance optimizations.
+
+- **useEnhancedTouch** - Enhanced touch gesture composable with:
+  - Extended gesture types: tap, doubleTap, longPress, swipe, pan, pinch, pinchIn, pinchOut, rotate, twoFingerTap, edgeSwipe
+  - Configurable gesture thresholds (tap, longPress, swipe, pinch, rotate, doubleTap, swipeVelocity)
+  - Haptic feedback support (light, medium, heavy, selection)
+  - Visual feedback with configurable CSS class and duration
+  - Gesture priority and debounce/throttle support
+  - Passive event listener optimization
+- **triggerHaptic** - Trigger device vibration for haptic feedback
+- **applyVisualFeedback** - Apply visual touch feedback to elements
+- **addPassiveListener / addNonPassiveListener** - Passive event listener helpers
+- **isTouchDevice / isMobileDevice** - Device detection utilities
+- **getDevicePixelRatio** - Device pixel ratio detection
+- **ObjectPool** - Object pool for memory optimization (acquire/release pattern)
+- **usePWA** - PWA support composable with:
+  - Service Worker registration and lifecycle management
+  - Online/offline state tracking
+  - Update detection and notification
+  - Unregistration support
+
+#### Accessibility (A11y)
+
+Comprehensive accessibility utilities for building inclusive directive experiences.
+
+- **ARIA Configuration System** - `ARIAConfig` interface with full ARIA attribute support:
+  - Role types (60+ ARIA roles)
+  - State attributes (expanded, selected, checked, disabled, hidden, busy, pressed, current)
+  - Property attributes (label, labelledBy, describedBy, controls, owns, hasPopup, autoComplete)
+  - Live region attributes (live, atomic, relevant)
+  - Value attributes (valueNow, valueMin, valueMax, valueText)
+  - Form attributes (placeholder, required, readonly)
+  - Modal attribute (ariaModal)
+- **applyAriaAttributes** - Apply ARIA attributes to elements with automatic cleanup
+- **clearAriaAttributes** - Remove all ARIA attributes from elements
+- **generateAriaId** - Generate unique IDs for ARIA references
+- **announce** - Screen reader announcements with priority control (polite/assertive)
+- **clearAnnouncer** - Clear screen reader announcer
+- **useKeyboardNavigation** - Keyboard navigation composable with:
+  - Configurable navigation keys (next, prev, select, close, home, end)
+  - Focus trap support
+  - Roving tabindex for accessible component navigation
+  - Linear, grid, and tree navigation modes
+  - Loop navigation support
+  - Return focus on close
+- **useFocusTrap** - Focus trap composable with:
+  - Initial focus configuration (element, selector, or function)
+  - Outside click handling
+  - Escape key deactivation
+  - Activate/deactivate lifecycle callbacks
+- **getAutoAriaConfig** - Auto-generate ARIA config for common directive types (tooltip, menu, dialog, popover, dropdown, modal, alert, region)
+
+#### Security Enhancement
+
+Enhanced XSS protection, CSP compatibility, and security audit tools.
+
+- **sanitizeHtml** - Advanced HTML sanitizer with:
+  - Configurable allowed tags and attributes
+  - Protocol validation (javascript:, data:, vbscript:, file:)
+  - Dangerous pattern detection (script injection, event handlers, CSS expressions)
+  - Custom filter support
+  - Tag-specific attribute allowlists
+- **isUrlSafe / sanitizeUrl** - URL validation and sanitization
+- **escapeHtml / unescapeHtml** - HTML entity encoding/decoding
+- **stripHtml** - Strip all HTML tags from string
+- **getCSPNonce** - Extract CSP nonce from meta tags or script elements
+- **injectStylesCSP** - CSP-safe style injection with nonce support
+- **injectScriptCSP** - CSP-safe script injection with nonce support
+- **SecurityAudit** - Security audit utility with:
+  - `scanHtml()` - Scan HTML for XSS vulnerabilities
+  - `checkCSP()` - Check Content Security Policy configuration
+  - `generateReport()` - Generate comprehensive security reports
+  - `formatReport()` - Format reports as text, JSON, or HTML
+- **SafeContentHandler** - Safe content handler class for directive use
+- **createSafeContentHandler** - Factory function for safe content handlers
+
 ## [1.9.0] - 2026-04-29
 
 ### Added

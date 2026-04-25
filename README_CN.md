@@ -24,6 +24,94 @@
 - 🌐 **国际化支持** - 内置中文、英文、日文翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
 
+## v1.10.0 新特性
+
+### Vue 3 优化预览
+
+Vue 3 专属优化，利用响应式系统提升性能。
+
+```typescript
+import { useLazyOptimized, useSuspenseDirective, teleportContent } from 'directix'
+
+// 使用 shallowRef 优化的懒加载
+const { state, observe } = useLazyOptimized({
+  onLoad: (entry) => console.log('可见！')
+})
+
+// 支持 Suspense 的异步指令
+const { state, load } = useSuspenseDirective({
+  loader: () => fetchData()
+})
+
+// 传送内容到目标位置
+teleportContent(element, { to: '#modal-container' })
+```
+
+### 移动端优化
+
+增强的触摸手势支持，包含触觉反馈和 PWA 支持。
+
+```typescript
+import { useEnhancedTouch, triggerHaptic, usePWA } from 'directix'
+
+// 12+ 种手势类型，支持触觉反馈
+const { activeGesture, bind } = useEnhancedTouch({
+  feedback: { haptic: true, visual: true },
+  onSwipe: (e) => console.log(`滑动方向: ${e.direction}`),
+  onPinch: (e) => console.log(`缩放: ${e.scale}`),
+})
+
+// PWA 支持
+const { isOnline, needsUpdate } = usePWA({ serviceWorker: { enabled: true } })
+```
+
+### 无障碍访问 (A11y)
+
+完整的 ARIA 支持、屏幕阅读器公告和键盘导航。
+
+```typescript
+import { 
+  applyAriaAttributes, 
+  announce, 
+  useKeyboardNavigation, 
+  useFocusTrap 
+} from 'directix'
+
+// 应用 ARIA 属性
+applyAriaAttributes(element, {
+  role: 'button',
+  ariaLabel: '提交',
+  ariaDisabled: true,
+})
+
+// 屏幕阅读器公告
+announce('表单提交成功')
+
+// 键盘导航与焦点陷阱
+const { bind } = useKeyboardNavigation({ focusTrap: true, rovingTabindex: true })
+```
+
+### 安全增强
+
+高级 XSS 防护、CSP 兼容性和安全审计工具。
+
+```typescript
+import { sanitizeHtml, SecurityAudit, getCSPNonce } from 'directix'
+
+// 高级 HTML 消毒
+const clean = sanitizeHtml(userInput, {
+  allowedTags: ['b', 'i', 'p'],
+  detectDangerousPatterns: true,
+})
+
+// 安全审计
+const report = SecurityAudit.generateReport(htmlContent)
+console.log(SecurityAudit.formatReport(report, 'json'))
+
+// 检查依赖漏洞
+const vulns = await SecurityAudit.checkDependencies()
+```
+
 ## v1.9.0 新特性
 
 ### 国际化 (i18n)

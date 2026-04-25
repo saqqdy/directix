@@ -41,7 +41,7 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			external: ['vue', 'lottie-web', '@nuxt/kit', '@nuxt/schema', '#app', '#imports'],
+			external: ['vue', 'lottie-web', '@nuxt/kit', '@nuxt/schema', '#app', '#imports', 'node:child_process'],
 			output: {
 				banner,
 				globals: {
