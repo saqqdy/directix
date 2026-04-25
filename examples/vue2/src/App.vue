@@ -182,6 +182,20 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/emoji', name: 'v-emoji', desc: 'Emoji filter', version: '1.5.0' },
 		],
 	},
+	{
+		name: 'A11y',
+		icon: '♿',
+		demos: [
+			{ path: '/a11y', name: 'Accessibility', desc: 'ARIA, announcements, focus trap', version: '1.10.0' },
+		],
+	},
+	{
+		name: 'Security Utils',
+		icon: '🔐',
+		demos: [
+			{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
+		],
+	},
 ]
 
 export default defineComponent({
@@ -454,6 +468,11 @@ body {
 .nav-version.v1-9-0 {
 	background: #fef3c7;
 	color: #d97706;
+}
+
+.nav-version.v1-10-0 {
+	background: #ecfdf5;
+	color: #059669;
 }
 
 .nav-desc {

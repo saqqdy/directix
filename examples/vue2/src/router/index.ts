@@ -358,6 +358,17 @@ const routes: RouteConfig[] = [
 		name: 'FullscreenMedia',
 		component: () => import('@/scenarios/FullscreenMedia.vue'),
 	},
+	// v1.10.0 Features
+	{
+		path: '/a11y',
+		name: 'A11y',
+		component: () => import('@/demos/a11y.vue'),
+	},
+	{
+		path: '/security-audit',
+		name: 'SecurityAudit',
+		component: () => import('@/demos/security-audit.vue'),
+	},
 ]
 
 export default routes
