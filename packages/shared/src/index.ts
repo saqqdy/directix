@@ -1,3 +1,6 @@
+// Browser detection
+export * from './browser'
+
 // Directive utilities
 export * from './directive'
 
@@ -9,6 +12,9 @@ export * from './event'
 
 // Event modifiers
 export * from './event-modifiers'
+
+// Polyfill and fallback strategies
+export * from './polyfill'
 
 // Utility functions
 export * from './utils'

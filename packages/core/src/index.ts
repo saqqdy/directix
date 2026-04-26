@@ -1,6 +1,165 @@
 // Adapters (for advanced usage)
 export * from './adapter'
 
+// Audit logging system
+export {
+	audit,
+	clearAuditLogs,
+	configureAuditLog,
+	createAuditLogMiddleware,
+	DEFAULT_AUDIT_LOG_CONFIG,
+	exportAuditLogs,
+	getAuditLogById,
+	getAuditLogConfig,
+	getAuditLogs,
+	getAuditLogStats,
+	logAudit,
+	logDirectiveOperation,
+	logPerformanceIssue,
+	logPermissionCheck,
+	logSecurityViolation,
+	withAuditLog,
+	type AuditContext,
+	type AuditEventType,
+	type AuditLogConfig,
+	type AuditLogEntry,
+	type AuditLogExportOptions,
+	type AuditLogFilter,
+	type AuditLogLevel,
+	type AuditLogStats,
+} from './audit-log'
+
+// Benchmark system
+export {
+	benchmark,
+	clearBenchmarkResults,
+	compareBenchmarks,
+	compareSnapshots,
+	configureBenchmark,
+	createDirectiveBenchmark,
+	DEFAULT_BENCHMARK_CONFIG,
+	exportBenchmarkResults,
+	generateBenchmarkReport,
+	getAllBenchmarkResults,
+	getBenchmarkConfig,
+	getBenchmarkResult,
+	runBenchmark,
+	runBenchmarkSuite,
+	takePerformanceSnapshot,
+	type BenchmarkComparison,
+	type BenchmarkConfig,
+	type BenchmarkFunction,
+	type BenchmarkResult,
+	type BenchmarkSuite,
+	type PerformanceSnapshot,
+} from './benchmark'
+
+// Breaking changes warning system
+export {
+	BREAKING_CHANGES_REGISTRY,
+	checkAPIUsage,
+	clearWarnedChanges,
+	compareVersions,
+	configureBreakingChanges,
+	createDeprecationWarning,
+	DEFAULT_BREAKING_CHANGES_CONFIG,
+	detectBreakingChangesInCode,
+	generateBreakingChangesReport,
+	getAllBreakingChanges,
+	getBreakingChangesByCategory,
+	getBreakingChangesBySeverity,
+	getBreakingChangesConfig,
+	getBreakingChangesForAPI,
+	getBreakingChangesForVersion,
+	getMigrationTimeline,
+	getWarnedChanges,
+	isAPIAffected,
+	isVersionAffected,
+	warnBreakingChange,
+	type ChangeCategory as BreakingChangeCategory,
+	type BreakingChangeDefinition,
+	type BreakingChangeDetection,
+	type BreakingChangesConfig,
+	type BreakingChangesReport,
+	type ChangeSeverity,
+	type ChangeStatus,
+} from './breaking-changes'
+
+// Browser compatibility
+export {
+	clearWarnedFeatures,
+	configureCompatibility,
+	generateCompatibilityReport,
+	getBrowserInfo,
+	getCompatibilityConfig,
+	getMissingPolyfills,
+	getPolyfillStatus,
+	getUnsupportedFeatures,
+	isFeatureSupported,
+	isFullySupported,
+	isPolyfillLoaded,
+	isUnsupportedBrowser,
+	markPolyfillLoaded,
+	meetsMinimumRequirements,
+	registerPolyfill,
+	resetBrowserInfo,
+	warnUnsupportedFeatureOnce,
+	warnUnsupportedFeatures,
+	type BrowserCompatibilityConfig,
+	type BrowserFeatures,
+	type BrowserInfo,
+	type BrowserTarget,
+	type CompatibilityReport,
+	type FallbackConfig,
+	type PlatformType,
+	type PolyfillStrategy,
+	type SupportLevel,
+} from './compatibility'
+
+// Compatibility test matrix
+export {
+	BROWSER_TARGETS,
+	FEATURE_MATRIX,
+	generateBrowserslistConfig,
+	getBrowserCompatibilityReport,
+	getBrowsersSupportingFeature,
+	getCompatibilityMatrix,
+	getFeatureSupport,
+	isBrowserSupported,
+	MOBILE_DEVICES,
+	type CompatibilityMatrix,
+	type FeatureMatrix,
+	type FeatureSupport,
+	type BrowserTarget as MatrixBrowserTarget,
+	type MobileDevice,
+} from './compatibility-matrix'
+
+// Config center
+export {
+	configureConfigCenter,
+	DEFAULT_CONFIG_CENTER_CONFIG,
+	deleteConfig,
+	exportConfig,
+	getAllConfig,
+	getConfig,
+	getConfigCenterConfig,
+	getConfigSnapshots,
+	getConfigStats,
+	importConfig,
+	initConfigCenter,
+	resetConfigCenter,
+	rollbackConfig,
+	setConfig,
+	syncConfigToRemote,
+	watchConfig,
+	type ConfigCenterConfig,
+	type ConfigChangeEvent,
+	type ConfigSchema,
+	type ConfigSnapshot,
+	type ConfigSource,
+	type ConfigSourceType,
+} from './config-center'
+
 // Directive definition
 export { defineDirective, defineDirectiveGroup } from './define'
 
@@ -20,6 +179,56 @@ export {
 	type PluginInfo,
 } from './devtools'
 
+// Edge case handling
+export {
+	checkDependency,
+	clearEdgeCaseWarnings,
+	configureEdgeCase,
+	createDebouncedResizeHandler,
+	createSafeDirectiveWrapper,
+	DEFAULT_EDGE_CASE_CONFIG,
+	detectResizeLoop,
+	detectScrollJank,
+	getEdgeCaseConfig,
+	getEdgeCaseWarnings,
+	getElementWithFallback,
+	getMemoryStats,
+	getObserverCount,
+	handleSSRUnsupported,
+	handleTouchConflict,
+	isInViewport,
+	isSSR as isSSREnvironment,
+	safeQueryElement,
+	setupCleanupOnUnload,
+	stopCleanupTimer,
+	trackObserver,
+	untrackObserver,
+	validateBinding,
+	waitForDOMReady,
+	withErrorRecovery,
+	type EdgeCaseConfig,
+	type EdgeCaseResult,
+	type EdgeCaseType,
+	type EdgeCaseWarning,
+} from './edge-case'
+
+// Enterprise permission management
+export {
+	configureEnterprisePermission,
+	createPermissionCheck,
+	DEFAULT_ENTERPRISE_PERMISSION_CONFIG,
+	EnterprisePermissionManager,
+	getPermissionManager,
+	hasPermission,
+	hasPermissionSync,
+	type EnterprisePermissionConfig,
+	type PermissionAuditLogEntry,
+	type PermissionCheckResult,
+	type PermissionSourceConfig,
+	type PermissionSourceType,
+	type RoleDefinition,
+} from './enterprise-permission'
+
 // Environment detection
 export {
 	getVueVersion,
@@ -37,6 +246,94 @@ export {
 	supportsResizeObserver,
 	type VueVersion,
 } from './env'
+
+// First screen optimization
+export {
+	calculateTTI,
+	cancelIdleCallback,
+	cleanupFirstScreenOptimizer,
+	configureFirstScreen,
+	createLazyLoader,
+	createPerformanceBudget,
+	DEFAULT_FIRST_SCREEN_CONFIG,
+	deferNonCriticalDirective,
+	deferTask,
+	executeDeferredTasks,
+	extractCriticalCSS,
+	getFirstScreenConfig,
+	getFirstScreenMetrics,
+	initFirstScreenOptimizer,
+	inlineCriticalCSS,
+	isDOMReady,
+	isPageLoaded,
+	onDOMReady,
+	onPageLoad,
+	prefetchModule,
+	prefetchVisibleElements,
+	preloadModule,
+	requestIdleCallback,
+	type DeferredTask,
+	type FirstScreenConfig,
+	type FirstScreenMetrics,
+	type LoadPriority,
+} from './first-screen'
+
+// Migration helpers
+export {
+	detectLegacyUsage,
+	estimateMigrationEffort,
+	generateMigrationReport,
+	getMigrationRules,
+	migrate,
+	needsMigration,
+	type BreakingChange,
+	type CodeChange,
+	type DeprecatedAPI,
+	type LegacyUsageReport,
+	type MigrationOptions,
+	type MigrationResult,
+	type MigrationRule,
+	type MigrationSource,
+	type MigrationStats,
+	type MigrationSuggestion,
+	type MigrationWarning,
+} from './migration'
+
+// Monitoring and alerting
+export {
+	acknowledgeAlert,
+	addHealthCheck,
+	clearAlerts,
+	configureMonitoring,
+	DEFAULT_MONITORING_CONFIG,
+	exportPrometheusMetrics,
+	getAlerts,
+	getCounterValue,
+	getGaugeValue,
+	getHealthStatus,
+	getHistogramStats,
+	getMetrics,
+	getMonitoringConfig,
+	getMonitoringStats,
+	incrementCounter,
+	recordHistogram,
+	removeHealthCheck,
+	resetMonitoring,
+	resolveAlert,
+	setGauge,
+	timeOperation,
+	triggerAlert,
+	type Alert,
+	type AlertChannel,
+	type AlertRule,
+	type AlertSeverity,
+	type AlertStatus,
+	type HealthCheck,
+	type HealthStatus,
+	type Metric,
+	type MetricType,
+	type MonitoringConfig,
+} from './monitoring'
 
 // Performance monitoring
 export {
@@ -62,6 +359,27 @@ export {
 	type PerformanceMetric,
 	type PerformanceStats,
 } from './performance'
+
+// Performance optimization
+export {
+	ComputedCache,
+	configurePerformanceOptimization,
+	DEFAULT_PERFORMANCE_CONFIG,
+	DOMQueryCache,
+	EventBatchProcessor,
+	getDOMQueryCache,
+	getEventBatchProcessor,
+	getMemoryCleanupManager,
+	getPerformanceOptimizationConfig,
+	LazyInitializer,
+	MemoryCleanupManager,
+	ObjectPool,
+	resetPerformanceOptimizer,
+	runMemoryCleanup,
+	WeakCache,
+	type ObjectPoolOptions,
+	type PerformanceOptimizationConfig,
+} from './performance-optimizer'
 
 // Types
 export * from './types'

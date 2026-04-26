@@ -5,6 +5,7 @@ import { createComposable } from './commands/create-composable.js'
 import { createDirective } from './commands/create-directive.js'
 import { doctor } from './commands/doctor.js'
 import { initProject } from './commands/init.js'
+import { runMigrate } from './commands/migrate.js'
 
 const cli = cac('directix')
 
@@ -49,11 +50,23 @@ cli
 
 // Migrate command
 cli
-	.command('migrate', 'Migrate from another library')
-	.option('-f, --from <library>', 'Source library (vueuse, v-directives)')
-	.action(async (options: { from?: string }) => {
-		console.log(chalk.yellow('Migration feature coming soon!'))
-		console.log(chalk.gray(`Source: ${options.from || 'not specified'}`))
+	.command('migrate', 'Migrate from older versions or other libraries')
+	.option('-f, --from <library>', 'Source library (directix-v1, vueuse, v-directives)')
+	.option('-d, --dry-run', 'Show changes without applying them')
+	.option('-v, --verbose', 'Show detailed output')
+	.option('-o, --output <file>', 'Output report to file')
+	.option('--format <format>', 'Report format (text, json, markdown)', { default: 'text' })
+	.example('directix migrate')
+	.example('directix migrate --from vueuse --dry-run')
+	.example('directix migrate --output report.md --format markdown')
+	.action(async (options: {
+		from?: string
+		dryRun?: boolean
+		verbose?: boolean
+		output?: string
+		format?: 'text' | 'json' | 'markdown'
+	}) => {
+		await runMigrate(options)
 	})
 
 cli.parse()
