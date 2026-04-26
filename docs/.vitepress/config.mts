@@ -291,6 +291,14 @@ export default defineConfig({
 							text: 'Categories',
 						},
 					],
+					'/migration/': [
+						{
+							items: [
+								{ link: '/migration/v2-migration-guide', text: 'v2.0 Migration Guide' },
+							],
+							text: 'Migration',
+						},
+					],
 				},
 				sidebarMenuLabel: 'Menu',
 			},
@@ -578,6 +586,14 @@ export default defineConfig({
 								{ link: '/zh/guide/observers', text: '观察者指令' },
 							],
 							text: '分类',
+						},
+					],
+					'/zh/migration/': [
+						{
+							items: [
+								{ link: '/zh/migration/v2-migration-guide', text: 'v2.0 迁移指南' },
+							],
+							text: '迁移',
 						},
 					],
 				},
