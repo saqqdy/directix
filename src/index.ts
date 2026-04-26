@@ -225,29 +225,14 @@ export type {
 	UsePWAReturn,
 } from './utils'
 
+// Export Web Components utilities
+export * from './web-components'
+
 // Export core utilities
 export * from '@directix/core'
 
 // Export i18n
 export * from '@directix/i18n'
-
-// Export shared utilities (excluding tools with the same name as directives)
-export {
-	deepClone,
-	deepMerge,
-	generateId,
-	get,
-	isArray,
-	isBoolean,
-	isEmpty,
-	isFunction,
-	isNumber,
-	isObject,
-	isPromise,
-	isString,
-	parseTime,
-	set,
-} from '@directix/shared'
 
 // All directives list
 const allDirectives: Record<string, Directive> = {
@@ -372,3 +357,21 @@ const install = (app: App | any, options: DirectiveInstallOptions = {}): void =>
 export const Directix: Plugin = {
 	install,
 }
+
+// Export shared utilities (excluding tools with the same name as directives)
+export {
+	deepClone,
+	deepMerge,
+	generateId,
+	get,
+	isArray,
+	isBoolean,
+	isEmpty,
+	isFunction,
+	isNumber,
+	isObject,
+	isPromise,
+	isString,
+	parseTime,
+	set,
+} from '@directix/shared'
