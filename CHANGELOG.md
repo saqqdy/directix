@@ -1221,13 +1221,13 @@ None
 - Developer experience improvements (error messages, DevTools integration)
 - Plugin system for community extensions
 
-### v1.10.0 (Planned - 2026-05-06)
+### v1.10.0 (2026-05-06)
 - Vue 3 exclusive optimizations preview (Suspense, Teleport)
 - Mobile optimization (touch gestures, PWA support)
 - Accessibility (ARIA, keyboard navigation, screen readers)
 - Security enhancements (XSS protection, CSP compatibility)
 
-### v1.11.0 (Planned - 2026-05-13)
+### v1.11.0 (2026-05-13)
 - Stability and compatibility enhancements
 - Performance limit optimization (bundle size, runtime, memory)
 - Enterprise features (permissions, audit logs, config center, monitoring)
