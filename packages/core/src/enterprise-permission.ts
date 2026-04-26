@@ -554,6 +554,8 @@ export class EnterprisePermissionManager {
 	 */
 	addRole(role: RoleDefinition): void {
 		this.config.roles[role.name] = role
+		// Clear resolved cache to re-detect circular inheritance
+		this.resolvedRoles.clear()
 		this.resolveRole(role.name, new Set())
 	}
 

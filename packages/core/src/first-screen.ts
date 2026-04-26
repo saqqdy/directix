@@ -592,29 +592,30 @@ export function onPageLoad(callback: () => void): void {
  * Request idle callback with fallback
  */
 export function requestIdleCallback(callback: IdleRequestCallback, options?: IdleRequestOptions): number {
-	if ('requestIdleCallback' in window) {
+	if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
 		return (window as any).requestIdleCallback(callback, options)
 	}
 
-	// Fallback to setTimeout (window may be typed as never in SSR contexts)
-	const win = window as unknown as Window & { setTimeout: typeof setTimeout }
-	return win.setTimeout(() => {
+	// Fallback to setTimeout
+	const timeoutId = setTimeout(() => {
 		const start = Date.now()
 		callback({
 			didTimeout: false,
 			timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
 		})
-	}, 1) as unknown as number
+	}, 1)
+	// Return a number for consistency (in Node.js, setTimeout returns an object)
+	return typeof timeoutId === 'number' ? timeoutId : Number(timeoutId)
 }
 
 /**
  * Cancel idle callback
  */
 export function cancelIdleCallback(id: number): void {
-	if ('cancelIdleCallback' in window) {
+	if (typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
 		(window as any).cancelIdleCallback(id)
 	} else {
-		clearTimeout(id)
+		clearTimeout(id as any)
 	}
 }
 
