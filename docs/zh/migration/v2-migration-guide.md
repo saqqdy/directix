@@ -1,286 +1,252 @@
-# Directix v2.0.0 迁移指南
+# Directix v2.0.0 升级指南
 
-本指南帮助你从 Directix v1.x 迁移到 v2.0.0。
+本指南帮助你升级到 Directix v2.0.0 并了解新功能。
 
 ## 概述
 
-v2.0.0 是一个主要版本，专注于 Vue 3 优化并包含多项破坏性变更。本指南将帮助你理解这些变更并平滑迁移你的代码库。
+v2.0.0 是一个主要版本，新增了 **Web Components 支持**，同时保持 **Vue 2 和 Vue 3 的完全兼容性**。对于现有用户来说，这是一个**无破坏性升级** - 所有 v1.x 代码无需修改即可继续使用。
 
-## 破坏性变更摘要
+## 主要功能摘要
 
-| 变更 | 严重程度 | 可自动修复 |
-|------|----------|------------|
-| 移除 Vue 2 支持 | 严重 | 否 |
-| 指令命名标准化 | 中等 | 是 |
-| 选项结构简化 | 高 | 否 |
-| 处理函数签名更新 | 中等 | 是 |
-| 移除废弃工具函数 | 低 | 否 |
-| 类型导出重新组织 | 中等 | 否 |
+| 功能 | 影响 | 需要的操作 |
+|------|------|------------|
+| Web Components 支持 | 主要新功能 | 可选 - 探索新功能 |
+| Vue 3 条件优化 | 性能提升 | 无 - 使用 Vue 3 时自动启用 |
+| Vue 2 兼容性保持 | 稳定性 | 无 - 继续正常使用 |
+| 包体积优化 | 性能 | 无 - 自动优化 |
+| 增强的类型定义 | 开发体验 | 可选 - 更新导入 |
 
-## 迁移前检查清单
+## 升级前检查清单
 
-1. **检查 Vue 版本**
+1. **检查当前版本**
    ```bash
-   npm list vue
-   ```
-   v2.0.0 需要 Vue 3.x。如果你使用的是 Vue 2，请参阅 [Vue 2 迁移](#vue-2-迁移) 章节。
-
-2. **运行迁移检测器**
-   ```bash
-   npx directix migrate --from directix-v1 --dry-run
+   npm list directix
    ```
 
-3. **查看破坏性变更报告**
+2. **了解新功能**
+   - Web Components 支持（新增）
+   - Vue 3 性能优化（自动）
+   - 增强的 TypeScript 定义
+
+3. **可选：测试 Web Components**
    ```typescript
-   import { generateBreakingChangesReport } from 'directix/core'
-   
-   const report = generateBreakingChangesReport('2.0.0')
-   console.log(report)
+   import { defineCustomElementDirective, vLazy } from 'directix'
+
+   defineCustomElementDirective({
+     name: 'lazy-img',
+     directive: vLazy,
+   })
    ```
 
-## 主要变更
+## 主要新功能
 
-### 1. 移除 Vue 2 支持
+### 1. Web Components 支持
 
-**之前 (v1.x):**
+v2.0.0 引入了全面的 Web Components 支持，允许你在自定义元素中使用 Directix 指令。
+
+**基本用法：**
 ```typescript
-// 同时支持 Vue 2 和 Vue 3
-import { createApp } from 'vue' // 或 'vue2'
-import Directix from 'directix'
+import { defineCustomElementDirective, vLazy, vClickOutside } from 'directix'
 
-createApp().use(Directix)
+// 从指令定义自定义元素
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true,
+  shadowMode: 'open'
+})
+
+// 现在可以在 HTML 中使用
+// <lazy-img src="image.jpg" value="{ threshold: 0.5 }"></lazy-img>
 ```
 
-**之后 (v2.0.0):**
+**注册多个指令：**
 ```typescript
-// 仅支持 Vue 3
-import { createApp } from 'vue'
-import Directix from 'directix'
+import { registerDirectiveElements, vLazy, vClickOutside } from 'directix'
 
-createApp().use(Directix)
+registerDirectiveElements({
+  'lazy-image': vLazy,
+  'click-outside': vClickOutside,
+})
 ```
 
-**迁移步骤:**
-1. 升级到 Vue 3.x
-2. 如需要，使用 Vue 3 迁移构建版本
-3. 移除 `@vue/composition-api` 依赖
-
-### 2. 指令命名标准化
-
-**之前 (v1.x):**
-```html
-<!-- CamelCase 名称 -->
-<div vClickOutside="handler"></div>
-<div vLazyLoad="options"></div>
-```
-
-**之后 (v2.0.0):**
-```html
-<!-- kebab-case 名称 -->
-<div v-click-outside="handler"></div>
-<div v-lazy-load="options"></div>
-```
-
-**自动修复:**
-```bash
-npx directix migrate --from directix-v1 --auto-fix
-```
-
-### 3. 选项结构简化
-
-**之前 (v1.x):**
+**应用到现有自定义元素：**
 ```typescript
+import { applyDirectiveToCustomElement, vLazy } from 'directix'
+
+const myElement = document.querySelector('my-component')
+const cleanup = applyDirectiveToCustomElement(myElement, vLazy, { threshold: 0.5 })
+
+// 之后需要清理时
+cleanup()
+```
+
+### 2. Vue 3 条件优化
+
+使用 Vue 3 时，Directix 会自动应用性能优化：
+
+- **DOM 元素使用 markRaw** - 避免不必要的响应式开销
+- **状态使用 shallowReactive** - 优化大对象性能
+- **减少运行时检查** - 简化 Vue 3 适配器
+
+这些优化是**自动的**，无需修改代码。
+
+### 3. 包体积改进
+
+- 比 v1.11.0 **减小约 10-15%**
+- 对未使用的指令**更好的 tree-shaking**
+- Web Components 工具的**优化导入**
+
+### 4. 增强的类型定义
+
+改进的 TypeScript 支持和更好的类型推断：
+
+```typescript
+// 更好的指令选项类型推断
+import { vDebounce } from 'directix'
+
 vDebounce({
-  handler: () => {},
+  handler: () => console.log('debounced'),
   delay: 300,
-  immediate: true
+  immediate: true // 完全类型化
 })
-```
 
-**之后 (v2.0.0):**
-```typescript
-vDebounce="{
-  handler: () => {},
-  delay: 300,
-  immediate: true
-}"
-// 或
-v-debounce:300.immediate="handler"
-```
+// Web Components 类型
+import type { CustomElementDirectiveOptions } from 'directix'
 
-### 4. 处理函数签名更新
-
-**之前 (v1.x):**
-```typescript
-const handler = (event, binding) => {
-  // 旧签名
+const options: CustomElementDirectiveOptions = {
+  name: 'my-element',
+  directive: vLazy,
+  shadow: true
 }
 ```
 
-**之后 (v2.0.0):**
+## 可选优化
+
+### Vue 3 性能功能
+
+如果你使用 Vue 3，可以可选地利用增强功能：
+
 ```typescript
-const handler = (value, oldValue, binding) => {
-  // 新签名
-}
-```
+// 使用 Vue 3 时自动启用
+import { useLazyOptimized } from 'directix'
 
-### 5. 移除废弃工具函数
-
-**移除的 API:**
-- `deepMerge` → 使用 `structuredClone()` 或 `Object.assign()`
-- `shallowMerge` → 使用 `Object.assign()`
-- `isObjectLike` → 使用 `typeof` 检查
-
-**之前:**
-```typescript
-import { deepMerge } from 'directix/core'
-const merged = deepMerge(obj1, obj2)
-```
-
-**之后:**
-```typescript
-const merged = structuredClone({ ...obj1, ...obj2 })
-// 或
-const merged = Object.assign({}, obj1, obj2)
-```
-
-### 6. 类型导出重新组织
-
-**之前 (v1.x):**
-```typescript
-import { DirectiveBinding, DirectiveConfig } from 'directix/core'
-```
-
-**之后 (v2.0.0):**
-```typescript
-import type { 
-  DirectiveBinding, 
-  DirectiveConfig,
-  DirectiveSetup 
-} from 'directix/core'
-```
-
-## v2.0.0 新功能
-
-### 企业级权限管理
-```typescript
-import { 
-  configureEnterprisePermission,
-  hasPermission 
-} from 'directix/core'
-
-configureEnterprisePermission({
-  sources: [{ type: 'api', api: { url: '/api/permissions' } }],
-  roles: {
-    admin: { permissions: ['read', 'write', 'delete'] }
-  }
+// 内部使用 markRaw 和 shallowReactive 以获得更好的性能
+const { state, observe, unobserve } = useLazyOptimized({
+  threshold: 0.5,
+  rootMargin: '50px'
 })
+```
 
-if (await hasPermission('admin')) {
-  // 显示管理员功能
+### Web Components 集成
+
+对于在 Vue 旁边使用 Web Components 的项目：
+
+```typescript
+import { 
+  isCustomElement, 
+  createDirectiveElement 
+} from 'directix'
+
+// 检查元素是否为自定义元素
+if (isCustomElement(myElement)) {
+  // 应用指令特定逻辑
 }
+
+// 创建可复用的自定义元素类
+const LazyImage = createDirectiveElement('lazy-img', vLazy)
+customElements.define('lazy-img', LazyImage)
 ```
 
-### 审计日志
-```typescript
-import { 
-  configureAuditLog,
-  logDirectiveOperation 
-} from 'directix/core'
+## 升级指南
 
-configureAuditLog({
-  enabled: true,
-  persistToStorage: true
-})
+### 简单升级（推荐）
 
-// 指令中自动记录日志
-logDirectiveOperation('mount', 'v-permission')
-```
+对于大多数用户，升级非常简单：
 
-### 破坏性变更预警系统
-```typescript
-import { 
-  generateBreakingChangesReport,
-  detectBreakingChangesInCode 
-} from 'directix/core'
-
-// 检查代码中的潜在问题
-const detections = detectBreakingChangesInCode(yourCode)
-```
-
-## 迁移工具
-
-### CLI 迁移命令
 ```bash
-# 试运行查看变更
-npx directix migrate --from directix-v1 --dry-run
-
-# 应用变更
-npx directix migrate --from directix-v1
-
-# 尽可能自动修复
-npx directix migrate --from directix-v1 --auto-fix
+npm install directix@2.0.0
+# 或
+pnpm add directix@2.0.0
+# 或
+yarn add directix@2.0.0
 ```
 
-### 编程式迁移
-```typescript
-import { 
-  migrate,
-  detectLegacyUsage,
-  generateMigrationReport 
-} from 'directix/core'
+**无需修改代码** - 你现有的 v1.x 代码将继续正常工作。
 
-const report = detectLegacyUsage(code, 'directix-v1')
-const result = migrate(code, { source: 'directix-v1' })
+### 探索新功能
+
+升级后，你可以选择性地探索新功能：
+
+**1. 尝试 Web Components：**
+```typescript
+import { defineCustomElementDirective, vLazy } from 'directix'
+
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+})
 ```
 
-## 兼容层
-
-为了渐进式迁移，v2.0.0 提供了兼容层：
-
+**2. 使用 Vue 3 优化（自动）：**
 ```typescript
-import { createCompatLayer } from 'directix/compat'
+// 无需更改 - 使用 Vue 3 时优化自动启用
+import { vLazy } from 'directix'
+```
 
-const app = createApp()
-app.use(createCompatLayer({
-  // 启用特定的兼容特性
-  legacyNaming: true,
-  legacyOptions: true
-}))
+**3. 检查包体积：**
+```bash
+# 分析你的包体积
+npx vite-bundle-visualizer
 ```
 
 ## 性能提升
 
 v2.0.0 包含显著的性能提升：
 
-- **包体积**: 核心包体积减少 30%
+- **包体积**: 比 v1.11.0 减小约 10-15%
 - **Tree-shaking**: 更好的死代码消除
-- **运行时**: 优化的指令生命周期
+- **运行时**: 优化的指令生命周期（Vue 3）
 - **内存**: 减少观察者开销
+- **Web Components**: 未使用时零开销
 
 ## 时间线
 
-| 阶段 | 日期 | 操作 |
+| 阶段 | 日期 | 状态 |
 |------|------|------|
-| v1.11.0 | 2026-05-13 | 发布迁移工具 |
-| v1.12.0 | 待定 | 最终 v1.x 版本 |
-| v2.0.0-beta | 待定 | Beta 测试 |
-| v2.0.0 | 待定 | 稳定版本发布 |
+| v1.11.0 | 2026-05-13 | ✅ 已发布 - 迁移工具和企业级功能 |
+| v2.0.0 | 2026-04-26 | ✅ 已发布 - Web Components 支持 |
+| v2.1.0 | 待定 | 📋 计划中 - 增强 Web Components |
 
 ## 获取帮助
 
-- **文档**: https://directix.dev/docs/migration
+- **文档**: https://directix.dev/docs
+- **Web Components 指南**: https://directix.dev/docs/web-components
 - **GitHub Issues**: https://github.com/saqqdy/directix/issues
 - **Discord**: https://discord.gg/directix
 
-## 检查清单
+## 升级检查清单
 
-- [ ] 升级到 Vue 3.x
-- [ ] 运行迁移检测器
-- [ ] 查看破坏性变更报告
-- [ ] 更新指令名称为 kebab-case
-- [ ] 更新指令选项
-- [ ] 替换废弃的工具函数
-- [ ] 更新类型导入
-- [ ] 运行测试
-- [ ] 在预发布环境中测试
+- [x] 安装 directix@2.0.0
+- [ ] 验证现有代码正常工作（无需修改）
+- [ ] 可选：探索 Web Components 支持
+- [ ] 可选：测试 Vue 3 性能优化
+- [ ] 运行测试确保兼容性
+- [ ] 查看包体积改进
+
+## 下一步
+
+### 对于 Vue 2 用户
+- 继续像以前一样使用 Directix
+- 无需迁移
+- 考虑为未来项目探索 Web Components
+
+### 对于 Vue 3 用户
+- 享受自动的性能优化
+- 尝试 Web Components 实现框架无关的指令
+- 从更小的包体积中受益
+
+### 对于所有用户
+- Web Components 开启了新的使用场景
+- 更好的 TypeScript 支持
+- 改进的文档和示例

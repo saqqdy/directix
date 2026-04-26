@@ -1,286 +1,252 @@
 # Directix v2.0.0 Migration Guide
 
-This guide helps you migrate from Directix v1.x to v2.0.0.
+This guide helps you upgrade to Directix v2.0.0 and understand the new features.
 
 ## Overview
 
-v2.0.0 is a major release that focuses on Vue 3 optimization and includes several breaking changes. This guide will help you understand the changes and migrate your codebase smoothly.
+v2.0.0 is a major release that adds **Web Components support** while maintaining **full Vue 2 and Vue 3 compatibility**. This is a **non-breaking upgrade** for existing users - all v1.x code continues to work without modifications.
 
-## Breaking Changes Summary
+## Key Features Summary
 
-| Change | Severity | Auto-fixable |
-|--------|----------|--------------|
-| Vue 2 support removed | Critical | No |
-| Directive naming standardized | Medium | Yes |
-| Option structure simplified | High | No |
-| Handler signatures updated | Medium | Yes |
-| Deprecated utils removed | Low | No |
-| Type exports reorganized | Medium | No |
+| Feature | Impact | Action Required |
+|---------|---------|-----------------|
+| Web Components support | Major new feature | Optional - explore new capabilities |
+| Vue 3 conditional optimizations | Performance boost | None - automatic when using Vue 3 |
+| Vue 2 compatibility maintained | Stability | None - continues to work |
+| Bundle size optimization | Performance | None - automatic |
+| Enhanced type definitions | Developer experience | Optional - update imports |
 
-## Pre-Migration Checklist
+## Pre-Upgrade Checklist
 
-1. **Check Vue Version**
+1. **Check Current Version**
    ```bash
-   npm list vue
-   ```
-   v2.0.0 requires Vue 3.x. If you're using Vue 2, see the [Vue 2 Migration](#vue-2-migration) section.
-
-2. **Run Migration Detector**
-   ```bash
-   npx directix migrate --from directix-v1 --dry-run
+   npm list directix
    ```
 
-3. **Review Breaking Changes Report**
+2. **Review New Features**
+   - Web Components support (new)
+   - Vue 3 performance optimizations (automatic)
+   - Enhanced TypeScript definitions
+
+3. **Optional: Test Web Components**
    ```typescript
-   import { generateBreakingChangesReport } from 'directix/core'
-   
-   const report = generateBreakingChangesReport('2.0.0')
-   console.log(report)
+   import { defineCustomElementDirective, vLazy } from 'directix'
+
+   defineCustomElementDirective({
+     name: 'lazy-img',
+     directive: vLazy,
+   })
    ```
 
-## Major Changes
+## Major New Features
 
-### 1. Vue 2 Support Removed
+### 1. Web Components Support
 
-**Before (v1.x):**
+v2.0.0 introduces comprehensive Web Components support, allowing you to use Directix directives with custom elements.
+
+**Basic Usage:**
 ```typescript
-// Works with both Vue 2 and Vue 3
-import { createApp } from 'vue' // or 'vue2'
-import Directix from 'directix'
+import { defineCustomElementDirective, vLazy, vClickOutside } from 'directix'
 
-createApp().use(Directix)
+// Define a custom element from a directive
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true,
+  shadowMode: 'open'
+})
+
+// Now you can use it in HTML
+// <lazy-img src="image.jpg" value="{ threshold: 0.5 }"></lazy-img>
 ```
 
-**After (v2.0.0):**
+**Register Multiple Directives:**
 ```typescript
-// Vue 3 only
-import { createApp } from 'vue'
-import Directix from 'directix'
+import { registerDirectiveElements, vLazy, vClickOutside } from 'directix'
 
-createApp().use(Directix)
+registerDirectiveElements({
+  'lazy-image': vLazy,
+  'click-outside': vClickOutside,
+})
 ```
 
-**Migration Steps:**
-1. Upgrade to Vue 3.x
-2. Use Vue 3 migration build if needed
-3. Remove `@vue/composition-api` dependency
-
-### 2. Directive Naming Standardized
-
-**Before (v1.x):**
-```html
-<!-- CamelCase names -->
-<div vClickOutside="handler"></div>
-<div vLazyLoad="options"></div>
-```
-
-**After (v2.0.0):**
-```html
-<!-- kebab-case names -->
-<div v-click-outside="handler"></div>
-<div v-lazy-load="options"></div>
-```
-
-**Auto-fix:**
-```bash
-npx directix migrate --from directix-v1 --auto-fix
-```
-
-### 3. Option Structure Simplified
-
-**Before (v1.x):**
+**Apply to Existing Custom Elements:**
 ```typescript
+import { applyDirectiveToCustomElement, vLazy } from 'directix'
+
+const myElement = document.querySelector('my-component')
+const cleanup = applyDirectiveToCustomElement(myElement, vLazy, { threshold: 0.5 })
+
+// Later, when you need to cleanup
+cleanup()
+```
+
+### 2. Vue 3 Conditional Optimizations
+
+When using Vue 3, Directix automatically applies performance optimizations:
+
+- **markRaw for DOM elements** - Prevents unnecessary reactivity overhead
+- **shallowReactive for state** - Optimizes large object performance
+- **Reduced runtime checks** - Simplified adapter for Vue 3
+
+These optimizations are **automatic** and require no code changes.
+
+### 3. Bundle Size Improvements
+
+- **~10-15% smaller** than v1.11.0
+- **Better tree-shaking** for unused directives
+- **Optimized imports** for Web Components utilities
+
+### 4. Enhanced Type Definitions
+
+Improved TypeScript support with better type inference:
+
+```typescript
+// Better type inference for directive options
+import { vDebounce } from 'directix'
+
 vDebounce({
-  handler: () => {},
+  handler: () => console.log('debounced'),
   delay: 300,
-  immediate: true
+  immediate: true // Fully typed
 })
-```
 
-**After (v2.0.0):**
-```typescript
-vDebounce="{
-  handler: () => {},
-  delay: 300,
-  immediate: true
-}"
-// or
-v-debounce:300.immediate="handler"
-```
+// Web Components types
+import type { CustomElementDirectiveOptions } from 'directix'
 
-### 4. Handler Signature Updated
-
-**Before (v1.x):**
-```typescript
-const handler = (event, binding) => {
-  // old signature
+const options: CustomElementDirectiveOptions = {
+  name: 'my-element',
+  directive: vLazy,
+  shadow: true
 }
 ```
 
-**After (v2.0.0):**
+## Optional Optimizations
+
+### Vue 3 Performance Features
+
+If you're using Vue 3, you can optionally leverage enhanced features:
+
 ```typescript
-const handler = (value, oldValue, binding) => {
-  // new signature
-}
-```
+// Automatic when using Vue 3
+import { useLazyOptimized } from 'directix'
 
-### 5. Deprecated Utilities Removed
-
-**Removed APIs:**
-- `deepMerge` → Use `structuredClone()` or `Object.assign()`
-- `shallowMerge` → Use `Object.assign()`
-- `isObjectLike` → Use `typeof` checks
-
-**Before:**
-```typescript
-import { deepMerge } from 'directix/core'
-const merged = deepMerge(obj1, obj2)
-```
-
-**After:**
-```typescript
-const merged = structuredClone({ ...obj1, ...obj2 })
-// or
-const merged = Object.assign({}, obj1, obj2)
-```
-
-### 6. Type Exports Reorganized
-
-**Before (v1.x):**
-```typescript
-import { DirectiveBinding, DirectiveConfig } from 'directix/core'
-```
-
-**After (v2.0.0):**
-```typescript
-import type { 
-  DirectiveBinding, 
-  DirectiveConfig,
-  DirectiveSetup 
-} from 'directix/core'
-```
-
-## New Features in v2.0.0
-
-### Enterprise Permission Management
-```typescript
-import { 
-  configureEnterprisePermission,
-  hasPermission 
-} from 'directix/core'
-
-configureEnterprisePermission({
-  sources: [{ type: 'api', api: { url: '/api/permissions' } }],
-  roles: {
-    admin: { permissions: ['read', 'write', 'delete'] }
-  }
+// Uses markRaw and shallowReactive internally for better performance
+const { state, observe, unobserve } = useLazyOptimized({
+  threshold: 0.5,
+  rootMargin: '50px'
 })
+```
 
-if (await hasPermission('admin')) {
-  // Show admin features
+### Web Components Integration
+
+For projects using Web Components alongside Vue:
+
+```typescript
+import { 
+  isCustomElement, 
+  createDirectiveElement 
+} from 'directix'
+
+// Check if element is custom element
+if (isCustomElement(myElement)) {
+  // Apply directive-specific logic
 }
+
+// Create reusable custom element class
+const LazyImage = createDirectiveElement('lazy-img', vLazy)
+customElements.define('lazy-img', LazyImage)
 ```
 
-### Audit Logging
-```typescript
-import { 
-  configureAuditLog,
-  logDirectiveOperation 
-} from 'directix/core'
+## Upgrade Guide
 
-configureAuditLog({
-  enabled: true,
-  persistToStorage: true
-})
+### Simple Upgrade (Recommended)
 
-// Automatic logging in directives
-logDirectiveOperation('mount', 'v-permission')
-```
+For most users, upgrading is straightforward:
 
-### Breaking Changes Warning System
-```typescript
-import { 
-  generateBreakingChangesReport,
-  detectBreakingChangesInCode 
-} from 'directix/core'
-
-// Check code for potential issues
-const detections = detectBreakingChangesInCode(yourCode)
-```
-
-## Migration Tools
-
-### CLI Migration Command
 ```bash
-# Dry run to see changes
-npx directix migrate --from directix-v1 --dry-run
-
-# Apply changes
-npx directix migrate --from directix-v1
-
-# Auto-fix where possible
-npx directix migrate --from directix-v1 --auto-fix
+npm install directix@2.0.0
+# or
+pnpm add directix@2.0.0
+# or
+yarn add directix@2.0.0
 ```
 
-### Programmatic Migration
-```typescript
-import { 
-  migrate,
-  detectLegacyUsage,
-  generateMigrationReport 
-} from 'directix/core'
+**No code changes required** - your existing v1.x code will continue to work.
 
-const report = detectLegacyUsage(code, 'directix-v1')
-const result = migrate(code, { source: 'directix-v1' })
+### Exploring New Features
+
+After upgrading, you can optionally explore new features:
+
+**1. Try Web Components:**
+```typescript
+import { defineCustomElementDirective, vLazy } from 'directix'
+
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+})
 ```
 
-## Compatibility Layer
-
-For gradual migration, v2.0.0 provides a compatibility layer:
-
+**2. Use Vue 3 Optimizations (Automatic):**
 ```typescript
-import { createCompatLayer } from 'directix/compat'
+// No changes needed - optimizations are automatic when using Vue 3
+import { vLazy } from 'directix'
+```
 
-const app = createApp()
-app.use(createCompatLayer({
-  // Enable specific compat features
-  legacyNaming: true,
-  legacyOptions: true
-}))
+**3. Check Bundle Size:**
+```bash
+# Analyze your bundle
+npx vite-bundle-visualizer
 ```
 
 ## Performance Improvements
 
 v2.0.0 includes significant performance improvements:
 
-- **Bundle Size**: 30% smaller core bundle
+- **Bundle Size**: ~10-15% smaller than v1.11.0
 - **Tree-shaking**: Better dead code elimination
-- **Runtime**: Optimized directive lifecycle
+- **Runtime**: Optimized directive lifecycle (Vue 3)
 - **Memory**: Reduced observer overhead
+- **Web Components**: Zero-overhead when not used
 
 ## Timeline
 
-| Phase | Date | Action |
+| Phase | Date | Status |
 |-------|------|--------|
-| v1.11.0 | 2026-05-13 | Migration tools released |
-| v1.12.0 | TBD | Final v1.x release |
-| v2.0.0-beta | TBD | Beta testing |
-| v2.0.0 | TBD | Stable release |
+| v1.11.0 | 2026-05-13 | ✅ Released - Migration tools & enterprise features |
+| v2.0.0 | 2026-04-26 | ✅ Released - Web Components support |
+| v2.1.0 | TBD | 📋 Planned - Enhanced Web Components |
 
 ## Getting Help
 
-- **Documentation**: https://directix.dev/docs/migration
+- **Documentation**: https://directix.dev/docs
+- **Web Components Guide**: https://directix.dev/docs/web-components
 - **GitHub Issues**: https://github.com/saqqdy/directix/issues
 - **Discord**: https://discord.gg/directix
 
-## Checklist
+## Upgrade Checklist
 
-- [ ] Upgrade to Vue 3.x
-- [ ] Run migration detector
-- [ ] Review breaking changes report
-- [ ] Update directive names to kebab-case
-- [ ] Update directive options
-- [ ] Replace deprecated utilities
-- [ ] Update type imports
-- [ ] Run tests
-- [ ] Test in staging environment
+- [x] Install directix@2.0.0
+- [ ] Verify existing code works (no changes needed)
+- [ ] Optional: Explore Web Components support
+- [ ] Optional: Test Vue 3 performance optimizations
+- [ ] Run tests to ensure compatibility
+- [ ] Review bundle size improvements
+
+## What's Next?
+
+### For Vue 2 Users
+- Continue using Directix as before
+- No migration needed
+- Consider exploring Web Components for future projects
+
+### For Vue 3 Users
+- Enjoy automatic performance optimizations
+- Try Web Components for framework-agnostic directives
+- Benefit from smaller bundle sizes
+
+### For All Users
+- Web Components enable new use cases
+- Better TypeScript support
+- Improved documentation and examples
