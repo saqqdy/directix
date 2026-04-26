@@ -1,12 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
+	announce,
 	applyAriaAttributes,
+	type ARIAConfig,
+	clearAnnouncer,
 	clearAriaAttributes,
 	generateAriaId,
-	announce,
-	clearAnnouncer,
 	getAutoAriaConfig,
-	type ARIAConfig,
 } from '../../src/utils/a11y'
 
 describe('A11y Utilities', () => {

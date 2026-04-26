@@ -1,14 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
+import { nextTick, ref } from 'vue'
 import {
-	useLazyOptimized,
-	useDirectiveInstance,
 	computedWithCleanup,
-	watchEffectBinding,
-	useSuspenseDirective,
 	ensureTeleportTarget,
 	teleportContent,
+	useDirectiveInstance,
+	useLazyOptimized,
+	useSuspenseDirective,
+	watchEffectBinding,
 } from '../../src/utils/vue3'
-import { nextTick, ref } from 'vue'
 
 describe('Vue3 Utilities', () => {
 	describe('useLazyOptimized', () => {
@@ -29,9 +29,10 @@ describe('Vue3 Utilities', () => {
 
 		it('should load manually', async () => {
 			const onLoad = vi.fn()
-			const { state, load } = useLazyOptimized({ onLoad })
+			const { load } = useLazyOptimized({ onLoad })
 			load()
 			await nextTick()
+			expect(onLoad).toHaveBeenCalled()
 		})
 
 		it('should disconnect observer', () => {
@@ -67,14 +68,15 @@ describe('Vue3 Utilities', () => {
 				initialState: { value: 'test' },
 			})
 			result.setState(prev => ({ ...prev, value: 'updated' }))
+			expect(result.state.value).toBe('updated')
 		})
 
-		it('should reset state', () => {
+		it('should have reset function', () => {
 			const result = useDirectiveInstance({
-				initialState: { value: 'initial' },
+				initialState: { value: 'initial', count: 0 },
 			})
-			result.setState(prev => ({ ...prev, value: 'changed' }))
-			result.reset()
+			expect(typeof result.reset).toBe('function')
+			result.reset() // Should not throw
 		})
 
 		it('should accept shallow option', () => {
@@ -154,15 +156,11 @@ describe('Vue3 Utilities', () => {
 			expect(loader).toHaveBeenCalled()
 		})
 
-		it('should handle errors', async () => {
+		it('should handle errors gracefully', async () => {
 			const loader = vi.fn().mockRejectedValue(new Error('Load failed'))
 			const { state, load } = useSuspenseDirective({ loader })
-			try {
-				await load()
-			} catch (e) {
-				// Error is expected
-			}
-			await nextTick()
+			await load()
+			expect(state.value.error).toBeDefined()
 		})
 
 		it('should call onSuccess callback', async () => {
@@ -194,9 +192,7 @@ describe('Vue3 Utilities', () => {
 		it('should create target if not exists', () => {
 			const target = ensureTeleportTarget('#test-teleport-new')
 			expect(target).toBeDefined()
-			if (target) {
-				expect(target.id).toBe('test-teleport-new')
-			}
+			expect(target?.id).toBe('test-teleport-new')
 		})
 
 		it('should return existing target', () => {

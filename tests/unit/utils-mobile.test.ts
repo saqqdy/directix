@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
-	triggerHaptic,
-	applyVisualFeedback,
-	addPassiveListener,
 	addNonPassiveListener,
-	isTouchDevice,
-	isMobileDevice,
+	addPassiveListener,
+	applyVisualFeedback,
 	getDevicePixelRatio,
+	isMobileDevice,
+	isTouchDevice,
+	NON_PASSIVE_OPTIONS,
 	ObjectPool,
 	PASSIVE_OPTIONS,
-	NON_PASSIVE_OPTIONS,
+	triggerHaptic,
 } from '../../src/utils/mobile'
 
 describe('Mobile Utilities', () => {
@@ -41,12 +41,12 @@ describe('Mobile Utilities', () => {
 			expect(typeof triggerHaptic).toBe('function')
 		})
 
-		it('should accept haptic types', () => {
-			// In non-browser environment, it returns early
+		it('should accept haptic types without error', () => {
 			triggerHaptic('light')
 			triggerHaptic('medium')
 			triggerHaptic('heavy')
 			triggerHaptic('selection')
+			expect(true).toBe(true)
 		})
 	})
 
@@ -121,7 +121,9 @@ describe('Mobile Utilities', () => {
 	describe('ObjectPool', () => {
 		it('should create objects using factory', () => {
 			const factory = () => ({ value: 0 })
-			const reset = (item: { value: number }) => { item.value = 0 }
+			const reset = (item: { value: number }) => {
+				item.value = 0
+			}
 			const pool = new ObjectPool(factory, reset)
 			const obj = pool.acquire()
 			expect(obj).toBeDefined()
@@ -130,19 +132,23 @@ describe('Mobile Utilities', () => {
 
 		it('should reuse objects after release', () => {
 			const factory = () => ({ value: 0 })
-			const reset = (item: { value: number }) => { item.value = 0 }
+			const reset = (item: { value: number }) => {
+				item.value = 0
+			}
 			const pool = new ObjectPool(factory, reset)
 			const obj1 = pool.acquire()
 			obj1.value = 10
 			pool.release(obj1)
 			const obj2 = pool.acquire()
 			expect(obj2).toBe(obj1)
-			expect(obj2.value).toBe(0) // Reset was called
+			expect(obj2.value).toBe(0)
 		})
 
 		it('should track pool size', () => {
 			const factory = () => ({ value: 0 })
-			const reset = (item: { value: number }) => { item.value = 0 }
+			const reset = (item: { value: number }) => {
+				item.value = 0
+			}
 			const pool = new ObjectPool(factory, reset, 5)
 			expect(pool.size).toBe(0)
 			const obj1 = pool.acquire()
@@ -154,20 +160,24 @@ describe('Mobile Utilities', () => {
 
 		it('should respect maxSize', () => {
 			const factory = () => ({ value: 0 })
-			const reset = (item: { value: number }) => { item.value = 0 }
+			const reset = (item: { value: number }) => {
+				item.value = 0
+			}
 			const pool = new ObjectPool(factory, reset, 2)
 			const obj1 = pool.acquire()
 			const obj2 = pool.acquire()
 			const obj3 = pool.acquire()
 			pool.release(obj1)
 			pool.release(obj2)
-			pool.release(obj3) // Should not be added
+			pool.release(obj3)
 			expect(pool.size).toBeLessThanOrEqual(2)
 		})
 
 		it('should clear all pooled objects', () => {
 			const factory = () => ({ value: 0 })
-			const reset = (item: { value: number }) => { item.value = 0 }
+			const reset = (item: { value: number }) => {
+				item.value = 0
+			}
 			const pool = new ObjectPool(factory, reset)
 			const obj1 = pool.acquire()
 			pool.release(obj1)

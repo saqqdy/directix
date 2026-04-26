@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { App, Directive } from 'vue'
-import { PluginManager } from '../../src/plugin/manager'
 import type { DirectixPlugin, PluginContext } from '../../src/plugin/types'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { PluginManager } from '../../src/plugin/manager'
 
 // Mock Vue app
 const mockApp = {

@@ -1,14 +1,14 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import {
-	isUrlSafe,
-	sanitizeUrl,
-	escapeHtml,
-	unescapeHtml,
-	stripHtml,
-	sanitizeHtml,
-	SecurityAudit,
-	SafeContentHandler,
 	createSafeContentHandler,
+	escapeHtml,
+	isUrlSafe,
+	SafeContentHandler,
+	sanitizeHtml,
+	sanitizeUrl,
+	SecurityAudit,
+	stripHtml,
+	unescapeHtml,
 } from '../../src/utils/security'
 
 describe('Security Utilities', () => {
