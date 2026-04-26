@@ -63,12 +63,18 @@ function handleSearch(event) {
 </script>
 ```
 
-## v1.9.0 New Features
+## v1.11.0 Features
 
-- 🌐 **i18n Support** - Internationalization for directive messages
-- 🔌 **Plugin System** - Extensible plugin architecture
-- ⚠️ **Unified Warnings** - Consistent warning system with log levels
-- 📚 **10 Scenario Examples** - Real-world usage patterns
+- 🏢 **Enterprise Features** - Permission management, audit logging, configuration center
+- ⚡ **Performance Optimization** - Bundle size reduction, runtime performance improvements
+- 🛡️ **Security Enhancements** - Advanced XSS protection, CSP compatibility
+- 📊 **Monitoring & Alerting** - Performance metrics, health checks, alert rules
+
+## v2.0.0 Coming Soon
+
+- 🧩 **Web Components Support** - Use directives with Custom Elements
+- ⚡ **Vue 3 Conditional Optimizations** - markRaw, shallowReactive enhancements
+- 🔄 **Full Vue 2 Compatibility** - Continued support for Vue 2.x
 
 ## Resources
 

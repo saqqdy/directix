@@ -25,7 +25,9 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
-## What's New in v2.0.0
+## What's Coming in v2.0.0 (Planned)
+
+> **Note**: v2.0.0 is currently in development. The features below are planned and will be released soon.
 
 ### Web Components Support
 
@@ -69,9 +71,9 @@ const { state, load } = useSuspenseDirective({
 teleportContent(element, { to: '#modal-container' })
 ```
 
-### No Breaking Changes
+### Vue 2 Support Maintained
 
-**v2.0.0 is a non-breaking upgrade** - all v1.x code continues to work without modifications.
+**v2.0.0 will maintain full Vue 2 compatibility** - all v1.x code continues to work without modifications. We are committed to supporting both Vue 2 and Vue 3.
 
 ### Mobile Optimization
 

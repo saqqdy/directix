@@ -2,13 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.0] - 2026-04-26
+## [2.0.0] - TBD
 
 ### Major Update - Web Components Support with Vue 2/3 Compatibility
 
-This is a major version release that adds Web Components support while maintaining full Vue 2 and Vue 3 compatibility. No breaking changes for existing users.
+> **Status**: 📋 Planned - Currently in development
 
-### Added
+This is a major version release that will add Web Components support while maintaining full Vue 2 and Vue 3 compatibility. No breaking changes for existing users.
+
+### Planned Features
 
 #### Web Components Support
 
@@ -30,20 +32,14 @@ defineCustomElementDirective({
 // Now usable as: <lazy-img src="..."></lazy-img>
 ```
 
-### Changed
+### Planned Changes
 
 #### Vue 3 Conditional Optimizations
 
 - **markRaw for DOM elements (Vue 3 only)** - Better performance, no unnecessary reactivity
 - **shallowReactive for directive state (Vue 3 only)** - Optimized for large objects
 - **Runtime version detection maintained** - Ensures Vue 2/3 compatibility
-- **Bundle size optimization** - ~10-15% smaller than v1.11.0
-
-#### Package Changes
-
-- Updated description to include Web Components support
-- Keywords updated to reflect Web Components capability
-- Maintained Vue 2 and Vue 3 peer dependencies
+- **Bundle size optimization** - Expected ~10-15% smaller than v1.11.0
 
 ### Compatibility
 
