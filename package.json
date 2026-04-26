@@ -21,6 +21,22 @@
 			"require": "./dist/nuxt/index.cjs",
 			"import": "./dist/nuxt/index.mjs"
 		},
+		"./core": {
+			"types": "./dist/packages/core.d.ts",
+			"import": "./dist/packages/core.mjs"
+		},
+		"./shared": {
+			"types": "./dist/packages/shared.d.ts",
+			"import": "./dist/packages/shared.mjs"
+		},
+		"./i18n": {
+			"types": "./dist/packages/i18n.d.ts",
+			"import": "./dist/packages/i18n.mjs"
+		},
+		"./composables": {
+			"types": "./dist/composables.d.ts",
+			"import": "./dist/composables.mjs"
+		},
 		"./style.css": "./dist/style.css"
 	},
 	"files": [
@@ -30,7 +46,9 @@
 		"dev": "vite",
 		"dev:playground": "pnpm --dir playground dev",
 		"build": "vite build && tsx scripts/minify && tsx scripts/build-nuxt",
-		"build:types": "vue-tsc --emitDeclarationOnly --outDir dist",
+		"build:optimized": "tsx scripts/build-optimized",
+		"build:size": "tsx scripts/bundle-size",
+		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist",
 		"build:playground": "pnpm --dir playground build",
 		"watch": "vite build --watch",
 		"clean": "rm -rf dist es lib temp coverage playwright-report",
@@ -66,12 +84,12 @@
 		"@types/node": "^22.19.17",
 		"@vitejs/plugin-vue": "^5.2.4",
 		"@vitest/coverage-v8": "^3.2.4",
-		"@vue/test-utils": "^2.4.6",
+		"@vue/test-utils": "^2.4.8",
 		"esbuild": "^0.28.0",
 		"eslint": "^9.39.4",
 		"jsdom": "^26.1.0",
 		"nuxt": "^4.4.2",
-		"terser": "^5.46.1",
+		"terser": "^5.46.2",
 		"tinybench": "^6.0.0",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
@@ -79,7 +97,7 @@
 		"vite-plugin-dts": "^4.5.4",
 		"vitepress": "^1.6.4",
 		"vitest": "^3.2.4",
-		"vue": "^3.5.32",
+		"vue": "^3.5.33",
 		"vue-tsc": "^2.2.12",
 		"vue2": "npm:vue@^2.7.16"
 	},

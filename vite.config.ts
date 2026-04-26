@@ -20,6 +20,9 @@ export default defineConfig({
 			exclude: ['src/nuxt/**'],
 			outDir: 'dist',
 			rollupTypes: true,
+			compilerOptions: {
+				declaration: true,
+			},
 		}),
 	],
 
@@ -51,11 +54,26 @@ export default defineConfig({
 					'@nuxt/schema': 'nuxtSchema',
 				},
 				extend: true,
+				// Optimize chunk splitting for better tree-shaking
+				manualChunks: undefined,
+				// Preserve modules for better tree-shaking
+				preserveModules: false,
+				// Minification options
+				minifyInternalExports: true,
+			},
+			// Tree-shaking optimization
+			treeshake: {
+				preset: 'recommended',
+				moduleSideEffects: 'no-external',
+				propertyReadSideEffects: false,
+				tryCatchDeoptimization: false,
 			},
 		},
 
 		sourcemap: true,
 		minify: false,
+		// Reduce chunk size warnings threshold
+		chunkSizeWarningLimit: 50,
 	},
 
 	resolve: {
@@ -65,5 +83,11 @@ export default defineConfig({
 			'@directix/shared': resolve(__dirname, 'packages/shared/src'),
 			'@directix/i18n': resolve(__dirname, 'packages/i18n/src'),
 		},
+	},
+
+	// Optimize dependency pre-bundling
+	optimizeDeps: {
+		include: ['vue'],
+		exclude: ['@nuxt/kit', '@nuxt/schema'],
 	},
 })

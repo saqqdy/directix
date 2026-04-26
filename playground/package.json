@@ -10,9 +10,9 @@
 		"deploy": "bash scripts/deploy.sh"
 	},
 	"dependencies": {
-		"@vue/repl": "^4.4.0",
+		"@vue/repl": "^4.7.2",
 		"directix": "workspace:*",
-		"vue": "^3.5.32"
+		"vue": "^3.5.33"
 	},
 	"devDependencies": {
 		"@vitejs/plugin-vue": "^5.2.4",
