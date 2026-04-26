@@ -22,8 +22,9 @@ export function createVue3Directive<T, B extends Element>(
 	return {
 		created(el: B, binding: any, vnode: VNode) {
 			// Use shallowReactive for better performance with large objects
+			// Only use markRaw for non-null/undefined values
 			const state: ElementState = shallowReactive({
-				value: markRaw(binding.value),
+				value: binding.value != null ? markRaw(binding.value) : binding.value,
 				vnode,
 				cleanup: [],
 			})
@@ -61,7 +62,7 @@ export function createVue3Directive<T, B extends Element>(
 
 			// Update state
 			if (state) {
-				state.value = binding.value
+				state.value = binding.value != null ? markRaw(binding.value) : binding.value
 				state.vnode = vnode
 			}
 		},

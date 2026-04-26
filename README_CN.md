@@ -8,12 +8,13 @@
 
 **[English](README.md) | 中文**
 
-一个功能全面、易于使用且高性能的 Vue 自定义指令库，同时支持 Vue 2 和 Vue 3。
+一个功能全面、易于使用且高性能的 Vue 自定义指令库，同时支持 Vue 2 和 Vue 3，并提供 Web Components 支持。
 
 ## 特性
 
 - 🎯 **功能全面** - 提供 57 个常用指令和 57 个组合式函数
-- 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2 和 Vue 3
+- 🔄 **Vue 2/3 兼容** - 单一代码库同时支持 Vue 2.6+ 和 Vue 3.0+
+- 🧩 **Web Components** - 支持在自定义元素/Web Components 中使用指令
 - 📦 **支持 Tree-shaking** - 按需引入，减小打包体积
 - 🔒 **TypeScript** - 完整的 TypeScript 类型支持
 - 🚀 **SSR 友好** - 多个指令开箱即用支持 SSR
@@ -24,16 +25,37 @@
 - 🌐 **国际化支持** - 内置中文、英文、日文翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
 
-## v1.10.0 新特性
+## v2.0.0 新特性
 
-### Vue 3 优化预览
+### Web Components 支持
 
-Vue 3 专属优化，利用响应式系统提升性能。
+在自定义元素/Web Components 中使用 Directix 指令：
+
+```typescript
+import { vLazy, defineCustomElementDirective, registerDirectiveElements } from 'directix'
+
+// 从指令定义单个自定义元素
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true
+})
+
+// 注册多个指令为自定义元素
+registerDirectiveElements({
+  'lazy-img': vLazy,
+  'click-outside': vClickOutside
+})
+```
+
+### Vue 3 条件优化
+
+使用 Vue 3 时，Directix 自动应用性能优化：
 
 ```typescript
 import { useLazyOptimized, useSuspenseDirective, teleportContent } from 'directix'
 
-// 使用 shallowRef 优化的懒加载
+// 使用 shallowRef 优化的懒加载（仅 Vue 3）
 const { state, observe } = useLazyOptimized({
   onLoad: (entry) => console.log('可见！')
 })
@@ -43,9 +65,13 @@ const { state, load } = useSuspenseDirective({
   loader: () => fetchData()
 })
 
-// 传送内容到目标位置
+// 传送内容到目标
 teleportContent(element, { to: '#modal-container' })
 ```
+
+### 无破坏性变更
+
+**v2.0.0 是无破坏性升级** - 所有 v1.x 代码无需修改即可继续使用。
 
 ### 移动端优化
 

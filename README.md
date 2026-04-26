@@ -8,12 +8,13 @@
 
 **English** | **[中文文档](README_CN.md)**
 
-A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3.
+A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3, with Web Components support.
 
 ## Features
 
 - 🎯 **Comprehensive** - 57 commonly used directives and 57 composables
-- 🔄 **Vue 2/3 Compatible** - Single codebase supports both Vue 2 and Vue 3
+- 🔄 **Vue 2/3 Compatible** - Single codebase supporting both Vue 2.6+ and Vue 3.0+
+- 🧩 **Web Components** - Use directives with Custom Elements / Web Components
 - 📦 **Tree-shakable** - Import only what you need
 - 🔒 **TypeScript** - Full TypeScript support with type definitions
 - 🚀 **SSR Friendly** - Multiple directives support SSR out of the box
@@ -24,16 +25,37 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
-## What's New in v1.10.0
+## What's New in v2.0.0
 
-### Vue 3 Optimization Preview
+### Web Components Support
 
-Vue 3-specific optimizations leveraging the reactive system for better performance.
+Use Directix directives with Custom Elements / Web Components:
+
+```typescript
+import { vLazy, defineCustomElementDirective, registerDirectiveElements } from 'directix'
+
+// Define a single custom element from directive
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true
+})
+
+// Register multiple directives as custom elements
+registerDirectiveElements({
+  'lazy-img': vLazy,
+  'click-outside': vClickOutside
+})
+```
+
+### Vue 3 Conditional Optimizations
+
+When using Vue 3, Directix automatically applies performance optimizations:
 
 ```typescript
 import { useLazyOptimized, useSuspenseDirective, teleportContent } from 'directix'
 
-// Optimized lazy loading with shallowRef
+// Optimized lazy loading with shallowRef (Vue 3 only)
 const { state, observe } = useLazyOptimized({
   onLoad: (entry) => console.log('Visible!')
 })
@@ -46,6 +68,10 @@ const { state, load } = useSuspenseDirective({
 // Teleport content to target
 teleportContent(element, { to: '#modal-container' })
 ```
+
+### No Breaking Changes
+
+**v2.0.0 is a non-breaking upgrade** - all v1.x code continues to work without modifications.
 
 ### Mobile Optimization
 
