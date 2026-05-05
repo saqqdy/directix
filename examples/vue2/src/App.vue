@@ -196,6 +196,48 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
 		],
 	},
+	{
+		name: 'Composables',
+		icon: '🧩',
+		demos: [
+			{ path: '/composables', name: 'Composables API', desc: 'useDebounce, useThrottle, useHover, etc.', version: '1.11.0' },
+		],
+	},
+	{
+		name: 'Enterprise',
+		icon: '🏢',
+		demos: [
+			{ path: '/enterprise', name: 'Enterprise Features', desc: 'Audit logs, monitoring, permissions', version: '1.11.0' },
+		],
+	},
+	{
+		name: 'i18n',
+		icon: '🌐',
+		demos: [
+			{ path: '/i18n', name: 'Internationalization', desc: 'Multi-language support', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'Plugin',
+		icon: '🔌',
+		demos: [
+			{ path: '/plugin-system', name: 'Plugin System', desc: 'Custom plugins, registry', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'DevTools',
+		icon: '🔧',
+		demos: [
+			{ path: '/devtools', name: 'DevTools Integration', desc: 'Vue DevTools debugging', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'Monitoring',
+		icon: '⚡',
+		demos: [
+			{ path: '/performance', name: 'Performance Monitor', desc: 'Metrics, benchmarks', version: '1.11.0' },
+		],
+	},
 ]
 
 export default defineComponent({
@@ -473,6 +515,11 @@ body {
 .nav-version.v1-10-0 {
 	background: #ecfdf5;
 	color: #059669;
+}
+
+.nav-version.v1-11-0 {
+	background: #e0f7fa;
+	color: #00838f;
 }
 
 .nav-desc {

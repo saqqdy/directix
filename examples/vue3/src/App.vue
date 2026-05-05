@@ -1,10 +1,5 @@
-<script setup lang="ts">
-import { ref, reactive, watch, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
-const currentPath = ref(route.path)
+<script lang="ts">
+import { defineComponent } from 'vue'
 
 interface Demo {
 	path: string
@@ -13,15 +8,18 @@ interface Demo {
 	version: string
 }
 
-interface Category {
+interface CategoryDefinition {
 	name: string
 	icon: string
-	expanded: boolean
 	demos: Demo[]
 }
 
+interface Category extends CategoryDefinition {
+	expanded: boolean
+}
+
 // Category definitions (expanded will be set based on current route)
-const categoryDefinitions: Omit<Category, 'expanded'>[] = [
+const categoryDefinitions: CategoryDefinition[] = [
 	{
 		name: 'Scenarios',
 		icon: '🎯',
@@ -184,71 +182,117 @@ const categoryDefinitions: Omit<Category, 'expanded'>[] = [
 			{ path: '/emoji', name: 'v-emoji', desc: 'Emoji filter', version: '1.5.0' },
 		],
 	},
-		{
-			name: 'A11y',
-			icon: '♿',
-			demos: [
-				{ path: '/a11y', name: 'Accessibility', desc: 'ARIA, announcements, focus trap', version: '1.10.0' },
-			],
-		},
-		{
-			name: 'Security Utils',
-			icon: '🔐',
-			demos: [
-				{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
-			],
-		},
-	]
+	{
+		name: 'A11y',
+		icon: '♿',
+		demos: [
+			{ path: '/a11y', name: 'Accessibility', desc: 'ARIA, announcements, focus trap', version: '1.10.0' },
+		],
+	},
+	{
+		name: 'Security Utils',
+		icon: '🔐',
+		demos: [
+			{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
+		],
+	},
+	{
+		name: 'Composables',
+		icon: '🧩',
+		demos: [
+			{ path: '/composables', name: 'Composables API', desc: 'useDebounce, useThrottle, useHover, etc.', version: '1.11.0' },
+		],
+	},
+	{
+		name: 'Enterprise',
+		icon: '🏢',
+		demos: [
+			{ path: '/enterprise', name: 'Enterprise Features', desc: 'Audit logs, monitoring, permissions', version: '1.11.0' },
+		],
+	},
+	{
+		name: 'i18n',
+		icon: '🌐',
+		demos: [
+			{ path: '/i18n', name: 'Internationalization', desc: 'Multi-language support', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'Plugin',
+		icon: '🔌',
+		demos: [
+			{ path: '/plugin-system', name: 'Plugin System', desc: 'Custom plugins, registry', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'DevTools',
+		icon: '🔧',
+		demos: [
+			{ path: '/devtools', name: 'DevTools Integration', desc: 'Vue DevTools debugging', version: '1.9.0' },
+		],
+	},
+	{
+		name: 'Monitoring',
+		icon: '⚡',
+		demos: [
+			{ path: '/performance', name: 'Performance Monitor', desc: 'Metrics, benchmarks', version: '1.11.0' },
+		],
+	},
+]
 
-// Create reactive categories with expanded state
-const categories = reactive<Category[]>(
-	categoryDefinitions.map(def => ({
-		...def,
-		expanded: false,
-	}))
-)
-
-// Find which category contains the current path
-function findCategoryByPath(path: string): string | null {
-	for (const def of categoryDefinitions) {
-		if (def.demos.some(demo => demo.path === path)) {
-			return def.name
+export default defineComponent({
+	name: 'App',
+	data() {
+		return {
+			categories: [] as Category[],
 		}
-	}
-	return null
-}
-
-// Update expanded state based on current route
-function updateExpandedState(path: string) {
-	const activeCategoryName = findCategoryByPath(path)
-	categories.forEach(category => {
-		category.expanded = category.name === activeCategoryName
-	})
-}
-
-// Watch route changes
-watch(
-	() => route.path,
-	(newPath) => {
-		currentPath.value = newPath
-		updateExpandedState(newPath)
-	}
-)
-
-// Initialize on mount
-onMounted(() => {
-	updateExpandedState(route.path)
+	},
+	computed: {
+		currentPath(): string {
+			return this.$route.path
+		},
+	},
+	watch: {
+		'$route.path': {
+			immediate: true,
+			handler(newPath: string) {
+				this.updateExpandedState(newPath)
+			},
+		},
+	},
+	created() {
+		// Initialize categories with expanded = false
+		this.categories = categoryDefinitions.map(def => ({
+			...def,
+			expanded: false,
+		}))
+	},
+	methods: {
+		toggleCategory(category: Category) {
+			category.expanded = !category.expanded
+		},
+		findCategoryByPath(path: string): string | null {
+			for (const def of categoryDefinitions) {
+				if (def.demos.some(demo => demo.path === path)) {
+					return def.name
+				}
+			}
+			return null
+		},
+		updateExpandedState(path: string) {
+			const activeCategoryName = this.findCategoryByPath(path)
+			this.categories.forEach(category => {
+				category.expanded = category.name === activeCategoryName
+			})
+		},
+	},
 })
-
-function toggleCategory(category: Category) {
-	category.expanded = !category.expanded
-}
 </script>
 
 <template>
 	<div class="app">
 		<header class="header">
-			<h1>Directix Examples</h1>
+			<h1>Directix Examples (Vue 3)</h1>
 			<p>Vue Directives Library - Demo & Testing</p>
 		</header>
 
@@ -267,7 +311,7 @@ function toggleCategory(category: Category) {
 							:key="demo.path"
 							:to="demo.path"
 							class="nav-item"
-							:class="{ active: currentPath === demo.path }"
+							active-class="active"
 						>
 							<span class="nav-name">
 								{{ demo.name }}
@@ -312,7 +356,7 @@ body {
 }
 
 .header {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #42b883 0%, #35495e 100%);
 	color: white;
 	padding: 30px;
 	text-align: center;
@@ -350,7 +394,7 @@ body {
 	display: flex;
 	align-items: center;
 	padding: 10px 12px;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #42b883 0%, #35495e 100%);
 	color: white;
 	border-radius: 8px;
 	cursor: pointer;
@@ -402,11 +446,11 @@ body {
 }
 
 .nav-item:hover {
-	border-color: #667eea;
+	border-color: #42b883;
 }
 
 .nav-item.active {
-	background: #667eea;
+	background: #42b883;
 	color: white;
 }
 
@@ -471,6 +515,11 @@ body {
 .nav-version.v1-10-0 {
 	background: #ecfdf5;
 	color: #059669;
+}
+
+.nav-version.v1-11-0 {
+	background: #e0f7fa;
+	color: #00838f;
 }
 
 .nav-desc {

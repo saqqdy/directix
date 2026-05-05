@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
 	{
 		path: '/',
 		redirect: '/click-outside',
@@ -369,7 +370,40 @@ const routes = [
 		name: 'SecurityAudit',
 		component: () => import('@/demos/security-audit.vue'),
 	},
+	// v1.11.0 Features
+	{
+		path: '/composables',
+		name: 'Composables',
+		component: () => import('@/demos/composables.vue'),
+	},
+	{
+		path: '/enterprise',
+		name: 'Enterprise',
+		component: () => import('@/demos/enterprise.vue'),
+	},
+	{
+		path: '/performance',
+		name: 'Performance',
+		component: () => import('@/demos/performance.vue'),
+	},
+	// v1.9.0 Features
+	{
+		path: '/i18n',
+		name: 'I18n',
+		component: () => import('@/demos/i18n.vue'),
+	},
+	{
+		path: '/plugin-system',
+		name: 'PluginSystem',
+		component: () => import('@/demos/plugin-system.vue'),
+	},
+	{
+		path: '/devtools',
+		name: 'DevTools',
+		component: () => import('@/demos/devtools.vue'),
+	},
 ]
+
 
 const router = createRouter({
 	history: createWebHistory(),

@@ -326,12 +326,18 @@ export default {
     }
 
     const logDirectiveOp = () => {
-      logDirectiveOperation('v-debounce', 'mounted', { wait: 300 })
+      logDirectiveOperation('mount', 'v-debounce', { wait: 300 })
       updateAuditStats()
     }
 
+    const permCheckCount = ref(0)
+
     const logPermissionCheckEvent = () => {
-      logPermissionCheck('admin', true, { userId: 'user-123' })
+      permCheckCount.value++
+      // Alternate between granted and denied to showcase both log levels
+      const granted = permCheckCount.value % 3 !== 0
+      const permission = granted ? 'read' : 'admin'
+      logPermissionCheck(permission, granted, 'role-check', { userId: 'user-123' })
       updateAuditStats()
     }
 
@@ -341,7 +347,7 @@ export default {
     }
 
     const logPerformanceIssueEvent = () => {
-      logPerformanceIssue('slow-render', { duration: 1500, threshold: 1000 })
+      logPerformanceIssue('slow-render', 1500, 1000)
       updateAuditStats()
     }
 
