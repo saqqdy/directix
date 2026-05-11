@@ -2,24 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.0] - TBD
+## [2.0.0] - 2026-05-05
 
 ### Major Update - Web Components Support with Vue 2/3 Compatibility
 
-> **Status**: 📋 Planned - Currently in development
+This is a major version release that adds Web Components support while maintaining full Vue 2 and Vue 3 compatibility. No breaking changes for existing users.
 
-This is a major version release that will add Web Components support while maintaining full Vue 2 and Vue 3 compatibility. No breaking changes for existing users.
-
-### Planned Features
+### Added
 
 #### Web Components Support
 
 New utilities for using directives with Custom Elements:
 
 - `isCustomElement(el)` - Check if an element is a custom element
-- `applyDirectiveToCustomElement(el, directive, value)` - Apply Vue directive to custom element
+- `applyDirectiveToCustomElement(el, directive, value, options)` - Apply Vue directive to custom element
 - `defineCustomElementDirective(options)` - Define a custom element wrapping a directive
-- `createDirectiveElement(name, directive)` - Create custom element class from directive
+- `createDirectiveElement(name, directive, options)` - Create custom element class from directive
 - `registerDirectiveElements(elements)` - Register multiple directives as custom elements
 
 ```ts
@@ -32,14 +30,13 @@ defineCustomElementDirective({
 // Now usable as: <lazy-img src="..."></lazy-img>
 ```
 
-### Planned Changes
+### Changed
 
 #### Vue 3 Conditional Optimizations
 
 - **markRaw for DOM elements (Vue 3 only)** - Better performance, no unnecessary reactivity
 - **shallowReactive for directive state (Vue 3 only)** - Optimized for large objects
 - **Runtime version detection maintained** - Ensures Vue 2/3 compatibility
-- **Bundle size optimization** - Expected ~10-15% smaller than v1.11.0
 
 ### Compatibility
 

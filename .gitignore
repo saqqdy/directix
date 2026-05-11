@@ -36,6 +36,9 @@ playwright-report/
 temp
 stats.html
 
+# Playwright CLI cache
+.playwright-cli/
+
 # TypeScript
 *.tsbuildinfo
 
