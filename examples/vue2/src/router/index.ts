@@ -385,6 +385,12 @@ const routes: RouteConfig[] = [
 		name: 'Performance',
 		component: () => import('@/demos/performance.vue'),
 	},
+	// v2.0.0 Features
+	{
+		path: '/web-components',
+		name: 'WebComponents',
+		component: () => import('@/demos/web-components.vue'),
+	},
 	// v1.9.0 Features
 	{
 		path: '/i18n',

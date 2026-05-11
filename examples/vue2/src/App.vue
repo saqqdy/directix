@@ -196,6 +196,13 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
 		],
 	},
+	},
+	{
+		name: 'Web Components',
+		icon: '🧩',
+		demos: [
+			{ path: '/web-components', name: 'Web Components', desc: 'Custom elements, directives integration', version: '2.0.0' },
+		],
 	{
 		name: 'Composables',
 		icon: '🧩',

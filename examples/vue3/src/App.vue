@@ -196,6 +196,13 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: '/security-audit', name: 'Security Audit', desc: 'XSS scan, CSP check', version: '1.10.0' },
 		],
 	},
+	},
+	{
+		name: 'Web Components',
+		icon: '🧩',
+		demos: [
+			{ path: '/web-components', name: 'Web Components', desc: 'Custom elements, directives integration', version: '2.0.0' },
+		],
 	{
 		name: 'Composables',
 		icon: '🧩',
@@ -292,7 +299,7 @@ export default defineComponent({
 <template>
 	<div class="app">
 		<header class="header">
-			<h1>Directix Examples (Vue 3)</h1>
+			<h1>Directix Examples (Vue 2)</h1>
 			<p>Vue Directives Library - Demo & Testing</p>
 		</header>
 

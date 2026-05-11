@@ -1,7 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteConfig } from 'vue-router'
 
-const routes: RouteRecordRaw[] = [
+const routes: RouteConfig[] = [
 	{
 		path: '/',
 		redirect: '/click-outside',
@@ -386,6 +385,12 @@ const routes: RouteRecordRaw[] = [
 		name: 'Performance',
 		component: () => import('@/demos/performance.vue'),
 	},
+	// v2.0.0 Features
+	{
+		path: '/web-components',
+		name: 'WebComponents',
+		component: () => import('@/demos/web-components.vue'),
+	},
 	// v1.9.0 Features
 	{
 		path: '/i18n',
@@ -404,10 +409,4 @@ const routes: RouteRecordRaw[] = [
 	},
 ]
 
-
-const router = createRouter({
-	history: createWebHistory(),
-	routes,
-})
-
-export default router
+export default routes
