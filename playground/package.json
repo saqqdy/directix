@@ -12,11 +12,11 @@
 	"dependencies": {
 		"@vue/repl": "^4.7.2",
 		"directix": "workspace:*",
-		"vue": "^3.5.33"
+		"vue": "^3.5.35"
 	},
 	"devDependencies": {
 		"@vitejs/plugin-vue": "^5.2.4",
 		"typescript": "^5.9.3",
-		"vite": "^6.4.2"
+		"vite": "^6.4.3"
 	}
 }
