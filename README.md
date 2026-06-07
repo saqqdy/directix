@@ -25,30 +25,56 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
-## What's Coming in v2.0.0 (Planned)
+## What's New in v2.1.0
 
-> **Note**: v2.0.0 is currently in development. The features below are planned and will be released soon.
+### Enhanced Web Components Support
 
-### Web Components Support
-
-Use Directix directives with Custom Elements / Web Components:
+v2.1.0 significantly enhances Web Components support with Shadow DOM, SSR safety, lifecycle hooks, and more:
 
 ```typescript
-import { vLazy, defineCustomElementDirective, registerDirectiveElements } from 'directix'
+import { 
+  vLazy, 
+  defineCustomElementDirective, 
+  createSSRSafeCustomElement,
+  hydrateCustomElements 
+} from 'directix'
 
-// Define a single custom element from directive
+// Define with lifecycle hooks and styles
 defineCustomElementDirective({
   name: 'lazy-img',
   directive: vLazy,
-  shadow: true
+  shadow: true,
+  styles: ':host { display: block; }',
+  lifecycle: {
+    onConnect: (el) => console.log('Connected', el),
+    onDisconnect: (el) => console.log('Disconnected', el),
+  },
 })
 
-// Register multiple directives as custom elements
-registerDirectiveElements({
-  'lazy-img': vLazy,
-  'click-outside': vClickOutside
+// SSR-safe custom elements
+const LazyImage = createSSRSafeCustomElement('lazy-img', vLazy, {
+  shadow: true,
+  styles: ':host { display: block; }',
 })
+
+// SSR render
+const html = LazyImage.ssrRender({ src: 'image.jpg' })
+
+// Client hydration
+hydrateCustomElements(document.body)
 ```
+
+### New Web Components APIs
+
+| API | Description |
+|-----|-------------|
+| `CustomElementLifecycleHooks` | Lifecycle hooks interface (onConnect, onDisconnect, onAdopt, onAttributeChange) |
+| `SSRSafeCustomElement` | SSR-safe custom element type |
+| `isCustomElementDefined(name)` | Check if a custom element is already defined |
+| `whenCustomElementDefined(name)` | Async wait for custom element definition |
+| `getRegisteredCustomElements()` | Get all registered custom element names |
+| `hydrateCustomElements(root)` | Hydrate custom elements on client (SSR support) |
+| `createSSRSafeCustomElement()` | Create SSR-safe custom elements with declarative Shadow DOM |
 
 ### Vue 3 Conditional Optimizations
 

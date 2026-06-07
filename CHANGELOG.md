@@ -2,6 +2,80 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-06-06
+
+### Enhanced Web Components Support
+
+This release significantly enhances Web Components support with Shadow DOM, SSR safety, lifecycle hooks, and more.
+
+### Added
+
+#### Enhanced Web Components API
+
+New utilities for advanced Web Components usage:
+
+- `CustomElementLifecycleHooks` - Lifecycle hooks interface (onConnect, onDisconnect, onAdopt, onAttributeChange)
+- `SSRSafeCustomElement` - SSR-safe custom element type
+- `isCustomElementDefined(name)` - Check if a custom element is already defined
+- `whenCustomElementDefined(name)` - Async wait for custom element definition
+- `getRegisteredCustomElements()` - Get all registered custom element names
+- `hydrateCustomElements(root)` - Hydrate custom elements on client (SSR support)
+- `createSSRSafeCustomElement(name, directive, options)` - Create SSR-safe custom elements
+
+#### Extended CustomElementDirectiveOptions
+
+New options for `defineCustomElementDirective` and `createDirectiveElement`:
+
+- `styles` - CSS styles to inject into shadow DOM (string or string[])
+- `observedAttributes` - Custom list of attributes to observe
+- `lifecycle` - Lifecycle hooks for custom element events
+- `slots` - Enable slot content projection
+
+```ts
+import { defineCustomElementDirective, vLazy } from 'directix'
+
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true,
+  styles: ':host { display: block; }',
+  lifecycle: {
+    onConnect: (el) => console.log('Connected', el),
+    onDisconnect: (el) => console.log('Disconnected', el),
+  },
+})
+```
+
+### SSR Support
+
+Declarative Shadow DOM for server-side rendering:
+
+```ts
+import { createSSRSafeCustomElement, vLazy } from 'directix'
+
+const LazyImage = createSSRSafeCustomElement('lazy-image', vLazy, {
+  shadow: true,
+  styles: ':host { display: block; }',
+})
+
+// SSR render
+const html = LazyImage.ssrRender({ src: 'image.jpg', alt: 'Image' })
+
+// Browser registration
+if (typeof window !== 'undefined') {
+  customElements.define('lazy-image', LazyImage.elementClass)
+}
+```
+
+### Compatibility
+
+- **Vue 2.6+** - Fully supported
+- **Vue 3.0+** - Fully supported with performance optimizations
+- **Web Components** - Enhanced with Shadow DOM, SSR, lifecycle hooks
+- **No breaking changes** - All v2.0.0 code continues to work
+
+---
+
 ## [2.0.0] - 2026-05-05
 
 ### Major Update - Web Components Support with Vue 2/3 Compatibility

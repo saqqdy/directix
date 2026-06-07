@@ -25,30 +25,56 @@
 - 🌐 **国际化支持** - 内置中文、英文、日文翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
 
-## v2.0.0 新特性（计划中）
+## v2.1.0 新特性
 
-> **注意**: v2.0.0 目前正在开发中。以下功能为计划功能，即将发布。
+### 增强 Web Components 支持
 
-### Web Components 支持
-
-在自定义元素/Web Components 中使用 Directix 指令：
+v2.1.0 显著增强了 Web Components 支持，包括 Shadow DOM、SSR 安全、生命周期钩子等：
 
 ```typescript
-import { vLazy, defineCustomElementDirective, registerDirectiveElements } from 'directix'
+import { 
+  vLazy, 
+  defineCustomElementDirective, 
+  createSSRSafeCustomElement,
+  hydrateCustomElements 
+} from 'directix'
 
-// 从指令定义单个自定义元素
+// 定义带生命周期钩子和样式的元素
 defineCustomElementDirective({
   name: 'lazy-img',
   directive: vLazy,
-  shadow: true
+  shadow: true,
+  styles: ':host { display: block; }',
+  lifecycle: {
+    onConnect: (el) => console.log('已连接', el),
+    onDisconnect: (el) => console.log('已断开', el),
+  },
 })
 
-// 注册多个指令为自定义元素
-registerDirectiveElements({
-  'lazy-img': vLazy,
-  'click-outside': vClickOutside
+// SSR 安全的自定义元素
+const LazyImage = createSSRSafeCustomElement('lazy-img', vLazy, {
+  shadow: true,
+  styles: ':host { display: block; }',
 })
+
+// SSR 渲染
+const html = LazyImage.ssrRender({ src: 'image.jpg' })
+
+// 客户端水合
+hydrateCustomElements(document.body)
 ```
+
+### 新增 Web Components API
+
+| API | 描述 |
+|-----|------|
+| `CustomElementLifecycleHooks` | 生命周期钩子接口 (onConnect, onDisconnect, onAdopt, onAttributeChange) |
+| `SSRSafeCustomElement` | SSR 安全自定义元素类型 |
+| `isCustomElementDefined(name)` | 检查自定义元素是否已定义 |
+| `whenCustomElementDefined(name)` | 异步等待自定义元素定义 |
+| `getRegisteredCustomElements()` | 获取所有已注册的自定义元素名称 |
+| `hydrateCustomElements(root)` | 在客户端水合自定义元素 (SSR 支持) |
+| `createSSRSafeCustomElement()` | 创建带声明式 Shadow DOM 的 SSR 安全元素 |
 
 ### Vue 3 条件优化
 
