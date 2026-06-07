@@ -2,7 +2,7 @@ import eslintConfig from '@eslint-sets/eslint-config'
 
 export default eslintConfig({
 	type: 'lib',
-	ignores: ['examples/**'],
+	ignores: ['examples/**', '.understand-anything/**'],
 	markdown: false,
 	rules: {
 		camelcase: 'off',
