@@ -202,3 +202,99 @@ import {
   defineDirectiveGroup
 } from 'directix'
 ```
+
+## Web Components API (v2.1.0)
+
+Directix 提供全面的 Web Components 支持，可在自定义元素中使用指令：
+
+### 基础函数
+
+```typescript
+import {
+  // 检查元素是否为自定义元素
+  isCustomElement,
+  
+  // 将指令应用到自定义元素
+  applyDirectiveToCustomElement,
+  
+  // 从指令定义自定义元素
+  defineCustomElementDirective,
+  
+  // 创建自定义元素类
+  createDirectiveElement,
+  
+  // 注册多个元素
+  registerDirectiveElements,
+  
+  // 检查元素是否已定义
+  isCustomElementDefined,
+  
+  // 等待元素定义
+  whenCustomElementDefined,
+  
+  // 获取已注册元素
+  getRegisteredCustomElements,
+  
+  // 水合元素 (SSR)
+  hydrateCustomElements,
+  
+  // 创建 SSR 安全元素
+  createSSRSafeCustomElement
+} from 'directix'
+```
+
+### 使用示例
+
+```typescript
+// 定义自定义元素
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true,
+  styles: ':host { display: block; }',
+  lifecycle: {
+    onConnect: (el) => console.log('已连接'),
+    onDisconnect: (el) => console.log('已断开'),
+  },
+})
+
+// SSR 安全渲染
+const LazyImage = createSSRSafeCustomElement('lazy-img', vLazy, {
+  shadow: true,
+  styles: ':host { display: block; }',
+})
+
+const html = LazyImage.ssrRender({ src: 'image.jpg' })
+// <lazy-img src="image.jpg"><template shadowroot="open">...</template></lazy-img>
+
+// 客户端水合
+hydrateCustomElements(document.body)
+```
+
+### 类型定义
+
+```typescript
+interface CustomElementLifecycleHooks {
+  onConnect?: (el: HTMLElement) => void
+  onDisconnect?: (el: HTMLElement) => void
+  onAdopt?: (el: HTMLElement) => void
+  onAttributeChange?: (el: HTMLElement, name: string, oldValue: string | null, newValue: string | null) => void
+}
+
+interface CustomElementDirectiveOptions {
+  name: string
+  directive: Directive
+  defaultValue?: any
+  shadow?: boolean
+  shadowMode?: 'open' | 'closed'
+  styles?: string | string[]
+  observedAttributes?: string[]
+  lifecycle?: CustomElementLifecycleHooks
+  slots?: boolean
+}
+
+interface SSRSafeCustomElement {
+  elementClass: CustomElementConstructor
+  ssrRender: (attrs?: Record<string, string>) => string
+}
+```

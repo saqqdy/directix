@@ -202,3 +202,99 @@ import {
   defineDirectiveGroup
 } from 'directix'
 ```
+
+## Web Components API (v2.1.0)
+
+Directix provides comprehensive Web Components support for using directives with Custom Elements:
+
+### Basic Functions
+
+```typescript
+import {
+  // Check if element is a custom element
+  isCustomElement,
+  
+  // Apply directive to custom element
+  applyDirectiveToCustomElement,
+  
+  // Define custom element from directive
+  defineCustomElementDirective,
+  
+  // Create custom element class
+  createDirectiveElement,
+  
+  // Register multiple elements
+  registerDirectiveElements,
+  
+  // Check if element is defined
+  isCustomElementDefined,
+  
+  // Wait for element definition
+  whenCustomElementDefined,
+  
+  // Get registered elements
+  getRegisteredCustomElements,
+  
+  // Hydrate elements (SSR)
+  hydrateCustomElements,
+  
+  // Create SSR-safe element
+  createSSRSafeCustomElement
+} from 'directix'
+```
+
+### Usage Examples
+
+```typescript
+// Define a custom element
+defineCustomElementDirective({
+  name: 'lazy-img',
+  directive: vLazy,
+  shadow: true,
+  styles: ':host { display: block; }',
+  lifecycle: {
+    onConnect: (el) => console.log('Connected'),
+    onDisconnect: (el) => console.log('Disconnected'),
+  },
+})
+
+// SSR-safe rendering
+const LazyImage = createSSRSafeCustomElement('lazy-img', vLazy, {
+  shadow: true,
+  styles: ':host { display: block; }',
+})
+
+const html = LazyImage.ssrRender({ src: 'image.jpg' })
+// <lazy-img src="image.jpg"><template shadowroot="open">...</template></lazy-img>
+
+// Client hydration
+hydrateCustomElements(document.body)
+```
+
+### Types
+
+```typescript
+interface CustomElementLifecycleHooks {
+  onConnect?: (el: HTMLElement) => void
+  onDisconnect?: (el: HTMLElement) => void
+  onAdopt?: (el: HTMLElement) => void
+  onAttributeChange?: (el: HTMLElement, name: string, oldValue: string | null, newValue: string | null) => void
+}
+
+interface CustomElementDirectiveOptions {
+  name: string
+  directive: Directive
+  defaultValue?: any
+  shadow?: boolean
+  shadowMode?: 'open' | 'closed'
+  styles?: string | string[]
+  observedAttributes?: string[]
+  lifecycle?: CustomElementLifecycleHooks
+  slots?: boolean
+}
+
+interface SSRSafeCustomElement {
+  elementClass: CustomElementConstructor
+  ssrRender: (attrs?: Record<string, string>) => string
+}
+```

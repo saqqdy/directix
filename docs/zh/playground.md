@@ -63,14 +63,14 @@ function handleSearch(event) {
 </script>
 ```
 
-## v1.11.0 功能
+## v2.1.0 功能
 
-- 🏢 **企业级功能** - 权限管理、审计日志、配置中心
-- ⚡ **性能优化** - 包体积减小、运行时性能提升
-- 🛡️ **安全增强** - 高级 XSS 防护、CSP 兼容性
-- 📊 **监控告警** - 性能指标、健康检查、告警规则
+- 🧩 **增强 Web Components** - Shadow DOM 样式、生命周期钩子、插槽投射
+- 🖥️ **SSR 支持** - 声明式 Shadow DOM、hydrateCustomElements、createSSRSafeCustomElement
+- 🔌 **新 API** - isCustomElementDefined、whenCustomElementDefined、getRegisteredCustomElements
+- 🎯 **扩展选项** - styles、observedAttributes、自定义元素生命周期钩子
 
-## v2.0.0 即将推出
+## v2.0.0 功能
 
 - 🧩 **Web Components 支持** - 在自定义元素中使用指令
 - ⚡ **Vue 3 条件优化** - markRaw、shallowReactive 增强

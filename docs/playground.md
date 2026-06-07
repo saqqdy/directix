@@ -63,14 +63,14 @@ function handleSearch(event) {
 </script>
 ```
 
-## v1.11.0 Features
+## v2.1.0 Features
 
-- 🏢 **Enterprise Features** - Permission management, audit logging, configuration center
-- ⚡ **Performance Optimization** - Bundle size reduction, runtime performance improvements
-- 🛡️ **Security Enhancements** - Advanced XSS protection, CSP compatibility
-- 📊 **Monitoring & Alerting** - Performance metrics, health checks, alert rules
+- 🧩 **Enhanced Web Components** - Shadow DOM styles, lifecycle hooks, slot projection
+- 🖥️ **SSR Support** - Declarative Shadow DOM, hydrateCustomElements, createSSRSafeCustomElement
+- 🔌 **New APIs** - isCustomElementDefined, whenCustomElementDefined, getRegisteredCustomElements
+- 🎯 **Extended Options** - styles, observedAttributes, lifecycle hooks for custom elements
 
-## v2.0.0 Coming Soon
+## v2.0.0 Features
 
 - 🧩 **Web Components Support** - Use directives with Custom Elements
 - ⚡ **Vue 3 Conditional Optimizations** - markRaw, shallowReactive enhancements
