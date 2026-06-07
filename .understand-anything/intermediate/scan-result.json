@@ -1,0 +1,5845 @@
+{
+  "name": "directix",
+  "description": "A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3, with Web Components support. Note: this project has over 100 source files; consider scoping analysis to a subdirectory for faster results.",
+  "languages": [
+    "css",
+    "html",
+    "javascript",
+    "markdown",
+    "mts",
+    "shell",
+    "typescript",
+    "unknown",
+    "vue",
+    "yaml"
+  ],
+  "frameworks": [
+    "Vue",
+    "Vite",
+    "Vitest",
+    "VitePress",
+    "Nuxt",
+    "Playwright",
+    "TypeScript",
+    "pnpm",
+    "GitHub Actions"
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "language": "markdown",
+      "sizeLines": 44,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/labeler.yml",
+      "language": "yaml",
+      "sizeLines": 78,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 214,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "language": "yaml",
+      "sizeLines": 38,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "language": "yaml",
+      "sizeLines": 62,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/e2e.yml",
+      "language": "yaml",
+      "sizeLines": 67,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/playground.yml",
+      "language": "yaml",
+      "sizeLines": 80,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/pr-check.yml",
+      "language": "yaml",
+      "sizeLines": 73,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/publish-vscode.yml",
+      "language": "yaml",
+      "sizeLines": 69,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "language": "yaml",
+      "sizeLines": 53,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".markdownlint.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".nvmrc",
+      "language": "unknown",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".workbuddy/memory/2026-04-26.md",
+      "language": "markdown",
+      "sizeLines": 118,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".workbuddy/memory/2026-04-29.md",
+      "language": "markdown",
+      "sizeLines": 56,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".workbuddy/memory/2026-04-30.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".workbuddy/memory/2026-05-01.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".workbuddy/memory/MEMORY.md",
+      "language": "markdown",
+      "sizeLines": 71,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 1377,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 133,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/.vitepress/components/DirectiveConfigurator.vue",
+      "language": "vue",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/.vitepress/components/Playground.vue",
+      "language": "vue",
+      "sizeLines": 480,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/.vitepress/config.mts",
+      "language": "mts",
+      "sizeLines": 622,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/.vitepress/theme/index.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/.vitepress/theme/style.css",
+      "language": "css",
+      "sizeLines": 21,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/api/directives/blur.md",
+      "language": "markdown",
+      "sizeLines": 105,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/capitalcase.md",
+      "language": "markdown",
+      "sizeLines": 125,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/click-delay.md",
+      "language": "markdown",
+      "sizeLines": 161,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/click-outside.md",
+      "language": "markdown",
+      "sizeLines": 243,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/click-wave.md",
+      "language": "markdown",
+      "sizeLines": 139,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/context-menu.md",
+      "language": "markdown",
+      "sizeLines": 139,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/copy.md",
+      "language": "markdown",
+      "sizeLines": 233,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/countdown.md",
+      "language": "markdown",
+      "sizeLines": 209,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/counter.md",
+      "language": "markdown",
+      "sizeLines": 131,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/debounce.md",
+      "language": "markdown",
+      "sizeLines": 276,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/draggable.md",
+      "language": "markdown",
+      "sizeLines": 282,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/ellipsis.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/emoji.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/export.md",
+      "language": "markdown",
+      "sizeLines": 129,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/fade.md",
+      "language": "markdown",
+      "sizeLines": 119,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/focus.md",
+      "language": "markdown",
+      "sizeLines": 248,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/fullscreen.md",
+      "language": "markdown",
+      "sizeLines": 128,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/highlight.md",
+      "language": "markdown",
+      "sizeLines": 117,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/hotkey.md",
+      "language": "markdown",
+      "sizeLines": 216,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/hover.md",
+      "language": "markdown",
+      "sizeLines": 230,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/image-preview.md",
+      "language": "markdown",
+      "sizeLines": 283,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/infinite-scroll.md",
+      "language": "markdown",
+      "sizeLines": 253,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/intersect.md",
+      "language": "markdown",
+      "sizeLines": 236,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/lazy.md",
+      "language": "markdown",
+      "sizeLines": 211,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/loading.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/long-press.md",
+      "language": "markdown",
+      "sizeLines": 224,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/lottie.md",
+      "language": "markdown",
+      "sizeLines": 128,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/lowercase.md",
+      "language": "markdown",
+      "sizeLines": 119,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/mask.md",
+      "language": "markdown",
+      "sizeLines": 240,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/money.md",
+      "language": "markdown",
+      "sizeLines": 174,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/mutation.md",
+      "language": "markdown",
+      "sizeLines": 287,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/number.md",
+      "language": "markdown",
+      "sizeLines": 176,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/pan.md",
+      "language": "markdown",
+      "sizeLines": 133,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/parallax.md",
+      "language": "markdown",
+      "sizeLines": 117,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/permission.md",
+      "language": "markdown",
+      "sizeLines": 261,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/pinch.md",
+      "language": "markdown",
+      "sizeLines": 142,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/print.md",
+      "language": "markdown",
+      "sizeLines": 167,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/progress.md",
+      "language": "markdown",
+      "sizeLines": 144,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/pull-refresh.md",
+      "language": "markdown",
+      "sizeLines": 198,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/resize.md",
+      "language": "markdown",
+      "sizeLines": 218,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/ripple.md",
+      "language": "markdown",
+      "sizeLines": 196,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/rotate-gesture.md",
+      "language": "markdown",
+      "sizeLines": 151,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/sanitize.md",
+      "language": "markdown",
+      "sizeLines": 207,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/scroll.md",
+      "language": "markdown",
+      "sizeLines": 240,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/skeleton.md",
+      "language": "markdown",
+      "sizeLines": 140,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/sticky.md",
+      "language": "markdown",
+      "sizeLines": 201,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/swipe.md",
+      "language": "markdown",
+      "sizeLines": 183,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/throttle.md",
+      "language": "markdown",
+      "sizeLines": 253,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/tooltip.md",
+      "language": "markdown",
+      "sizeLines": 226,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/touch.md",
+      "language": "markdown",
+      "sizeLines": 331,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/trim.md",
+      "language": "markdown",
+      "sizeLines": 144,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/truncate.md",
+      "language": "markdown",
+      "sizeLines": 165,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/typewriter.md",
+      "language": "markdown",
+      "sizeLines": 147,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/uppercase.md",
+      "language": "markdown",
+      "sizeLines": 123,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/virtual-list.md",
+      "language": "markdown",
+      "sizeLines": 215,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/visible.md",
+      "language": "markdown",
+      "sizeLines": 200,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/directives/watermark.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/api/index.md",
+      "language": "markdown",
+      "sizeLines": 204,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/click-outside.md",
+      "language": "markdown",
+      "sizeLines": 132,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/copy.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/debounce.md",
+      "language": "markdown",
+      "sizeLines": 165,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/focus.md",
+      "language": "markdown",
+      "sizeLines": 191,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/index.md",
+      "language": "markdown",
+      "sizeLines": 46,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/scenarios.md",
+      "language": "markdown",
+      "sizeLines": 180,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/examples/throttle.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/a11y.md",
+      "language": "markdown",
+      "sizeLines": 311,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/community-plugins.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/events.md",
+      "language": "markdown",
+      "sizeLines": 235,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/forms.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/i18n.md",
+      "language": "markdown",
+      "sizeLines": 243,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/index.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/installation.md",
+      "language": "markdown",
+      "sizeLines": 124,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/nuxt.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/observers.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/plugin.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/quick-start.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/scroll.md",
+      "language": "markdown",
+      "sizeLines": 107,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/security.md",
+      "language": "markdown",
+      "sizeLines": 330,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/visibility.md",
+      "language": "markdown",
+      "sizeLines": 109,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guide/vscode-extension.md",
+      "language": "markdown",
+      "sizeLines": 115,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/index.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/migration/v2-migration-guide.md",
+      "language": "markdown",
+      "sizeLines": 252,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/playground.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/public/plugins.json",
+      "language": "json",
+      "sizeLines": 71,
+      "fileCategory": "config"
+    },
+    {
+      "path": "docs/tutorials/01-introduction.md",
+      "language": "markdown",
+      "sizeLines": 184,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/02-installation.md",
+      "language": "markdown",
+      "sizeLines": 247,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/03-event-directives.md",
+      "language": "markdown",
+      "sizeLines": 353,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/04-form-directives.md",
+      "language": "markdown",
+      "sizeLines": 239,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/05-visibility-directives.md",
+      "language": "markdown",
+      "sizeLines": 274,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/06-composables.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/09-devtools.md",
+      "language": "markdown",
+      "sizeLines": 170,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/11-form-validation.md",
+      "language": "markdown",
+      "sizeLines": 364,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/15-i18n.md",
+      "language": "markdown",
+      "sizeLines": 221,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/tutorials/index.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/blur.md",
+      "language": "markdown",
+      "sizeLines": 102,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/capitalcase.md",
+      "language": "markdown",
+      "sizeLines": 109,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/click-delay.md",
+      "language": "markdown",
+      "sizeLines": 142,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/click-outside.md",
+      "language": "markdown",
+      "sizeLines": 182,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/click-wave.md",
+      "language": "markdown",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/context-menu.md",
+      "language": "markdown",
+      "sizeLines": 139,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/copy.md",
+      "language": "markdown",
+      "sizeLines": 184,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/countdown.md",
+      "language": "markdown",
+      "sizeLines": 190,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/counter.md",
+      "language": "markdown",
+      "sizeLines": 140,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/debounce.md",
+      "language": "markdown",
+      "sizeLines": 210,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/draggable.md",
+      "language": "markdown",
+      "sizeLines": 187,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/ellipsis.md",
+      "language": "markdown",
+      "sizeLines": 135,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/emoji.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/export.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/fade.md",
+      "language": "markdown",
+      "sizeLines": 136,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/focus.md",
+      "language": "markdown",
+      "sizeLines": 191,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/fullscreen.md",
+      "language": "markdown",
+      "sizeLines": 125,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/highlight.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/hotkey.md",
+      "language": "markdown",
+      "sizeLines": 217,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/hover.md",
+      "language": "markdown",
+      "sizeLines": 99,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/image-preview.md",
+      "language": "markdown",
+      "sizeLines": 248,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/infinite-scroll.md",
+      "language": "markdown",
+      "sizeLines": 105,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/intersect.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/lazy.md",
+      "language": "markdown",
+      "sizeLines": 109,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/loading.md",
+      "language": "markdown",
+      "sizeLines": 115,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/long-press.md",
+      "language": "markdown",
+      "sizeLines": 100,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/lottie.md",
+      "language": "markdown",
+      "sizeLines": 168,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/lowercase.md",
+      "language": "markdown",
+      "sizeLines": 101,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/mask.md",
+      "language": "markdown",
+      "sizeLines": 100,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/money.md",
+      "language": "markdown",
+      "sizeLines": 146,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/mutation.md",
+      "language": "markdown",
+      "sizeLines": 104,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/number.md",
+      "language": "markdown",
+      "sizeLines": 148,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/pan.md",
+      "language": "markdown",
+      "sizeLines": 146,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/parallax.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/permission.md",
+      "language": "markdown",
+      "sizeLines": 98,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/pinch.md",
+      "language": "markdown",
+      "sizeLines": 137,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/print.md",
+      "language": "markdown",
+      "sizeLines": 155,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/progress.md",
+      "language": "markdown",
+      "sizeLines": 160,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/pull-refresh.md",
+      "language": "markdown",
+      "sizeLines": 187,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/resize.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/ripple.md",
+      "language": "markdown",
+      "sizeLines": 91,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/rotate-gesture.md",
+      "language": "markdown",
+      "sizeLines": 128,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/sanitize.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/scroll.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/skeleton.md",
+      "language": "markdown",
+      "sizeLines": 126,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/sticky.md",
+      "language": "markdown",
+      "sizeLines": 93,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/swipe.md",
+      "language": "markdown",
+      "sizeLines": 174,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/throttle.md",
+      "language": "markdown",
+      "sizeLines": 210,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/tooltip.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/touch.md",
+      "language": "markdown",
+      "sizeLines": 289,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/trim.md",
+      "language": "markdown",
+      "sizeLines": 128,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/truncate.md",
+      "language": "markdown",
+      "sizeLines": 140,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/typewriter.md",
+      "language": "markdown",
+      "sizeLines": 140,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/uppercase.md",
+      "language": "markdown",
+      "sizeLines": 105,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/virtual-list.md",
+      "language": "markdown",
+      "sizeLines": 212,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/visible.md",
+      "language": "markdown",
+      "sizeLines": 94,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/directives/watermark.md",
+      "language": "markdown",
+      "sizeLines": 166,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/api/index.md",
+      "language": "markdown",
+      "sizeLines": 204,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/click-outside.md",
+      "language": "markdown",
+      "sizeLines": 132,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/copy.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/debounce.md",
+      "language": "markdown",
+      "sizeLines": 165,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/focus.md",
+      "language": "markdown",
+      "sizeLines": 191,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/index.md",
+      "language": "markdown",
+      "sizeLines": 46,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/scenarios.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/examples/throttle.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/a11y.md",
+      "language": "markdown",
+      "sizeLines": 299,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/community-plugins.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/events.md",
+      "language": "markdown",
+      "sizeLines": 202,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/forms.md",
+      "language": "markdown",
+      "sizeLines": 187,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/i18n.md",
+      "language": "markdown",
+      "sizeLines": 243,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/index.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/installation.md",
+      "language": "markdown",
+      "sizeLines": 124,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/nuxt.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/observers.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/plugin.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/quick-start.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/scroll.md",
+      "language": "markdown",
+      "sizeLines": 107,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/security.md",
+      "language": "markdown",
+      "sizeLines": 329,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/visibility.md",
+      "language": "markdown",
+      "sizeLines": 109,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/guide/vscode-extension.md",
+      "language": "markdown",
+      "sizeLines": 115,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/index.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/migration/v2-migration-guide.md",
+      "language": "markdown",
+      "sizeLines": 251,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/playground.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/01-introduction.md",
+      "language": "markdown",
+      "sizeLines": 184,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/02-installation.md",
+      "language": "markdown",
+      "sizeLines": 247,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/03-event-directives.md",
+      "language": "markdown",
+      "sizeLines": 414,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/04-form-directives.md",
+      "language": "markdown",
+      "sizeLines": 239,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/05-visibility-directives.md",
+      "language": "markdown",
+      "sizeLines": 274,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/06-composables.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/09-devtools.md",
+      "language": "markdown",
+      "sizeLines": 170,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/11-form-validation.md",
+      "language": "markdown",
+      "sizeLines": 365,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/15-i18n.md",
+      "language": "markdown",
+      "sizeLines": 221,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/zh/tutorials/index.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "language": "javascript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/nuxt/app.vue",
+      "language": "vue",
+      "sizeLines": 288,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/nuxt/nuxt.config.ts",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/nuxt/package.json",
+      "language": "json",
+      "sizeLines": 18,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue2/index.html",
+      "language": "html",
+      "sizeLines": 13,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/vue2/package.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue2/src/App.vue",
+      "language": "vue",
+      "sizeLines": 543,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/components/CodeBlock.vue",
+      "language": "vue",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/components/DemoSection.vue",
+      "language": "vue",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/a11y.vue",
+      "language": "vue",
+      "sizeLines": 444,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/blur.vue",
+      "language": "vue",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/capitalcase.vue",
+      "language": "vue",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/click-delay.vue",
+      "language": "vue",
+      "sizeLines": 425,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/click-outside.vue",
+      "language": "vue",
+      "sizeLines": 428,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/click-wave.vue",
+      "language": "vue",
+      "sizeLines": 415,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/composables.vue",
+      "language": "vue",
+      "sizeLines": 729,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/context-menu.vue",
+      "language": "vue",
+      "sizeLines": 307,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/copy.vue",
+      "language": "vue",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/countdown.vue",
+      "language": "vue",
+      "sizeLines": 357,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/counter.vue",
+      "language": "vue",
+      "sizeLines": 345,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/debounce.vue",
+      "language": "vue",
+      "sizeLines": 465,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/devtools.vue",
+      "language": "vue",
+      "sizeLines": 558,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/draggable.vue",
+      "language": "vue",
+      "sizeLines": 457,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/ellipsis.vue",
+      "language": "vue",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/emoji.vue",
+      "language": "vue",
+      "sizeLines": 301,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/enterprise.vue",
+      "language": "vue",
+      "sizeLines": 1108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/export.vue",
+      "language": "vue",
+      "sizeLines": 428,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/fade.vue",
+      "language": "vue",
+      "sizeLines": 413,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/focus.vue",
+      "language": "vue",
+      "sizeLines": 474,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/fullscreen.vue",
+      "language": "vue",
+      "sizeLines": 328,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/highlight.vue",
+      "language": "vue",
+      "sizeLines": 354,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/hotkey.vue",
+      "language": "vue",
+      "sizeLines": 582,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/hover.vue",
+      "language": "vue",
+      "sizeLines": 361,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/i18n.vue",
+      "language": "vue",
+      "sizeLines": 386,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/image-preview.vue",
+      "language": "vue",
+      "sizeLines": 417,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/infinite-scroll.vue",
+      "language": "vue",
+      "sizeLines": 376,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/intersect.vue",
+      "language": "vue",
+      "sizeLines": 714,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/lazy.vue",
+      "language": "vue",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/loading.vue",
+      "language": "vue",
+      "sizeLines": 463,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/long-press.vue",
+      "language": "vue",
+      "sizeLines": 439,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/lottie.vue",
+      "language": "vue",
+      "sizeLines": 383,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/lowercase.vue",
+      "language": "vue",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/mask.vue",
+      "language": "vue",
+      "sizeLines": 368,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/money.vue",
+      "language": "vue",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/mutation.vue",
+      "language": "vue",
+      "sizeLines": 429,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/number.vue",
+      "language": "vue",
+      "sizeLines": 336,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/pan.vue",
+      "language": "vue",
+      "sizeLines": 383,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/parallax.vue",
+      "language": "vue",
+      "sizeLines": 396,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/performance.vue",
+      "language": "vue",
+      "sizeLines": 745,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/permission.vue",
+      "language": "vue",
+      "sizeLines": 578,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/pinch.vue",
+      "language": "vue",
+      "sizeLines": 318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/plugin-system.vue",
+      "language": "vue",
+      "sizeLines": 662,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/print.vue",
+      "language": "vue",
+      "sizeLines": 421,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/progress.vue",
+      "language": "vue",
+      "sizeLines": 405,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/pull-refresh.vue",
+      "language": "vue",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/resize.vue",
+      "language": "vue",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/ripple.vue",
+      "language": "vue",
+      "sizeLines": 368,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/rotate-gesture.vue",
+      "language": "vue",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/sanitize.vue",
+      "language": "vue",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/scroll.vue",
+      "language": "vue",
+      "sizeLines": 430,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/security-audit.vue",
+      "language": "vue",
+      "sizeLines": 401,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/skeleton.vue",
+      "language": "vue",
+      "sizeLines": 634,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/sticky.vue",
+      "language": "vue",
+      "sizeLines": 349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/swipe.vue",
+      "language": "vue",
+      "sizeLines": 359,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/throttle.vue",
+      "language": "vue",
+      "sizeLines": 447,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/tooltip.vue",
+      "language": "vue",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/touch.vue",
+      "language": "vue",
+      "sizeLines": 727,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/trim.vue",
+      "language": "vue",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/truncate.vue",
+      "language": "vue",
+      "sizeLines": 711,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/typewriter.vue",
+      "language": "vue",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/uppercase.vue",
+      "language": "vue",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/virtual-list.vue",
+      "language": "vue",
+      "sizeLines": 315,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/visible.vue",
+      "language": "vue",
+      "sizeLines": 415,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/watermark.vue",
+      "language": "vue",
+      "sizeLines": 322,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/demos/web-components.vue",
+      "language": "vue",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/main.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/router/index.ts",
+      "language": "typescript",
+      "sizeLines": 412,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/DataVisualization.vue",
+      "language": "vue",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/DragSort.vue",
+      "language": "vue",
+      "sizeLines": 457,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/FormValidation.vue",
+      "language": "vue",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/FullscreenMedia.vue",
+      "language": "vue",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/GestureInteraction.vue",
+      "language": "vue",
+      "sizeLines": 282,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/ImageGallery.vue",
+      "language": "vue",
+      "sizeLines": 199,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/index.vue",
+      "language": "vue",
+      "sizeLines": 136,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/InfiniteScrollList.vue",
+      "language": "vue",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/PermissionManagement.vue",
+      "language": "vue",
+      "sizeLines": 355,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/PrintExport.vue",
+      "language": "vue",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/src/scenarios/RichTextEditor.vue",
+      "language": "vue",
+      "sizeLines": 254,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue2/tsconfig.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue2/tsconfig.node.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue2/vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/index.html",
+      "language": "html",
+      "sizeLines": 13,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "examples/vue3/package.json",
+      "language": "json",
+      "sizeLines": 22,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue3/src/App.vue",
+      "language": "vue",
+      "sizeLines": 543,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/components/CodeBlock.vue",
+      "language": "vue",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/components/DemoSection.vue",
+      "language": "vue",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/a11y.vue",
+      "language": "vue",
+      "sizeLines": 444,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/blur.vue",
+      "language": "vue",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/capitalcase.vue",
+      "language": "vue",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/click-delay.vue",
+      "language": "vue",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/click-outside.vue",
+      "language": "vue",
+      "sizeLines": 424,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/click-wave.vue",
+      "language": "vue",
+      "sizeLines": 355,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/composables.vue",
+      "language": "vue",
+      "sizeLines": 729,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/context-menu.vue",
+      "language": "vue",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/copy.vue",
+      "language": "vue",
+      "sizeLines": 343,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/countdown.vue",
+      "language": "vue",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/counter.vue",
+      "language": "vue",
+      "sizeLines": 311,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/debounce.vue",
+      "language": "vue",
+      "sizeLines": 462,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/devtools.vue",
+      "language": "vue",
+      "sizeLines": 558,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/draggable.vue",
+      "language": "vue",
+      "sizeLines": 410,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/ellipsis.vue",
+      "language": "vue",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/emoji.vue",
+      "language": "vue",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/enterprise.vue",
+      "language": "vue",
+      "sizeLines": 1108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/export.vue",
+      "language": "vue",
+      "sizeLines": 390,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/fade.vue",
+      "language": "vue",
+      "sizeLines": 402,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/focus.vue",
+      "language": "vue",
+      "sizeLines": 487,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/fullscreen.vue",
+      "language": "vue",
+      "sizeLines": 307,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/highlight.vue",
+      "language": "vue",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/hotkey.vue",
+      "language": "vue",
+      "sizeLines": 606,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/hover.vue",
+      "language": "vue",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/i18n.vue",
+      "language": "vue",
+      "sizeLines": 386,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/image-preview.vue",
+      "language": "vue",
+      "sizeLines": 429,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/infinite-scroll.vue",
+      "language": "vue",
+      "sizeLines": 359,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/intersect.vue",
+      "language": "vue",
+      "sizeLines": 630,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/lazy.vue",
+      "language": "vue",
+      "sizeLines": 341,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/loading.vue",
+      "language": "vue",
+      "sizeLines": 380,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/long-press.vue",
+      "language": "vue",
+      "sizeLines": 385,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/lottie.vue",
+      "language": "vue",
+      "sizeLines": 367,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/lowercase.vue",
+      "language": "vue",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/mask.vue",
+      "language": "vue",
+      "sizeLines": 380,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/money.vue",
+      "language": "vue",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/mutation.vue",
+      "language": "vue",
+      "sizeLines": 372,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/number.vue",
+      "language": "vue",
+      "sizeLines": 325,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/pan.vue",
+      "language": "vue",
+      "sizeLines": 366,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/parallax.vue",
+      "language": "vue",
+      "sizeLines": 381,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/performance.vue",
+      "language": "vue",
+      "sizeLines": 745,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/permission.vue",
+      "language": "vue",
+      "sizeLines": 539,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/pinch.vue",
+      "language": "vue",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/plugin-system.vue",
+      "language": "vue",
+      "sizeLines": 662,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/print.vue",
+      "language": "vue",
+      "sizeLines": 436,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/progress.vue",
+      "language": "vue",
+      "sizeLines": 296,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/pull-refresh.vue",
+      "language": "vue",
+      "sizeLines": 316,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/resize.vue",
+      "language": "vue",
+      "sizeLines": 343,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/ripple.vue",
+      "language": "vue",
+      "sizeLines": 295,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/rotate-gesture.vue",
+      "language": "vue",
+      "sizeLines": 341,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/sanitize.vue",
+      "language": "vue",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/scroll.vue",
+      "language": "vue",
+      "sizeLines": 377,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/security-audit.vue",
+      "language": "vue",
+      "sizeLines": 401,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/skeleton.vue",
+      "language": "vue",
+      "sizeLines": 615,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/sticky.vue",
+      "language": "vue",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/swipe.vue",
+      "language": "vue",
+      "sizeLines": 347,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/throttle.vue",
+      "language": "vue",
+      "sizeLines": 455,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/tooltip.vue",
+      "language": "vue",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/touch.vue",
+      "language": "vue",
+      "sizeLines": 851,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/trim.vue",
+      "language": "vue",
+      "sizeLines": 273,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/truncate.vue",
+      "language": "vue",
+      "sizeLines": 613,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/typewriter.vue",
+      "language": "vue",
+      "sizeLines": 438,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/uppercase.vue",
+      "language": "vue",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/virtual-list.vue",
+      "language": "vue",
+      "sizeLines": 413,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/visible.vue",
+      "language": "vue",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/watermark.vue",
+      "language": "vue",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/demos/web-components.vue",
+      "language": "vue",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/env.d.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/main.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/router/index.ts",
+      "language": "typescript",
+      "sizeLines": 412,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/DataVisualization.vue",
+      "language": "vue",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/DragSort.vue",
+      "language": "vue",
+      "sizeLines": 423,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/FormValidation.vue",
+      "language": "vue",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/FullscreenMedia.vue",
+      "language": "vue",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/GestureInteraction.vue",
+      "language": "vue",
+      "sizeLines": 282,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/ImageGallery.vue",
+      "language": "vue",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/index.vue",
+      "language": "vue",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/InfiniteScrollList.vue",
+      "language": "vue",
+      "sizeLines": 256,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/PermissionManagement.vue",
+      "language": "vue",
+      "sizeLines": 355,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/PrintExport.vue",
+      "language": "vue",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/src/scenarios/RichTextEditor.vue",
+      "language": "vue",
+      "sizeLines": 254,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/tsconfig.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue3/tsconfig.node.json",
+      "language": "json",
+      "sizeLines": 11,
+      "fileCategory": "config"
+    },
+    {
+      "path": "examples/vue3/vite.config.d.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/vite.config.js",
+      "language": "javascript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "examples/vue3/vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli-tool-guide.md",
+      "language": "markdown",
+      "sizeLines": 229,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/competitor-analysis.md",
+      "language": "markdown",
+      "sizeLines": 1254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/development-plan.md",
+      "language": "markdown",
+      "sizeLines": 6784,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/e2e-testing-guide.md",
+      "language": "markdown",
+      "sizeLines": 501,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/extractable-utilities.md",
+      "language": "markdown",
+      "sizeLines": 406,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/vscode-extension-guide.md",
+      "language": "markdown",
+      "sizeLines": 260,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/vue-detection-optimization.md",
+      "language": "markdown",
+      "sizeLines": 299,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/vue-version-detection-comparison.md",
+      "language": "markdown",
+      "sizeLines": 441,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 208,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/cli/package.json",
+      "language": "json",
+      "sizeLines": 45,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/cli/src/commands/create-composable.ts",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/cli/src/commands/create-directive.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/cli/src/commands/doctor.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/cli/src/commands/init.ts",
+      "language": "typescript",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/cli/src/commands/migrate.ts",
+      "language": "typescript",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/cli/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/adapter/index.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/adapter/vue2.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/adapter/vue3.ts",
+      "language": "typescript",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/audit-log.ts",
+      "language": "typescript",
+      "sizeLines": 721,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/benchmark.ts",
+      "language": "typescript",
+      "sizeLines": 531,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/breaking-changes.ts",
+      "language": "typescript",
+      "sizeLines": 574,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/compatibility-matrix.ts",
+      "language": "typescript",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/compatibility.ts",
+      "language": "typescript",
+      "sizeLines": 671,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/config-center.ts",
+      "language": "typescript",
+      "sizeLines": 754,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/define.ts",
+      "language": "typescript",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/devtools.ts",
+      "language": "typescript",
+      "sizeLines": 479,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/edge-case.ts",
+      "language": "typescript",
+      "sizeLines": 662,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/enterprise-permission.ts",
+      "language": "typescript",
+      "sizeLines": 673,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/env.ts",
+      "language": "typescript",
+      "sizeLines": 252,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/first-screen.ts",
+      "language": "typescript",
+      "sizeLines": 688,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 407,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/migration.ts",
+      "language": "typescript",
+      "sizeLines": 627,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/monitoring.ts",
+      "language": "typescript",
+      "sizeLines": 794,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/performance-optimizer.ts",
+      "language": "typescript",
+      "sizeLines": 703,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/performance.ts",
+      "language": "typescript",
+      "sizeLines": 383,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/types/directive.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/types/index.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/src/warning.ts",
+      "language": "typescript",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/core/tsconfig.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/i18n/src/i18n.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/locale.ts",
+      "language": "typescript",
+      "sizeLines": 489,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/locales/en-US.ts",
+      "language": "typescript",
+      "sizeLines": 539,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/locales/ja-JP.ts",
+      "language": "typescript",
+      "sizeLines": 539,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/locales/zh-CN.ts",
+      "language": "typescript",
+      "sizeLines": 539,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/i18n/src/types.ts",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/browser.ts",
+      "language": "typescript",
+      "sizeLines": 567,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/directive.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/dom.ts",
+      "language": "typescript",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/event-modifiers.ts",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/event.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/polyfill.ts",
+      "language": "typescript",
+      "sizeLines": 653,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/src/utils.ts",
+      "language": "typescript",
+      "sizeLines": 333,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/shared/tsconfig.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/vscode-extension/package.json",
+      "language": "json",
+      "sizeLines": 79,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/vscode-extension/README.md",
+      "language": "markdown",
+      "sizeLines": 91,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "packages/vscode-extension/snippets/snippets.json",
+      "language": "json",
+      "sizeLines": 137,
+      "fileCategory": "config"
+    },
+    {
+      "path": "packages/vscode-extension/src/extension.ts",
+      "language": "typescript",
+      "sizeLines": 652,
+      "fileCategory": "code"
+    },
+    {
+      "path": "packages/vscode-extension/tsconfig.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "playground/index.html",
+      "language": "html",
+      "sizeLines": 13,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "playground/package.json",
+      "language": "json",
+      "sizeLines": 22,
+      "fileCategory": "config"
+    },
+    {
+      "path": "playground/README.md",
+      "language": "markdown",
+      "sizeLines": 100,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "playground/scripts/deploy.sh",
+      "language": "shell",
+      "sizeLines": 107,
+      "fileCategory": "script"
+    },
+    {
+      "path": "playground/src/App.vue",
+      "language": "vue",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/components/CodePreview.vue",
+      "language": "vue",
+      "sizeLines": 685,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/components/ConfigPanel.vue",
+      "language": "vue",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/components/DirectiveSelector.vue",
+      "language": "vue",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/components/MonacoEditor.vue",
+      "language": "vue",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/composables/useEditor.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/main.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/style.css",
+      "language": "css",
+      "sizeLines": 427,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "playground/src/types/index.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/utils/code-generator.ts",
+      "language": "typescript",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/utils/directive-configs.ts",
+      "language": "typescript",
+      "sizeLines": 1514,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/src/utils/directive-examples.ts",
+      "language": "typescript",
+      "sizeLines": 490,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playground/tsconfig.json",
+      "language": "json",
+      "sizeLines": 26,
+      "fileCategory": "config"
+    },
+    {
+      "path": "playground/tsconfig.node.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "playground/vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playwright.config.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "language": "yaml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "README_CN.md",
+      "language": "markdown",
+      "sizeLines": 1338,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 2106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/build-nuxt.ts",
+      "language": "typescript",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build-optimized.ts",
+      "language": "typescript",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/bundle-size.ts",
+      "language": "typescript",
+      "sizeLines": 298,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/deploy.sh",
+      "language": "shell",
+      "sizeLines": 28,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/minify.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/publish.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/sync.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/tag.ts",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/unpublish.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/version.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/index.ts",
+      "language": "typescript",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-blur.ts",
+      "language": "typescript",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-capitalcase.ts",
+      "language": "typescript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-click-delay.ts",
+      "language": "typescript",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-click-outside.ts",
+      "language": "typescript",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-click-wave.ts",
+      "language": "typescript",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-context-menu.ts",
+      "language": "typescript",
+      "sizeLines": 247,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-copy.ts",
+      "language": "typescript",
+      "sizeLines": 202,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-countdown.ts",
+      "language": "typescript",
+      "sizeLines": 380,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-counter.ts",
+      "language": "typescript",
+      "sizeLines": 254,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-debounce.ts",
+      "language": "typescript",
+      "sizeLines": 222,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-draggable.ts",
+      "language": "typescript",
+      "sizeLines": 339,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-ellipsis.ts",
+      "language": "typescript",
+      "sizeLines": 297,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-emoji.ts",
+      "language": "typescript",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-export.ts",
+      "language": "typescript",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-fade.ts",
+      "language": "typescript",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-focus.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-fullscreen.ts",
+      "language": "typescript",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-highlight.ts",
+      "language": "typescript",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-hotkey.ts",
+      "language": "typescript",
+      "sizeLines": 342,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-hover.ts",
+      "language": "typescript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-image-preview.ts",
+      "language": "typescript",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-infinite-scroll.ts",
+      "language": "typescript",
+      "sizeLines": 228,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-intersect.ts",
+      "language": "typescript",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-lazy.ts",
+      "language": "typescript",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-loading.ts",
+      "language": "typescript",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-long-press.ts",
+      "language": "typescript",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-lottie.ts",
+      "language": "typescript",
+      "sizeLines": 273,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-lowercase.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-mask.ts",
+      "language": "typescript",
+      "sizeLines": 279,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-money.ts",
+      "language": "typescript",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-mutation.ts",
+      "language": "typescript",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-number.ts",
+      "language": "typescript",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-pan.ts",
+      "language": "typescript",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-parallax.ts",
+      "language": "typescript",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-permission.ts",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-pinch.ts",
+      "language": "typescript",
+      "sizeLines": 245,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-print.ts",
+      "language": "typescript",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-progress.ts",
+      "language": "typescript",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-pull-refresh.ts",
+      "language": "typescript",
+      "sizeLines": 261,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-resize.ts",
+      "language": "typescript",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-ripple.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-rotate-gesture.ts",
+      "language": "typescript",
+      "sizeLines": 232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-sanitize.ts",
+      "language": "typescript",
+      "sizeLines": 210,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-scroll.ts",
+      "language": "typescript",
+      "sizeLines": 304,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-skeleton.ts",
+      "language": "typescript",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-sticky.ts",
+      "language": "typescript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-swipe.ts",
+      "language": "typescript",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-throttle.ts",
+      "language": "typescript",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-tooltip.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-touch.ts",
+      "language": "typescript",
+      "sizeLines": 357,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-trim.ts",
+      "language": "typescript",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-truncate.ts",
+      "language": "typescript",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-typewriter.ts",
+      "language": "typescript",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-uppercase.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-virtual-list.ts",
+      "language": "typescript",
+      "sizeLines": 365,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-visible.ts",
+      "language": "typescript",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/composables/use-watermark.ts",
+      "language": "typescript",
+      "sizeLines": 418,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/blur.ts",
+      "language": "typescript",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/capitalcase.ts",
+      "language": "typescript",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/click-delay.ts",
+      "language": "typescript",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/click-outside.ts",
+      "language": "typescript",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/click-wave.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/context-menu.ts",
+      "language": "typescript",
+      "sizeLines": 287,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/copy.ts",
+      "language": "typescript",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/countdown.ts",
+      "language": "typescript",
+      "sizeLines": 339,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/counter.ts",
+      "language": "typescript",
+      "sizeLines": 287,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/debounce.ts",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/draggable.ts",
+      "language": "typescript",
+      "sizeLines": 359,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/ellipsis.ts",
+      "language": "typescript",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/emoji.ts",
+      "language": "typescript",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/export.ts",
+      "language": "typescript",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/fade.ts",
+      "language": "typescript",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/focus.ts",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/fullscreen.ts",
+      "language": "typescript",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/highlight.ts",
+      "language": "typescript",
+      "sizeLines": 294,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/hotkey.ts",
+      "language": "typescript",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/hover.ts",
+      "language": "typescript",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/image-preview.ts",
+      "language": "typescript",
+      "sizeLines": 719,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/index.ts",
+      "language": "typescript",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/infinite-scroll.ts",
+      "language": "typescript",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/intersect.ts",
+      "language": "typescript",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/lazy.ts",
+      "language": "typescript",
+      "sizeLines": 328,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/loading.ts",
+      "language": "typescript",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/long-press.ts",
+      "language": "typescript",
+      "sizeLines": 322,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/lottie.ts",
+      "language": "typescript",
+      "sizeLines": 333,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/lowercase.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/mask.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/money.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/mutation.ts",
+      "language": "typescript",
+      "sizeLines": 241,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/number.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/pan.ts",
+      "language": "typescript",
+      "sizeLines": 357,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/parallax.ts",
+      "language": "typescript",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/permission.ts",
+      "language": "typescript",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/pinch.ts",
+      "language": "typescript",
+      "sizeLines": 328,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/print.ts",
+      "language": "typescript",
+      "sizeLines": 355,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/progress.ts",
+      "language": "typescript",
+      "sizeLines": 399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/pull-refresh.ts",
+      "language": "typescript",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/resize.ts",
+      "language": "typescript",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/ripple.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/rotate-gesture.ts",
+      "language": "typescript",
+      "sizeLines": 317,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/sanitize.ts",
+      "language": "typescript",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/scroll.ts",
+      "language": "typescript",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/skeleton.ts",
+      "language": "typescript",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/sticky.ts",
+      "language": "typescript",
+      "sizeLines": 238,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/swipe.ts",
+      "language": "typescript",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/throttle.ts",
+      "language": "typescript",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/tooltip.ts",
+      "language": "typescript",
+      "sizeLines": 422,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/touch.ts",
+      "language": "typescript",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/trim.ts",
+      "language": "typescript",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/truncate.ts",
+      "language": "typescript",
+      "sizeLines": 199,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/typewriter.ts",
+      "language": "typescript",
+      "sizeLines": 387,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/uppercase.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/virtual-list.ts",
+      "language": "typescript",
+      "sizeLines": 412,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/visible.ts",
+      "language": "typescript",
+      "sizeLines": 223,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/directives/watermark.ts",
+      "language": "typescript",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/index.ts",
+      "language": "typescript",
+      "sizeLines": 377,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/nuxt/index.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/nuxt/module.ts",
+      "language": "typescript",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/nuxt/runtime/plugin.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugin/index.ts",
+      "language": "typescript",
+      "sizeLines": 223,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugin/manager.ts",
+      "language": "typescript",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugin/registry.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugin/types.ts",
+      "language": "typescript",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/index.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/optional-deps.d.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/a11y.ts",
+      "language": "typescript",
+      "sizeLines": 804,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/directive.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/index.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/mobile.ts",
+      "language": "typescript",
+      "sizeLines": 866,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/number.ts",
+      "language": "typescript",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/security.ts",
+      "language": "typescript",
+      "sizeLines": 815,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/text-transform.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/vue3.ts",
+      "language": "typescript",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/web-components.ts",
+      "language": "typescript",
+      "sizeLines": 593,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/benchmark/index.ts",
+      "language": "typescript",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/e2e/directives.spec.ts",
+      "language": "typescript",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/setup.ts",
+      "language": "typescript",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/audit-log.test.ts",
+      "language": "typescript",
+      "sizeLines": 381,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/backward-compatibility.test.ts",
+      "language": "typescript",
+      "sizeLines": 419,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/benchmark.test.ts",
+      "language": "typescript",
+      "sizeLines": 215,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/blur.test.ts",
+      "language": "typescript",
+      "sizeLines": 256,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/breaking-changes.test.ts",
+      "language": "typescript",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/browser-detection.test.ts",
+      "language": "typescript",
+      "sizeLines": 403,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/capitalcase.test.ts",
+      "language": "typescript",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/click-delay.test.ts",
+      "language": "typescript",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/click-outside.test.ts",
+      "language": "typescript",
+      "sizeLines": 508,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/click-wave.test.ts",
+      "language": "typescript",
+      "sizeLines": 343,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/compatibility-matrix.test.ts",
+      "language": "typescript",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/compatibility.test.ts",
+      "language": "typescript",
+      "sizeLines": 276,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-blur.test.ts",
+      "language": "typescript",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-capitalcase.test.ts",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-click-delay.test.ts",
+      "language": "typescript",
+      "sizeLines": 276,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-click-outside.test.ts",
+      "language": "typescript",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-click-wave.test.ts",
+      "language": "typescript",
+      "sizeLines": 221,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-context-menu.test.ts",
+      "language": "typescript",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-copy.test.ts",
+      "language": "typescript",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-countdown.test.ts",
+      "language": "typescript",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-counter.test.ts",
+      "language": "typescript",
+      "sizeLines": 504,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-debounce.test.ts",
+      "language": "typescript",
+      "sizeLines": 276,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-dom.test.ts",
+      "language": "typescript",
+      "sizeLines": 684,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-draggable.test.ts",
+      "language": "typescript",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-element.test.ts",
+      "language": "typescript",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-ellipsis.test.ts",
+      "language": "typescript",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-emoji.test.ts",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-export.test.ts",
+      "language": "typescript",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-fade.test.ts",
+      "language": "typescript",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-focus.test.ts",
+      "language": "typescript",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-fullscreen.test.ts",
+      "language": "typescript",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-gesture.test.ts",
+      "language": "typescript",
+      "sizeLines": 742,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-highlight.test.ts",
+      "language": "typescript",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-hotkey.test.ts",
+      "language": "typescript",
+      "sizeLines": 329,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-hover.test.ts",
+      "language": "typescript",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-image-preview.test.ts",
+      "language": "typescript",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-infinite-scroll.test.ts",
+      "language": "typescript",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-intersect.test.ts",
+      "language": "typescript",
+      "sizeLines": 254,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-lazy.test.ts",
+      "language": "typescript",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-loading.test.ts",
+      "language": "typescript",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-long-press.test.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-lottie.test.ts",
+      "language": "typescript",
+      "sizeLines": 277,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-lowercase.test.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-mask.test.ts",
+      "language": "typescript",
+      "sizeLines": 162,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-money.test.ts",
+      "language": "typescript",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-mutation.test.ts",
+      "language": "typescript",
+      "sizeLines": 239,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-number.test.ts",
+      "language": "typescript",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-pan.test.ts",
+      "language": "typescript",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-parallax.test.ts",
+      "language": "typescript",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-permission.test.ts",
+      "language": "typescript",
+      "sizeLines": 375,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-pinch.test.ts",
+      "language": "typescript",
+      "sizeLines": 314,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-print.test.ts",
+      "language": "typescript",
+      "sizeLines": 243,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-progress.test.ts",
+      "language": "typescript",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-pull-refresh.test.ts",
+      "language": "typescript",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-resize.test.ts",
+      "language": "typescript",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-ripple.test.ts",
+      "language": "typescript",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-rotate-gesture.test.ts",
+      "language": "typescript",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-sanitize.test.ts",
+      "language": "typescript",
+      "sizeLines": 190,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-scroll.test.ts",
+      "language": "typescript",
+      "sizeLines": 888,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-skeleton.test.ts",
+      "language": "typescript",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-sticky.test.ts",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-swipe.test.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-text.test.ts",
+      "language": "typescript",
+      "sizeLines": 515,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-throttle.test.ts",
+      "language": "typescript",
+      "sizeLines": 234,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-tooltip.test.ts",
+      "language": "typescript",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-touch.test.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-trim.test.ts",
+      "language": "typescript",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-truncate.test.ts",
+      "language": "typescript",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-typewriter.test.ts",
+      "language": "typescript",
+      "sizeLines": 378,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-ui.test.ts",
+      "language": "typescript",
+      "sizeLines": 495,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-uppercase.test.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-virtual-list.test.ts",
+      "language": "typescript",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-visible.test.ts",
+      "language": "typescript",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables-watermark.test.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/composables.test.ts",
+      "language": "typescript",
+      "sizeLines": 790,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/config-center.test.ts",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/context-menu.test.ts",
+      "language": "typescript",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/copy.test.ts",
+      "language": "typescript",
+      "sizeLines": 366,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/countdown.test.ts",
+      "language": "typescript",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/counter.test.ts",
+      "language": "typescript",
+      "sizeLines": 416,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/debounce.test.ts",
+      "language": "typescript",
+      "sizeLines": 454,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/directives-index.test.ts",
+      "language": "typescript",
+      "sizeLines": 678,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/draggable.test.ts",
+      "language": "typescript",
+      "sizeLines": 601,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/edge-case.test.ts",
+      "language": "typescript",
+      "sizeLines": 296,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ellipsis.test.ts",
+      "language": "typescript",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/emoji.test.ts",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/enterprise-permission.test.ts",
+      "language": "typescript",
+      "sizeLines": 483,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/export.test.ts",
+      "language": "typescript",
+      "sizeLines": 247,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/fade.test.ts",
+      "language": "typescript",
+      "sizeLines": 321,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/first-screen.test.ts",
+      "language": "typescript",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/focus.test.ts",
+      "language": "typescript",
+      "sizeLines": 560,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/fullscreen.test.ts",
+      "language": "typescript",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/highlight.test.ts",
+      "language": "typescript",
+      "sizeLines": 332,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/hotkey.test.ts",
+      "language": "typescript",
+      "sizeLines": 457,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/hover.test.ts",
+      "language": "typescript",
+      "sizeLines": 391,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/image-preview.test.ts",
+      "language": "typescript",
+      "sizeLines": 563,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/index.test.ts",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/infinite-scroll.test.ts",
+      "language": "typescript",
+      "sizeLines": 562,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/intersect.test.ts",
+      "language": "typescript",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/lazy.test.ts",
+      "language": "typescript",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/loading.test.ts",
+      "language": "typescript",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/long-press.test.ts",
+      "language": "typescript",
+      "sizeLines": 469,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/lottie.test.ts",
+      "language": "typescript",
+      "sizeLines": 479,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/lowercase.test.ts",
+      "language": "typescript",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mask.test.ts",
+      "language": "typescript",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/media-directives.test.ts",
+      "language": "typescript",
+      "sizeLines": 353,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/migration.test.ts",
+      "language": "typescript",
+      "sizeLines": 321,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/money.test.ts",
+      "language": "typescript",
+      "sizeLines": 372,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/monitoring.test.ts",
+      "language": "typescript",
+      "sizeLines": 376,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/mutation.test.ts",
+      "language": "typescript",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/number.test.ts",
+      "language": "typescript",
+      "sizeLines": 388,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/pan.test.ts",
+      "language": "typescript",
+      "sizeLines": 666,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/parallax.test.ts",
+      "language": "typescript",
+      "sizeLines": 537,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/permission.test.ts",
+      "language": "typescript",
+      "sizeLines": 391,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/pinch.test.ts",
+      "language": "typescript",
+      "sizeLines": 474,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/plugin-manager.test.ts",
+      "language": "typescript",
+      "sizeLines": 282,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/polyfill.test.ts",
+      "language": "typescript",
+      "sizeLines": 386,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/print.test.ts",
+      "language": "typescript",
+      "sizeLines": 504,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/progress.test.ts",
+      "language": "typescript",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/pull-refresh.test.ts",
+      "language": "typescript",
+      "sizeLines": 392,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/resize.test.ts",
+      "language": "typescript",
+      "sizeLines": 466,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ripple.test.ts",
+      "language": "typescript",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/rotate-gesture.test.ts",
+      "language": "typescript",
+      "sizeLines": 495,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/sanitize.test.ts",
+      "language": "typescript",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/scroll.test.ts",
+      "language": "typescript",
+      "sizeLines": 426,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/skeleton.test.ts",
+      "language": "typescript",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/sticky.test.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/swipe.test.ts",
+      "language": "typescript",
+      "sizeLines": 470,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/text-transform.test.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/throttle.test.ts",
+      "language": "typescript",
+      "sizeLines": 429,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/tooltip.test.ts",
+      "language": "typescript",
+      "sizeLines": 551,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/touch.test.ts",
+      "language": "typescript",
+      "sizeLines": 753,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/trim.test.ts",
+      "language": "typescript",
+      "sizeLines": 341,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/truncate.test.ts",
+      "language": "typescript",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/types.test.ts",
+      "language": "typescript",
+      "sizeLines": 148,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/typewriter.test.ts",
+      "language": "typescript",
+      "sizeLines": 379,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/ui-effect-directives.test.ts",
+      "language": "typescript",
+      "sizeLines": 467,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/uppercase.test.ts",
+      "language": "typescript",
+      "sizeLines": 232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/utils-a11y.test.ts",
+      "language": "typescript",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/utils-directive.test.ts",
+      "language": "typescript",
+      "sizeLines": 558,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/utils-mobile.test.ts",
+      "language": "typescript",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/utils-security.test.ts",
+      "language": "typescript",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/utils-vue3.test.ts",
+      "language": "typescript",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/virtual-list.test.ts",
+      "language": "typescript",
+      "sizeLines": 416,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/visible.test.ts",
+      "language": "typescript",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/watermark.test.ts",
+      "language": "typescript",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/unit/web-components.test.ts",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/utils.ts",
+      "language": "typescript",
+      "sizeLines": 406,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 47,
+      "fileCategory": "config"
+    },
+    {
+      "path": "vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "vitest.config.ts",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 778,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "very-large",
+  "importMap": {
+    ".gitattributes": [],
+    ".github/ISSUE_TEMPLATE/bug_report.md": [],
+    ".github/ISSUE_TEMPLATE/feature_request.md": [],
+    ".github/labeler.yml": [],
+    ".github/workflows/ci.yml": [],
+    ".github/workflows/codeql-analysis.yml": [],
+    ".github/workflows/deploy.yml": [],
+    ".github/workflows/e2e.yml": [],
+    ".github/workflows/playground.yml": [],
+    ".github/workflows/pr-check.yml": [],
+    ".github/workflows/publish-vscode.yml": [],
+    ".github/workflows/publish.yml": [],
+    ".markdownlint.json": [],
+    ".nvmrc": [],
+    ".understand-anything/.understandignore": [],
+    ".workbuddy/memory/2026-04-26.md": [],
+    ".workbuddy/memory/2026-04-29.md": [],
+    ".workbuddy/memory/2026-04-30.md": [],
+    ".workbuddy/memory/2026-05-01.md": [],
+    ".workbuddy/memory/MEMORY.md": [],
+    "CHANGELOG.md": [],
+    "CONTRIBUTING.md": [],
+    "docs/.vitepress/components/DirectiveConfigurator.vue": [],
+    "docs/.vitepress/components/Playground.vue": [],
+    "docs/.vitepress/config.mts": [],
+    "docs/.vitepress/theme/index.ts": [
+      "docs/.vitepress/components/DirectiveConfigurator.vue",
+      "docs/.vitepress/components/Playground.vue",
+      "docs/.vitepress/theme/style.css"
+    ],
+    "docs/.vitepress/theme/style.css": [],
+    "docs/api/directives/blur.md": [],
+    "docs/api/directives/capitalcase.md": [],
+    "docs/api/directives/click-delay.md": [],
+    "docs/api/directives/click-outside.md": [],
+    "docs/api/directives/click-wave.md": [],
+    "docs/api/directives/context-menu.md": [],
+    "docs/api/directives/copy.md": [],
+    "docs/api/directives/countdown.md": [],
+    "docs/api/directives/counter.md": [],
+    "docs/api/directives/debounce.md": [],
+    "docs/api/directives/draggable.md": [],
+    "docs/api/directives/ellipsis.md": [],
+    "docs/api/directives/emoji.md": [],
+    "docs/api/directives/export.md": [],
+    "docs/api/directives/fade.md": [],
+    "docs/api/directives/focus.md": [],
+    "docs/api/directives/fullscreen.md": [],
+    "docs/api/directives/highlight.md": [],
+    "docs/api/directives/hotkey.md": [],
+    "docs/api/directives/hover.md": [],
+    "docs/api/directives/image-preview.md": [],
+    "docs/api/directives/infinite-scroll.md": [],
+    "docs/api/directives/intersect.md": [],
+    "docs/api/directives/lazy.md": [],
+    "docs/api/directives/loading.md": [],
+    "docs/api/directives/long-press.md": [],
+    "docs/api/directives/lottie.md": [],
+    "docs/api/directives/lowercase.md": [],
+    "docs/api/directives/mask.md": [],
+    "docs/api/directives/money.md": [],
+    "docs/api/directives/mutation.md": [],
+    "docs/api/directives/number.md": [],
+    "docs/api/directives/pan.md": [],
+    "docs/api/directives/parallax.md": [],
+    "docs/api/directives/permission.md": [],
+    "docs/api/directives/pinch.md": [],
+    "docs/api/directives/print.md": [],
+    "docs/api/directives/progress.md": [],
+    "docs/api/directives/pull-refresh.md": [],
+    "docs/api/directives/resize.md": [],
+    "docs/api/directives/ripple.md": [],
+    "docs/api/directives/rotate-gesture.md": [],
+    "docs/api/directives/sanitize.md": [],
+    "docs/api/directives/scroll.md": [],
+    "docs/api/directives/skeleton.md": [],
+    "docs/api/directives/sticky.md": [],
+    "docs/api/directives/swipe.md": [],
+    "docs/api/directives/throttle.md": [],
+    "docs/api/directives/tooltip.md": [],
+    "docs/api/directives/touch.md": [],
+    "docs/api/directives/trim.md": [],
+    "docs/api/directives/truncate.md": [],
+    "docs/api/directives/typewriter.md": [],
+    "docs/api/directives/uppercase.md": [],
+    "docs/api/directives/virtual-list.md": [],
+    "docs/api/directives/visible.md": [],
+    "docs/api/directives/watermark.md": [],
+    "docs/api/index.md": [],
+    "docs/examples/click-outside.md": [],
+    "docs/examples/copy.md": [],
+    "docs/examples/debounce.md": [],
+    "docs/examples/focus.md": [],
+    "docs/examples/index.md": [],
+    "docs/examples/scenarios.md": [],
+    "docs/examples/throttle.md": [],
+    "docs/guide/a11y.md": [],
+    "docs/guide/community-plugins.md": [],
+    "docs/guide/events.md": [],
+    "docs/guide/forms.md": [],
+    "docs/guide/i18n.md": [],
+    "docs/guide/index.md": [],
+    "docs/guide/installation.md": [],
+    "docs/guide/nuxt.md": [],
+    "docs/guide/observers.md": [],
+    "docs/guide/plugin.md": [],
+    "docs/guide/quick-start.md": [],
+    "docs/guide/scroll.md": [],
+    "docs/guide/security.md": [],
+    "docs/guide/visibility.md": [],
+    "docs/guide/vscode-extension.md": [],
+    "docs/index.md": [],
+    "docs/migration/v2-migration-guide.md": [],
+    "docs/playground.md": [],
+    "docs/public/plugins.json": [],
+    "docs/tutorials/01-introduction.md": [],
+    "docs/tutorials/02-installation.md": [],
+    "docs/tutorials/03-event-directives.md": [],
+    "docs/tutorials/04-form-directives.md": [],
+    "docs/tutorials/05-visibility-directives.md": [],
+    "docs/tutorials/06-composables.md": [],
+    "docs/tutorials/09-devtools.md": [],
+    "docs/tutorials/11-form-validation.md": [],
+    "docs/tutorials/15-i18n.md": [],
+    "docs/tutorials/index.md": [],
+    "docs/zh/api/directives/blur.md": [],
+    "docs/zh/api/directives/capitalcase.md": [],
+    "docs/zh/api/directives/click-delay.md": [],
+    "docs/zh/api/directives/click-outside.md": [],
+    "docs/zh/api/directives/click-wave.md": [],
+    "docs/zh/api/directives/context-menu.md": [],
+    "docs/zh/api/directives/copy.md": [],
+    "docs/zh/api/directives/countdown.md": [],
+    "docs/zh/api/directives/counter.md": [],
+    "docs/zh/api/directives/debounce.md": [],
+    "docs/zh/api/directives/draggable.md": [],
+    "docs/zh/api/directives/ellipsis.md": [],
+    "docs/zh/api/directives/emoji.md": [],
+    "docs/zh/api/directives/export.md": [],
+    "docs/zh/api/directives/fade.md": [],
+    "docs/zh/api/directives/focus.md": [],
+    "docs/zh/api/directives/fullscreen.md": [],
+    "docs/zh/api/directives/highlight.md": [],
+    "docs/zh/api/directives/hotkey.md": [],
+    "docs/zh/api/directives/hover.md": [],
+    "docs/zh/api/directives/image-preview.md": [],
+    "docs/zh/api/directives/infinite-scroll.md": [],
+    "docs/zh/api/directives/intersect.md": [],
+    "docs/zh/api/directives/lazy.md": [],
+    "docs/zh/api/directives/loading.md": [],
+    "docs/zh/api/directives/long-press.md": [],
+    "docs/zh/api/directives/lottie.md": [],
+    "docs/zh/api/directives/lowercase.md": [],
+    "docs/zh/api/directives/mask.md": [],
+    "docs/zh/api/directives/money.md": [],
+    "docs/zh/api/directives/mutation.md": [],
+    "docs/zh/api/directives/number.md": [],
+    "docs/zh/api/directives/pan.md": [],
+    "docs/zh/api/directives/parallax.md": [],
+    "docs/zh/api/directives/permission.md": [],
+    "docs/zh/api/directives/pinch.md": [],
+    "docs/zh/api/directives/print.md": [],
+    "docs/zh/api/directives/progress.md": [],
+    "docs/zh/api/directives/pull-refresh.md": [],
+    "docs/zh/api/directives/resize.md": [],
+    "docs/zh/api/directives/ripple.md": [],
+    "docs/zh/api/directives/rotate-gesture.md": [],
+    "docs/zh/api/directives/sanitize.md": [],
+    "docs/zh/api/directives/scroll.md": [],
+    "docs/zh/api/directives/skeleton.md": [],
+    "docs/zh/api/directives/sticky.md": [],
+    "docs/zh/api/directives/swipe.md": [],
+    "docs/zh/api/directives/throttle.md": [],
+    "docs/zh/api/directives/tooltip.md": [],
+    "docs/zh/api/directives/touch.md": [],
+    "docs/zh/api/directives/trim.md": [],
+    "docs/zh/api/directives/truncate.md": [],
+    "docs/zh/api/directives/typewriter.md": [],
+    "docs/zh/api/directives/uppercase.md": [],
+    "docs/zh/api/directives/virtual-list.md": [],
+    "docs/zh/api/directives/visible.md": [],
+    "docs/zh/api/directives/watermark.md": [],
+    "docs/zh/api/index.md": [],
+    "docs/zh/examples/click-outside.md": [],
+    "docs/zh/examples/copy.md": [],
+    "docs/zh/examples/debounce.md": [],
+    "docs/zh/examples/focus.md": [],
+    "docs/zh/examples/index.md": [],
+    "docs/zh/examples/scenarios.md": [],
+    "docs/zh/examples/throttle.md": [],
+    "docs/zh/guide/a11y.md": [],
+    "docs/zh/guide/community-plugins.md": [],
+    "docs/zh/guide/events.md": [],
+    "docs/zh/guide/forms.md": [],
+    "docs/zh/guide/i18n.md": [],
+    "docs/zh/guide/index.md": [],
+    "docs/zh/guide/installation.md": [],
+    "docs/zh/guide/nuxt.md": [],
+    "docs/zh/guide/observers.md": [],
+    "docs/zh/guide/plugin.md": [],
+    "docs/zh/guide/quick-start.md": [],
+    "docs/zh/guide/scroll.md": [],
+    "docs/zh/guide/security.md": [],
+    "docs/zh/guide/visibility.md": [],
+    "docs/zh/guide/vscode-extension.md": [],
+    "docs/zh/index.md": [],
+    "docs/zh/migration/v2-migration-guide.md": [],
+    "docs/zh/playground.md": [],
+    "docs/zh/tutorials/01-introduction.md": [],
+    "docs/zh/tutorials/02-installation.md": [],
+    "docs/zh/tutorials/03-event-directives.md": [],
+    "docs/zh/tutorials/04-form-directives.md": [],
+    "docs/zh/tutorials/05-visibility-directives.md": [],
+    "docs/zh/tutorials/06-composables.md": [],
+    "docs/zh/tutorials/09-devtools.md": [],
+    "docs/zh/tutorials/11-form-validation.md": [],
+    "docs/zh/tutorials/15-i18n.md": [],
+    "docs/zh/tutorials/index.md": [],
+    "eslint.config.mjs": [],
+    "examples/nuxt/app.vue": [],
+    "examples/nuxt/nuxt.config.ts": [],
+    "examples/nuxt/package.json": [],
+    "examples/vue2/index.html": [],
+    "examples/vue2/package.json": [],
+    "examples/vue2/src/App.vue": [],
+    "examples/vue2/src/components/CodeBlock.vue": [],
+    "examples/vue2/src/components/DemoSection.vue": [],
+    "examples/vue2/src/demos/a11y.vue": [],
+    "examples/vue2/src/demos/blur.vue": [],
+    "examples/vue2/src/demos/capitalcase.vue": [],
+    "examples/vue2/src/demos/click-delay.vue": [],
+    "examples/vue2/src/demos/click-outside.vue": [],
+    "examples/vue2/src/demos/click-wave.vue": [],
+    "examples/vue2/src/demos/composables.vue": [],
+    "examples/vue2/src/demos/context-menu.vue": [],
+    "examples/vue2/src/demos/copy.vue": [],
+    "examples/vue2/src/demos/countdown.vue": [],
+    "examples/vue2/src/demos/counter.vue": [],
+    "examples/vue2/src/demos/debounce.vue": [],
+    "examples/vue2/src/demos/devtools.vue": [],
+    "examples/vue2/src/demos/draggable.vue": [],
+    "examples/vue2/src/demos/ellipsis.vue": [],
+    "examples/vue2/src/demos/emoji.vue": [],
+    "examples/vue2/src/demos/enterprise.vue": [],
+    "examples/vue2/src/demos/export.vue": [],
+    "examples/vue2/src/demos/fade.vue": [],
+    "examples/vue2/src/demos/focus.vue": [],
+    "examples/vue2/src/demos/fullscreen.vue": [],
+    "examples/vue2/src/demos/highlight.vue": [],
+    "examples/vue2/src/demos/hotkey.vue": [],
+    "examples/vue2/src/demos/hover.vue": [],
+    "examples/vue2/src/demos/i18n.vue": [],
+    "examples/vue2/src/demos/image-preview.vue": [],
+    "examples/vue2/src/demos/infinite-scroll.vue": [],
+    "examples/vue2/src/demos/intersect.vue": [],
+    "examples/vue2/src/demos/lazy.vue": [],
+    "examples/vue2/src/demos/loading.vue": [],
+    "examples/vue2/src/demos/long-press.vue": [],
+    "examples/vue2/src/demos/lottie.vue": [],
+    "examples/vue2/src/demos/lowercase.vue": [],
+    "examples/vue2/src/demos/mask.vue": [],
+    "examples/vue2/src/demos/money.vue": [],
+    "examples/vue2/src/demos/mutation.vue": [],
+    "examples/vue2/src/demos/number.vue": [],
+    "examples/vue2/src/demos/pan.vue": [],
+    "examples/vue2/src/demos/parallax.vue": [],
+    "examples/vue2/src/demos/performance.vue": [],
+    "examples/vue2/src/demos/permission.vue": [],
+    "examples/vue2/src/demos/pinch.vue": [],
+    "examples/vue2/src/demos/plugin-system.vue": [],
+    "examples/vue2/src/demos/print.vue": [],
+    "examples/vue2/src/demos/progress.vue": [],
+    "examples/vue2/src/demos/pull-refresh.vue": [],
+    "examples/vue2/src/demos/resize.vue": [],
+    "examples/vue2/src/demos/ripple.vue": [],
+    "examples/vue2/src/demos/rotate-gesture.vue": [],
+    "examples/vue2/src/demos/sanitize.vue": [],
+    "examples/vue2/src/demos/scroll.vue": [],
+    "examples/vue2/src/demos/security-audit.vue": [],
+    "examples/vue2/src/demos/skeleton.vue": [],
+    "examples/vue2/src/demos/sticky.vue": [],
+    "examples/vue2/src/demos/swipe.vue": [],
+    "examples/vue2/src/demos/throttle.vue": [],
+    "examples/vue2/src/demos/tooltip.vue": [],
+    "examples/vue2/src/demos/touch.vue": [],
+    "examples/vue2/src/demos/trim.vue": [],
+    "examples/vue2/src/demos/truncate.vue": [],
+    "examples/vue2/src/demos/typewriter.vue": [],
+    "examples/vue2/src/demos/uppercase.vue": [],
+    "examples/vue2/src/demos/virtual-list.vue": [],
+    "examples/vue2/src/demos/visible.vue": [],
+    "examples/vue2/src/demos/watermark.vue": [],
+    "examples/vue2/src/demos/web-components.vue": [],
+    "examples/vue2/src/main.ts": [
+      "examples/vue2/src/App.vue",
+      "examples/vue2/src/router/index.ts"
+    ],
+    "examples/vue2/src/router/index.ts": [],
+    "examples/vue2/src/scenarios/DataVisualization.vue": [],
+    "examples/vue2/src/scenarios/DragSort.vue": [],
+    "examples/vue2/src/scenarios/FormValidation.vue": [],
+    "examples/vue2/src/scenarios/FullscreenMedia.vue": [],
+    "examples/vue2/src/scenarios/GestureInteraction.vue": [],
+    "examples/vue2/src/scenarios/ImageGallery.vue": [],
+    "examples/vue2/src/scenarios/index.vue": [],
+    "examples/vue2/src/scenarios/InfiniteScrollList.vue": [],
+    "examples/vue2/src/scenarios/PermissionManagement.vue": [],
+    "examples/vue2/src/scenarios/PrintExport.vue": [],
+    "examples/vue2/src/scenarios/RichTextEditor.vue": [],
+    "examples/vue2/tsconfig.json": [],
+    "examples/vue2/tsconfig.node.json": [],
+    "examples/vue2/vite.config.ts": [],
+    "examples/vue3/index.html": [],
+    "examples/vue3/package.json": [],
+    "examples/vue3/src/App.vue": [],
+    "examples/vue3/src/components/CodeBlock.vue": [],
+    "examples/vue3/src/components/DemoSection.vue": [],
+    "examples/vue3/src/demos/a11y.vue": [],
+    "examples/vue3/src/demos/blur.vue": [],
+    "examples/vue3/src/demos/capitalcase.vue": [],
+    "examples/vue3/src/demos/click-delay.vue": [],
+    "examples/vue3/src/demos/click-outside.vue": [],
+    "examples/vue3/src/demos/click-wave.vue": [],
+    "examples/vue3/src/demos/composables.vue": [],
+    "examples/vue3/src/demos/context-menu.vue": [],
+    "examples/vue3/src/demos/copy.vue": [],
+    "examples/vue3/src/demos/countdown.vue": [],
+    "examples/vue3/src/demos/counter.vue": [],
+    "examples/vue3/src/demos/debounce.vue": [],
+    "examples/vue3/src/demos/devtools.vue": [],
+    "examples/vue3/src/demos/draggable.vue": [],
+    "examples/vue3/src/demos/ellipsis.vue": [],
+    "examples/vue3/src/demos/emoji.vue": [],
+    "examples/vue3/src/demos/enterprise.vue": [],
+    "examples/vue3/src/demos/export.vue": [],
+    "examples/vue3/src/demos/fade.vue": [],
+    "examples/vue3/src/demos/focus.vue": [],
+    "examples/vue3/src/demos/fullscreen.vue": [],
+    "examples/vue3/src/demos/highlight.vue": [],
+    "examples/vue3/src/demos/hotkey.vue": [],
+    "examples/vue3/src/demos/hover.vue": [],
+    "examples/vue3/src/demos/i18n.vue": [],
+    "examples/vue3/src/demos/image-preview.vue": [],
+    "examples/vue3/src/demos/infinite-scroll.vue": [],
+    "examples/vue3/src/demos/intersect.vue": [],
+    "examples/vue3/src/demos/lazy.vue": [],
+    "examples/vue3/src/demos/loading.vue": [],
+    "examples/vue3/src/demos/long-press.vue": [],
+    "examples/vue3/src/demos/lottie.vue": [],
+    "examples/vue3/src/demos/lowercase.vue": [],
+    "examples/vue3/src/demos/mask.vue": [],
+    "examples/vue3/src/demos/money.vue": [],
+    "examples/vue3/src/demos/mutation.vue": [],
+    "examples/vue3/src/demos/number.vue": [],
+    "examples/vue3/src/demos/pan.vue": [],
+    "examples/vue3/src/demos/parallax.vue": [],
+    "examples/vue3/src/demos/performance.vue": [],
+    "examples/vue3/src/demos/permission.vue": [],
+    "examples/vue3/src/demos/pinch.vue": [],
+    "examples/vue3/src/demos/plugin-system.vue": [],
+    "examples/vue3/src/demos/print.vue": [],
+    "examples/vue3/src/demos/progress.vue": [],
+    "examples/vue3/src/demos/pull-refresh.vue": [],
+    "examples/vue3/src/demos/resize.vue": [],
+    "examples/vue3/src/demos/ripple.vue": [],
+    "examples/vue3/src/demos/rotate-gesture.vue": [],
+    "examples/vue3/src/demos/sanitize.vue": [],
+    "examples/vue3/src/demos/scroll.vue": [],
+    "examples/vue3/src/demos/security-audit.vue": [],
+    "examples/vue3/src/demos/skeleton.vue": [],
+    "examples/vue3/src/demos/sticky.vue": [],
+    "examples/vue3/src/demos/swipe.vue": [],
+    "examples/vue3/src/demos/throttle.vue": [],
+    "examples/vue3/src/demos/tooltip.vue": [],
+    "examples/vue3/src/demos/touch.vue": [],
+    "examples/vue3/src/demos/trim.vue": [],
+    "examples/vue3/src/demos/truncate.vue": [],
+    "examples/vue3/src/demos/typewriter.vue": [],
+    "examples/vue3/src/demos/uppercase.vue": [],
+    "examples/vue3/src/demos/virtual-list.vue": [],
+    "examples/vue3/src/demos/visible.vue": [],
+    "examples/vue3/src/demos/watermark.vue": [],
+    "examples/vue3/src/demos/web-components.vue": [],
+    "examples/vue3/src/env.d.ts": [],
+    "examples/vue3/src/main.ts": [
+      "examples/vue3/src/App.vue",
+      "examples/vue3/src/router/index.ts"
+    ],
+    "examples/vue3/src/router/index.ts": [],
+    "examples/vue3/src/scenarios/DataVisualization.vue": [],
+    "examples/vue3/src/scenarios/DragSort.vue": [],
+    "examples/vue3/src/scenarios/FormValidation.vue": [],
+    "examples/vue3/src/scenarios/FullscreenMedia.vue": [],
+    "examples/vue3/src/scenarios/GestureInteraction.vue": [],
+    "examples/vue3/src/scenarios/ImageGallery.vue": [],
+    "examples/vue3/src/scenarios/index.vue": [],
+    "examples/vue3/src/scenarios/InfiniteScrollList.vue": [],
+    "examples/vue3/src/scenarios/PermissionManagement.vue": [],
+    "examples/vue3/src/scenarios/PrintExport.vue": [],
+    "examples/vue3/src/scenarios/RichTextEditor.vue": [],
+    "examples/vue3/tsconfig.json": [],
+    "examples/vue3/tsconfig.node.json": [],
+    "examples/vue3/vite.config.d.ts": [],
+    "examples/vue3/vite.config.js": [],
+    "examples/vue3/vite.config.ts": [],
+    "internal/cli-tool-guide.md": [],
+    "internal/competitor-analysis.md": [],
+    "internal/development-plan.md": [],
+    "internal/e2e-testing-guide.md": [],
+    "internal/extractable-utilities.md": [],
+    "internal/vscode-extension-guide.md": [],
+    "internal/vue-detection-optimization.md": [],
+    "internal/vue-version-detection-comparison.md": [],
+    "package.json": [],
+    "packages/cli/package.json": [],
+    "packages/cli/src/commands/create-composable.ts": [],
+    "packages/cli/src/commands/create-directive.ts": [],
+    "packages/cli/src/commands/doctor.ts": [],
+    "packages/cli/src/commands/init.ts": [],
+    "packages/cli/src/commands/migrate.ts": [],
+    "packages/cli/src/index.ts": [],
+    "packages/core/src/adapter/index.ts": [],
+    "packages/core/src/adapter/vue2.ts": [
+      "packages/core/src/types/index.ts"
+    ],
+    "packages/core/src/adapter/vue3.ts": [
+      "packages/core/src/types/index.ts"
+    ],
+    "packages/core/src/audit-log.ts": [],
+    "packages/core/src/benchmark.ts": [],
+    "packages/core/src/breaking-changes.ts": [],
+    "packages/core/src/compatibility-matrix.ts": [],
+    "packages/core/src/compatibility.ts": [
+      "packages/core/src/env.ts"
+    ],
+    "packages/core/src/config-center.ts": [],
+    "packages/core/src/define.ts": [
+      "packages/core/src/adapter/vue2.ts",
+      "packages/core/src/adapter/vue3.ts",
+      "packages/core/src/env.ts",
+      "packages/core/src/types/index.ts"
+    ],
+    "packages/core/src/devtools.ts": [
+      "packages/core/src/env.ts"
+    ],
+    "packages/core/src/edge-case.ts": [],
+    "packages/core/src/enterprise-permission.ts": [],
+    "packages/core/src/env.ts": [],
+    "packages/core/src/first-screen.ts": [],
+    "packages/core/src/index.ts": [],
+    "packages/core/src/migration.ts": [],
+    "packages/core/src/monitoring.ts": [],
+    "packages/core/src/performance-optimizer.ts": [],
+    "packages/core/src/performance.ts": [
+      "packages/core/src/env.ts"
+    ],
+    "packages/core/src/types/directive.ts": [],
+    "packages/core/src/types/index.ts": [],
+    "packages/core/src/warning.ts": [],
+    "packages/core/tsconfig.json": [],
+    "packages/i18n/src/i18n.ts": [
+      "packages/i18n/src/locales/zh-CN.ts",
+      "packages/i18n/src/types.ts"
+    ],
+    "packages/i18n/src/index.ts": [],
+    "packages/i18n/src/locale.ts": [],
+    "packages/i18n/src/locales/en-US.ts": [
+      "packages/i18n/src/types.ts"
+    ],
+    "packages/i18n/src/locales/ja-JP.ts": [
+      "packages/i18n/src/types.ts"
+    ],
+    "packages/i18n/src/locales/zh-CN.ts": [
+      "packages/i18n/src/types.ts"
+    ],
+    "packages/i18n/src/types.ts": [],
+    "packages/shared/src/browser.ts": [],
+    "packages/shared/src/directive.ts": [],
+    "packages/shared/src/dom.ts": [],
+    "packages/shared/src/event-modifiers.ts": [],
+    "packages/shared/src/event.ts": [],
+    "packages/shared/src/index.ts": [],
+    "packages/shared/src/polyfill.ts": [],
+    "packages/shared/src/utils.ts": [],
+    "packages/shared/tsconfig.json": [],
+    "packages/vscode-extension/package.json": [],
+    "packages/vscode-extension/README.md": [],
+    "packages/vscode-extension/snippets/snippets.json": [],
+    "packages/vscode-extension/src/extension.ts": [],
+    "packages/vscode-extension/tsconfig.json": [],
+    "playground/index.html": [],
+    "playground/package.json": [],
+    "playground/README.md": [],
+    "playground/scripts/deploy.sh": [],
+    "playground/src/App.vue": [],
+    "playground/src/components/CodePreview.vue": [],
+    "playground/src/components/ConfigPanel.vue": [],
+    "playground/src/components/DirectiveSelector.vue": [],
+    "playground/src/components/MonacoEditor.vue": [],
+    "playground/src/composables/useEditor.ts": [],
+    "playground/src/main.ts": [
+      "playground/src/App.vue",
+      "playground/src/style.css"
+    ],
+    "playground/src/style.css": [],
+    "playground/src/types/index.ts": [],
+    "playground/src/utils/code-generator.ts": [
+      "playground/src/types/index.ts"
+    ],
+    "playground/src/utils/directive-configs.ts": [
+      "playground/src/types/index.ts"
+    ],
+    "playground/src/utils/directive-examples.ts": [
+      "playground/src/types/index.ts"
+    ],
+    "playground/tsconfig.json": [],
+    "playground/tsconfig.node.json": [],
+    "playground/vite.config.ts": [],
+    "playwright.config.ts": [],
+    "pnpm-workspace.yaml": [],
+    "README_CN.md": [],
+    "README.md": [],
+    "scripts/build-nuxt.ts": [],
+    "scripts/build-optimized.ts": [],
+    "scripts/bundle-size.ts": [],
+    "scripts/deploy.sh": [],
+    "scripts/minify.ts": [],
+    "scripts/publish.ts": [
+      "package.json"
+    ],
+    "scripts/sync.ts": [],
+    "scripts/tag.ts": [
+      "package.json"
+    ],
+    "scripts/unpublish.ts": [],
+    "scripts/version.ts": [
+      "package.json"
+    ],
+    "src/composables/index.ts": [],
+    "src/composables/use-blur.ts": [],
+    "src/composables/use-capitalcase.ts": [],
+    "src/composables/use-click-delay.ts": [],
+    "src/composables/use-click-outside.ts": [],
+    "src/composables/use-click-wave.ts": [],
+    "src/composables/use-context-menu.ts": [],
+    "src/composables/use-copy.ts": [],
+    "src/composables/use-countdown.ts": [],
+    "src/composables/use-counter.ts": [],
+    "src/composables/use-debounce.ts": [],
+    "src/composables/use-draggable.ts": [],
+    "src/composables/use-ellipsis.ts": [],
+    "src/composables/use-emoji.ts": [],
+    "src/composables/use-export.ts": [],
+    "src/composables/use-fade.ts": [],
+    "src/composables/use-focus.ts": [],
+    "src/composables/use-fullscreen.ts": [],
+    "src/composables/use-highlight.ts": [],
+    "src/composables/use-hotkey.ts": [],
+    "src/composables/use-hover.ts": [],
+    "src/composables/use-image-preview.ts": [],
+    "src/composables/use-infinite-scroll.ts": [],
+    "src/composables/use-intersect.ts": [],
+    "src/composables/use-lazy.ts": [],
+    "src/composables/use-loading.ts": [],
+    "src/composables/use-long-press.ts": [],
+    "src/composables/use-lottie.ts": [],
+    "src/composables/use-lowercase.ts": [],
+    "src/composables/use-mask.ts": [],
+    "src/composables/use-money.ts": [],
+    "src/composables/use-mutation.ts": [],
+    "src/composables/use-number.ts": [],
+    "src/composables/use-pan.ts": [],
+    "src/composables/use-parallax.ts": [],
+    "src/composables/use-permission.ts": [],
+    "src/composables/use-pinch.ts": [],
+    "src/composables/use-print.ts": [],
+    "src/composables/use-progress.ts": [],
+    "src/composables/use-pull-refresh.ts": [],
+    "src/composables/use-resize.ts": [],
+    "src/composables/use-ripple.ts": [],
+    "src/composables/use-rotate-gesture.ts": [],
+    "src/composables/use-sanitize.ts": [],
+    "src/composables/use-scroll.ts": [],
+    "src/composables/use-skeleton.ts": [],
+    "src/composables/use-sticky.ts": [],
+    "src/composables/use-swipe.ts": [],
+    "src/composables/use-throttle.ts": [],
+    "src/composables/use-tooltip.ts": [],
+    "src/composables/use-touch.ts": [],
+    "src/composables/use-trim.ts": [],
+    "src/composables/use-truncate.ts": [],
+    "src/composables/use-typewriter.ts": [],
+    "src/composables/use-uppercase.ts": [],
+    "src/composables/use-virtual-list.ts": [],
+    "src/composables/use-visible.ts": [],
+    "src/composables/use-watermark.ts": [],
+    "src/directives/blur.ts": [],
+    "src/directives/capitalcase.ts": [
+      "src/utils/text-transform.ts"
+    ],
+    "src/directives/click-delay.ts": [],
+    "src/directives/click-outside.ts": [],
+    "src/directives/click-wave.ts": [],
+    "src/directives/context-menu.ts": [],
+    "src/directives/copy.ts": [],
+    "src/directives/countdown.ts": [],
+    "src/directives/counter.ts": [],
+    "src/directives/debounce.ts": [],
+    "src/directives/draggable.ts": [],
+    "src/directives/ellipsis.ts": [],
+    "src/directives/emoji.ts": [],
+    "src/directives/export.ts": [],
+    "src/directives/fade.ts": [],
+    "src/directives/focus.ts": [],
+    "src/directives/fullscreen.ts": [],
+    "src/directives/highlight.ts": [],
+    "src/directives/hotkey.ts": [],
+    "src/directives/hover.ts": [
+      "src/utils/directive.ts"
+    ],
+    "src/directives/image-preview.ts": [],
+    "src/directives/index.ts": [],
+    "src/directives/infinite-scroll.ts": [],
+    "src/directives/intersect.ts": [],
+    "src/directives/lazy.ts": [],
+    "src/directives/loading.ts": [],
+    "src/directives/long-press.ts": [],
+    "src/directives/lottie.ts": [],
+    "src/directives/lowercase.ts": [
+      "src/utils/text-transform.ts"
+    ],
+    "src/directives/mask.ts": [],
+    "src/directives/money.ts": [
+      "src/utils/number.ts"
+    ],
+    "src/directives/mutation.ts": [],
+    "src/directives/number.ts": [
+      "src/utils/number.ts"
+    ],
+    "src/directives/pan.ts": [],
+    "src/directives/parallax.ts": [],
+    "src/directives/permission.ts": [],
+    "src/directives/pinch.ts": [],
+    "src/directives/print.ts": [],
+    "src/directives/progress.ts": [],
+    "src/directives/pull-refresh.ts": [],
+    "src/directives/resize.ts": [],
+    "src/directives/ripple.ts": [],
+    "src/directives/rotate-gesture.ts": [],
+    "src/directives/sanitize.ts": [],
+    "src/directives/scroll.ts": [],
+    "src/directives/skeleton.ts": [],
+    "src/directives/sticky.ts": [],
+    "src/directives/swipe.ts": [],
+    "src/directives/throttle.ts": [],
+    "src/directives/tooltip.ts": [],
+    "src/directives/touch.ts": [],
+    "src/directives/trim.ts": [],
+    "src/directives/truncate.ts": [],
+    "src/directives/typewriter.ts": [],
+    "src/directives/uppercase.ts": [
+      "src/utils/text-transform.ts"
+    ],
+    "src/directives/virtual-list.ts": [],
+    "src/directives/visible.ts": [],
+    "src/directives/watermark.ts": [],
+    "src/index.ts": [
+      "src/directives/index.ts"
+    ],
+    "src/nuxt/index.ts": [],
+    "src/nuxt/module.ts": [
+      "src/directives/index.ts",
+      "src/types/index.ts"
+    ],
+    "src/nuxt/runtime/plugin.ts": [
+      "src/directives/index.ts",
+      "src/types/index.ts"
+    ],
+    "src/plugin/index.ts": [],
+    "src/plugin/manager.ts": [
+      "src/plugin/registry.ts",
+      "src/plugin/types.ts"
+    ],
+    "src/plugin/registry.ts": [
+      "src/plugin/manager.ts",
+      "src/plugin/types.ts"
+    ],
+    "src/plugin/types.ts": [],
+    "src/types/index.ts": [],
+    "src/types/optional-deps.d.ts": [],
+    "src/utils/a11y.ts": [],
+    "src/utils/directive.ts": [],
+    "src/utils/index.ts": [],
+    "src/utils/mobile.ts": [],
+    "src/utils/number.ts": [],
+    "src/utils/security.ts": [],
+    "src/utils/text-transform.ts": [],
+    "src/utils/vue3.ts": [],
+    "src/web-components.ts": [],
+    "tests/benchmark/index.ts": [],
+    "tests/e2e/directives.spec.ts": [],
+    "tests/setup.ts": [],
+    "tests/unit/audit-log.test.ts": [
+      "packages/core/src/audit-log.ts"
+    ],
+    "tests/unit/backward-compatibility.test.ts": [],
+    "tests/unit/benchmark.test.ts": [
+      "packages/core/src/benchmark.ts"
+    ],
+    "tests/unit/blur.test.ts": [
+      "src/directives/blur.ts"
+    ],
+    "tests/unit/breaking-changes.test.ts": [
+      "packages/core/src/breaking-changes.ts"
+    ],
+    "tests/unit/browser-detection.test.ts": [],
+    "tests/unit/capitalcase.test.ts": [
+      "src/directives/capitalcase.ts"
+    ],
+    "tests/unit/click-delay.test.ts": [
+      "src/directives/click-delay.ts"
+    ],
+    "tests/unit/click-outside.test.ts": [
+      "src/directives/click-outside.ts"
+    ],
+    "tests/unit/click-wave.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/compatibility-matrix.test.ts": [],
+    "tests/unit/compatibility.test.ts": [],
+    "tests/unit/composables-blur.test.ts": [
+      "src/composables/use-blur.ts"
+    ],
+    "tests/unit/composables-capitalcase.test.ts": [
+      "src/composables/use-capitalcase.ts"
+    ],
+    "tests/unit/composables-click-delay.test.ts": [
+      "src/composables/use-click-delay.ts"
+    ],
+    "tests/unit/composables-click-outside.test.ts": [
+      "src/composables/use-click-outside.ts"
+    ],
+    "tests/unit/composables-click-wave.test.ts": [
+      "src/composables/use-click-wave.ts"
+    ],
+    "tests/unit/composables-context-menu.test.ts": [
+      "src/composables/use-context-menu.ts"
+    ],
+    "tests/unit/composables-copy.test.ts": [
+      "src/composables/use-copy.ts"
+    ],
+    "tests/unit/composables-countdown.test.ts": [
+      "src/composables/use-countdown.ts"
+    ],
+    "tests/unit/composables-counter.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-debounce.test.ts": [
+      "src/composables/use-debounce.ts"
+    ],
+    "tests/unit/composables-dom.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-draggable.test.ts": [
+      "src/composables/use-draggable.ts"
+    ],
+    "tests/unit/composables-element.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-ellipsis.test.ts": [
+      "src/composables/use-ellipsis.ts"
+    ],
+    "tests/unit/composables-emoji.test.ts": [
+      "src/composables/use-emoji.ts"
+    ],
+    "tests/unit/composables-export.test.ts": [
+      "src/composables/use-export.ts"
+    ],
+    "tests/unit/composables-fade.test.ts": [
+      "src/composables/use-fade.ts"
+    ],
+    "tests/unit/composables-focus.test.ts": [
+      "src/composables/use-focus.ts"
+    ],
+    "tests/unit/composables-fullscreen.test.ts": [
+      "src/composables/use-fullscreen.ts"
+    ],
+    "tests/unit/composables-gesture.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-highlight.test.ts": [
+      "src/composables/use-highlight.ts"
+    ],
+    "tests/unit/composables-hotkey.test.ts": [
+      "src/composables/use-hotkey.ts"
+    ],
+    "tests/unit/composables-hover.test.ts": [
+      "src/composables/use-hover.ts"
+    ],
+    "tests/unit/composables-image-preview.test.ts": [
+      "src/composables/use-image-preview.ts"
+    ],
+    "tests/unit/composables-infinite-scroll.test.ts": [
+      "src/composables/use-infinite-scroll.ts"
+    ],
+    "tests/unit/composables-intersect.test.ts": [
+      "src/composables/use-intersect.ts"
+    ],
+    "tests/unit/composables-lazy.test.ts": [
+      "src/composables/use-lazy.ts"
+    ],
+    "tests/unit/composables-loading.test.ts": [
+      "src/composables/use-loading.ts"
+    ],
+    "tests/unit/composables-long-press.test.ts": [
+      "src/composables/use-long-press.ts"
+    ],
+    "tests/unit/composables-lottie.test.ts": [
+      "src/composables/use-lottie.ts"
+    ],
+    "tests/unit/composables-lowercase.test.ts": [
+      "src/composables/use-lowercase.ts"
+    ],
+    "tests/unit/composables-mask.test.ts": [
+      "src/composables/use-mask.ts"
+    ],
+    "tests/unit/composables-money.test.ts": [
+      "src/composables/use-money.ts"
+    ],
+    "tests/unit/composables-mutation.test.ts": [
+      "src/composables/use-mutation.ts"
+    ],
+    "tests/unit/composables-number.test.ts": [
+      "src/composables/use-number.ts"
+    ],
+    "tests/unit/composables-pan.test.ts": [
+      "src/composables/use-pan.ts"
+    ],
+    "tests/unit/composables-parallax.test.ts": [
+      "src/composables/use-parallax.ts"
+    ],
+    "tests/unit/composables-permission.test.ts": [
+      "src/composables/use-permission.ts"
+    ],
+    "tests/unit/composables-pinch.test.ts": [
+      "src/composables/use-pinch.ts"
+    ],
+    "tests/unit/composables-print.test.ts": [
+      "src/composables/use-print.ts"
+    ],
+    "tests/unit/composables-progress.test.ts": [
+      "src/composables/use-progress.ts"
+    ],
+    "tests/unit/composables-pull-refresh.test.ts": [
+      "src/composables/use-pull-refresh.ts"
+    ],
+    "tests/unit/composables-resize.test.ts": [
+      "src/composables/use-resize.ts"
+    ],
+    "tests/unit/composables-ripple.test.ts": [
+      "src/composables/use-ripple.ts"
+    ],
+    "tests/unit/composables-rotate-gesture.test.ts": [
+      "src/composables/use-rotate-gesture.ts"
+    ],
+    "tests/unit/composables-sanitize.test.ts": [
+      "src/composables/use-sanitize.ts"
+    ],
+    "tests/unit/composables-scroll.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-skeleton.test.ts": [
+      "src/composables/use-skeleton.ts"
+    ],
+    "tests/unit/composables-sticky.test.ts": [
+      "src/composables/use-sticky.ts"
+    ],
+    "tests/unit/composables-swipe.test.ts": [
+      "src/composables/use-swipe.ts"
+    ],
+    "tests/unit/composables-text.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-throttle.test.ts": [
+      "src/composables/use-throttle.ts"
+    ],
+    "tests/unit/composables-tooltip.test.ts": [
+      "src/composables/use-tooltip.ts"
+    ],
+    "tests/unit/composables-touch.test.ts": [
+      "src/composables/use-touch.ts"
+    ],
+    "tests/unit/composables-trim.test.ts": [
+      "src/composables/use-trim.ts"
+    ],
+    "tests/unit/composables-truncate.test.ts": [
+      "src/composables/use-truncate.ts"
+    ],
+    "tests/unit/composables-typewriter.test.ts": [
+      "src/composables/use-typewriter.ts"
+    ],
+    "tests/unit/composables-ui.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/composables-uppercase.test.ts": [
+      "src/composables/use-uppercase.ts"
+    ],
+    "tests/unit/composables-virtual-list.test.ts": [
+      "src/composables/use-virtual-list.ts"
+    ],
+    "tests/unit/composables-visible.test.ts": [
+      "src/composables/use-visible.ts"
+    ],
+    "tests/unit/composables-watermark.test.ts": [
+      "src/composables/use-watermark.ts"
+    ],
+    "tests/unit/composables.test.ts": [
+      "src/composables/index.ts"
+    ],
+    "tests/unit/config-center.test.ts": [
+      "packages/core/src/config-center.ts"
+    ],
+    "tests/unit/context-menu.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/copy.test.ts": [
+      "src/directives/copy.ts"
+    ],
+    "tests/unit/countdown.test.ts": [
+      "src/directives/countdown.ts"
+    ],
+    "tests/unit/counter.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/debounce.test.ts": [
+      "src/directives/debounce.ts"
+    ],
+    "tests/unit/directives-index.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/draggable.test.ts": [
+      "src/directives/draggable.ts"
+    ],
+    "tests/unit/edge-case.test.ts": [
+      "packages/core/src/edge-case.ts"
+    ],
+    "tests/unit/ellipsis.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/emoji.test.ts": [
+      "src/directives/emoji.ts"
+    ],
+    "tests/unit/enterprise-permission.test.ts": [
+      "packages/core/src/enterprise-permission.ts"
+    ],
+    "tests/unit/export.test.ts": [
+      "src/directives/export.ts"
+    ],
+    "tests/unit/fade.test.ts": [
+      "src/directives/fade.ts"
+    ],
+    "tests/unit/first-screen.test.ts": [
+      "packages/core/src/first-screen.ts"
+    ],
+    "tests/unit/focus.test.ts": [
+      "src/directives/focus.ts"
+    ],
+    "tests/unit/fullscreen.test.ts": [
+      "src/directives/fullscreen.ts"
+    ],
+    "tests/unit/highlight.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/hotkey.test.ts": [
+      "src/directives/hotkey.ts"
+    ],
+    "tests/unit/hover.test.ts": [
+      "src/directives/hover.ts"
+    ],
+    "tests/unit/image-preview.test.ts": [
+      "src/directives/image-preview.ts"
+    ],
+    "tests/unit/index.test.ts": [
+      "src/directives/index.ts",
+      "src/index.ts"
+    ],
+    "tests/unit/infinite-scroll.test.ts": [
+      "src/directives/infinite-scroll.ts",
+      "tests/utils.ts"
+    ],
+    "tests/unit/intersect.test.ts": [
+      "src/directives/intersect.ts",
+      "tests/utils.ts"
+    ],
+    "tests/unit/lazy.test.ts": [
+      "src/directives/lazy.ts"
+    ],
+    "tests/unit/loading.test.ts": [
+      "src/directives/loading.ts"
+    ],
+    "tests/unit/long-press.test.ts": [
+      "src/directives/long-press.ts"
+    ],
+    "tests/unit/lottie.test.ts": [
+      "src/directives/lottie.ts"
+    ],
+    "tests/unit/lowercase.test.ts": [
+      "src/directives/lowercase.ts"
+    ],
+    "tests/unit/mask.test.ts": [
+      "src/directives/mask.ts"
+    ],
+    "tests/unit/media-directives.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/migration.test.ts": [],
+    "tests/unit/money.test.ts": [
+      "src/directives/money.ts"
+    ],
+    "tests/unit/monitoring.test.ts": [
+      "packages/core/src/monitoring.ts"
+    ],
+    "tests/unit/mutation.test.ts": [
+      "src/directives/mutation.ts",
+      "tests/utils.ts"
+    ],
+    "tests/unit/number.test.ts": [
+      "src/directives/number.ts"
+    ],
+    "tests/unit/pan.test.ts": [
+      "src/directives/pan.ts"
+    ],
+    "tests/unit/parallax.test.ts": [
+      "src/directives/parallax.ts"
+    ],
+    "tests/unit/permission.test.ts": [
+      "src/directives/permission.ts"
+    ],
+    "tests/unit/pinch.test.ts": [
+      "src/directives/pinch.ts"
+    ],
+    "tests/unit/plugin-manager.test.ts": [
+      "src/plugin/manager.ts",
+      "src/plugin/types.ts"
+    ],
+    "tests/unit/polyfill.test.ts": [],
+    "tests/unit/print.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/progress.test.ts": [
+      "src/directives/progress.ts"
+    ],
+    "tests/unit/pull-refresh.test.ts": [
+      "src/directives/pull-refresh.ts",
+      "tests/utils.ts"
+    ],
+    "tests/unit/resize.test.ts": [
+      "src/directives/resize.ts",
+      "tests/utils.ts"
+    ],
+    "tests/unit/ripple.test.ts": [
+      "src/directives/ripple.ts"
+    ],
+    "tests/unit/rotate-gesture.test.ts": [
+      "src/directives/rotate-gesture.ts"
+    ],
+    "tests/unit/sanitize.test.ts": [
+      "src/directives/sanitize.ts"
+    ],
+    "tests/unit/scroll.test.ts": [
+      "src/directives/scroll.ts"
+    ],
+    "tests/unit/skeleton.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/sticky.test.ts": [
+      "src/directives/sticky.ts"
+    ],
+    "tests/unit/swipe.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/text-transform.test.ts": [
+      "src/utils/text-transform.ts"
+    ],
+    "tests/unit/throttle.test.ts": [
+      "src/directives/throttle.ts"
+    ],
+    "tests/unit/tooltip.test.ts": [
+      "src/directives/tooltip.ts"
+    ],
+    "tests/unit/touch.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/trim.test.ts": [
+      "src/directives/trim.ts"
+    ],
+    "tests/unit/truncate.test.ts": [
+      "src/directives/truncate.ts"
+    ],
+    "tests/unit/types.test.ts": [
+      "src/types/index.ts"
+    ],
+    "tests/unit/typewriter.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/ui-effect-directives.test.ts": [
+      "src/directives/index.ts"
+    ],
+    "tests/unit/uppercase.test.ts": [
+      "src/directives/uppercase.ts"
+    ],
+    "tests/unit/utils-a11y.test.ts": [
+      "src/utils/a11y.ts"
+    ],
+    "tests/unit/utils-directive.test.ts": [
+      "src/utils/directive.ts"
+    ],
+    "tests/unit/utils-mobile.test.ts": [
+      "src/utils/mobile.ts"
+    ],
+    "tests/unit/utils-security.test.ts": [
+      "src/utils/security.ts"
+    ],
+    "tests/unit/utils-vue3.test.ts": [
+      "src/utils/vue3.ts"
+    ],
+    "tests/unit/virtual-list.test.ts": [
+      "src/directives/virtual-list.ts"
+    ],
+    "tests/unit/visible.test.ts": [
+      "src/directives/visible.ts"
+    ],
+    "tests/unit/watermark.test.ts": [
+      "src/directives/watermark.ts"
+    ],
+    "tests/unit/web-components.test.ts": [
+      "src/index.ts",
+      "src/web-components.ts"
+    ],
+    "tests/utils.ts": [],
+    "tsconfig.json": [],
+    "vite.config.ts": [],
+    "vitest.config.ts": []
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "Directix",
+    "languages": ["typescript", "vue", "javascript", "markdown", "yaml", "shell"],
+    "frameworks": ["Vue", "Vite", "Vitest", "VitePress", "Nuxt", "Playwright"],
+    "description": "A comprehensive Vue directives library supporting Vue 2, Vue 3, and Web Components",
+    "analyzedAt": "2026-06-06T05:09:40Z",
+    "gitCommitHash": "b8abb7402934cf209e5215cfc2d19386c3f82c87"
+  },
+  "nodes": [
+  {
+    "id": "file:src/index.ts",
+    "type": "file",
+    "name": "index.ts",
+    "filePath": "src/index.ts",
+    "summary": "Main entry point - exports all directives, composables, and utilities",
+    "tags": [
+      "entry-point",
+      "exports",
+      "core"
+    ]
+  },
+  {
+    "id": "file:src/web-components.ts",
+    "type": "file",
+    "name": "web-components.ts",
+    "filePath": "src/web-components.ts",
+    "summary": "Web Components support - create custom elements from directives with Shadow DOM, SSR, lifecycle hooks",
+    "tags": [
+      "web-components",
+      "custom-elements",
+      "shadow-dom"
+    ]
+  },
+  {
+    "id": "file:src/directives/index.ts",
+    "type": "file",
+    "name": "directives/index.ts",
+    "filePath": "src/directives/index.ts",
+    "summary": "Exports all 57 Vue directives",
+    "tags": [
+      "directives",
+      "exports"
+    ]
+  },
+  {
+    "id": "file:src/composables/index.ts",
+    "type": "file",
+    "name": "composables/index.ts",
+    "filePath": "src/composables/index.ts",
+    "summary": "Exports all 57 composables for Composition API",
+    "tags": [
+      "composables",
+      "composition-api"
+    ]
+  },
+  {
+    "id": "file:packages/core/src/index.ts",
+    "type": "file",
+    "name": "packages/core/index.ts",
+    "filePath": "packages/core/src/index.ts",
+    "summary": "Core package - adapter, define, devtools, env, performance, monitoring",
+    "tags": [
+      "core",
+      "adapter",
+      "performance"
+    ]
+  },
+  {
+    "id": "file:packages/core/src/adapter/vue2.ts",
+    "type": "file",
+    "name": "adapter/vue2.ts",
+    "filePath": "packages/core/src/adapter/vue2.ts",
+    "summary": "Vue 2 directive adapter - creates Vue 2 compatible hooks from unified definition",
+    "tags": [
+      "vue2",
+      "adapter",
+      "compatibility"
+    ]
+  },
+  {
+    "id": "file:packages/core/src/adapter/vue3.ts",
+    "type": "file",
+    "name": "adapter/vue3.ts",
+    "filePath": "packages/core/src/adapter/vue3.ts",
+    "summary": "Vue 3 directive adapter with markRaw and shallowReactive optimizations",
+    "tags": [
+      "vue3",
+      "adapter",
+      "optimization"
+    ]
+  },
+  {
+    "id": "file:packages/core/src/define.ts",
+    "type": "file",
+    "name": "define.ts",
+    "filePath": "packages/core/src/define.ts",
+    "summary": "defineDirective - creates cross-version compatible directives with lazy loading",
+    "tags": [
+      "directive-definition",
+      "cross-version"
+    ]
+  },
+  {
+    "id": "file:packages/core/src/env.ts",
+    "type": "file",
+    "name": "env.ts",
+    "filePath": "packages/core/src/env.ts",
+    "summary": "Environment detection - isVue2, isVue3, isVue27, SSR detection",
+    "tags": [
+      "env",
+      "detection",
+      "ssr"
+    ]
+  },
+  {
+    "id": "file:packages/i18n/src/index.ts",
+    "type": "file",
+    "name": "packages/i18n/index.ts",
+    "filePath": "packages/i18n/src/index.ts",
+    "summary": "i18n support - createI18n, setLocale, t translations",
+    "tags": [
+      "i18n",
+      "localization"
+    ]
+  },
+  {
+    "id": "file:packages/shared/src/index.ts",
+    "type": "file",
+    "name": "packages/shared/index.ts",
+    "filePath": "packages/shared/src/index.ts",
+    "summary": "Shared utilities - debounce, throttle, deepClone, deepMerge, type checks",
+    "tags": [
+      "utils",
+      "shared"
+    ]
+  },
+  {
+    "id": "file:src/nuxt/module.ts",
+    "type": "file",
+    "name": "nuxt/module.ts",
+    "filePath": "src/nuxt/module.ts",
+    "summary": "Nuxt 3 module - auto-import composables, register directives",
+    "tags": [
+      "nuxt",
+      "module",
+      "auto-import"
+    ]
+  },
+  {
+    "id": "config:package.json",
+    "type": "config",
+    "name": "package.json",
+    "filePath": "package.json",
+    "summary": "Project configuration - v2.0.0, Vue 2/3 support, Web Components",
+    "tags": [
+      "config",
+      "npm"
+    ]
+  },
+  {
+    "id": "config:vite.config.ts",
+    "type": "config",
+    "name": "vite.config.ts",
+    "filePath": "vite.config.ts",
+    "summary": "Vite build configuration - library mode, DTS plugin",
+    "tags": [
+      "config",
+      "build",
+      "vite"
+    ]
+  },
+  {
+    "id": "document:README.md",
+    "type": "document",
+    "name": "README.md",
+    "filePath": "README.md",
+    "summary": "Project documentation - features, installation, usage examples",
+    "tags": [
+      "docs",
+      "readme"
+    ]
+  },
+  {
+    "id": "document:CHANGELOG.md",
+    "type": "document",
+    "name": "CHANGELOG.md",
+    "filePath": "CHANGELOG.md",
+    "summary": "Version history and release notes",
+    "tags": [
+      "docs",
+      "changelog"
+    ]
+  }
+],
+  "edges": [
+  {
+    "source": "file:src/index.ts",
+    "target": "file:src/directives/index.ts",
+    "type": "imports",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/index.ts",
+    "target": "file:src/composables/index.ts",
+    "type": "imports",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/index.ts",
+    "target": "file:src/web-components.ts",
+    "type": "imports",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/index.ts",
+    "target": "file:packages/core/src/index.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/index.ts",
+    "target": "file:packages/i18n/src/index.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/index.ts",
+    "target": "file:packages/shared/src/index.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/index.ts",
+    "target": "file:packages/core/src/adapter/vue2.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/index.ts",
+    "target": "file:packages/core/src/adapter/vue3.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/index.ts",
+    "target": "file:packages/core/src/define.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/index.ts",
+    "target": "file:packages/core/src/env.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/define.ts",
+    "target": "file:packages/core/src/adapter/vue2.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:packages/core/src/define.ts",
+    "target": "file:packages/core/src/adapter/vue3.ts",
+    "type": "imports",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/nuxt/module.ts",
+    "target": "file:src/directives/index.ts",
+    "type": "imports",
+    "weight": 0.6
+  }
+],
+  "layers": [
+  {"id": "layer:entry", "name": "Entry Points", "description": "Main entry files that export all public APIs", "nodeIds": ["file:src/index.ts"]},
+  {"id": "layer:directives", "name": "Directives", "description": "57 Vue directives for various use cases", "nodeIds": ["file:src/directives/index.ts"]},
+  {"id": "layer:composables", "name": "Composables", "description": "57 Composition API functions", "nodeIds": ["file:src/composables/index.ts"]},
+  {"id": "layer:web-components", "name": "Web Components", "description": "Custom elements support with Shadow DOM and SSR", "nodeIds": ["file:src/web-components.ts"]},
+  {"id": "layer:core", "name": "Core Package", "description": "Cross-version adapters, define, env, devtools", "nodeIds": ["file:packages/core/src/index.ts", "file:packages/core/src/adapter/vue2.ts", "file:packages/core/src/adapter/vue3.ts", "file:packages/core/src/define.ts", "file:packages/core/src/env.ts"]},
+  {"id": "layer:i18n", "name": "i18n Package", "description": "Internationalization support", "nodeIds": ["file:packages/i18n/src/index.ts"]},
+  {"id": "layer:shared", "name": "Shared Package", "description": "Shared utilities and helpers", "nodeIds": ["file:packages/shared/src/index.ts"]},
+  {"id": "layer:nuxt", "name": "Nuxt Module", "description": "Nuxt 3 integration module", "nodeIds": ["file:src/nuxt/module.ts"]},
+  {"id": "layer:config", "name": "Configuration", "description": "Build and project configuration", "nodeIds": ["config:package.json", "config:vite.config.ts"]},
+  {"id": "layer:docs", "name": "Documentation", "description": "Project documentation files", "nodeIds": ["document:README.md", "document:CHANGELOG.md"]}
+],
+  "tour": [
+  {"order": 1, "title": "Project Overview", "description": "Directix is a Vue directives library supporting Vue 2 and Vue 3 with 57 directives and Web Components support.", "nodeIds": ["document:README.md"]},
+  {"order": 2, "title": "Main Entry Point", "description": "The main index.ts exports all directives, composables, and utilities for public use.", "nodeIds": ["file:src/index.ts"]},
+  {"order": 3, "title": "Web Components Support", "description": "Create custom elements from Vue directives with Shadow DOM, SSR safety, and lifecycle hooks.", "nodeIds": ["file:src/web-components.ts"]},
+  {"order": 4, "title": "Core Adapters", "description": "Cross-version adapters enable the same directive definition to work with both Vue 2 and Vue 3.", "nodeIds": ["file:packages/core/src/adapter/vue2.ts", "file:packages/core/src/adapter/vue3.ts"]},
+  {"order": 5, "title": "Directive Definition", "description": "defineDirective creates cross-version compatible directives with automatic version detection.", "nodeIds": ["file:packages/core/src/define.ts"]},
+  {"order": 6, "title": "Nuxt Integration", "description": "Nuxt 3 module provides auto-import for composables and automatic directive registration.", "nodeIds": ["file:src/nuxt/module.ts"]}
+]
+}
