@@ -3,10 +3,31 @@
  *
  * This module provides utilities for using Directix directives
  * with Web Components / Custom Elements.
+ *
+ * @module web-components
+ * @version 2.1.0
  */
 
 import type { DirectiveBinding } from '@directix/core'
 import type { Directive, VNode } from 'vue'
+
+// ============================================================================
+// Types
+// ============================================================================
+
+/**
+ * Lifecycle hooks for custom element
+ */
+export interface CustomElementLifecycleHooks {
+	/** Called when element is connected to DOM */
+	onConnect?: (el: HTMLElement) => void
+	/** Called when element is disconnected from DOM */
+	onDisconnect?: (el: HTMLElement) => void
+	/** Called when element is adopted to a new document */
+	onAdopt?: (el: HTMLElement) => void
+	/** Called when an attribute changes */
+	onAttributeChange?: (el: HTMLElement, name: string, oldValue: string | null, newValue: string | null) => void
+}
 
 /**
  * Options for creating a custom element directive
@@ -22,7 +43,27 @@ export interface CustomElementDirectiveOptions {
 	shadow?: boolean
 	/** Shadow DOM mode */
 	shadowMode?: 'open' | 'closed'
+	/** CSS styles to inject into shadow DOM (v2.1.0) */
+	styles?: string | string[]
+	/** Attributes to observe for changes (v2.1.0) */
+	observedAttributes?: string[]
+	/** Lifecycle hooks (v2.1.0) */
+	lifecycle?: CustomElementLifecycleHooks
+	/** Enable slot content projection (v2.1.0) */
+	slots?: boolean
 }
+
+/**
+ * SSR-safe custom element result (v2.1.0)
+ */
+export interface SSRSafeCustomElement {
+	elementClass: CustomElementConstructor
+	ssrRender: (attrs?: Record<string, string>) => string
+}
+
+// ============================================================================
+// Core Functions
+// ============================================================================
 
 /**
  * Check if an element is a custom element
@@ -239,4 +280,152 @@ export function registerDirectiveElements(
 		const elementClass = createDirectiveElement(elementName, elementDirective)
 		customElements.define(elementName, elementClass)
 	})
+}
+
+// ============================================================================
+// v2.1.0 Enhanced Functions
+// ============================================================================
+
+/**
+ * Check if custom element is defined
+ *
+ * @param name - Element name
+ * @returns True if element is defined
+ *
+ * @example
+ * ```ts
+ * import { isCustomElementDefined } from 'directix'
+ *
+ * if (!isCustomElementDefined('lazy-img')) {
+ *   customElements.define('lazy-img', LazyImage)
+ * }
+ * ```
+ */
+export function isCustomElementDefined(name: string): boolean {
+	return customElements.get(name) !== undefined
+}
+
+/**
+ * Wait for custom element to be defined
+ *
+ * @param name - Element name
+ * @returns Promise that resolves when element is defined
+ *
+ * @example
+ * ```ts
+ * import { whenCustomElementDefined } from 'directix'
+ *
+ * await whenCustomElementDefined('lazy-img')
+ * // Element is now ready to use
+ * ```
+ */
+export async function whenCustomElementDefined(name: string): Promise<void> {
+	await customElements.whenDefined(name)
+}
+
+/**
+ * Get all registered custom element names
+ *
+ * @returns Array of custom element names
+ *
+ * @example
+ * ```ts
+ * import { getRegisteredCustomElements } from 'directix'
+ *
+ * const elements = getRegisteredCustomElements()
+ * console.log('Registered:', elements)
+ * ```
+ */
+export function getRegisteredCustomElements(): string[] {
+	// Access internal registry if available
+	const registry = (customElements as any).__registry
+	if (registry && typeof registry.keys === 'function') {
+		return Array.from(registry.keys())
+	}
+	return []
+}
+
+/**
+ * Hydrate custom elements on the client (SSR support)
+ *
+ * @param root - Root element to hydrate
+ *
+ * @example
+ * ```ts
+ * import { hydrateCustomElements, registerDirectiveElements } from 'directix'
+ *
+ * // Register directives first
+ * registerDirectiveElements({ 'lazy-img': vLazy })
+ *
+ * // Then hydrate
+ * hydrateCustomElements(document.body)
+ * ```
+ */
+export function hydrateCustomElements(root: Element = document.body): void {
+	const customElementsList = root.querySelectorAll('*')
+	customElementsList.forEach(el => {
+		if (isCustomElement(el)) {
+			// Trigger re-connection to apply directive
+			const clone = el.cloneNode(true)
+			el.parentNode?.replaceChild(clone, el)
+		}
+	})
+}
+
+/**
+ * Create SSR-safe custom element with declarative shadow DOM support
+ *
+ * @param name - Element name
+ * @param directive - Vue directive
+ * @param options - Element options
+ * @returns SSR-safe custom element definition
+ *
+ * @example
+ * ```ts
+ * import { createSSRSafeCustomElement, vLazy } from 'directix'
+ *
+ * const LazyImage = createSSRSafeCustomElement('lazy-image', vLazy, {
+ *   shadow: true,
+ *   styles: ':host { display: block; }',
+ * })
+ *
+ * // SSR render
+ * const html = LazyImage.ssrRender({ src: 'image.jpg' })
+ *
+ * // Register in browser
+ * if (typeof window !== 'undefined') {
+ *   customElements.define('lazy-image', LazyImage.elementClass)
+ * }
+ * ```
+ */
+export function createSSRSafeCustomElement(
+	name: string,
+	directive: Directive,
+	options?: Omit<CustomElementDirectiveOptions, 'name' | 'directive'>,
+): SSRSafeCustomElement {
+	const { styles, shadow = false } = options || {}
+
+	// SSR render function
+	const ssrRender = (attrs: Record<string, string> = {}): string => {
+		const attrString = Object.entries(attrs)
+			.map(([key, value]) => `${key}="${value}"`)
+			.join(' ')
+
+		if (shadow) {
+			// Declarative Shadow DOM for SSR
+			const stylesString = styles ? `<style>${Array.isArray(styles) ? styles.join('') : styles}</style>` : ''
+
+			return `<${name} ${attrString}><template shadowroot="open">${stylesString}<slot></slot></template></${name}>`
+		}
+
+		return `<${name} ${attrString}></${name}>`
+	}
+
+	// Create element class (only in browser)
+	const elementClass = typeof window === 'undefined' ? class extends HTMLElement {} as CustomElementConstructor : createDirectiveElement(name, directive, options)
+
+	return {
+		elementClass,
+		ssrRender,
+	}
 }
