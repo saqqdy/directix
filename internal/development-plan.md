@@ -6102,7 +6102,7 @@ npx directix migrate --check
 
 #### 核心目标
 
-极致性能优化，减小包体积，提升运行时性能和内存效率。
+极致性能优化，减小包体积，提升运行时性能和内存效率。目标：单指令 ≤ 1KB gzip，全量包 ≤ 20KB gzip。
 
 #### 任务清单
 
@@ -6122,6 +6122,71 @@ npx directix migrate --check
 | WeakMap 使用优化 | 4h | P2 | - | 📋 待开发 |
 | 内存泄漏检测工具 | 6h | P2 | - | 📋 待开发 |
 
+#### 功能详解
+
+##### 1. 包体积优化
+
+**代码分割策略：**
+- 按指令独立分割，支持按需加载
+- preserveModules 模式优化
+- 手动 chunk 分割（core、shared、utils）
+
+**Tree-shaking 增强：**
+- package.json sideEffects 标记
+- Rollup treeshake 预设优化
+- 按指令入口导出
+
+**体积目标：**
+| 模块 | 目标 (gzip) |
+|------|------------|
+| 单指令 | ≤ 1KB |
+| 核心包 | ≤ 5KB |
+| 全量包 | ≤ 20KB |
+
+##### 2. 运行时优化
+
+**事件委托优化：**
+- EventDelegationManager 全局事件委托
+- 减少 DOM 事件监听器数量
+- 支持选择器匹配批量处理
+
+**批量处理增强：**
+- BatchProcessor 任务队列
+- DOMBatchUpdater 批量更新
+- 读写分离，避免强制同步布局
+
+**虚拟化性能提升：**
+- VirtualListOptimizer 列表优化器
+- VNode 缓存与回收池
+- 项高度缓存
+
+##### 3. 内存优化
+
+**对象池扩展：**
+- ObjectPool 通用对象池
+- eventPool 事件对象池
+- observerEntryPool 观察器条目池
+
+**WeakMap 优化：**
+- WeakCache 弱引用缓存
+- elementStateCache 元素状态缓存
+- 自动清理无效引用
+
+**内存泄漏检测：**
+- MemoryLeakDetector 检测器
+- 定期快照对比
+- 优化建议生成
+
+#### 性能目标表
+
+| 指标 | 当前 | 目标 | 提升 |
+|------|------|------|------|
+| 单指令体积 | 1.2KB | 1KB | 17% |
+| 全量包体积 | 25KB | 20KB | 20% |
+| 挂载时间 | 2ms | 1ms | 50% |
+| 更新时间 | 1ms | 0.5ms | 50% |
+| 内存占用 | 150B | 100B | 33% |
+
 **里程碑 M17：v2.2.0 发布** 📋 计划中
 
 ---
@@ -6130,7 +6195,7 @@ npx directix migrate --check
 
 #### 核心目标
 
-完善国际化支持，增加更多语言，提供便捷的翻译工具和贡献流程。
+完善国际化支持，新增 5 种语言（韩/法/德/西/俄），提供便捷的翻译工具、验证系统和社区贡献流程。
 
 #### 任务清单
 
@@ -6149,6 +6214,687 @@ npx directix migrate --check
 | **社区贡献** | | | | |
 | 翻译贡献指南 | 4h | P0 | - | 📋 待开发 |
 | Crowdin/Transifex 集成 | 6h | P2 | - | 📋 待开发 |
+
+#### 功能详解
+
+##### 1. 多语言支持
+
+**语言包架构：**
+
+```
+packages/i18n/
+├── src/
+│   ├── locales/
+│   │   ├── zh-CN.ts      # 简体中文（已完成）
+│   │   ├── en-US.ts      # 英语（已完成）
+│   │   ├── ja-JP.ts      # 日语（已完成）
+│   │   ├── ko-KR.ts      # 韩语（新增）
+│   │   ├── fr-FR.ts      # 法语（新增）
+│   │   ├── de-DE.ts      # 德语（新增）
+│   │   ├── es-ES.ts      # 西班牙语（新增）
+│   │   └── ru-RU.ts      # 俄语（新增）
+│   ├── types.ts          # 类型定义
+│   ├── loader.ts         # 语言加载器
+│   ├── detector.ts       # 语言检测
+│   ├── fallback.ts       # 回退策略
+│   └── index.ts          # 导出入口
+└── package.json
+```
+
+**语言包结构定义：**
+
+```typescript
+// packages/i18n/src/types.ts
+
+export interface LocaleMessages {
+  // 指令名称
+  directives: {
+    [name: string]: {
+      name: string           // 指令显示名
+      description: string    // 简短描述
+      details?: string       // 详细说明
+    }
+  }
+
+  // 指令参数
+  params: {
+    [key: string]: {
+      name: string           // 参数名
+      description: string    // 参数说明
+      type?: string          // 类型提示
+      default?: string       // 默认值说明
+    }
+  }
+
+  // 警告和错误信息
+  messages: {
+    warn: {
+      [key: string]: string  // 警告消息模板
+    }
+    error: {
+      [key: string]: string  // 错误消息模板
+    }
+    info: {
+      [key: string]: string  // 信息消息模板
+    }
+  }
+
+  // 文档相关
+  docs: {
+    guide: {
+      [key: string]: string  // 指南文本
+    }
+    api: {
+      [key: string]: string  // API 文本
+    }
+    example: {
+      [key: string]: string  // 示例说明
+    }
+  }
+
+  // 通用文本
+  common: {
+    loading: string
+    error: string
+    success: string
+    cancel: string
+    confirm: string
+    // ...
+  }
+}
+
+export type LocaleCode = 
+  | 'zh-CN' 
+  | 'en-US' 
+  | 'ja-JP' 
+  | 'ko-KR' 
+  | 'fr-FR' 
+  | 'de-DE' 
+  | 'es-ES' 
+  | 'ru-RU'
+
+export interface I18nConfig {
+  locale: LocaleCode
+  fallback?: LocaleCode
+  silent?: boolean  // 缺失翻译时是否静默
+}
+```
+
+**韩语 (ko-KR) 语言包示例：**
+
+```typescript
+// packages/i18n/src/locales/ko-KR.ts
+
+import type { LocaleMessages } from '../types'
+
+export const koKR: LocaleMessages = {
+  directives: {
+    'click-outside': {
+      name: 'v-click-outside',
+      description: '요소 외부 클릭 감지',
+      details: '지정된 요소 외부를 클릭했을 때 이벤트를 트리거합니다.',
+    },
+    'copy': {
+      name: 'v-copy',
+      description: '클립보드에 복사',
+      details: '클릭 시 텍스트를 클립보드에 복사합니다.',
+    },
+    'debounce': {
+      name: 'v-debounce',
+      description: '디바운스',
+      details: '함수 실행을 지연시키고 마지막 호출만 실행합니다.',
+    },
+    // ... 其他 57 个指令
+  },
+
+  params: {
+    'wait': {
+      name: '지연 시간',
+      description: '실행 전 대기 시간 (밀리초)',
+      type: 'number',
+      default: '300',
+    },
+    'handler': {
+      name: '핸들러',
+      description: '실행할 함수',
+      type: 'Function',
+    },
+    // ... 其他参数
+  },
+
+  messages: {
+    warn: {
+      'invalid_param': '매개변수 "{param}"이(가) 잘못되었습니다. 예상: {expected}, 실제: {actual}',
+      'deprecated_api': 'API "{api}"은(는) 더 이상 사용되지 않습니다. "{replacement}"을(를) 사용하세요.',
+      'ssr_incompatible': '指令 "{directive}"은(는) SSR과 호환되지 않습니다.',
+    },
+    error: {
+      'missing_required': '필수 매개변수 "{param}"이(가) 누락되었습니다.',
+      'type_mismatch': '유형 불일치: "{param}"은(는) {expected} 유형이어야 합니다.',
+      'copy_failed': '클립보드에 복사하지 못했습니다.',
+    },
+    info: {
+      'copied': '클립보드에 복사되었습니다!',
+      'loaded': '이미지가 로드되었습니다.',
+    },
+  },
+
+  docs: {
+    guide: {
+      'getting-started': '시작하기',
+      'installation': '설치',
+      'usage': '사용법',
+    },
+    api: {
+      'config': '구성',
+      'options': '옵션',
+    },
+    example: {
+      'basic': '기본 사용법',
+      'advanced': '고급 사용법',
+    },
+  },
+
+  common: {
+    loading: '로딩 중...',
+    error: '오류가 발생했습니다.',
+    success: '성공!',
+    cancel: '취소',
+    confirm: '확인',
+  },
+}
+```
+
+**语言检测与自动切换：**
+
+```typescript
+// packages/i18n/src/detector.ts
+
+export class LocaleDetector {
+  private static storedLocale: LocaleCode | null = null
+  private static readonly STORAGE_KEY = 'directix_locale'
+
+  /**
+   * 检测用户语言
+   * 优先级：存储 > 浏览器语言 > 默认
+   */
+  static detect(fallback: LocaleCode = 'en-US'): LocaleCode {
+    // 1. 检查存储
+    if (this.storedLocale) {
+      return this.storedLocale
+    }
+
+    // 2. 尝试从 localStorage 读取
+    if (typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem(this.STORAGE_KEY)
+      if (stored && this.isValidLocale(stored)) {
+        this.storedLocale = stored as LocaleCode
+        return this.storedLocale
+      }
+    }
+
+    // 3. 检测浏览器语言
+    if (typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || (navigator as any).userLanguage
+      const detected = this.normalizeLocale(browserLang)
+      if (detected && this.isSupported(detected)) {
+        return detected
+      }
+    }
+
+    // 4. 返回默认
+    return fallback
+  }
+
+  /**
+   * 设置语言
+   */
+  static setLocale(locale: LocaleCode): void {
+    this.storedLocale = locale
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.STORAGE_KEY, locale)
+    }
+  }
+
+  /**
+   * 标准化语言代码
+   */
+  private static normalizeLocale(lang: string): LocaleCode | null {
+    // 处理 zh-CN, zh-TW, zh-HK 等
+    if (lang.startsWith('zh')) {
+      return 'zh-CN'
+    }
+    // 处理 ko, ko-KR
+    if (lang.startsWith('ko')) {
+      return 'ko-KR'
+    }
+    // 处理 ja, ja-JP
+    if (lang.startsWith('ja')) {
+      return 'ja-JP'
+    }
+    // 处理 en, en-US, en-GB 等
+    if (lang.startsWith('en')) {
+      return 'en-US'
+    }
+    // 处理 fr, fr-FR
+    if (lang.startsWith('fr')) {
+      return 'fr-FR'
+    }
+    // 处理 de, de-DE
+    if (lang.startsWith('de')) {
+      return 'de-DE'
+    }
+    // 处理 es, es-ES
+    if (lang.startsWith('es')) {
+      return 'es-ES'
+    }
+    // 处理 ru, ru-RU
+    if (lang.startsWith('ru')) {
+      return 'ru-RU'
+    }
+    return null
+  }
+
+  /**
+   * 检查是否支持
+   */
+  private static isSupported(locale: LocaleCode): boolean {
+    const supported: LocaleCode[] = [
+      'zh-CN', 'en-US', 'ja-JP', 'ko-KR', 
+      'fr-FR', 'de-DE', 'es-ES', 'ru-RU'
+    ]
+    return supported.includes(locale)
+  }
+
+  /**
+   * 验证语言代码
+   */
+  private static isValidLocale(code: string): boolean {
+    return [
+      'zh-CN', 'en-US', 'ja-JP', 'ko-KR', 
+      'fr-FR', 'de-DE', 'es-ES', 'ru-RU'
+    ].includes(code)
+  }
+}
+```
+
+##### 2. 翻译工具
+
+**语言包提取工具：**
+
+```typescript
+// scripts/i18n/extract.ts
+
+import { glob } from 'glob'
+import { readFileSync, writeFileSync } from 'fs'
+
+/**
+ * 从源码提取需要翻译的文本
+ */
+export async function extractMessages(): Promise<void> {
+  const files = await glob('src/**/*.ts')
+  const messages: Set<string> = new Set()
+
+  // 正则匹配翻译调用
+  const patterns = [
+    /warn\(['"`]([^'"`]+)['"`]/g,
+    /error\(['"`]([^'"`]+)['"`]/g,
+    /info\(['"`]([^'"`]+)['"`]/g,
+    /\$t\(['"`]([^'"`]+)['"`]/g,
+  ]
+
+  for (const file of files) {
+    const content = readFileSync(file, 'utf-8')
+    for (const pattern of patterns) {
+      let match
+      while ((match = pattern.exec(content)) !== null) {
+        messages.add(match[1])
+      }
+    }
+  }
+
+  // 生成待翻译文件
+  const output = {
+    extracted: Array.from(messages),
+    count: messages.size,
+    timestamp: new Date().toISOString(),
+  }
+
+  writeFileSync('i18n-extracted.json', JSON.stringify(output, null, 2))
+  console.log(`✅ Extracted ${messages.size} messages`)
+}
+```
+
+**翻译验证工具：**
+
+```typescript
+// scripts/i18n/validate.ts
+
+import { glob } from 'glob'
+import { readFileSync } from 'fs'
+
+interface ValidationResult {
+  locale: string
+  missing: string[]
+  extra: string[]
+  coverage: number
+}
+
+/**
+ * 验证语言包完整性
+ */
+export async function validateLocales(): Promise<ValidationResult[]> {
+  const locales = await glob('packages/i18n/src/locales/*.ts')
+  const baseLocale = 'en-US' // 基准语言
+
+  // 加载基准语言包
+  const baseMessages = await loadLocale(baseLocale)
+  const baseKeys = Object.keys(baseMessages)
+
+  const results: ValidationResult[] = []
+
+  for (const localeFile of locales) {
+    const locale = extractLocaleName(localeFile)
+    const messages = await loadLocale(locale)
+    const keys = Object.keys(messages)
+
+    // 检查缺失的键
+    const missing = baseKeys.filter(k => !keys.includes(k))
+
+    // 检查多余的键
+    const extra = keys.filter(k => !baseKeys.includes(k))
+
+    // 计算覆盖率
+    const coverage = ((baseKeys.length - missing.length) / baseKeys.length) * 100
+
+    results.push({
+      locale,
+      missing,
+      extra,
+      coverage,
+    })
+  }
+
+  // 输出报告
+  console.table(results.map(r => ({
+    语言: r.locale,
+    覆盖率: `${r.coverage.toFixed(1)}%`,
+    缺失: r.missing.length,
+    多余: r.extra.length,
+  })))
+
+  return results
+}
+
+/**
+ * 检查翻译质量
+ */
+export async function checkTranslationQuality(locale: string): Promise<string[]> {
+  const messages = await loadLocale(locale)
+  const issues: string[] = []
+
+  for (const [key, value] of Object.entries(messages)) {
+    // 检查空翻译
+    if (!value || value.trim() === '') {
+      issues.push(`❌ [${key}]: 空翻译`)
+      continue
+    }
+
+    // 检查占位符是否匹配
+    const placeholders = value.match(/\{[^}]+\}/g) || []
+    const expectedPlaceholders = key.match(/\{[^}]+\}/g) || []
+
+    if (placeholders.length !== expectedPlaceholders.length) {
+      issues.push(`⚠️  [${key}]: 占位符数量不匹配`)
+    }
+
+    // 检查 HTML 标签
+    if (/<[^>]+>/.test(value)) {
+      issues.push(`⚠️  [${key}]: 包含 HTML 标签`)
+    }
+  }
+
+  return issues
+}
+```
+
+##### 3. i18n CLI 命令
+
+```typescript
+// packages/cli/src/commands/i18n.ts
+
+import { cac } from 'cac'
+
+export function registerI18nCommands(cli: cac.CAC): void {
+  cli
+    .command('i18n:extract', '提取需要翻译的文本')
+    .option('--output <file>', '输出文件路径', { default: 'i18n-extracted.json' })
+    .action(async (options) => {
+      console.log('📝 正在提取翻译文本...')
+      await extractMessages()
+      console.log(`✅ 已提取到 ${options.output}`)
+    })
+
+  cli
+    .command('i18n:validate', '验证语言包完整性')
+    .option('--locale <code>', '验证特定语言')
+    .action(async (options) => {
+      console.log('🔍 正在验证语言包...')
+      const results = await validateLocales()
+      
+      // 检查覆盖率低于 90% 的语言
+      const lowCoverage = results.filter(r => r.coverage < 90)
+      if (lowCoverage.length > 0) {
+        console.warn('⚠️  以下语言覆盖率低于 90%:')
+        lowCoverage.forEach(r => {
+          console.warn(`   - ${r.locale}: ${r.coverage.toFixed(1)}%`)
+        })
+      }
+    })
+
+  cli
+    .command('i18n:sync', '同步语言包结构')
+    .option('--base <locale>', '基准语言', { default: 'en-US' })
+    .action(async (options) => {
+      console.log('🔄 正在同步语言包...')
+      await syncLocaleStructure(options.base)
+      console.log('✅ 同步完成')
+    })
+
+  cli
+    .command('i18n:translate', '自动翻译（需配置 API）')
+    .option('--source <locale>', '源语言', { default: 'en-US' })
+    .option('--target <locale>', '目标语言', { default: 'zh-CN' })
+    .option('--service <name>', '翻译服务', { default: 'google' })
+    .action(async (options) => {
+      console.log(`🌐 正在翻译: ${options.source} → ${options.target}`)
+      await autoTranslate(options)
+      console.log('✅ 翻译完成')
+    })
+
+  cli
+    .command('i18n:report', '生成翻译报告')
+    .action(async () => {
+      console.log('📊 正在生成报告...')
+      const report = await generateI18nReport()
+      writeFileSync('i18n-report.html', report)
+      console.log('✅ 报告已生成: i18n-report.html')
+    })
+}
+```
+
+##### 4. 社区贡献系统
+
+**翻译贡献指南：**
+
+```markdown
+# 翻译贡献指南
+
+## 如何贡献翻译
+
+### 1. 选择要翻译的语言
+
+查看 `packages/i18n/src/locales/` 目录，选择需要更新的语言文件。
+
+### 2. 复制模板
+
+```bash
+cp packages/i18n/src/locales/en-US.ts packages/i18n/src/locales/xx-XX.ts
+```
+
+### 3. 翻译内容
+
+编辑文件，将英文文本翻译为目标语言：
+
+```typescript
+directives: {
+  'click-outside': {
+    name: 'v-click-outside',  // 保持指令名称不变
+    description: '点击外部检测', // 翻译描述
+    details: '点击元素外部区域时触发回调函数', // 翻译详细说明
+  },
+}
+```
+
+### 4. 翻译规范
+
+- ✅ 保持变量占位符格式：`{param}`
+- ✅ 保持 HTML 标签不变：`<strong>...</strong>`
+- ✅ 保持代码块不变：`code` 或 `v-directive`
+- ✅ 使用正式、专业的语气
+- ❌ 不要翻译指令名称（如 `v-debounce`）
+- ❌ 不要翻译技术术语（如 SSR、API）
+
+### 5. 提交 PR
+
+```bash
+git checkout -b i18n/xx-XX
+git add packages/i18n/src/locales/xx-XX.ts
+git commit -m "i18n: add xx-XX translations"
+git push origin i18n/xx-XX
+```
+
+### 6. 验证
+
+运行验证命令确保翻译完整：
+
+```bash
+pnpm i18n:validate --locale xx-XX
+```
+```
+
+**Crowdin 集成配置：**
+
+```yaml
+# crowdin.yml
+
+project_id: "directix"
+api_token_env: CROWDIN_TOKEN
+
+files:
+  - source: /packages/i18n/src/locales/en-US.ts
+    translation: /packages/i18n/src/locales/%locale%.ts
+    languages_mapping:
+      locale:
+        'zh-CN': 'zh-CN'
+        'ja': 'ja-JP'
+        'ko': 'ko-KR'
+        'fr': 'fr-FR'
+        'de': 'de-DE'
+        'es': 'es-ES'
+        'ru': 'ru-RU'
+
+# 保留原有翻译
+preserve_translations: true
+
+# 翻译更新时自动提交
+commit_message: "i18n: update %language% translations (%origin%)"
+```
+
+##### 5. 语言包动态加载
+
+```typescript
+// packages/i18n/src/loader.ts
+
+export class LocaleLoader {
+  private static cache: Map<LocaleCode, LocaleMessages> = new Map()
+  private static loading: Map<LocaleCode, Promise<LocaleMessages>> = new Map()
+
+  /**
+   * 加载语言包
+   */
+  static async load(locale: LocaleCode): Promise<LocaleMessages> {
+    // 检查缓存
+    if (this.cache.has(locale)) {
+      return this.cache.get(locale)!
+    }
+
+    // 检查是否正在加载
+    if (this.loading.has(locale)) {
+      return this.loading.get(locale)!
+    }
+
+    // 开始加载
+    const promise = this.doLoad(locale)
+    this.loading.set(locale, promise)
+
+    try {
+      const messages = await promise
+      this.cache.set(locale, messages)
+      return messages
+    } finally {
+      this.loading.delete(locale)
+    }
+  }
+
+  /**
+   * 实际加载逻辑
+   */
+  private static async doLoad(locale: LocaleCode): Promise<LocaleMessages> {
+    // 动态导入
+    const module = await import(`./locales/${locale}.ts`)
+    return module.default || module[Object.keys(module)[0]]
+  }
+
+  /**
+   * 预加载语言包
+   */
+  static async preload(locales: LocaleCode[]): Promise<void> {
+    await Promise.all(locales.map(l => this.load(l)))
+  }
+
+  /**
+   * 清除缓存
+   */
+  static clearCache(): void {
+    this.cache.clear()
+    this.loading.clear()
+  }
+}
+```
+
+#### 语言覆盖目标
+
+| 语言 | 代码 | 状态 | 覆盖率目标 |
+|------|------|------|-----------|
+| 简体中文 | zh-CN | ✅ 已完成 | 100% |
+| 英语 | en-US | ✅ 已完成 | 100% |
+| 日语 | ja-JP | ✅ 已完成 | 100% |
+| 韩语 | ko-KR | 📋 新增 | 100% |
+| 法语 | fr-FR | 📋 新增 | 100% |
+| 德语 | de-DE | 📋 新增 | 100% |
+| 西班牙语 | es-ES | 📋 新增 | 100% |
+| 俄语 | ru-RU | 📋 新增 | 100% |
+
+#### 技术栈
+
+| 功能 | 技术选型 | 说明 |
+|------|---------|------|
+| 语言包管理 | 自研 i18n 系统 | 轻量级实现 |
+| 动态加载 | 动态 import | 按需加载 |
+| 翻译平台 | Crowdin | 社区翻译 |
+| CLI 工具 | cac | 命令行框架 |
+| 验证工具 | TypeScript | 类型检查 |
 
 **里程碑 M18：v2.3.0 发布** 📋 计划中
 
@@ -6208,14 +6954,14 @@ npx directix migrate --check
 
 ### v2.x 版本规划表
 
-| 版本 | 计划时间 | 主要内容 | 状态 |
+| 版本 | 发布时间 | 主要内容 | 状态 |
 |------|---------|---------|------|
 | v2.0.0 | 2026-05-05 | Web Components 支持、Vue 3 条件优化 | ✅ 已发布 |
-| v2.1.0 | 2026-06-06 | Web Components 增强、SSR 支持、生命周期钩子 | ✅ 已发布 |
-| v2.2.0 | 2026-06-02 | 性能优化、包体积减小 | 📋 计划中 |
-| v2.3.0 | 2026-06-16 | 国际化扩展、更多语言 | 📋 计划中 |
-| v2.4.0 | 2026-06-30 | 开发者体验增强、调试工具 | 📋 计划中 |
-| v2.5.0 | 2026-07-14 | 新指令扩展 | 📋 计划中 |
+| v2.1.0 | 2026-06-07 | Web Components 增强、SSR 支持、生命周期钩子 | ✅ 已发布 |
+| v2.2.0 | 2026-06-21 | 性能优化、包体积减小、运行时优化 | 📋 计划中 |
+| v2.3.0 | 2026-07-05 | 国际化扩展、更多语言（韩/法/德/西/俄） | 📋 计划中 |
+| v2.4.0 | 2026-07-19 | 开发者体验增强、调试工具、浏览器扩展 | 📋 计划中 |
+| v2.5.0 | 2026-08-02 | 新指令扩展（观察器增强版） | 📋 计划中 |
 | v3.0.0 | TBD | Vue 3 专属版本（评估中） | 🔮 评估中 |
 
 ### 10.11 版本规划
