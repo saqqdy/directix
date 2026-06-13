@@ -6923,6 +6923,1704 @@ export class LocaleLoader {
 | 视频教程 | 12h | P1 | - | 📋 待开发 |
 | 最佳实践指南 | 6h | P1 | - | 📋 待开发 |
 
+#### 详细技术方案
+
+##### 1. VS Code 插件增强
+
+**插件架构设计：**
+
+```
+packages/vscode-directix/
+├── src/
+│   ├── extension.ts          # 扩展入口
+│   ├── features/
+│   │   ├── completion.ts     # 智能补全
+│   │   ├── hover.ts         # 悬停提示
+│   │   ├── diagnostics.ts   # 诊断功能
+│   │   └── commands.ts      # 命令注册
+│   ├── providers/
+│   │   ├── DirectiveCompletionProvider.ts
+│   │   ├── ConfigCompletionProvider.ts
+│   │   ├── HoverProvider.ts
+│   │   └── CodeActionProvider.ts
+│   ├── parser/
+│   │   ├── templateParser.ts # 模板解析
+│   │   └── configParser.ts  # 配置解析
+│   ├── data/
+│   │   ├── directives.json   # 指令元数据
+│   │   └── snippets.json     # 代码片段
+│   └── utils/
+│       ├── vscode.ts         # VS Code 工具函数
+│       └── types.ts          # 类型定义
+├── syntaxes/
+│   └── directix.tmLanguage.json
+├── package.json
+└── README.md
+```
+
+**指令智能提示实现：**
+
+```typescript
+// packages/vscode-directix/src/providers/DirectiveCompletionProvider.ts
+
+import {
+  CompletionItem,
+  CompletionItemKind,
+  CompletionItemProvider,
+  TextDocument,
+  Position,
+  CancellationToken,
+  CompletionContext,
+  MarkdownString,
+  SnippetString,
+} from 'vscode'
+import { parse } from '@vue/compiler-dom'
+import { directives } from '../data/directives'
+
+export class DirectiveCompletionProvider implements CompletionItemProvider {
+  /**
+   * 提供指令补全
+   */
+  async provideCompletionItems(
+    document: TextDocument,
+    position: Position,
+    token: CancellationToken,
+    context: CompletionContext
+  ): Promise<CompletionItem[]> {
+    // 获取当前行内容
+    const line = document.lineAt(position.line)
+    const textBeforeCursor = line.text.substring(0, position.character)
+
+    // 检查是否在元素属性位置
+    if (!this.isInAttributePosition(textBeforeCursor)) {
+      return []
+    }
+
+    // 提取已有属性
+    const existingDirectives = this.extractExistingDirectives(line.text)
+
+    // 生成补全项
+    return directives
+      .filter(d => !existingDirectives.includes(d.name))
+      .map(directive => this.createCompletionItem(directive))
+  }
+
+  /**
+   * 检查是否在属性位置
+   */
+  private isInAttributePosition(text: string): boolean {
+    // 匹配 <element | 或 <element attr="value" |
+    const patterns = [
+      /<\w+\s+$/,                           // 开始标签后
+      /<\w+[^>]*\s+$/,                      // 已有属性后
+      /<\w+[^>]*\s+v-\w+="[^"]*"\s+$/,      // 指令值后
+    ]
+    return patterns.some(p => p.test(text))
+  }
+
+  /**
+   * 提取已有指令
+   */
+  private extractExistingDirectives(lineText: string): string[] {
+    const regex = /v-(\w+)/g
+    const directives: string[] = []
+    let match
+    while ((match = regex.exec(lineText)) !== null) {
+      directives.push(`v-${match[1]}`)
+    }
+    return directives
+  }
+
+  /**
+   * 创建补全项
+   */
+  private createCompletionItem(directive: DirectiveMeta): CompletionItem {
+    const item = new CompletionItem(
+      directive.name,
+      CompletionItemKind.Property
+    )
+
+    // 设置插入文本
+    item.insertText = new SnippetString(this.generateSnippet(directive))
+
+    // 设置文档
+    item.documentation = new MarkdownString()
+      .appendMarkdown(`## ${directive.name}\n\n`)
+      .appendMarkdown(`${directive.description}\n\n`)
+      .appendCodeblock(directive.example, 'vue')
+
+    // 设置排序
+    item.sortText = this.getSortText(directive.priority)
+
+    // 设置详情
+    item.detail = `Directix: ${directive.category}`
+
+    return item
+  }
+
+  /**
+   * 生成代码片段
+   */
+  private generateSnippet(directive: DirectiveMeta): string {
+    const params = directive.params
+      .map(p => p.optional ? `${p.name}=\${${p.position}:${p.default}}` : `${p.name}=\${${p.position}}`)
+      .join('.')
+
+    if (directive.modifiers.length > 0) {
+      return `${directive.name}="\${1|${directive.modifiers.join(',')}|}.${params}"`
+    }
+
+    return `${directive.name}="${params}"`
+  }
+
+  /**
+   * 获取排序文本
+   */
+  private getSortText(priority: 'high' | 'medium' | 'low'): string {
+    return priority === 'high' ? '0' : priority === 'medium' ? '1' : '2'
+  }
+}
+
+interface DirectiveMeta {
+  name: string
+  description: string
+  category: string
+  params: Array<{
+    name: string
+    type: string
+    optional: boolean
+    default?: string
+    position: number
+  }>
+  modifiers: string[]
+  example: string
+  priority: 'high' | 'medium' | 'low'
+}
+```
+
+**悬停提示实现：**
+
+```typescript
+// packages/vscode-directix/src/providers/HoverProvider.ts
+
+import {
+  Hover,
+  HoverProvider,
+  TextDocument,
+  Position,
+  CancellationToken,
+  MarkdownString,
+} from 'vscode'
+import { directives } from '../data/directives'
+
+export class DirectiveHoverProvider implements HoverProvider {
+  async provideHover(
+    document: TextDocument,
+    position: Position,
+    token: CancellationToken
+  ): Promise<Hover | undefined> {
+    const range = document.getWordRangeAtPosition(position, /v-[\w-]+/)
+    if (!range) return undefined
+
+    const directiveName = document.getText(range)
+    const directive = directives.find(d => d.name === directiveName)
+
+    if (!directive) return undefined
+
+    const markdown = new MarkdownString()
+      .appendMarkdown(`### ${directive.name}\n\n`)
+      .appendMarkdown(`${directive.description}\n\n`)
+      .appendMarkdown('#### 参数\n\n')
+
+    directive.params.forEach(param => {
+      markdown.appendMarkdown(
+        `- **${param.name}** (\`${param.type}\`): ${param.description}`
+      )
+      if (param.optional) {
+        markdown.appendMarkdown(` _可选，默认: \`${param.default}\`_`)
+      }
+      markdown.appendMarkdown('\n')
+    })
+
+    if (directive.modifiers.length > 0) {
+      markdown
+        .appendMarkdown('\n#### 修饰符\n\n')
+        .appendMarkdown(directive.modifiers.map(m => `- \`.${m}\``).join('\n'))
+    }
+
+    markdown
+      .appendMarkdown('\n\n#### 示例\n\n')
+      .appendCodeblock(directive.example, 'vue')
+
+    return new Hover(markdown, range)
+  }
+}
+```
+
+**配置可视化编辑器：**
+
+```typescript
+// packages/vscode-directix/src/features/ConfigEditor.ts
+
+import {
+  WebviewPanel,
+  Uri,
+  ViewColumn,
+  window,
+  ExtensionContext,
+} from 'vscode'
+import { readFileSync, writeFileSync } from 'fs'
+import { join } from 'path'
+
+export class ConfigEditor {
+  private panel: WebviewPanel | undefined
+  private context: ExtensionContext
+
+  constructor(context: ExtensionContext) {
+    this.context = context
+  }
+
+  /**
+   * 打开配置编辑器
+   */
+  async open(configPath: Uri): Promise<void> {
+    if (this.panel) {
+      this.panel.reveal(ViewColumn.One)
+      return
+    }
+
+    this.panel = window.createWebviewPanel(
+      'directixConfig',
+      'Directix 配置编辑器',
+      ViewColumn.One,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+      }
+    )
+
+    // 加载配置
+    const config = this.loadConfig(configPath)
+
+    // 加载 Webview
+    this.panel.webview.html = this.getWebviewContent(config)
+
+    // 监听消息
+    this.panel.webview.onDidReceiveMessage(async (message) => {
+      switch (message.command) {
+        case 'save':
+          await this.saveConfig(configPath, message.config)
+          window.showInformationMessage('✅ 配置已保存')
+          break
+
+        case 'reset':
+          const resetConfig = this.getDefaultConfig()
+          this.panel!.webview.postMessage({
+            command: 'update',
+            config: resetConfig,
+          })
+          break
+
+        case 'validate':
+          const errors = this.validateConfig(message.config)
+          this.panel!.webview.postMessage({
+            command: 'validationResult',
+            errors,
+          })
+          break
+      }
+    })
+
+    this.panel.onDidDispose(() => {
+      this.panel = undefined
+    })
+  }
+
+  /**
+   * 获取 Webview HTML
+   */
+  private getWebviewContent(config: DirectixConfig): string {
+    const nonce = this.getNonce()
+
+    return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${this.panel!.webview.cspSource}; script-src 'nonce-${nonce}';">
+  <title>Directix 配置编辑器</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; background: var(--vscode-editor-background); color: var(--vscode-editor-foreground); }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 24px; margin-bottom: 24px; }
+    .section { background: var(--vscode-editorWidget-background); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .section h2 { font-size: 18px; margin-bottom: 12px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; margin-bottom: 4px; font-weight: 500; }
+    .form-group input, .form-group select { width: 100%; padding: 8px 12px; border-radius: 4px; border: 1px solid var(--vscode-input-border); background: var(--vscode-input-background); color: var(--vscode-input-foreground); }
+    .directive-list { display: grid; gap: 8px; }
+    .directive-item { display: flex; align-items: center; padding: 8px 12px; background: var(--vscode-list-hoverBackground); border-radius: 4px; }
+    .directive-item input[type="checkbox"] { margin-right: 12px; }
+    .actions { display: flex; gap: 12px; margin-top: 24px; }
+    button { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: 500; }
+    .btn-primary { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+    .btn-secondary { background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+    .error { color: var(--vscode-errorForeground); font-size: 12px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Directix 配置编辑器</h1>
+
+    <div class="section">
+      <h2>基础配置</h2>
+      <div class="form-group">
+        <label for="prefix">指令前缀</label>
+        <input type="text" id="prefix" value="${config.prefix || ''}">
+      </div>
+      <div class="form-group">
+        <label for="ssr">SSR 支持</label>
+        <select id="ssr">
+          <option value="true" ${config.ssr === true ? 'selected' : ''}>启用</option>
+          <option value="false" ${config.ssr === false ? 'selected' : ''}>禁用</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>启用的指令</h2>
+      <div class="directive-list" id="directives"></div>
+    </div>
+
+    <div class="section">
+      <h2>性能配置</h2>
+      <div class="form-group">
+        <label for="lazy">懒加载模式</label>
+        <select id="lazy">
+          <option value="true" ${config.lazy === true ? 'selected' : ''}>启用</option>
+          <option value="false" ${config.lazy === false ? 'selected' : ''}>禁用</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cacheSize">缓存大小</label>
+        <input type="number" id="cacheSize" value="${config.cacheSize || 100}">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="save()">💾 保存配置</button>
+      <button class="btn-secondary" onclick="reset()">🔄 重置为默认</button>
+      <button class="btn-secondary" onclick="validate()">✅ 验证配置</button>
+    </div>
+    <div id="errors"></div>
+  </div>
+
+  <script nonce="${nonce}">
+    const vscode = acquireVsCodeApi()
+
+    // 保存配置
+    function save() {
+      const config = {
+        prefix: document.getElementById('prefix').value,
+        ssr: document.getElementById('ssr').value === 'true',
+        lazy: document.getElementById('lazy').value === 'true',
+        cacheSize: parseInt(document.getElementById('cacheSize').value),
+      }
+      vscode.postMessage({ command: 'save', config })
+    }
+
+    // 重置配置
+    function reset() {
+      vscode.postMessage({ command: 'reset' })
+    }
+
+    // 验证配置
+    function validate() {
+      const config = {
+        prefix: document.getElementById('prefix').value,
+        ssr: document.getElementById('ssr').value === 'true',
+        lazy: document.getElementById('lazy').value === 'true',
+        cacheSize: parseInt(document.getElementById('cacheSize').value),
+      }
+      vscode.postMessage({ command: 'validate', config })
+    }
+
+    // 接收消息
+    window.addEventListener('message', event => {
+      const message = event.data
+      if (message.command === 'validationResult') {
+        const errorsDiv = document.getElementById('errors')
+        if (message.errors.length === 0) {
+          errorsDiv.innerHTML = '<div style="color: green;">✅ 配置验证通过</div>'
+        } else {
+          errorsDiv.innerHTML = message.errors.map(e => 
+            '<div class="error">' + e + '</div>'
+          ).join('')
+        }
+      } else if (message.command === 'update') {
+        // 更新表单
+        document.getElementById('prefix').value = message.config.prefix || ''
+        document.getElementById('ssr').value = message.config.ssr ? 'true' : 'false'
+        document.getElementById('lazy').value = message.config.lazy ? 'true' : 'false'
+        document.getElementById('cacheSize').value = message.config.cacheSize || 100
+      }
+    })
+  </script>
+</body>
+</html>`
+  }
+
+  private getNonce(): string {
+    return Math.random().toString(36).substring(2)
+  }
+}
+
+interface DirectixConfig {
+  prefix?: string
+  ssr?: boolean
+  lazy?: boolean
+  cacheSize?: number
+  directives?: string[]
+}
+```
+
+**代码片段扩展：**
+
+```json
+// packages/vscode-directix/src/data/snippets.json
+{
+  "v-debounce": {
+    "prefix": "vdebounce",
+    "body": [
+      "v-debounce=\"${1:handler}\"",
+      ".${2|immediate,leading,trailing|}",
+      "=\"${3:300}\""
+    ],
+    "description": "Debounce 指令：防抖处理"
+  },
+  "v-throttle": {
+    "prefix": "vthrottle",
+    "body": [
+      "v-throttle=\"${1:handler}\"",
+      ".${2|leading,trailing|}",
+      "=\"${3:300}\""
+    ],
+    "description": "Throttle 指令：节流处理"
+  },
+  "v-click-outside": {
+    "prefix": "vclickoutside",
+    "body": [
+      "v-click-outside=\"${1:handler}\"",
+      "${2:,options}\""
+    ],
+    "description": "ClickOutside 指令：点击外部检测"
+  },
+  "v-lazy": {
+    "prefix": "vlazy",
+    "body": [
+      "v-lazy=\"${1:imageUrl}\"",
+      "${2:,options}\""
+    ],
+    "description": "Lazy 指令：图片懒加载"
+  },
+  "v-permission": {
+    "prefix": "vpermission",
+    "body": [
+      "v-permission=\"['${1:permission}']\""
+    ],
+    "description": "Permission 指令：权限控制"
+  },
+  "v-copy": {
+    "prefix": "vcopy",
+    "body": [
+      "v-copy=\"${1:text}\"",
+      "${2:,options}\""
+    ],
+    "description": "Copy 指令：复制到剪贴板"
+  },
+  "v-loading": {
+    "prefix": "vloading",
+    "body": [
+      "v-loading=\"${1:isLoading}\"",
+      ".${2|fullscreen,lock,spinner|}"
+    ],
+    "description": "Loading 指令：加载状态"
+  }
+}
+```
+
+##### 2. 浏览器扩展
+
+**扩展架构：**
+
+```
+packages/browser-extension/
+├── src/
+│   ├── devtools/
+│   │   ├── panel.html        # DevTools 面板
+│   │   ├── panel.ts         # 面板逻辑
+│   │   ├── components/      # UI 组件
+│   │   │   ├── DirectiveTree.vue
+│   │   │   ├── PerfMonitor.vue
+│   │   │   └── StateInspector.vue
+│   │   └── stores/         # 状态管理
+│   │       └── devtools.ts
+│   ├── content/            # 内容脚本
+│   │   ├── injector.ts     # 注入器
+│   │   ├── bridge.ts       # 消息桥接
+│   │   └── hook.ts         # DevTools 钩子
+│   ├── background/         # 后台脚本
+│   │   └── index.ts
+│   └── popup/              # 弹窗页面
+│       ├── popup.html
+│       └── popup.ts
+├── manifest.json
+└── package.json
+```
+
+**DevTools 面板实现：**
+
+```typescript
+// packages/browser-extension/src/devtools/panel.ts
+
+import { createApp, ref, computed, onMounted, onUnmounted } from 'vue'
+import DirectiveTree from './components/DirectiveTree.vue'
+import PerfMonitor from './components/PerfMonitor.vue'
+import StateInspector from './components/StateInspector.vue'
+
+interface DevtoolsMessage {
+  type: 'directives' | 'performance' | 'state'
+  payload: any
+}
+
+export function initDevtoolsPanel(): void {
+  const app = createApp({
+    setup() {
+      // 状态
+      const directives = ref<DirectiveInfo[]>([])
+      const selectedDirective = ref<DirectiveInfo | null>(null)
+      const performance = ref<PerfData | null>(null)
+      const connected = ref(false)
+
+      // 计算属性
+      const directiveCount = computed(() => directives.value.length)
+      const activeDirectives = computed(() =>
+        directives.value.filter(d => d.active)
+      )
+
+      // 消息处理
+      const handleMessage = (message: DevtoolsMessage) => {
+        switch (message.type) {
+          case 'directives':
+            directives.value = message.payload
+            break
+          case 'performance':
+            performance.value = message.payload
+            break
+          case 'state':
+            if (selectedDirective.value) {
+              selectedDirective.value.state = message.payload
+            }
+            break
+        }
+      }
+
+      // 连接到页面
+      const connect = () => {
+        chrome.devtools.panels.create(
+          'Directix',
+          'icons/icon48.png',
+          'panel.html',
+          (panel) => {
+            panel.onShown.addListener((window) => {
+              connected.value = true
+              // 发送初始化消息
+              chrome.runtime.sendMessage({
+                type: 'init',
+                tabId: chrome.devtools.inspectedWindow.tabId,
+              })
+            })
+
+            panel.onHidden.addListener(() => {
+              connected.value = false
+            })
+          }
+        )
+      }
+
+      // 监听消息
+      chrome.runtime.onMessage.addListener((message) => {
+        if (message.tabId === chrome.devtools.inspectedWindow.tabId) {
+          handleMessage(message)
+        }
+      })
+
+      // 选择指令
+      const selectDirective = (directive: DirectiveInfo) => {
+        selectedDirective.value = directive
+        chrome.runtime.sendMessage({
+          type: 'selectDirective',
+          directiveId: directive.id,
+        })
+      }
+
+      // 刷新数据
+      const refresh = () => {
+        chrome.runtime.sendMessage({ type: 'refresh' })
+      }
+
+      // 清除状态
+      const clearState = () => {
+        chrome.runtime.sendMessage({ type: 'clearState' })
+      }
+
+      // 导出数据
+      const exportData = () => {
+        const data = {
+          directives: directives.value,
+          performance: performance.value,
+          timestamp: new Date().toISOString(),
+        }
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: 'application/json',
+        })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `directix-debug-${Date.now()}.json`
+        a.click()
+      }
+
+      onMounted(() => {
+        connect()
+      })
+
+      return {
+        directives,
+        selectedDirective,
+        performance,
+        connected,
+        directiveCount,
+        activeDirectives,
+        selectDirective,
+        refresh,
+        clearState,
+        exportData,
+      }
+    },
+    template: `
+      <div class="directix-devtools">
+        <header>
+          <h1>🎯 Directix DevTools</h1>
+          <div class="status">
+            <span :class="{ connected }">
+              {{ connected ? '已连接' : '未连接' }}
+            </span>
+            <span class="count">
+              {{ directiveCount }} 个指令
+            </span>
+          </div>
+          <div class="actions">
+            <button @click="refresh">🔄 刷新</button>
+            <button @click="exportData">📥 导出</button>
+            <button @click="clearState">🗑️ 清除</button>
+          </div>
+        </header>
+
+        <main>
+          <aside>
+            <DirectiveTree
+              :directives="directives"
+              :selected="selectedDirective"
+              @select="selectDirective"
+            />
+          </aside>
+
+          <section>
+            <StateInspector :directive="selectedDirective" />
+          </section>
+
+          <aside>
+            <PerfMonitor :data="performance" />
+          </aside>
+        </main>
+      </div>
+    `,
+  })
+
+  app.mount('#app')
+}
+
+interface DirectiveInfo {
+  id: string
+  name: string
+  element: string
+  active: boolean
+  state: any
+  bindings: any
+  timestamp: number
+}
+
+interface PerfData {
+  mountTime: number
+  updateTime: number
+  unmountTime: number
+  totalCalls: number
+  avgTime: number
+  maxTime: number
+}
+```
+
+**指令性能分析器：**
+
+```typescript
+// packages/browser-extension/src/content/perfAnalyzer.ts
+
+export class PerformanceAnalyzer {
+  private static metrics: Map<string, PerfMetric> = new Map()
+  private static observers: PerformanceObserver[] = []
+
+  /**
+   * 开始性能监控
+   */
+  static startMonitoring(): void {
+    // 监控 long tasks
+    const longTaskObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.name.includes('directix')) {
+          this.recordLongTask(entry)
+        }
+      }
+    })
+    longTaskObserver.observe({ entryTypes: ['longtask'] })
+    this.observers.push(longTaskObserver)
+
+    // 监控 measure
+    const measureObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.name.startsWith('directix:')) {
+          this.recordMeasure(entry)
+        }
+      }
+    })
+    measureObserver.observe({ entryTypes: ['measure'] })
+    this.observers.push(measureObserver)
+  }
+
+  /**
+   * 停止性能监控
+   */
+  static stopMonitoring(): void {
+    this.observers.forEach((observer) => observer.disconnect())
+    this.observers = []
+  }
+
+  /**
+   * 记录指令操作
+   */
+  static recordDirectiveOperation(
+    directiveId: string,
+    operation: 'mount' | 'update' | 'unmount',
+    callback: () => void
+  ): number {
+    const startMark = `directix:${directiveId}:${operation}:start`
+    const endMark = `directix:${directiveId}:${operation}:end`
+    const measureName = `directix:${directiveId}:${operation}`
+
+    performance.mark(startMark)
+    callback()
+    performance.mark(endMark)
+    performance.measure(measureName, startMark, endMark)
+
+    const entries = performance.getEntriesByName(measureName, 'measure')
+    const duration = entries[entries.length - 1]?.duration || 0
+
+    // 更新指标
+    this.updateMetric(directiveId, operation, duration)
+
+    return duration
+  }
+
+  /**
+   * 更新性能指标
+   */
+  private static updateMetric(
+    directiveId: string,
+    operation: string,
+    duration: number
+  ): void {
+    const existing = this.metrics.get(directiveId) || {
+      mount: { count: 0, total: 0, max: 0, avg: 0 },
+      update: { count: 0, total: 0, max: 0, avg: 0 },
+      unmount: { count: 0, total: 0, max: 0, avg: 0 },
+    }
+
+    const metric = existing[operation as keyof typeof existing]
+    metric.count++
+    metric.total += duration
+    metric.max = Math.max(metric.max, duration)
+    metric.avg = metric.total / metric.count
+
+    this.metrics.set(directiveId, existing)
+  }
+
+  /**
+   * 获取性能报告
+   */
+  static getPerformanceReport(): PerfReport {
+    const allMetrics = Array.from(this.metrics.entries()).map(
+      ([id, metrics]) => ({
+        directiveId: id,
+        ...metrics,
+        total: Object.values(metrics).reduce(
+          (sum, m) => sum + m.total,
+          0
+        ),
+      })
+    )
+
+    return {
+      directives: allMetrics,
+      summary: {
+        totalTime: allMetrics.reduce((sum, m) => sum + m.total, 0),
+        slowDirectives: allMetrics
+          .filter((m) => m.total > 16)
+          .sort((a, b) => b.total - a.total),
+        recommendations: this.generateRecommendations(allMetrics),
+      },
+      timestamp: new Date().toISOString(),
+    }
+  }
+
+  /**
+   * 生成优化建议
+   */
+  private static generateRecommendations(
+    metrics: any[]
+  ): string[] {
+    const recommendations: string[] = []
+
+    // 检查慢指令
+    metrics.forEach((m) => {
+      if (m.mount.max > 50) {
+        recommendations.push(
+          `⚠️ ${m.directiveId}: 挂载时间过长 (${m.mount.max.toFixed(2)}ms)，建议优化初始化逻辑`
+        )
+      }
+
+      if (m.update.avg > 16) {
+        recommendations.push(
+          `⚠️ ${m.directiveId}: 更新频率过高或逻辑过重 (平均 ${m.update.avg.toFixed(2)}ms)，建议使用防抖或节流`
+        )
+      }
+
+      if (m.update.count > 100) {
+        recommendations.push(
+          `ℹ️ ${m.directiveId}: 更新次数过多 (${m.update.count}次)，检查是否有不必要的触发`
+        )
+      }
+    })
+
+    return recommendations
+  }
+
+  /**
+   * 清除性能数据
+   */
+  static clearMetrics(): void {
+    this.metrics.clear()
+    performance.clearMarks()
+    performance.clearMeasures()
+  }
+}
+
+interface PerfMetric {
+  mount: { count: number; total: number; max: number; avg: number }
+  update: { count: number; total: number; max: number; avg: number }
+  unmount: { count: number; total: number; max: number; avg: number }
+}
+
+interface PerfReport {
+  directives: any[]
+  summary: {
+    totalTime: number
+    slowDirectives: any[]
+    recommendations: string[]
+  }
+  timestamp: string
+}
+```
+
+##### 3. 调试工具
+
+**状态检查工具：**
+
+```typescript
+// packages/browser-extension/src/content/stateInspector.ts
+
+export class StateInspector {
+  private static inspectedElements: WeakMap<Element, DirectiveState> = new WeakMap()
+
+  /**
+   * 检查元素的所有指令状态
+   */
+  static inspectElement(element: Element): DirectiveState[] {
+    const states: DirectiveState[] = []
+    const attributes = element.getAttributeNames()
+
+    for (const attr of attributes) {
+      if (attr.startsWith('v-')) {
+        const state = this.inspectDirective(element, attr)
+        if (state) {
+          states.push(state)
+        }
+      }
+    }
+
+    return states
+  }
+
+  /**
+   * 检查单个指令状态
+   */
+  private static inspectDirective(
+    element: Element,
+    directiveAttr: string
+  ): DirectiveState | null {
+    const directiveName = directiveAttr.substring(2)
+    const instance = this.getDirectiveInstance(element, directiveName)
+
+    if (!instance) return null
+
+    return {
+      name: directiveName,
+      element: {
+        tagName: element.tagName,
+        id: element.id,
+        className: element.className,
+      },
+      value: element.getAttribute(directiveAttr),
+      modifiers: this.parseModifiers(directiveAttr),
+      state: {
+        mounted: instance._mounted,
+        active: instance._active,
+        bindings: instance._bindings,
+        cleanup: instance._cleanup ? '已注册' : '未注册',
+      },
+      performance: {
+        mountTime: instance._mountTime,
+        lastUpdateTime: instance._lastUpdateTime,
+        updateCount: instance._updateCount,
+      },
+      issues: this.detectIssues(instance),
+    }
+  }
+
+  /**
+   * 检测潜在问题
+   */
+  private static detectIssues(instance: any): string[] {
+    const issues: string[] = []
+
+    // 检查内存泄漏
+    if (instance._mounted && !instance._cleanup) {
+      issues.push('⚠️ 指令已挂载但未注册清理函数，可能存在内存泄漏')
+    }
+
+    // 检查更新频率
+    if (instance._updateCount > 100 && instance._lastUpdateTime < 1000) {
+      issues.push('⚠️ 短时间内更新次数过多，建议使用防抖或节流')
+    }
+
+    // 检查挂载时间
+    if (instance._mountTime > 50) {
+      issues.push(`⚠️ 挂载时间过长 (${instance._mountTime}ms)，建议优化初始化逻辑`)
+    }
+
+    // 检查响应式依赖
+    if (instance._bindings && Object.keys(instance._bindings).length > 10) {
+      issues.push('ℹ️ 绑定参数过多，可能影响性能')
+    }
+
+    return issues
+  }
+
+  /**
+   * 解析修饰符
+   */
+  private static parseModifiers(attr: string): string[] {
+    const parts = attr.split('.')
+    return parts.length > 1 ? parts.slice(1) : []
+  }
+
+  /**
+   * 获取指令实例（模拟）
+   */
+  private static getDirectiveInstance(
+    element: Element,
+    directiveName: string
+  ): any {
+    // 实际实现需要访问 Directix 内部实例
+    const key = `__directix_${directiveName}`
+    return (element as any)[key]
+  }
+
+  /**
+   * 导出调试信息
+   */
+  static exportDebugInfo(): DebugExport {
+    const allElements = document.querySelectorAll('[class*="v-"], [v-debounce], [v-throttle], [v-click-outside], [v-lazy], [v-permission], [v-copy], [v-loading]')
+    const states: DirectiveState[] = []
+
+    allElements.forEach((element) => {
+      const elementStates = this.inspectElement(element)
+      states.push(...elementStates)
+    })
+
+    return {
+      page: {
+        url: window.location.href,
+        title: document.title,
+      },
+      directives: states,
+      summary: {
+        total: states.length,
+        mounted: states.filter((s) => s.state.mounted).length,
+        active: states.filter((s) => s.state.active).length,
+        issues: states.flatMap((s) => s.issues),
+      },
+      exportedAt: new Date().toISOString(),
+    }
+  }
+}
+
+interface DirectiveState {
+  name: string
+  element: {
+    tagName: string
+    id: string
+    className: string
+  }
+  value: string | null
+  modifiers: string[]
+  state: {
+    mounted: boolean
+    active: boolean
+    bindings: any
+    cleanup: string
+  }
+  performance: {
+    mountTime: number
+    lastUpdateTime: number
+    updateCount: number
+  }
+  issues: string[]
+}
+
+interface DebugExport {
+  page: {
+    url: string
+    title: string
+  }
+  directives: DirectiveState[]
+  summary: {
+    total: number
+    mounted: number
+    active: number
+    issues: string[]
+  }
+  exportedAt: string
+}
+```
+
+##### 4. 交互式示例
+
+**示例平台架构：**
+
+```
+docs/interactive/
+├── index.html              # 示例首页
+├── playground/
+│   ├── index.html          # Playground 入口
+│   ├── editor.ts           # 代码编辑器
+│   ├── preview.ts          # 实时预览
+│   └── console.ts          # 控制台
+├── examples/
+│   ├── debounce/           # v-debounce 示例
+│   │   ├── basic.html
+│   │   ├── advanced.html
+│   │   └── real-world.html
+│   ├── throttle/           # v-throttle 示例
+│   ├── click-outside/      # v-click-outside 示例
+│   └── ...
+└── components/
+    ├── CodeEditor.vue      # 代码编辑器组件
+    ├── LivePreview.vue     # 实时预览组件
+    └── ExampleCard.vue     # 示例卡片组件
+```
+
+**Playground 实现：**
+
+```vue
+<!-- docs/interactive/playground/index.html -->
+
+<template>
+  <div class="playground">
+    <header>
+      <h1>🎯 Directix Playground</h1>
+      <div class="toolbar">
+        <select v-model="selectedDirective">
+          <option v-for="d in directives" :key="d" :value="d">
+            {{ d }}
+          </option>
+        </select>
+        <select v-model="selectedExample">
+          <option v-for="e in examples" :key="e.id" :value="e.id">
+            {{ e.name }}
+          </option>
+        </select>
+        <button @click="run">▶ 运行</button>
+        <button @click="reset">🔄 重置</button>
+        <button @click="share">📤 分享</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="editor-panel">
+        <CodeEditor
+          v-model="code"
+          :language="language"
+          @change="debouncedRun"
+        />
+      </div>
+
+      <div class="preview-panel">
+        <LivePreview
+          :code="compiledCode"
+          :imports="imports"
+          @error="handleError"
+        />
+      </div>
+
+      <div class="console-panel">
+        <Console :messages="consoleMessages" />
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <h2>📚 文档</h2>
+      <DirectiveDocs :directive="selectedDirective" />
+
+      <h2>💡 提示</h2>
+      <Tips :directive="selectedDirective" />
+    </aside>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import CodeEditor from '../components/CodeEditor.vue'
+import LivePreview from '../components/LivePreview.vue'
+import Console from '../components/Console.vue'
+import DirectiveDocs from '../components/DirectiveDocs.vue'
+import Tips from '../components/Tips.vue'
+import { debounce } from 'lodash-es'
+
+const selectedDirective = ref('debounce')
+const selectedExample = ref('basic')
+const code = ref('')
+const language = ref('vue')
+const consoleMessages = ref<ConsoleMessage[]>([])
+
+const directives = ['debounce', 'throttle', 'click-outside', 'lazy', 'permission', 'copy', 'loading']
+
+const examples = computed(() => {
+  return getExamplesForDirective(selectedDirective.value)
+})
+
+const compiledCode = computed(() => {
+  return compileVueCode(code.value)
+})
+
+const imports = {
+  vue: 'https://unpkg.com/vue@3/dist/vue.esm-browser.js',
+  directix: 'https://unpkg.com/directix@latest/dist/directix.esm.js',
+}
+
+const debouncedRun = debounce(() => {
+  run()
+}, 500)
+
+function run(): void {
+  consoleMessages.value = []
+  try {
+    // 执行编译后的代码
+    executeCode(compiledCode.value)
+  } catch (error) {
+    consoleMessages.value.push({
+      type: 'error',
+      message: error.message,
+      timestamp: Date.now(),
+    })
+  }
+}
+
+function reset(): void {
+  code.value = getExampleCode(selectedDirective.value, selectedExample.value)
+}
+
+async function share(): Promise<void> {
+  const url = generateShareUrl(code.value, selectedDirective.value)
+  await navigator.clipboard.writeText(url)
+  alert('链接已复制到剪贴板！')
+}
+
+function handleError(error: Error): void {
+  consoleMessages.value.push({
+    type: 'error',
+    message: error.message,
+    timestamp: Date.now(),
+  })
+}
+
+// 初始化
+watch([selectedDirective, selectedExample], () => {
+  reset()
+}, { immediate: true })
+</script>
+
+<style scoped>
+.playground {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr 300px;
+  height: 100vh;
+}
+
+header {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #1e1e1e;
+  border-bottom: 1px solid #333;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+.editor-panel {
+  grid-row: 1 / 3;
+  background: #1e1e1e;
+}
+
+.preview-panel {
+  background: white;
+}
+
+.console-panel {
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+}
+
+.sidebar {
+  grid-row: 2;
+  padding: 16px;
+  background: #252526;
+  overflow-y: auto;
+}
+</style>
+```
+
+**视频教程结构：**
+
+```markdown
+# Directix 视频教程大纲
+
+## 基础系列 (10集)
+
+1. **Directix 快速入门** (5min)
+   - 安装与配置
+   - 第一个指令
+   - 基本使用流程
+
+2. **v-debounce 防抖指令** (8min)
+   - 防抖原理
+   - 参数详解
+   - 实战案例
+
+3. **v-throttle 节流指令** (8min)
+   - 节流原理
+   - 与防抖的区别
+   - 最佳实践
+
+4. **v-click-outside 点击外部检测** (6min)
+   - 使用场景
+   - 配置选项
+   - 与弹窗组件配合
+
+5. **v-lazy 图片懒加载** (10min)
+   - 懒加载原理
+   - 占位图与错误处理
+   - 性能优化技巧
+
+6. **v-permission 权限控制** (12min)
+   - 权限系统设计
+   - 多权限组合
+   - 动态权限更新
+
+7. **v-copy 复制功能** (5min)
+   - 快速实现复制
+   - 自定义提示
+   - 兼容性处理
+
+8. **v-loading 加载状态** (8min)
+   - 全屏与局部加载
+   - 自定义样式
+   - 指令组合使用
+
+9. **指令组合与最佳实践** (15min)
+   - 多指令协同
+   - 性能优化
+   - 代码组织
+
+10. **SSR 与 Directix** (10min)
+    - SSR 配置
+    - 客户端激活
+    - 常见问题
+
+## 进阶系列 (5集)
+
+1. **自定义指令开发** (20min)
+   - 指令生命周期
+   - 参数与修饰符
+   - TypeScript 类型
+
+2. **指令性能优化** (15min)
+   - 性能分析
+   - 优化技巧
+   - 监控与调试
+
+3. **Directix 插件开发** (25min)
+   - 插件架构
+   - 扩展机制
+   - 发布流程
+
+4. **测试驱动开发** (15min)
+   - 单元测试
+   - E2E 测试
+   - 覆盖率要求
+
+5. **生产环境最佳实践** (20min)
+   - 构建优化
+   - 监控告警
+   - 故障排查
+```
+
+##### 5. 最佳实践指南
+
+```markdown
+# Directix 最佳实践指南
+
+## 性能优化
+
+### 1. 按需引入
+
+❌ **不推荐：全量引入**
+```typescript
+import { createApp } from 'vue'
+import Directix from 'directix'
+
+app.use(Directix)  // 引入所有指令
+```
+
+✅ **推荐：按需引入**
+```typescript
+import { createApp } from 'vue'
+import { vDebounce, vThrottle } from 'directix'
+
+app.directive('debounce', vDebounce)
+app.directive('throttle', vThrottle)
+```
+
+### 2. 合理使用修饰符
+
+```vue
+<!-- ✅ 使用 .sync 提高响应性 -->
+<button v-debounce:click.sync="handler">
+
+<!-- ✅ 使用 .leading 立即执行第一次 -->
+<input v-throttle.leading="updateSearch">
+
+<!-- ✅ 组合修饰符 -->
+<button v-debounce:click.leading.trailing="handler">
+```
+
+### 3. 避免频繁更新
+
+❌ **不推荐：响应式数据直接绑定**
+```vue
+<button v-debounce="() => handleClick(dynamicParam)">
+```
+
+✅ **推荐：使用稳定引用**
+```vue
+<script setup>
+const handleClick = (param) => {
+  // 处理逻辑
+}
+
+const debouncedHandler = useDebounceFn(handleClick, 300)
+</script>
+
+<button v-debounce="debouncedHandler">
+```
+
+## 内存管理
+
+### 1. 正确清理副作用
+
+```typescript
+// 自定义指令示例
+app.directive('my-directive', {
+  mounted(el, binding) {
+    const timer = setInterval(() => {
+      // 定时任务
+    }, 1000)
+
+    // ✅ 注册清理函数
+    el._cleanup = () => clearInterval(timer)
+  },
+  unmounted(el) {
+    // ✅ 执行清理
+    el._cleanup?.()
+  }
+})
+```
+
+### 2. 避免闭包陷阱
+
+❌ **不推荐：闭包持有引用**
+```typescript
+mounted(el, binding) {
+  const largeData = binding.value
+  el._handler = () => {
+    processLargeData(largeData)  // 持有引用
+  }
+}
+```
+
+✅ **推荐：必要时释放引用**
+```typescript
+mounted(el, binding) {
+  el._handler = () => {
+    const data = JSON.parse(JSON.stringify(binding.value))
+    processData(data)
+    binding.value = null  // 释放
+  }
+}
+```
+
+## TypeScript 支持
+
+### 1. 类型定义
+
+```typescript
+// types/directives.d.ts
+import { DirectiveBinding, ObjectDirective } from 'vue'
+
+declare module 'directix' {
+  export interface DebounceOptions {
+    delay?: number
+    leading?: boolean
+    trailing?: boolean
+    maxWait?: number
+  }
+
+  export const vDebounce: ObjectDirective<HTMLElement, DebounceOptions>
+  export const vThrottle: ObjectDirective<HTMLElement, ThrottleOptions>
+  // ...
+}
+```
+
+### 2. 组件类型扩展
+
+```typescript
+// types/components.d.ts
+import { vDebounce } from 'directix'
+
+declare module '@vue/runtime-core' {
+  interface GlobalDirectives {
+    'v-debounce': typeof vDebounce
+    'v-throttle': typeof vThrottle
+    // ...
+  }
+}
+```
+
+## SSR 兼容
+
+### 1. 条件注册
+
+```typescript
+// plugins/directix.ts
+import { defineNuxtPlugin } from '#app'
+import { vDebounce, vThrottle } from 'directix'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  // ✅ 仅在客户端注册
+  if (import.meta.client) {
+    nuxtApp.vueApp.directive('debounce', vDebounce)
+    nuxtApp.vueApp.directive('throttle', vThrottle)
+  }
+})
+```
+
+### 2. 避免服务端副作用
+
+```typescript
+app.directive('my-directive', {
+  getSSRProps() {
+    // ✅ 返回 SSR 安全的属性
+    return {}
+  },
+  mounted() {
+    // ✅ 仅客户端执行
+  }
+})
+```
+
+## 测试策略
+
+### 1. 单元测试
+
+```typescript
+import { mount } from '@vue/test-utils'
+import { vDebounce } from 'directix'
+
+describe('v-debounce', () => {
+  it('should debounce handler', async () => {
+    const handler = vi.fn()
+    const wrapper = mount({
+      template: '<button v-debounce="handler"></button>',
+      directives: { debounce: vDebounce },
+      methods: { handler }
+    })
+
+    await wrapper.find('button').trigger('click')
+    expect(handler).not.toHaveBeenCalled()
+
+    await new Promise(r => setTimeout(r, 300))
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+})
+```
+
+### 2. E2E 测试
+
+```typescript
+import { test, expect } from '@playwright/test'
+
+test('debounce should work correctly', async ({ page }) => {
+  await page.goto('/examples/debounce')
+
+  const button = page.getByRole('button', { name: /submit/i })
+  const counter = page.getByTestId('counter')
+
+  // 快速点击多次
+  for (let i = 0; i < 5; i++) {
+    await button.click()
+    await page.waitForTimeout(50)
+  }
+
+  // 等待防抖完成
+  await page.waitForTimeout(350)
+
+  // 应该只执行一次
+  await expect(counter).toHaveText('1')
+})
+```
+```
+
+#### 开发资源需求表
+
+| 资源类型 | 需求 | 用途 |
+|---------|------|------|
+| 开发人员 | 2名前端工程师 | VS Code 插件 + 浏览器扩展 |
+| UI/UX 设计 | 1名设计师 | 界面设计、图标设计 |
+| 视频制作 | 1名内容创作者 | 教程录制、剪辑 |
+| 技术写作 | 1名文档工程师 | 文档编写、示例开发 |
+| 测试设备 | 多台测试机器 | 跨浏览器、跨系统测试 |
+| 云服务 | CDN + 存储服务 | 示例托管、视频存储 |
+
+#### 质量保证检查清单
+
+```markdown
+# v2.4.0 发布检查清单
+
+## VS Code 插件
+
+- [ ] 指令智能提示正常工作
+- [ ] 参数补全准确
+- [ ] 修饰符提示完整
+- [ ] 悬停文档显示正确
+- [ ] 配置编辑器功能正常
+- [ ] 代码片段插入正确
+- [ ] 错误诊断准确
+- [ ] 多语言支持（中英文）
+- [ ] VS Code 1.60+ 兼容性
+- [ ] 性能测试（内存 < 50MB）
+
+## 浏览器扩展
+
+- [ ] DevTools 面板正常加载
+- [ ] 指令树显示正确
+- [ ] 状态检查功能正常
+- [ ] 性能分析数据准确
+- [ ] 数据导出功能正常
+- [ ] Chrome/Edge/Firefox 兼容
+- [ ] 权限请求合理
+- [ ] 性能影响 < 5ms
+
+## 文档与示例
+
+- [ ] 交互式示例运行正常
+- [ ] 所有示例代码正确
+- [ ] 视频教程质量达标
+- [ ] 最佳实践文档完整
+- [ ] 多语言文档同步
+- [ ] 搜索功能正常
+- [ ] 移动端适配良好
+
+## 测试覆盖
+
+- [ ] 单元测试覆盖率 > 80%
+- [ ] E2E 测试通过率 100%
+- [ ] 性能测试达标
+- [ ] 无障碍测试通过
+- [ ] 安全审计通过
+```
+
+#### 发布里程碑
+
+| 里程碑 | 日期 | 内容 | 验收标准 |
+|--------|------|------|----------|
+| M19.1 | Week 27 Day 3 | VS Code 插件 Alpha | 基础功能可用 |
+| M19.2 | Week 27 Day 5 | 浏览器扩展 Alpha | DevTools 基本功能 |
+| M19.3 | Week 28 Day 2 | 文档与示例完成 | 所有文档就绪 |
+| M19.4 | Week 28 Day 4 | 全量测试通过 | 质量检查清单完成 |
+| M19 | Week 28 Day 6 | v2.4.0 正式发布 | 发布流程完成 |
+
 **里程碑 M19：v2.4.0 发布** 📋 计划中
 
 ---
