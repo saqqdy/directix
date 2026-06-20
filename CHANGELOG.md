@@ -2,6 +2,125 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2026-06-21
+
+### Performance Optimization Release
+
+This release focuses on extreme performance optimization: smaller bundle sizes, faster runtime, and better memory efficiency. Target: single directive ≤ 1KB gzip, full bundle ≤ 20KB gzip.
+
+### Added
+
+#### Event Delegation Manager
+
+Global event delegation to reduce DOM event listeners:
+
+- `EventDelegationManager` - Manager class for global event delegation
+- `configureEventDelegation(config)` - Configure event delegation settings
+- `registerDelegatedHandler(selector, event, handler)` - Register a delegated event handler
+- `unregisterDelegatedHandler(id)` - Unregister a delegated handler
+- `pauseDelegatedHandler(id)` / `resumeDelegatedHandler(id)` - Pause/resume handlers
+- `getDelegationStats()` - Get delegation statistics
+- `startDelegation()` / `stopDelegation()` - Start/stop delegation
+
+```ts
+import { registerDelegatedHandler, unregisterDelegatedHandler } from 'directix'
+
+const id = registerDelegatedHandler('.btn', 'click', (event, target) => {
+  console.log('Button clicked:', target)
+})
+// Later: unregisterDelegatedHandler(id)
+```
+
+#### Batch Processor & DOM Batch Updater
+
+Batch operations to avoid layout thrashing:
+
+- `BatchProcessor<T, R>` - Generic batch processor with priority queue
+- `DOMBatchUpdater` - Read/write separated DOM batch updater
+- `getDOMBatchUpdater()` - Get global DOM batch updater
+- `domRead(fn)` / `domWrite(fn)` - Schedule DOM read/write operations
+
+```ts
+import { domRead, domWrite } from 'directix'
+
+// Read current layout (batched)
+domRead(() => {
+  const height = element.offsetHeight
+  // Schedule write based on read value
+  domWrite(() => {
+    element.style.transform = `translateY(${height}px)`
+  })
+})
+```
+
+#### Virtual List Optimizer
+
+Performance optimizations for virtual scrolling:
+
+- `VirtualListOptimizer` - Optimizer class with dynamic height caching and VNode recycling
+- `getVirtualListOptimizer()` - Get global optimizer instance
+- Dynamic item height caching with `cacheItemHeight()` / `getItemHeight()`
+- Visible range calculation with `calculateVisibleRange()`
+- VNode recycling pool with `recycleVNode()` / `acquireRecycledVNode()`
+- Scroll direction detection and velocity tracking
+
+```ts
+import { VirtualListOptimizer } from 'directix'
+
+const optimizer = new VirtualListOptimizer({ bufferSize: 5, dynamicHeight: true })
+optimizer.init(1000, 600)
+optimizer.cacheItemHeight(0, 48)
+const range = optimizer.calculateVisibleRange(scrollTop)
+```
+
+#### Memory Leak Detector
+
+Automatic detection and reporting of memory leaks:
+
+- `configureMemoryLeakDetector(config)` - Configure detector settings
+- `trackResource(type, description, cleanup)` - Track resources that need cleanup
+- `untrackResource(id)` / `cleanupResource(id)` - Manage tracked resources
+- `takeSnapshot()` - Take a memory snapshot for comparison
+- `getLeakReports()` - Get detected leak reports
+- `startLeakDetection()` / `stopLeakDetection()` - Start/stop periodic detection
+
+```ts
+import { trackResource, cleanupResource } from 'directix'
+
+const id = trackResource('event-listener', 'scroll handler', () => {
+  window.removeEventListener('scroll', handler)
+})
+// When component unmounts: cleanupResource(id)
+```
+
+### Enhanced
+
+#### ObjectPool Improvements
+
+- Added `autoExpand` option to allow pool growth beyond maxSize
+- Added `preWarm(count)` method to pre-populate the pool
+- Enhanced `getStats()` with `inUseCount`, `acquireCount`, `releaseCount`, `utilizationRate`
+
+#### WeakCache Improvements
+
+- Added LRU eviction strategy for strong cache entries
+- Added `getStats()` with `hitCount`, `missCount`, `hitRate`, `strongCacheSize`
+
+### Build Optimization
+
+- Updated `sideEffects` in package.json for more granular tree-shaking
+- Added `compact: true` output option for smaller bundle size
+- Enhanced tree-shaking configuration
+
+### Compatibility
+
+- **No breaking changes** - All new APIs are additive
+- Vue 2.6+ and Vue 3.0+ supported
+- Web Components compatible
+- Node.js 16.14+ required
+
+---
+
 ## [2.1.0] - 2026-06-06
 
 ### Enhanced Web Components Support

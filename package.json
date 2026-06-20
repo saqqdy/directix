@@ -2,7 +2,7 @@
 	"name": "directix",
 	"description": "A comprehensive, easy-to-use, and high-performance Vue custom directives library supporting both Vue 2 and Vue 3, with Web Components support",
 	"type": "module",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"packageManager": "pnpm@9.15.9",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
@@ -126,7 +126,12 @@
 		"node": ">=16.14"
 	},
 	"sideEffects": [
-		"**/*.css"
+		"**/*.css",
+		"**/style.css",
+		"src/index.ts",
+		"src/install.ts",
+		"packages/core/src/index.ts",
+		"packages/i18n/src/index.ts"
 	],
 	"keywords": [
 		"vue",

@@ -25,6 +25,88 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
+## What's New in v2.2.0
+
+### Performance Optimization Release
+
+v2.2.0 focuses on extreme performance optimization: smaller bundles, faster runtime, and better memory efficiency.
+
+#### Event Delegation Manager
+
+Reduce DOM event listeners with global event delegation:
+
+```typescript
+import { registerDelegatedHandler, unregisterDelegatedHandler } from 'directix'
+
+// Delegate click events for all .btn elements
+const id = registerDelegatedHandler('.btn', 'click', (event, target) => {
+  console.log('Button clicked:', target)
+})
+
+// Clean up when done
+unregisterDelegatedHandler(id)
+```
+
+#### Batch Processor & DOM Batch Updater
+
+Avoid layout thrashing with read/write separation:
+
+```typescript
+import { domRead, domWrite } from 'directix'
+
+// Batch DOM reads and writes
+domRead(() => {
+  const height = element.offsetHeight
+  domWrite(() => {
+    element.style.transform = `translateY(${height}px)`
+  })
+})
+```
+
+#### Virtual List Optimizer
+
+Optimize virtual scrolling with dynamic height caching and VNode recycling:
+
+```typescript
+import { VirtualListOptimizer } from 'directix'
+
+const optimizer = new VirtualListOptimizer({ bufferSize: 5, dynamicHeight: true })
+optimizer.init(1000, 600)
+optimizer.cacheItemHeight(0, 48)
+const range = optimizer.calculateVisibleRange(scrollTop)
+```
+
+#### Memory Leak Detector
+
+Automatically detect and report memory leaks:
+
+```typescript
+import { trackResource, cleanupResource, startLeakDetection } from 'directix'
+
+startLeakDetection()
+const id = trackResource('event-listener', 'scroll handler', () => {
+  window.removeEventListener('scroll', handler)
+})
+// On unmount: cleanupResource(id)
+```
+
+### Enhanced APIs
+
+| API | Change |
+|-----|--------|
+| `ObjectPool` | Added `autoExpand`, `preWarm()`, enhanced `getStats()` |
+| `WeakCache` | Added LRU eviction, `getStats()` with hit rate |
+
+### Performance Targets
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Single directive | 1.2KB | ≤1KB | 17% |
+| Full bundle | 25KB | ≤20KB | 20% |
+| Mount time | 2ms | ≤1ms | 50% |
+
+---
+
 ## What's New in v2.1.0
 
 ### Enhanced Web Components Support

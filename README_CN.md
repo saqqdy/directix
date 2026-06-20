@@ -25,6 +25,88 @@
 - 🌐 **国际化支持** - 内置中文、英文、日文翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
 
+## v2.2.0 新特性
+
+### 性能极限优化版本
+
+v2.2.0 专注于极致性能优化：更小的包体积、更快的运行时、更高的内存效率。
+
+#### 事件委托管理器
+
+通过全局事件委托减少 DOM 事件监听器：
+
+```typescript
+import { registerDelegatedHandler, unregisterDelegatedHandler } from 'directix'
+
+// 委托所有 .btn 元素的点击事件
+const id = registerDelegatedHandler('.btn', 'click', (event, target) => {
+  console.log('按钮被点击:', target)
+})
+
+// 用完后清理
+unregisterDelegatedHandler(id)
+```
+
+#### 批处理器 & DOM 批量更新器
+
+读写分离避免布局抖动：
+
+```typescript
+import { domRead, domWrite } from 'directix'
+
+// 批量处理 DOM 读写
+domRead(() => {
+  const height = element.offsetHeight
+  domWrite(() => {
+    element.style.transform = `translateY(${height}px)`
+  })
+})
+```
+
+#### 虚拟列表优化器
+
+动态高度缓存和 VNode 回收优化虚拟滚动：
+
+```typescript
+import { VirtualListOptimizer } from 'directix'
+
+const optimizer = new VirtualListOptimizer({ bufferSize: 5, dynamicHeight: true })
+optimizer.init(1000, 600)
+optimizer.cacheItemHeight(0, 48)
+const range = optimizer.calculateVisibleRange(scrollTop)
+```
+
+#### 内存泄漏检测器
+
+自动检测和报告内存泄漏：
+
+```typescript
+import { trackResource, cleanupResource, startLeakDetection } from 'directix'
+
+startLeakDetection()
+const id = trackResource('event-listener', 'scroll handler', () => {
+  window.removeEventListener('scroll', handler)
+})
+// 卸载时: cleanupResource(id)
+```
+
+### 增强的 API
+
+| API | 变更 |
+|-----|------|
+| `ObjectPool` | 新增 `autoExpand`、`preWarm()`，增强 `getStats()` |
+| `WeakCache` | 新增 LRU 淘汰策略、`getStats()` 含命中率 |
+
+### 性能目标
+
+| 指标 | 优化前 | 优化后 | 提升 |
+|------|--------|-------|------|
+| 单指令体积 | 1.2KB | ≤1KB | 17% |
+| 全量包体积 | 25KB | ≤20KB | 20% |
+| 挂载时间 | 2ms | ≤1ms | 50% |
+
+---
+
 ## v2.1.0 新特性
 
 ### 增强 Web Components 支持
