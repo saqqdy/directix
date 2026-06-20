@@ -29,6 +29,21 @@ export {
 	type AuditLogStats,
 } from './audit-log'
 
+// Batch processor and DOM batch updater
+export {
+	BatchProcessor,
+	DEFAULT_BATCH_PROCESSOR_CONFIG,
+	DOMBatchUpdater,
+	domRead,
+	domWrite,
+	getDOMBatchUpdater,
+	type BatchProcessorConfig,
+	type BatchProcessorStats,
+	type BatchResult,
+	type BatchTask,
+	type DOMUpdateTask,
+} from './batch-processor'
+
 // Benchmark system
 export {
 	benchmark,
@@ -212,24 +227,6 @@ export {
 	type EdgeCaseWarning,
 } from './edge-case'
 
-// Event delegation manager
-export {
-	clearDelegatedHandlers,
-	configureEventDelegation,
-	DEFAULT_EVENT_DELEGATION_CONFIG,
-	getDelegationStats,
-	getEventDelegationConfig,
-	pauseDelegatedHandler,
-	registerDelegatedHandler,
-	resumeDelegatedHandler,
-	startDelegation,
-	stopDelegation,
-	unregisterDelegatedHandler,
-	type DelegatedHandler,
-	type DelegationStats,
-	type EventDelegationConfig,
-} from './event-delegation'
-
 // Enterprise permission management
 export {
 	configureEnterprisePermission,
@@ -265,6 +262,24 @@ export {
 	type VueVersion,
 } from './env'
 
+// Event delegation manager
+export {
+	clearDelegatedHandlers,
+	configureEventDelegation,
+	DEFAULT_EVENT_DELEGATION_CONFIG,
+	getDelegationStats,
+	getEventDelegationConfig,
+	pauseDelegatedHandler,
+	registerDelegatedHandler,
+	resumeDelegatedHandler,
+	startDelegation,
+	stopDelegation,
+	unregisterDelegatedHandler,
+	type DelegatedHandler,
+	type DelegationStats,
+	type EventDelegationConfig,
+} from './event-delegation'
+
 // First screen optimization
 export {
 	calculateTTI,
@@ -295,6 +310,31 @@ export {
 	type FirstScreenMetrics,
 	type LoadPriority,
 } from './first-screen'
+
+// Memory leak detector
+export {
+	cleanupResource,
+	cleanupResourcesByType,
+	clearLeakReports,
+	configureMemoryLeakDetector,
+	DEFAULT_MEMORY_LEAK_DETECTOR_CONFIG,
+	getLeakDetectorStats,
+	getLeakReports,
+	getMemoryLeakDetectorConfig,
+	getSnapshots,
+	getTrackedResourcesInfo,
+	resetMemoryLeakDetector,
+	startLeakDetection,
+	stopLeakDetection,
+	takeSnapshot,
+	trackResource,
+	untrackResource,
+	type LeakReport,
+	type MemoryLeakDetectorConfig,
+	type MemoryLeakDetectorStats,
+	type MemorySnapshot,
+	type TrackedResource,
+} from './memory-leak-detector'
 
 // Migration helpers
 export {
@@ -399,61 +439,21 @@ export {
 	type PerformanceOptimizationConfig,
 } from './performance-optimizer'
 
-// Batch processor and DOM batch updater
-export {
-	BatchProcessor,
-	DOMBatchUpdater,
-	domRead,
-	domWrite,
-	getDOMBatchUpdater,
-	DEFAULT_BATCH_PROCESSOR_CONFIG,
-	type BatchProcessorConfig,
-	type BatchProcessorStats,
-	type BatchResult,
-	type BatchTask,
-	type DOMUpdateTask,
-} from './batch-processor'
+// Types
+export * from './types'
 
 // Virtual list optimizer
 export {
-	VirtualListOptimizer,
-	getVirtualListOptimizer,
 	DEFAULT_VIRTUAL_LIST_OPTIMIZER_CONFIG,
-	type VirtualListOptimizerConfig,
+	getVirtualListOptimizer,
+	VirtualListOptimizer,
 	type ItemHeightCache,
-	type VisibleRange,
-	type VirtualScrollInfo,
-	type VNodeRecyclePoolEntry,
+	type VirtualListOptimizerConfig,
 	type VirtualListOptimizerStats,
+	type VirtualScrollInfo,
+	type VisibleRange,
+	type VNodeRecyclePoolEntry,
 } from './virtual-list-optimizer'
-
-// Memory leak detector
-export {
-	cleanupResource,
-	cleanupResourcesByType,
-	clearLeakReports,
-	configureMemoryLeakDetector,
-	DEFAULT_MEMORY_LEAK_DETECTOR_CONFIG,
-	getLeakDetectorStats,
-	getLeakReports,
-	getMemoryLeakDetectorConfig,
-	getSnapshots,
-	getTrackedResourcesInfo,
-	resetMemoryLeakDetector,
-	startLeakDetection,
-	stopLeakDetection,
-	takeSnapshot,
-	trackResource,
-	untrackResource,
-	type LeakReport,
-	type MemoryLeakDetectorConfig,
-	type MemoryLeakDetectorStats,
-	type MemorySnapshot,
-	type TrackedResource,
-} from './memory-leak-detector'
-
-// Types
-export * from './types'
 
 // Warning system
 export {

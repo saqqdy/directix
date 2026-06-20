@@ -1,11 +1,11 @@
+import {
+	DEFAULT_VIRTUAL_LIST_OPTIMIZER_CONFIG,
+	VirtualListOptimizer,
+} from '@directix/core'
 /**
  * Tests for VirtualListOptimizer (v2.2.0)
  */
-import { describe, it, expect, beforeEach } from 'vitest'
-import {
-	VirtualListOptimizer,
-	DEFAULT_VIRTUAL_LIST_OPTIMIZER_CONFIG,
-} from '@directix/core'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('VirtualListOptimizer', () => {
 	let optimizer: VirtualListOptimizer

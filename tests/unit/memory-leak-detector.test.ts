@@ -1,24 +1,23 @@
-/**
- * Tests for MemoryLeakDetector (v2.2.0)
- */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import {
-	configureMemoryLeakDetector,
-	trackResource,
-	untrackResource,
 	cleanupResource,
 	cleanupResourcesByType,
-	takeSnapshot,
-	getSnapshots,
-	getLeakReports,
-	getLeakDetectorStats,
-	getTrackedResourcesInfo,
 	clearLeakReports,
+	configureMemoryLeakDetector,
+	getLeakDetectorStats,
+	getLeakReports,
+	getSnapshots,
+	getTrackedResourcesInfo,
 	resetMemoryLeakDetector,
 	startLeakDetection,
 	stopLeakDetection,
-	DEFAULT_MEMORY_LEAK_DETECTOR_CONFIG,
+	takeSnapshot,
+	trackResource,
+	untrackResource,
 } from '@directix/core'
+/**
+ * Tests for MemoryLeakDetector (v2.2.0)
+ */
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('MemoryLeakDetector', () => {
 	beforeEach(() => {

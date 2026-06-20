@@ -204,9 +204,7 @@ export class ObjectPool<T> {
 			inUseCount: this.createdCount - this.pool.length,
 			acquireCount: this.acquireCount,
 			releaseCount: this.releaseCount,
-			utilizationRate: this.createdCount > 0
-				? (this.createdCount - this.pool.length) / this.createdCount
-				: 0,
+			utilizationRate: this.createdCount > 0 ? (this.createdCount - this.pool.length) / this.createdCount : 0,
 		}
 	}
 }

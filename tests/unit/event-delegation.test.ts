@@ -1,20 +1,18 @@
+import {
+	clearDelegatedHandlers,
+	configureEventDelegation,
+	DEFAULT_EVENT_DELEGATION_CONFIG,
+	getDelegationStats,
+	getEventDelegationConfig,
+	pauseDelegatedHandler,
+	registerDelegatedHandler,
+	resumeDelegatedHandler,
+	unregisterDelegatedHandler,
+} from '@directix/core'
 /**
  * Tests for EventDelegationManager (v2.2.0)
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import {
-	configureEventDelegation,
-	registerDelegatedHandler,
-	unregisterDelegatedHandler,
-	pauseDelegatedHandler,
-	resumeDelegatedHandler,
-	getDelegationStats,
-	clearDelegatedHandlers,
-	startDelegation,
-	stopDelegation,
-	getEventDelegationConfig,
-	DEFAULT_EVENT_DELEGATION_CONFIG,
-} from '@directix/core'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('EventDelegationManager', () => {
 	beforeEach(() => {

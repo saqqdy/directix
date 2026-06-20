@@ -1,15 +1,14 @@
-/**
- * Tests for BatchProcessor and DOMBatchUpdater (v2.2.0)
- */
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import {
 	BatchProcessor,
 	DOMBatchUpdater,
-	getDOMBatchUpdater,
 	domRead,
 	domWrite,
-	DEFAULT_BATCH_PROCESSOR_CONFIG,
+	getDOMBatchUpdater,
 } from '@directix/core'
+/**
+ * Tests for BatchProcessor and DOMBatchUpdater (v2.2.0)
+ */
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('BatchProcessor', () => {
 	beforeEach(() => {
@@ -22,14 +21,14 @@ describe('BatchProcessor', () => {
 
 	describe('constructor', () => {
 		it('should use default config', () => {
-			const processor = new BatchProcessor((tasks) => [])
+			const processor = new BatchProcessor(_tasks => [])
 			const stats = processor.getStats()
 			expect(stats.queueSize).toBe(0)
 		})
 
 		it('should accept custom config', () => {
 			const processor = new BatchProcessor(
-				(tasks) => [],
+				_tasks => [],
 				{ maxBatchSize: 10, flushInterval: 32, useRAF: false },
 			)
 			const stats = processor.getStats()
@@ -39,14 +38,14 @@ describe('BatchProcessor', () => {
 
 	describe('add', () => {
 		it('should add tasks to the queue', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			const id = processor.add({ value: 1 }, 'test')
 			expect(id).toBeTruthy()
 			expect(processor.getStats().queueSize).toBe(1)
 		})
 
 		it('should add multiple tasks', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			const ids = processor.addMany([
 				{ data: { value: 1 } },
 				{ data: { value: 2 } },
@@ -58,7 +57,7 @@ describe('BatchProcessor', () => {
 
 	describe('cancel', () => {
 		it('should cancel a task by ID', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			const id = processor.add({ value: 1 })
 			const result = processor.cancel(id)
 			expect(result).toBe(true)
@@ -66,13 +65,13 @@ describe('BatchProcessor', () => {
 		})
 
 		it('should return false for non-existent task', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			const result = processor.cancel('non-existent')
 			expect(result).toBe(false)
 		})
 
 		it('should cancel tasks by type', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			processor.add({ value: 1 }, 'type-a')
 			processor.add({ value: 2 }, 'type-b')
 			processor.add({ value: 3 }, 'type-a')
@@ -85,9 +84,9 @@ describe('BatchProcessor', () => {
 
 	describe('flush', () => {
 		it('should process all pending tasks', () => {
-			const results: any[] = []
+			const _results: any[] = []
 			const processor = new BatchProcessor(
-				(tasks) => tasks.map(t => ({ id: t.id, success: true, duration: 0 })),
+				tasks => tasks.map(t => ({ id: t.id, success: true, duration: 0 })),
 				{ useRAF: false },
 			)
 
@@ -103,7 +102,7 @@ describe('BatchProcessor', () => {
 		it('should sort tasks by priority', () => {
 			const processed: number[] = []
 			const processor = new BatchProcessor(
-				(tasks) => {
+				tasks => {
 					for (const t of tasks) processed.push(t.priority)
 					return tasks.map(t => ({ id: t.id, success: true, duration: 0 }))
 				},
@@ -121,7 +120,7 @@ describe('BatchProcessor', () => {
 
 	describe('clear', () => {
 		it('should clear all pending tasks', () => {
-			const processor = new BatchProcessor((tasks) => [], { useRAF: false })
+			const processor = new BatchProcessor(_tasks => [], { useRAF: false })
 			processor.add({ value: 1 })
 			processor.add({ value: 2 })
 			processor.clear()
@@ -132,7 +131,7 @@ describe('BatchProcessor', () => {
 	describe('getStats', () => {
 		it('should return accurate statistics', () => {
 			const processor = new BatchProcessor(
-				(tasks) => tasks.map(t => ({ id: t.id, success: true, duration: 0 })),
+				tasks => tasks.map(t => ({ id: t.id, success: true, duration: 0 })),
 				{ useRAF: false },
 			)
 
