@@ -4,6 +4,8 @@
 **Directix** 是一个全面、易用、高性能的 Vue 自定义指令库，支持 Vue 2 和 Vue 3。
 
 ## 版本历史
+- **v2.2.0** (2026-06-13): 性能极限优化（EventDelegationManager、BatchProcessor、DOMBatchUpdater、VirtualListOptimizer、MemoryLeakDetector、增强 ObjectPool/WeakCache）
+- **v2.1.0** (2026-06-06): Web Components 增强、SSR 支持、生命周期钩子
 - **v2.0.0** (2026-04-26): Web Components 支持，保留 Vue 2 兼容性
 - **v1.11.0** (2026-05-13): 企业级功能、性能优化、迁移工具
 - **v1.0.0** (2026-03-27): 核心指令、基础文档
@@ -39,8 +41,16 @@ directix/
 
 ### 性能优化策略
 - **Vue 3 条件优化**：markRaw, shallowReactive（仅 Vue 3）
-- **Tree-shaking**：按需引入，单指令 < 2KB gzip
-- **包体积**：v2.0.0 比 v1.11.0 减小 10-15%
+- **Tree-shaking**：按需引入，单指令 < 1KB gzip（v2.2.0 目标）
+- **包体积**：v2.2.0 目标全量 ≤ 20KB gzip
+
+### v2.2.0 性能优化模块
+- **EventDelegationManager** (`packages/core/src/event-delegation.ts`): 全局事件委托，减少 DOM 监听器
+- **BatchProcessor + DOMBatchUpdater** (`packages/core/src/batch-processor.ts`): 通用批处理 + 读写分离 DOM 更新
+- **VirtualListOptimizer** (`packages/core/src/virtual-list-optimizer.ts`): 虚拟列表动态高度缓存、VNode 回收
+- **MemoryLeakDetector** (`packages/core/src/memory-leak-detector.ts`): 内存泄漏自动检测
+- **增强 ObjectPool**: autoExpand、preWarm、增强 stats
+- **增强 WeakCache**: LRU 淘汰、hit/miss 统计
 
 ## 开发规范
 - **语言**：TypeScript 5.x
