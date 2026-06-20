@@ -284,6 +284,74 @@
         </div>
       </div>
     </section>
+
+    <!-- Performance Optimization -->
+    <section class="ent-section">
+      <div class="section-header">
+        <span class="section-icon">⚡</span>
+        <h3>Performance Optimization</h3>
+      </div>
+      <div class="section-body">
+        <div class="action-bar">
+          <button class="btn btn-info" @click="testEventDelegation">🎯 Test Delegation</button>
+          <button class="btn btn-success" @click="testDOMBatch">📦 Test DOM Batch</button>
+          <button class="btn btn-warn" @click="testMemoryLeakDetector">🔍 Memory Snapshot</button>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-body">
+              <div class="metric-val">{{ perfStats.delegatedHandlers }}</div>
+              <div class="metric-name">Delegated Handlers</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📦</div>
+            <div class="metric-body">
+              <div class="metric-val">{{ perfStats.batchedUpdates }}</div>
+              <div class="metric-name">Batched Updates</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🔍</div>
+            <div class="metric-body">
+              <div class="metric-val">{{ perfStats.memorySnapshots }}</div>
+              <div class="metric-name">Snapshots</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📊</div>
+            <div class="metric-body">
+              <div class="metric-val">{{ perfStats.trackedResources }}</div>
+              <div class="metric-name">Tracked Resources</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="perf-log-panel">
+          <div class="panel-header">
+            <span>Performance Log</span>
+            <span class="log-count">{{ perfLog.length }} events</span>
+          </div>
+          <div class="log-list">
+            <div
+              v-for="(entry, idx) in perfLog"
+              :key="idx"
+              class="log-row info"
+            >
+              <span class="log-badge info">perf</span>
+              <span class="log-type">{{ entry.type }}</span>
+              <span class="log-msg">{{ entry.message }}</span>
+              <span class="log-ts">{{ formatTime(entry.timestamp) }}</span>
+            </div>
+            <div v-if="perfLog.length === 0" class="empty-state">
+              Click buttons above to test performance features
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -311,6 +379,15 @@ import {
   rollbackConfig,
   configureEnterprisePermission,
   hasPermissionSync,
+  registerDelegatedHandler,
+  unregisterDelegatedHandler,
+  getDelegationStats,
+  getDOMBatchUpdater,
+  takeSnapshot,
+  getLeakDetectorStats,
+  getTrackedResourcesInfo,
+  trackResource,
+  cleanupResource,
 } from 'directix'
 
 export default {
@@ -429,6 +506,65 @@ export default {
       { id: 'editor', name: 'Editor', permissions: ['read', 'write'] },
       { id: 'viewer', name: 'Viewer', permissions: ['read'] },
     ])
+    const perfStats = reactive({
+      delegatedHandlers: 0,
+      batchedUpdates: 0,
+      memorySnapshots: 0,
+      trackedResources: 0,
+    })
+    const perfLog = ref([])
+    const delegatedHandlerIds = ref([])
+
+    const addPerfLog = (type, message) => {
+      perfLog.value.unshift({ type, message, timestamp: new Date() })
+      if (perfLog.value.length > 20) perfLog.value.pop()
+    }
+
+    const testEventDelegation = () => {
+      // Register a few delegated handlers
+      const id1 = registerDelegatedHandler('button', 'click', (event, target) => {
+        // Delegated click handler
+      })
+      const id2 = registerDelegatedHandler('.btn', 'mouseover', (event, target) => {
+        // Delegated mouseover handler
+      })
+      delegatedHandlerIds.value.push(id1, id2)
+
+      const stats = getDelegationStats()
+      perfStats.delegatedHandlers = stats.activeHandlers
+      addPerfLog('delegation', `Registered 2 delegated handlers (total: ${stats.activeHandlers})`)
+    }
+
+    const testDOMBatch = () => {
+      const updater = getDOMBatchUpdater()
+      // Schedule batched DOM reads and writes
+      updater.read(() => {
+        perfStats.batchedUpdates++
+      })
+      updater.write(() => {
+        perfStats.batchedUpdates++
+      })
+      addPerfLog('batch', 'Scheduled read + write batch (RAF)')
+    }
+
+    const testMemoryLeakDetector = () => {
+      const snapshot = takeSnapshot()
+      const stats = getLeakDetectorStats()
+      perfStats.memorySnapshots = stats.snapshotCount
+      perfStats.trackedResources = stats.trackedResourceCount
+
+      // Track a demo resource
+      const id = trackResource(
+        'event-listener',
+        'Demo scroll listener',
+        () => { /* cleanup */ },
+        { tags: ['demo'] },
+      )
+      addPerfLog('memory', `Snapshot taken (resources: ${snapshot.resourceCount}, DOM nodes: ${snapshot.domNodeCount})`)
+
+      // Cleanup the demo resource after logging
+      setTimeout(() => cleanupResource(id), 100)
+    }
     const currentRole = ref('editor')
     const permissionToCheck = ref('')
     const permissionResult = ref(null)
@@ -536,6 +672,13 @@ export default {
 
       // Helpers
       formatTime,
+
+      // Performance
+      perfStats,
+      perfLog,
+      testEventDelegation,
+      testDOMBatch,
+      testMemoryLeakDetector,
     }
   },
 }
@@ -1094,6 +1237,13 @@ export default {
 .empty-state.small {
   padding: 16px;
   font-size: 12px;
+}
+
+/* ── Performance Log Panel ── */
+.perf-log-panel {
+  border: 1px solid #e8ecf0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 /* ── Responsive ── */

@@ -299,7 +299,7 @@ export default defineComponent({
 <template>
 	<div class="app">
 		<header class="header">
-			<h1>Directix Examples (Vue 2)</h1>
+			<h1>Directix Examples (Vue 3)</h1>
 			<p>Vue Directives Library - Demo & Testing</p>
 		</header>
 

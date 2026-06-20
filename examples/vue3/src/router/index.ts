@@ -1,6 +1,7 @@
-import type { RouteConfig } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
 	{
 		path: '/',
 		redirect: '/click-outside',
@@ -409,4 +410,9 @@ const routes: RouteConfig[] = [
 	},
 ]
 
-export default routes
+const router = createRouter({
+	history: createWebHistory(),
+	routes,
+})
+
+export default router
