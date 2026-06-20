@@ -54,6 +54,8 @@ export interface ObjectPoolOptions {
 	maxSize: number
 	resetFunction?: (obj: any) => void
 	createFunction: () => any
+	/** @since 2.2.0 - Whether the pool can auto-expand beyond maxSize */
+	autoExpand?: boolean
 }
 
 // ============================================================================
@@ -99,6 +101,9 @@ export const DEFAULT_PERFORMANCE_CONFIG: PerformanceOptimizationConfig = {
 
 /**
  * Generic object pool for memory optimization
+ *
+ * @since 1.11.0 - Initial implementation
+ * @since 2.2.0 - Added auto-expand, pre-warm, and usage stats
  */
 export class ObjectPool<T> {
 	private pool: T[] = []
@@ -106,11 +111,15 @@ export class ObjectPool<T> {
 	private createFunction: () => T
 	private resetFunction?: (obj: T) => void
 	private createdCount = 0
+	private acquireCount = 0
+	private releaseCount = 0
+	private autoExpand: boolean
 
 	constructor(options: ObjectPoolOptions) {
 		this.maxSize = options.maxSize
 		this.createFunction = options.createFunction
 		this.resetFunction = options.resetFunction
+		this.autoExpand = options.autoExpand ?? false
 
 		// Pre-populate pool
 		for (let i = 0; i < Math.min(options.initialSize, options.maxSize); i++) {
@@ -120,9 +129,22 @@ export class ObjectPool<T> {
 	}
 
 	/**
+	 * Pre-warm the pool to a specific size
+	 * @since 2.2.0
+	 */
+	preWarm(count: number): void {
+		const targetSize = Math.min(count, this.maxSize)
+		while (this.pool.length < targetSize) {
+			this.pool.push(this.createFunction())
+			this.createdCount++
+		}
+	}
+
+	/**
 	 * Get an object from the pool
 	 */
 	acquire(): T {
+		this.acquireCount++
 		if (this.pool.length > 0) {
 			const obj = this.pool.pop()!
 			if (this.resetFunction) {
@@ -132,7 +154,7 @@ export class ObjectPool<T> {
 		}
 
 		// Create new object if pool is empty and under max limit
-		if (this.createdCount < this.maxSize) {
+		if (this.createdCount < this.maxSize || this.autoExpand) {
 			this.createdCount++
 			return this.createFunction()
 		}
@@ -145,6 +167,7 @@ export class ObjectPool<T> {
 	 * Return an object to the pool
 	 */
 	release(obj: T): void {
+		this.releaseCount++
 		if (this.pool.length < this.maxSize) {
 			if (this.resetFunction) {
 				this.resetFunction(obj)
@@ -168,12 +191,22 @@ export class ObjectPool<T> {
 		maxSize: number
 		createdCount: number
 		availableCount: number
+		inUseCount: number
+		acquireCount: number
+		releaseCount: number
+		utilizationRate: number
 	} {
 		return {
 			poolSize: this.pool.length,
 			maxSize: this.maxSize,
 			createdCount: this.createdCount,
 			availableCount: this.pool.length,
+			inUseCount: this.createdCount - this.pool.length,
+			acquireCount: this.acquireCount,
+			releaseCount: this.releaseCount,
+			utilizationRate: this.createdCount > 0
+				? (this.createdCount - this.pool.length) / this.createdCount
+				: 0,
 		}
 	}
 }
@@ -248,11 +281,16 @@ export class EventBatchProcessor {
 
 /**
  * Cache using WeakMap for automatic cleanup when references are removed
+ *
+ * @since 1.11.0 - Initial implementation
+ * @since 2.2.0 - Added LRU eviction and hit/miss stats
  */
 export class WeakCache<K extends object, V> {
 	private cache = new WeakMap<K, V>()
 	private strongCache = new Map<K, V>()
 	private maxStrongSize: number
+	private hitCount = 0
+	private missCount = 0
 
 	constructor(maxStrongSize: number = 50) {
 		this.maxStrongSize = maxStrongSize
@@ -262,7 +300,13 @@ export class WeakCache<K extends object, V> {
 	 * Get cached value
 	 */
 	get(key: K): V | undefined {
-		return this.cache.get(key) ?? this.strongCache.get(key)
+		const value = this.cache.get(key) ?? this.strongCache.get(key)
+		if (value !== undefined) {
+			this.hitCount++
+		} else {
+			this.missCount++
+		}
+		return value
 	}
 
 	/**
@@ -271,10 +315,16 @@ export class WeakCache<K extends object, V> {
 	set(key: K, value: V): void {
 		this.cache.set(key, value)
 
-		// Also store in strong cache for non-object keys or important entries
-		if (this.strongCache.size < this.maxStrongSize) {
-			this.strongCache.set(key, value)
+		// LRU: if strong cache is full, delete the oldest entry
+		if (this.strongCache.size >= this.maxStrongSize) {
+			const oldestKey = this.strongCache.keys().next().value
+			if (oldestKey !== undefined) {
+				this.strongCache.delete(oldestKey)
+			}
 		}
+
+		// Also store in strong cache for non-object keys or important entries
+		this.strongCache.set(key, value)
 	}
 
 	/**
@@ -305,6 +355,27 @@ export class WeakCache<K extends object, V> {
 	 */
 	size(): number {
 		return this.strongCache.size
+	}
+
+	/**
+	 * Get cache hit/miss statistics
+	 * @since 2.2.0
+	 */
+	getStats(): {
+		hitCount: number
+		missCount: number
+		hitRate: number
+		strongCacheSize: number
+		maxStrongSize: number
+	} {
+		const total = this.hitCount + this.missCount
+		return {
+			hitCount: this.hitCount,
+			missCount: this.missCount,
+			hitRate: total > 0 ? this.hitCount / total : 0,
+			strongCacheSize: this.strongCache.size,
+			maxStrongSize: this.maxStrongSize,
+		}
 	}
 }
 
