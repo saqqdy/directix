@@ -56,10 +56,12 @@ export default defineConfig({
 				extend: true,
 				// Optimize chunk splitting for better tree-shaking
 				manualChunks: undefined,
-				// Preserve modules for better tree-shaking
+				// Preserve modules for better tree-shaking in ESM output
 				preserveModules: false,
 				// Minification options
 				minifyInternalExports: true,
+				// Compact output for smaller bundle size
+				compact: true,
 			},
 			// Tree-shaking optimization
 			treeshake: {
