@@ -2,7 +2,7 @@
   <div class="demo-container">
     <h2>i18n Internationalization</h2>
     <p class="description">
-      Built-in internationalization support with English, Chinese, and Japanese translations.
+      Built-in internationalization support with 8 languages (English, Chinese, Japanese, Korean, French, German, Spanish, Russian).
       Create custom translations for your application.
     </p>
 
@@ -114,6 +114,26 @@
             <span class="locale-code">ja-JP</span>
             <span class="locale-name">Japanese</span>
           </div>
+          <div class="locale-item" @click="showLocaleMessages('ko-KR')">
+            <span class="locale-code">ko-KR</span>
+            <span class="locale-name">Korean</span>
+          </div>
+          <div class="locale-item" @click="showLocaleMessages('fr-FR')">
+            <span class="locale-code">fr-FR</span>
+            <span class="locale-name">French</span>
+          </div>
+          <div class="locale-item" @click="showLocaleMessages('de-DE')">
+            <span class="locale-code">de-DE</span>
+            <span class="locale-name">German</span>
+          </div>
+          <div class="locale-item" @click="showLocaleMessages('es-ES')">
+            <span class="locale-code">es-ES</span>
+            <span class="locale-name">Spanish</span>
+          </div>
+          <div class="locale-item" @click="showLocaleMessages('ru-RU')">
+            <span class="locale-code">ru-RU</span>
+            <span class="locale-name">Russian</span>
+          </div>
         </div>
         <div v-if="selectedLocaleMessages" class="locale-preview">
           <h4>{{ selectedLocale }} Messages Preview</h4>
@@ -127,13 +147,18 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import {
-  createI18n,
-  setLocale,
-  getLocale,
-  t,
-  enUS,
-  zhCN,
-  jaJP,
+	createI18n,
+	setLocale,
+	getLocale,
+	t,
+	enUS,
+	zhCN,
+	jaJP,
+	koKR,
+	frFR,
+	deDE,
+	esES,
+	ruRU,
 } from 'directix'
 import { vDebounce } from 'directix'
 
@@ -148,6 +173,11 @@ export default {
       'en-US': enUS,
       'zh-CN': zhCN,
       'ja-JP': jaJP,
+      'ko-KR': koKR,
+      'fr-FR': frFR,
+      'de-DE': deDE,
+      'es-ES': esES,
+      'ru-RU': ruRU,
     }
 
     // Language options
@@ -155,6 +185,11 @@ export default {
       { code: 'en-US', name: 'English', flag: '🇺🇸' },
       { code: 'zh-CN', name: '中文', flag: '🇨🇳' },
       { code: 'ja-JP', name: '日本語', flag: '🇯🇵' },
+      { code: 'ko-KR', name: '한국어', flag: '🇰🇷' },
+      { code: 'fr-FR', name: 'Français', flag: '🇫🇷' },
+      { code: 'de-DE', name: 'Deutsch', flag: '🇩🇪' },
+      { code: 'es-ES', name: 'Español', flag: '🇪🇸' },
+      { code: 'ru-RU', name: 'Русский', flag: '🇷🇺' },
     ])
 
     const currentLocale = ref('zh-CN')

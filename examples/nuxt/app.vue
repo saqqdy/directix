@@ -45,6 +45,16 @@ const { copy, copied } = useCopy({ source: text })`,
 <!-- Or with composable -->
 const { isHovering } = useHover()`,
 	},
+	{
+		id: 'i18n',
+		name: 'i18n',
+		description: '8 languages with auto-detection',
+		code: `import { LocaleDetector, LocaleLoader } from 'directix'
+// Auto-detect user language
+const locale = LocaleDetector.detect()
+// Dynamic loading
+const messages = await LocaleLoader.load('ko-KR')`,
+	},
 ]
 
 function handleDropdownClose() {
@@ -54,6 +64,37 @@ function handleDropdownClose() {
 const handleClick = useDebounceFn((e: Event) => {
 	console.log('Debounced click:', e)
 }, 300)
+
+// i18n demo - uses auto-imported composables from Directix Nuxt module
+const detectedLocale = ref('zh-CN')
+const i18nSampleMessage = ref('')
+const i18nLanguages = [
+	{ code: 'zh-CN', name: '中文', flag: '🇨🇳' },
+	{ code: 'en-US', name: 'English', flag: '🇺🇸' },
+	{ code: 'ja-JP', name: '日本語', flag: '🇯🇵' },
+	{ code: 'ko-KR', name: '한국어', flag: '🇰🇷' },
+	{ code: 'fr-FR', name: 'Français', flag: '🇫🇷' },
+	{ code: 'de-DE', name: 'Deutsch', flag: '🇩🇪' },
+	{ code: 'es-ES', name: 'Español', flag: '🇪🇸' },
+	{ code: 'ru-RU', name: 'Русский', flag: '🇷🇺' },
+]
+
+async function switchI18nLocale(code: string) {
+	detectedLocale.value = code
+	try {
+		const { LocaleLoader } = await import('directix/i18n')
+		const messages = await LocaleLoader.load(code as any)
+		i18nSampleMessage.value = messages.directives.debounce?.description || 'No sample available'
+	} catch {
+		i18nSampleMessage.value = 'Failed to load locale'
+	}
+}
+
+onMounted(async () => {
+	const { LocaleDetector } = await import('directix/i18n')
+	detectedLocale.value = LocaleDetector.detect()
+	switchI18nLocale(detectedLocale.value)
+})
 </script>
 
 <template>
@@ -203,6 +244,23 @@ const handleClick = useDebounceFn((e: Event) => {
 								:class="{ 'ring-2 ring-teal-500': isHovering }"
 							>
 								useHover state: {{ isHovering ? 'Hovering' : 'Not hovering' }}
+							</div>
+						</div>
+
+						<!-- i18n Demo -->
+						<div v-else-if="activeTab === 'i18n'" class="space-y-4">
+							<p class="text-gray-600">
+								Directix supports 8 languages with auto-detection and dynamic loading.
+							</p>
+							<div class="grid grid-cols-4 gap-2">
+								<div v-for="lang in i18nLanguages" :key="lang.code" class="bg-gray-50 px-3 py-2 rounded text-center cursor-pointer hover:bg-green-50 transition-colors" :class="{ 'bg-green-100 ring-1 ring-green-400': detectedLocale === lang.code }" @click="switchI18nLocale(lang.code)">
+									<div class="text-lg">{{ lang.flag }}</div>
+									<div class="text-xs text-gray-600">{{ lang.name }}</div>
+								</div>
+							</div>
+							<div v-if="i18nSampleMessage" class="bg-gray-50 rounded p-3 text-sm">
+								<strong>Detect:</strong> {{ detectedLocale }}<br>
+								<strong>Sample:</strong> {{ i18nSampleMessage }}
 							</div>
 						</div>
 
