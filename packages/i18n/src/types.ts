@@ -3,6 +3,19 @@
  */
 
 /**
+ * Supported locale codes
+ */
+export type LocaleCode
+	= | 'zh-CN'
+		| 'en-US'
+		| 'ja-JP'
+		| 'ko-KR'
+		| 'fr-FR'
+		| 'de-DE'
+		| 'es-ES'
+		| 'ru-RU'
+
+/**
  * Locale messages structure
  */
 export interface I18nMessages {
@@ -45,11 +58,23 @@ export interface WarningMessages {
 }
 
 /**
- * i18n options
+ * i18n configuration
+ */
+export interface I18nConfig {
+	/** Current locale */
+	locale: LocaleCode
+	/** Fallback locale when translation is missing */
+	fallback?: LocaleCode
+	/** Whether to suppress missing translation warnings */
+	silent?: boolean
+}
+
+/**
+ * i18n options (user-facing)
  */
 export interface I18nOptions {
-	locale?: string
-	fallbackLocale?: string
+	locale?: LocaleCode
+	fallbackLocale?: LocaleCode
 	messages: Record<string, I18nMessages>
 }
 
@@ -57,9 +82,28 @@ export interface I18nOptions {
  * i18n instance
  */
 export interface I18nInstance {
-	locale: string
-	fallbackLocale: string
+	locale: LocaleCode
+	fallbackLocale: LocaleCode
 	messages: I18nMessages
-	setLocale: (locale: string) => void
+	setLocale: (locale: LocaleCode) => void
 	t: (key: string, params?: Record<string, any>) => string
+}
+
+/**
+ * Validation result for locale checking
+ */
+export interface LocaleValidationResult {
+	locale: string
+	missing: string[]
+	extra: string[]
+	coverage: number
+}
+
+/**
+ * Translation quality issue
+ */
+export interface TranslationIssue {
+	key: string
+	issue: string
+	severity: 'error' | 'warning'
 }
