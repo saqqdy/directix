@@ -43,5 +43,5 @@
 		"docs/.vitepress/**/*.ts",
 		"docs/.vitepress/**/*.vue"
 	],
-	"exclude": ["node_modules", "dist", "tests"]
+	"exclude": ["node_modules", "dist", "tests", "packages/devtools"]
 }
