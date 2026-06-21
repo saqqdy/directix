@@ -1,0 +1,14 @@
+{
+	"name": "directix-devtools",
+	"description": "Browser DevTools extension for Directix Vue directives",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"build": "node build.js",
+		"dev": "node build.js --watch"
+	},
+	"devDependencies": {
+		"@types/chrome": "^0.2.0",
+		"typescript": "^5.9.3"
+	}
+}
