@@ -3,7 +3,9 @@
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=saqqdy.directix-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**IntelliSense, code snippets, and hover documentation for [Directix](https://github.com/saqqdy/directix) - the comprehensive Vue directives library.**
+**English** | **[中文文档](README_CN.md)**
+
+IntelliSense, code snippets, and hover documentation for [Directix](https://github.com/saqqdy/directix) — the comprehensive Vue directives library.
 
 ## Features
 
