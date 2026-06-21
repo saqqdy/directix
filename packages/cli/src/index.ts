@@ -69,4 +69,31 @@ cli
 		await runMigrate(options)
 	})
 
+// i18n commands
+cli
+	.command('i18n:extract', 'Extract translation messages from source')
+	.option('--output <file>', 'Output file path', { default: 'i18n-extracted.json' })
+	.action(async options => {
+		const { extractMessages } = await import('./commands/i18n-extract.js')
+		await extractMessages(options)
+	})
+
+cli
+	.command('i18n:validate', 'Validate locale completeness')
+	.option('--locale <code>', 'Validate specific locale')
+	.option('--threshold <num>', 'Minimum coverage threshold', { default: 90 })
+	.action(async options => {
+		const { validateLocales } = await import('./commands/i18n-validate.js')
+		await validateLocales(options)
+	})
+
+cli
+	.command('i18n:sync', 'Sync locale structure with base')
+	.option('--base <locale>', 'Base locale', { default: 'en-US' })
+	.option('--target <locale>', 'Target locale to sync')
+	.action(async options => {
+		const { syncLocale } = await import('./commands/i18n-sync.js')
+		await syncLocale(options)
+	})
+
 cli.parse()
