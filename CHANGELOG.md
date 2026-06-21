@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2026-06-20
+
+### Internationalization Expansion Release
+
+This release significantly expands i18n support with 5 new languages, locale detection, and dynamic loading utilities.
+
+### Added
+
+#### New Language Support
+
+- Korean (ko-KR) locale with full translation coverage
+- French (fr-FR) locale with full translation coverage
+- German (de-DE) locale with full translation coverage
+- Spanish (es-ES) locale with full translation coverage
+- Russian (ru-RU) locale with full translation coverage
+
+#### New Utilities
+
+- `LocaleDetector` class - Auto-detect user's preferred language with localStorage persistence
+  - `detect(fallback?)` - Detect locale with priority: stored > browser > default
+  - `setLocale(locale)` - Set and persist locale preference
+  - `clearLocale()` - Clear stored preference
+  - `normalizeLocale(lang)` - Normalize browser language to supported code
+  - `isSupported(locale)` - Check if locale is supported
+  - `getSupportedLocales()` - Get all supported locale codes
+- `LocaleLoader` class - Dynamic loading and caching of locale messages
+  - `load(locale)` - Load locale with caching and deduplication
+  - `preload(locales)` - Preload multiple locales
+  - `register(locale, messages)` - Register locale directly (for SSR)
+  - `clearCache()` - Clear locale cache
+  - `isLoaded(locale)` - Check if locale is cached
+  - `getCachedLocales()` - Get all cached locale codes
+
+#### Updated Exports
+
+- All 5 new locale messages (koKR, frFR, deDE, esES, ruRU) exported from `directix`
+- `LocaleDetector` and `LocaleLoader` exported from `directix`
+
+```typescript
+import { LocaleDetector, LocaleLoader, koKR, frFR, deDE, esES, ruRU } from 'directix'
+```
+
+### Changed
+
+- `LocaleCode` type now includes `'ko-KR' | 'fr-FR' | 'de-DE' | 'es-ES' | 'ru-RU'`
+- i18n documentation updated to reflect 8 supported languages (was 3)
+
+---
+
 ## [2.2.0] - 2026-06-21
 
 ### Performance Optimization Release

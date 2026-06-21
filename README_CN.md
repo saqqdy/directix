@@ -22,8 +22,36 @@
 - ⚡ **零依赖** - 轻量级，打包体积小
 - 🎨 **组合式API** - 每个指令都有对应的组合式函数
 - 🔧 **工具函数导出** - 导出 `configurePermission`、`getPermissionConfig` 等工具函数供高级使用
-- 🌐 **国际化支持** - 内置中文、英文、日文翻译
+- 🌐 **国际化支持** - 内置中文、英文、日文、韩文、法文、德文、西班牙文、俄文 8 种语言翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
+
+## v2.3.0 更新内容
+
+### 国际化扩展
+
+本次版本大幅扩展了 i18n 支持，新增 5 种语言和实用工具：
+
+- 🇰🇷 **韩语 (ko-KR)** - 完整翻译支持
+- 🇫🇷 **法语 (fr-FR)** - 完整翻译支持
+- 🇩🇪 **德语 (de-DE)** - 完整翻译支持
+- 🇪🇸 **西班牙语 (es-ES)** - 完整翻译支持
+- 🇷🇺 **俄语 (ru-RU)** - 完整翻译支持
+
+**新增工具：**
+- `LocaleDetector` - 自动检测用户首选语言
+- `LocaleLoader` - 动态加载和缓存语言包
+
+```typescript
+import { LocaleDetector, LocaleLoader, koKR, frFR } from 'directix'
+
+// 自动检测用户语言
+const locale = LocaleDetector.detect() // 'ko-KR', 'fr-FR' 等
+
+// 动态加载语言包
+const messages = await LocaleLoader.load('ko-KR')
+```
+
+---
 
 ## v2.2.0 新特性
 

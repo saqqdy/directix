@@ -22,8 +22,36 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - ⚡ **Zero Dependencies** - Lightweight with minimal bundle size
 - 🎨 **Composables** - Every directive has a corresponding composable for Composition API
 - 🔧 **Utility Exports** - Export `configurePermission`, `getPermissionConfig` and other utilities for advanced usage
-- 🌐 **i18n Support** - Built-in internationalization with Chinese, English, and Japanese translations
+- 🌐 **i18n Support** - Built-in internationalization with 8 language translations (Chinese, English, Japanese, Korean, French, German, Spanish, Russian)
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
+
+## What's New in v2.3.0
+
+### Internationalization Expansion
+
+This release significantly expands i18n support with 5 new languages and utility tools:
+
+- 🇰🇷 **Korean (ko-KR)** - Full translation support
+- 🇫🇷 **French (fr-FR)** - Full translation support
+- 🇩🇪 **German (de-DE)** - Full translation support
+- 🇪🇸 **Spanish (es-ES)** - Full translation support
+- 🇷🇺 **Russian (ru-RU)** - Full translation support
+
+**New Utilities:**
+- `LocaleDetector` - Auto-detect user's preferred language
+- `LocaleLoader` - Dynamic loading and caching of locale messages
+
+```typescript
+import { LocaleDetector, LocaleLoader, koKR, frFR } from 'directix'
+
+// Auto-detect user language
+const locale = LocaleDetector.detect() // 'ko-KR', 'fr-FR', etc.
+
+// Dynamically load locale
+const messages = await LocaleLoader.load('ko-KR')
+```
+
+---
 
 ## What's New in v2.2.0
 
