@@ -18,11 +18,23 @@ Try Directix online with StackBlitz:
 - [Click Outside](/examples/click-outside) - Detect clicks outside elements
 - [Debounce](/examples/debounce) - Debounce event handlers
 - [Throttle](/examples/throttle) - Throttle event handlers
+- [Long Press](/examples/long-press) - Long press gesture detection
+- [Context Menu](/examples/context-menu) - Custom right-click context menu
 
 ### Form Directives
 
 - [Copy](/examples/copy) - Copy text to clipboard
 - [Focus](/examples/focus) - Auto focus elements
+
+### Visibility Directives
+
+- [Lazy Loading](/examples/lazy) - Image and component lazy loading
+- [Infinite Scroll & Virtual List](/examples/infinite-scroll-virtual-list) - Large dataset handling
+
+### Security Directives
+
+- [Permission](/examples/permission) - Permission-based UI control
+- [Watermark](/examples/watermark) - Content watermarking
 
 ## Local Development
 

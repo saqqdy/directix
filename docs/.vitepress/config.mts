@@ -253,6 +253,12 @@ export default defineConfig({
 								{ link: '/examples/debounce', text: 'Debounce' },
 								{ link: '/examples/throttle', text: 'Throttle' },
 								{ link: '/examples/focus', text: 'Focus' },
+								{ link: '/examples/lazy', text: 'Lazy' },
+								{ link: '/examples/permission', text: 'Permission' },
+								{ link: '/examples/long-press', text: 'Long Press' },
+								{ link: '/examples/context-menu', text: 'Context Menu' },
+								{ link: '/examples/watermark', text: 'Watermark' },
+								{ link: '/examples/infinite-scroll-virtual-list', text: 'Infinite Scroll & Virtual List' },
 							],
 							text: 'Demos',
 						},
@@ -290,6 +296,12 @@ export default defineConfig({
 								{ link: '/guide/performance', text: 'Performance Optimization' },
 							],
 							text: 'Categories',
+						},
+						{
+							items: [
+								{ link: '/guide/best-practices', text: 'Best Practices' },
+							],
+							text: 'Guides',
 						},
 					],
 					'/migration/': [
@@ -551,6 +563,12 @@ export default defineConfig({
 								{ link: '/zh/examples/debounce', text: 'Debounce' },
 								{ link: '/zh/examples/throttle', text: 'Throttle' },
 								{ link: '/zh/examples/focus', text: 'Focus' },
+								{ link: '/zh/examples/lazy', text: '懒加载' },
+								{ link: '/zh/examples/permission', text: '权限控制' },
+								{ link: '/zh/examples/long-press', text: '长按' },
+								{ link: '/zh/examples/context-menu', text: '右键菜单' },
+								{ link: '/zh/examples/watermark', text: '水印' },
+								{ link: '/zh/examples/infinite-scroll-virtual-list', text: '无限滚动 & 虚拟列表' },
 							],
 							text: '演示',
 						},
@@ -588,6 +606,12 @@ export default defineConfig({
 								{ link: '/zh/guide/performance', text: '性能优化' },
 							],
 							text: '分类',
+						},
+						{
+							items: [
+								{ link: '/zh/guide/best-practices', text: '最佳实践' },
+							],
+							text: '指南',
 						},
 					],
 					'/zh/migration/': [
