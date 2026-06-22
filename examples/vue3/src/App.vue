@@ -239,6 +239,20 @@ const categoryDefinitions: CategoryDefinition[] = [
 		],
 	},
 	{
+		name: 'VS Code',
+		icon: '💻',
+		demos: [
+			{ path: '/devtools', name: 'VS Code Extension', desc: 'IntelliSense, diagnostics, snippets, config editor', version: '2.4.0' },
+		],
+	},
+	{
+		name: 'Browser',
+		icon: '🌐',
+		demos: [
+			{ path: '/devtools', name: 'Browser DevTools', desc: 'Directive inspector, perf analysis, state check', version: '2.4.0' },
+		],
+	},
+	{
 		name: 'Monitoring',
 		icon: '⚡',
 		demos: [

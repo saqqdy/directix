@@ -5,6 +5,10 @@ const copyText = ref('Hello from Directix!')
 const { copy, copied } = useCopy({ source: copyText })
 const { isHovering } = useHover({ onEnter: () => console.log('Hover entered!') })
 
+// v2.4.0: Use Directix VS Code extension for IntelliSense, diagnostics & snippets
+// v2.4.0: Use Directix Browser DevTools for directive inspection & perf analysis
+// The Nuxt module auto-imports all composables and auto-registers directives
+
 // Demo data
 interface Demo {
 	id: string
