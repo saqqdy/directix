@@ -4,11 +4,12 @@
 	"displayName": "Directix - Vue Directives IntelliSense",
 	"icon": "icon.png",
 	"description": "IntelliSense for Directix Vue directives library",
-	"version": "1.0.0",
+	"version": "2.4.0",
 	"main": "./dist/extension.js",
 	"categories": [
 		"Programming Languages",
 		"Snippets",
+		"Debuggers",
 		"Other"
 	],
 	"scripts": {
@@ -39,7 +40,9 @@
 		"vue2",
 		"directives",
 		"directix",
-		"intellisense"
+		"intellisense",
+		"debug",
+		"performance"
 	],
 	"license": "MIT",
 	"repository": {
@@ -51,7 +54,23 @@
 		"commands": [
 			{
 				"command": "directix.openDocs",
-				"title": "Open Directix Documentation"
+				"title": "Directix: Open Documentation"
+			},
+			{
+				"command": "directix.openConfigEditor",
+				"title": "Directix: Open Config Editor"
+			},
+			{
+				"command": "directix.showPerfReport",
+				"title": "Directix: Show Performance Report"
+			},
+			{
+				"command": "directix.clearPerfData",
+				"title": "Directix: Clear Performance Data"
+			},
+			{
+				"command": "directix.inspectState",
+				"title": "Directix: Inspect Directive State"
 			}
 		],
 		"snippets": [
@@ -66,12 +85,44 @@
 				"directix.enableIntelliSense": {
 					"type": "boolean",
 					"default": true,
-					"description": "Enable Directix IntelliSense"
+					"description": "Enable Directix IntelliSense (completion & hover)"
 				},
 				"directix.showDocumentation": {
 					"type": "boolean",
 					"default": true,
-					"description": "Show documentation in hover"
+					"description": "Show documentation in hover tooltips"
+				},
+				"directix.enableDiagnostics": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable real-time diagnostics for directive usage"
+				},
+				"directix.enablePerformanceTracking": {
+					"type": "boolean",
+					"default": false,
+					"description": "Enable directive performance tracking (may slightly affect editor performance)"
+				},
+				"directix.diagnostics.debounceMs": {
+					"type": "number",
+					"default": 500,
+					"minimum": 100,
+					"maximum": 3000,
+					"description": "Debounce interval (ms) for diagnostics analysis"
+				},
+				"directix.diagnostics.checkDuplicates": {
+					"type": "boolean",
+					"default": true,
+					"description": "Warn about duplicate directive usage on the same element"
+				},
+				"directix.diagnostics.checkConflicts": {
+					"type": "boolean",
+					"default": true,
+					"description": "Warn about conflicting directive pairs on the same element"
+				},
+				"directix.diagnostics.checkSSRCompatibility": {
+					"type": "boolean",
+					"default": true,
+					"description": "Warn about SSR-incompatible directives in SSR contexts"
 				}
 			}
 		}
