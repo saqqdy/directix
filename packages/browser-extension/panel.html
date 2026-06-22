@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Directix</title>
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; padding: 12px; color: #e0e0e0; background: #1e1e1e; }
+		h1 { font-size: 16px; margin-bottom: 8px; }
+		.status { font-size: 12px; color: #888; margin-bottom: 12px; }
+		.section { margin-bottom: 16px; }
+		.section h2 { font-size: 13px; color: #42b883; margin-bottom: 6px; }
+		.directive-list { list-style: none; }
+		.directive-list li { padding: 6px 8px; border-radius: 4px; margin-bottom: 4px; background: #2d2d2d; cursor: pointer; }
+		.directive-list li:hover { background: #3a3a3a; }
+		.directive-name { font-weight: 600; color: #42b883; font-family: monospace; }
+		.directive-element { font-size: 12px; color: #888; margin-left: 8px; }
+		.empty { text-align: center; padding: 32px; color: #666; }
+	</style>
+</head>
+<body>
+	<h1>🎯 Directix DevTools</h1>
+	<p class="status" id="status">Connecting...</p>
+	<div class="section">
+		<h2>Directive Instances</h2>
+		<ul class="directive-list" id="directives"></ul>
+		<p class="empty" id="empty" style="display:none">No Directix directives detected.</p>
+	</div>
+	<div class="section">
+		<h2>Performance</h2>
+		<pre id="perf" style="font-size:12px;color:#aaa;background:#2d2d2d;padding:8px;border-radius:4px;overflow:auto;max-height:200px;"></pre>
+	</div>
+	<div class="section">
+		<h2>Issues</h2>
+		<ul id="issues" style="list-style:none;"></ul>
+	</div>
+	<script>
+		(function () {
+			var tabId = chrome.devtools.inspectedWindow.tabId
+			var statusEl = document.getElementById('status')
+			var listEl = document.getElementById('directives')
+			var emptyEl = document.getElementById('empty')
+
+			statusEl.textContent = 'Tab ID: ' + tabId
+
+			function refresh() {
+				chrome.tabs.sendMessage(tabId, { type: 'inspect', target: 'content' }, function (response) {
+					if (!response || !response.payload) {
+						emptyEl.style.display = ''
+						listEl.innerHTML = ''
+						return
+					}
+					var directives = response.payload
+					emptyEl.style.display = directives.length ? 'none' : ''
+					listEl.innerHTML = directives.map(function (d) {
+						return '<li><span class="directive-name">' + d.name + '</span><span class="directive-element">' + d.element + '</span></li>'
+					}).join('')
+				})
+			}
+
+			window.__directix_devtools_shown = refresh
+			refresh()
+		})()
+	</script>
+</body>
+</html>

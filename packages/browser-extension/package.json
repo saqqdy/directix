@@ -1,0 +1,16 @@
+{
+	"name": "directix-browser",
+	"description": "Browser DevTools extension for Directix - Vue Directives library",
+	"version": "2.4.0",
+	"private": true,
+	"scripts": {
+		"dev": "esbuild src/background/index.ts src/content/index.ts src/devtools/index.ts src/devtools/perfAnalyzer.ts src/devtools/stateInspector.ts --outdir=dist --bundle --external:chrome --format=esm --platform=browser --watch",
+		"build": "esbuild src/background/index.ts src/content/index.ts src/devtools/index.ts src/devtools/perfAnalyzer.ts src/devtools/stateInspector.ts --outdir=dist --bundle --external:chrome --format=esm --platform=browser",
+		"build:prod": "npm run build -- --minify"
+	},
+	"devDependencies": {
+		"@types/chrome": "^0.0.287",
+		"esbuild": "^0.28.1",
+		"typescript": "^5.9.3"
+	}
+}
