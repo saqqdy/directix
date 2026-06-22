@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2026-06-21
+
+### Developer Experience Enhancement Release
+
+### Added
+
+#### VS Code Extension
+
+- DirectiveCompletionProvider with parameter, modifier, and documentation hints
+- Hover tooltips showing directive description, parameters, modifiers, and code examples
+- DefinitionProvider for click-to-navigate to online documentation
+- ConfigEditor — visual configuration editor with directive enable/disable, search, and filtering
+- Code snippets for all 57 directives (`snippets.json`)
+- Commands: `directix.openDocs`, `directix.openConfigEditor`, `directix.showPerfReport`, `directix.clearPerfData`, `directix.inspectState`
+
+#### VS Code Configuration
+
+- `directix.enableIntelliSense` — toggle completion & hover (default: true)
+- `directix.showDocumentation` — show docs in hover (default: true)
+- `directix.enableDiagnostics` — real-time diagnostics (default: true)
+- `directix.enablePerformanceTracking` — perf tracking (default: false)
+- `directix.diagnostics.debounceMs` — diagnostics debounce (default: 500)
+- `directix.diagnostics.checkDuplicates` — warn duplicate directives (default: true)
+- `directix.diagnostics.checkConflicts` — warn conflicting directive pairs (default: true)
+- `directix.diagnostics.checkSSRCompatibility` — warn SSR incompatibility (default: true)
+
+#### Debugging Tools
+
+- DiagnosticsProvider — missing params, SSR warnings, deprecated patterns, duplicates, conflicts
+- PerformanceAnalyzer — mount/update/unmount timing, grouped stats, optimization recommendations
+- StateInspector — searchable directive list, category browsing, SSR indicators, param details
+
+#### Browser Extension (Skeleton)
+
+- `packages/browser-extension` — Chrome MV3 DevTools extension
+  - Background service worker for message routing
+  - Content script for DOM scanning and directive collection
+  - DevTools panel with directive list, performance metrics, issue detection
+  - PerformanceAnalyzer and StateInspector modules
+
+#### Documentation
+
+- Interactive examples: Lazy, Permission, Long Press, Context Menu, Watermark, Infinite Scroll & Virtual List
+- Best Practices Guide: directive selection, performance, SSR, security, TypeScript, Vue 2 migration, conflict avoidance
+
+---
+
 ## [2.3.0] - 2026-06-20
 
 ### Internationalization Expansion Release

@@ -25,6 +25,31 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with 8 language translations (Chinese, English, Japanese, Korean, French, German, Spanish, Russian)
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
+## What's New in v2.4.0
+
+### Developer Experience Enhancement
+
+This release focuses on enhancing debugging capabilities, improving the VS Code extension, and adding interactive documentation.
+
+**VS Code Extension Enhancements:**
+- 🔧 DirectiveCompletionProvider - Intelligent directive completion with parameters, modifiers, and documentation
+- 💡 HoverProvider - Rich hover tooltips with descriptions, parameters, modifiers, and code examples
+- 🔗 DefinitionProvider - Click-to-navigate to online documentation
+- 🎛️ ConfigEditor - Visual configuration editor with directive enable/disable, search, and filtering
+- 📝 snippets.json - Code snippets for all 57 directives
+
+**Debugging Tools:**
+- 🩺 DiagnosticsProvider - Real-time diagnostics (missing required params, SSR compatibility, deprecated patterns, duplicate/conflicting directives)
+- 📊 PerformanceAnalyzer - Directive performance profiling with grouped stats and optimization recommendations
+- 🔍 StateInspector - Searchable directive list with category browsing and parameter details
+- 🌐 Browser Extension (DevTools) - Chrome DevTools panel skeleton for DOM scanning, performance analysis, and state inspection
+
+**Documentation:**
+- 📖 Interactive examples for Lazy Loading, Permission Control, Long Press, Context Menu, Watermark, Infinite Scroll & Virtual List
+- ✅ Best Practices Guide (directive selection, performance, SSR, security, TypeScript, Vue 2 migration)
+
+---
+
 ## What's New in v2.3.0
 
 ### Internationalization Expansion
