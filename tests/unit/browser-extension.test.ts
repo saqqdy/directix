@@ -61,8 +61,8 @@ describe('Browser Extension - StateInspector', () => {
 
 		const states = StateInspector.inspectElement(el)
 		expect(states.length).toBe(2)
-		expect(states[0].name).toBe('v-debounce')
-		expect(states[1].name).toBe('v-focus')
+		expect(states[0].name).toBe('debounce')
+		expect(states[1].name).toBe('focus')
 	})
 
 	it('should parse modifiers', () => {

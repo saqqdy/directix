@@ -61,6 +61,7 @@ export default defineConfig({
 			'@directix/core': resolve(__dirname, 'packages/core/src'),
 			'@directix/shared': resolve(__dirname, 'packages/shared/src'),
 			'@directix/i18n': resolve(__dirname, 'packages/i18n/src'),
+			vscode: resolve(__dirname, 'tests/__mocks__/vscode.ts'),
 		},
 	},
 })

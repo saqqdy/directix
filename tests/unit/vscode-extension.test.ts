@@ -31,12 +31,12 @@ describe('DirectiveCompletionProvider', () => {
 	it('should cover all categories', async () => {
 		const { directives } = await import('../../packages/vscode-extension/src/data/directives')
 		const categories = new Set(directives.map(d => d.category))
-		expect(categories.has('Event')).toBe(true)
-		expect(categories.has('Form')).toBe(true)
-		expect(categories.has('Visibility')).toBe(true)
-		expect(categories.has('Scroll')).toBe(true)
-		expect(categories.has('Security')).toBe(true)
-		expect(categories.has('UI')).toBe(true)
+		expect(categories.has('事件')).toBe(true)
+		expect(categories.has('表单')).toBe(true)
+		expect(categories.has('可见性')).toBe(true)
+		expect(categories.has('滚动')).toBe(true)
+		expect(categories.has('安全')).toBe(true)
+		expect(categories.has('效果')).toBe(true)
 	})
 })
 
@@ -55,10 +55,10 @@ describe('PerformanceAnalyzer', () => {
 		const analyzer = new PerformanceAnalyzer()
 		analyzer.record({ directive: 'v-debounce', file: 'test.vue', line: 1, mountTime: 5.2 })
 		analyzer.record({ directive: 'v-debounce', file: 'test.vue', line: 10, updateTime: 3.1 })
-		expect(analyzer.perfData.length).toBe(2)
+		expect((analyzer as any).perfData.length).toBe(2)
 	})
 
-	it('should have activate, record, and showReport', async () => {
+	it('should have activate, record, and analyzeDocument', async () => {
 		const { PerformanceAnalyzer } = await import('../../packages/vscode-extension/src/features/PerfAnalyzer')
 		const analyzer = new PerformanceAnalyzer()
 		expect(typeof analyzer.activate).toBe('function')
