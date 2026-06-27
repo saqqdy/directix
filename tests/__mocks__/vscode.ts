@@ -43,7 +43,7 @@ export const commands = {
 }
 
 export class Disposable {
-	dispose() {}
+	dispose(): void {}
 }
 
 export class Diagnostic {
