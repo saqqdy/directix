@@ -63,6 +63,33 @@ function handleSearch(event) {
 </script>
 ```
 
+## v2.5.0 Features
+
+- 🖥️ **Browser Extension DevTools Panel** - Full-featured DevTools UI with Directives, Performance, Issues, and Export tabs
+- 🔍 **Real-time Directive Monitoring** - MutationObserver auto-detects DOM changes
+- 📊 **Performance Charts** - Visual bar charts showing mount/update/unmount timing
+- 📤 **Diagnostic Report Export** - JSON, CSV, HTML export formats
+- ⚡ **VS Code Bottleneck Detection** - Performance bottleneck warnings with optimization suggestions
+- 🔎 **MiniSearch Optimization** - Enhanced local search with boosted titles, fuzzy matching
+- ▶️ **One-Click Run Button** - Playground now has "Run" button to open generated code
+
+## v2.4.0 Features
+
+- 🛠️ **VS Code Extension Enhancements** - DirectiveCompletionProvider, hover tooltips, config editor, code snippets
+- 🐛 **Debugging Tools** - DiagnosticsProvider, PerformanceAnalyzer, StateInspector
+- 📚 **Interactive Examples** - Lazy, Permission, Long Press, Context Menu, Watermark demos
+- 📖 **Best Practices Guide** - Directive selection, performance, SSR, security guidelines
+
+## v2.3.0 Features
+
+- 🌍 **5 New Languages** - Korean, French, German, Spanish, Russian translations
+- 🔧 **Locale Utilities** - LocaleDetector, LocaleLoader for dynamic loading
+
+## v2.2.0 Features
+
+- ⚡ **Performance Optimization** - Event delegation, batch processing, memory leak detection
+- 📦 **Bundle Size Optimization** - Single directive ≤ 1KB gzip
+
 ## v2.1.0 Features
 
 - 🧩 **Enhanced Web Components** - Shadow DOM styles, lifecycle hooks, slot projection

@@ -63,6 +63,33 @@ function handleSearch(event) {
 </script>
 ```
 
+## v2.5.0 功能
+
+- 🖥️ **浏览器扩展 DevTools 面板** - 全功能 DevTools UI，包含 Directives、Performance、Issues、Export 四个标签页
+- 🔍 **实时指令监控** - MutationObserver 自动检测 DOM 变化
+- 📊 **性能图表** - 可视化柱状图显示挂载/更新/卸载时间
+- 📤 **诊断报告导出** - JSON、CSV、HTML 导出格式
+- ⚡ **VS Code 瓶颈检测** - 性能瓶颈警告，附带优化建议
+- 🔎 **MiniSearch 优化** - 增强本地搜索，标题加权、模糊匹配
+- ▶️ **一键运行按钮** - Playground 现有"运行"按钮打开生成的代码
+
+## v2.4.0 功能
+
+- 🛠️ **VS Code 扩展增强** - DirectiveCompletionProvider、悬浮文档、配置编辑器、代码片段
+- 🐛 **调试工具** - DiagnosticsProvider、PerformanceAnalyzer、StateInspector
+- 📚 **交互式示例** - Lazy、Permission、Long Press、Context Menu、Watermark 示例
+- 📖 **最佳实践指南** - 指令选择、性能、SSR、安全指南
+
+## v2.3.0 功能
+
+- 🌍 **5 种新语言** - 韩语、法语、德语、西班牙语、俄语翻译
+- 🔧 **Locale 工具** - LocaleDetector、LocaleLoader 动态加载
+
+## v2.2.0 功能
+
+- ⚡ **性能优化** - 事件委托、批量处理、内存泄漏检测
+- 📦 **体积优化** - 单指令 ≤ 1KB gzip
+
 ## v2.1.0 功能
 
 - 🧩 **增强 Web Components** - Shadow DOM 样式、生命周期钩子、插槽投射

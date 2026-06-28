@@ -39,7 +39,7 @@ features:
     details: 支持 Nuxt 等 SSR 框架，无水合不匹配问题。
   - icon: 🌐
     title: 国际化支持
-    details: 内置国际化系统，支持英文、中文、日文等多语言。
+    details: 内置国际化系统，支持英文、中文、日文、韩语、法语、德语、西班牙语、俄语等 8 种语言。
   - icon: 🔌
     title: 插件系统
     details: 可扩展的插件架构，支持生命周期钩子，轻松创建自定义指令。
@@ -49,4 +49,7 @@ features:
   - icon: ⚠️
     title: 统一警告系统
     details: 一致的警告系统，可配置日志级别，更好的调试体验。
+  - icon: 🛠️
+    title: DevTools 集成
+    details: VS Code 扩展和 Chrome DevTools 面板，实时指令监控、性能图表、诊断导出。
 ---

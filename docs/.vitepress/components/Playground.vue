@@ -231,6 +231,12 @@ function copyCode() {
 		copied.value = false
 	}, 2000)
 }
+
+function runInPlayground() {
+	const encodedCode = encodeURIComponent(generatedCode.value)
+	const playgroundUrl = `/playground.html?code=${encodedCode}&directive=${selectedDirective.value}`
+	window.open(playgroundUrl, '_blank')
+}
 </script>
 
 <template>
@@ -295,6 +301,10 @@ function copyCode() {
 			<button class="copy-btn" @click="copyCode">
 				<span v-if="copied">✓ Copied!</span>
 				<span v-else>📋 Copy</span>
+			</button>
+
+			<button class="run-btn" @click="runInPlayground">
+				▶ Run
 			</button>
 		</div>
 
@@ -421,6 +431,22 @@ function copyCode() {
 .copy-btn:hover {
 	background: var(--vp-c-bg-soft);
 	border-color: var(--vp-c-brand-1);
+}
+
+.run-btn {
+	padding: 8px 16px;
+	font-size: 13px;
+	background: var(--vp-c-brand-1);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	margin-left: 8px;
+	transition: all 0.2s;
+}
+
+.run-btn:hover {
+	background: var(--vp-c-brand-2);
 }
 
 .code-output {

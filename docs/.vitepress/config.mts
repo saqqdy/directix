@@ -45,6 +45,27 @@ export default defineConfig({
 				],
 				outline: { label: 'On this page' },
 				returnToTopLabel: 'Return to top',
+				search: {
+					provider: 'local',
+					options: {
+						minisearch: {
+							searchOptions: {
+								boost: { title: 4, text: 2, titles: 1 },
+								fuzzy: 0.2,
+								maxFuzzy: 4,
+								prefix: true,
+							},
+							indexOptions: {
+								boost: { title: 4, text: 2, titles: 1 },
+							},
+						},
+						translations: {
+							button: 'Search Directix docs',
+							placeholder: 'Search directives, guides, API...',
+							noResults: 'No results found. Try searching for a directive name like "debounce" or "lazy".',
+						},
+					},
+				},
 				sidebar: {
 					'/api/': [
 						{
@@ -355,6 +376,16 @@ export default defineConfig({
 				],
 				outline: { label: '页面导航' },
 				returnToTopLabel: '回到顶部',
+				search: {
+					provider: 'local',
+					options: {
+						translations: {
+							button: '搜索 Directix 文档',
+							placeholder: '搜索指令、指南、API...',
+							noResults: '未找到结果。请尝试搜索指令名称如 "debounce" 或 "lazy"。',
+						},
+					},
+				},
 				sidebar: {
 					'/zh/api/': [
 						{
