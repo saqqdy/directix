@@ -39,7 +39,7 @@ features:
     details: Works seamlessly with Nuxt and other SSR frameworks. No hydration mismatches.
   - icon: 🌐
     title: i18n Support
-    details: Built-in internationalization system with 8 languages: English, Chinese, Japanese, Korean, French, German, Spanish, and Russian.
+    details: "Built-in internationalization system with 8 languages: English, Chinese, Japanese, Korean, French, German, Spanish, and Russian."
   - icon: ♿
     title: Accessibility (A11y)
     details: Full ARIA support, screen reader announcements, keyboard navigation, and focus management.
