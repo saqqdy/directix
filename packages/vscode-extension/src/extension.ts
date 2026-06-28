@@ -107,6 +107,77 @@ export function activate(context: vscode.ExtensionContext): void {
 		}),
 	)
 
+	// Additional commands for v2.5.0
+	context.subscriptions.push(
+		vscode.commands.registerCommand('directix.inspectState', () => {
+			stateInspector.showQuickPick()
+		}),
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('directix.showBottlenecks', () => {
+			perfAnalyzer.showBottlenecks()
+		}),
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('directix.openDirectiveDocs', () => {
+			const activeEditor = vscode.window.activeTextEditor
+			if (!activeEditor) return
+			const position = activeEditor.selection.active
+			const range = activeEditor.document.getWordRangeAtPosition(position, /v-[a-z-]+/)
+			if (!range) {
+				vscode.window.showInformationMessage('[Directix] No directive found at cursor position.')
+				return
+			}
+			const word = activeEditor.document.getText(range)
+			const docUrl = `https://directix.saqqdy.com/directives/${word.replace('v-', '')}.html`
+			vscode.env.openExternal(vscode.Uri.parse(docUrl))
+		}),
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('directix.searchDocs', async () => {
+			const query = await vscode.window.showInputBox({
+				placeHolder: 'Enter directive name or keyword...',
+				title: 'Search Directix Documentation',
+			})
+			if (query) {
+				const docUrl = `https://directix.saqqdy.com/search.html?q=${encodeURIComponent(query)}`
+				vscode.env.openExternal(vscode.Uri.parse(docUrl))
+			}
+		}),
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('directix.insertDirective', async () => {
+			const activeEditor = vscode.window.activeTextEditor
+
+			interface DirectiveItem extends vscode.QuickPickItem {
+				directive: { name: string, description: string, category: string, since: string }
+			}
+
+			const items: DirectiveItem[] = directives.map((d: any) => ({
+				description: d.description,
+				detail: `Category: ${d.category} | Since: ${d.since}`,
+				directive: d,
+				label: d.name,
+			}))
+
+			const selected = await vscode.window.showQuickPick(items, {
+				placeHolder: 'Select a directive to insert...',
+				title: 'Insert Directix Directive',
+			})
+
+			if (selected && activeEditor) {
+				const snippet = new vscode.SnippetString(
+					`${selected.directive.name}="${1}"`,
+				)
+				activeEditor.insertSnippet(snippet)
+			}
+		}),
+	)
+
 	// 9. Analyze already-open documents for perf tracking
 	vscode.workspace.textDocuments.forEach(doc => {
 		perfAnalyzer.analyzeDocument(doc)

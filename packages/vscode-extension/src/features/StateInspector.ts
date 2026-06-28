@@ -7,9 +7,27 @@ export class StateInspector {
 	activate(subscriptions: vscode.Disposable[]): void {
 		subscriptions.push(
 			vscode.commands.registerCommand('directix.inspectState', () => {
-				this.showInspector()
+				this.showQuickPick()
 			}),
 		)
+	}
+
+	/** Show a QuickPick for quick directive state inspection */
+	showQuickPick(): void {
+		const items = directives.map(d => ({
+			label: d.name,
+			description: d.description,
+			detail: `Category: ${d.category} | SSR: ${d.ssr ? '✅' : '❌'} | Since: ${d.since}`,
+		}))
+
+		vscode.window.showQuickPick(items, {
+			title: '🎯 Directix State Inspector',
+			placeHolder: 'Select a directive to inspect...',
+		}).then(selected => {
+			if (selected) {
+				this.showInspector()
+			}
+		})
 	}
 
 	dispose(): void {

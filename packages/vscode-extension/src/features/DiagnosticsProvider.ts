@@ -78,6 +78,12 @@ export class DiagnosticsProvider {
 
 			diagnostics.push(...this.checkDeprecatedPatterns(line, pos, directiveName))
 
+			// Call new enhanced diagnostics methods
+			diagnostics.push(...this.checkModifierCombos(meta, line, pos, directiveName))
+			diagnostics.push(...this.checkMemoryLeaks(line, pos, directiveName))
+			diagnostics.push(...this.checkSSRHydration(pos, directiveName))
+			diagnostics.push(...this.checkAccessibility(line, pos, directiveName))
+
 			// Track directive per element for conflict/duplicate checks
 			const elementKey = this.getElementKey(text, offset)
 			if (elementKey) {
@@ -221,6 +227,162 @@ export class DiagnosticsProvider {
 					),
 				)
 			}
+		}
+
+		return diagnostics
+	}
+
+	/** Check for incorrect modifier combinations */
+	private checkModifierCombos(
+		meta: (typeof directives)[number],
+		line: string,
+		pos: vscode.Position,
+		directiveName: string,
+	): vscode.Diagnostic[] {
+		const diagnostics: vscode.Diagnostic[] = []
+		const modifiers = this.extractModifiers(line, directiveName)
+
+		// Check for invalid modifier combinations
+		const invalidCombos: Record<string, string[]> = {
+			'v-debounce': ['immediate', 'lazy'],
+			'v-throttle': ['leading', 'trailing'],
+			'v-lazy': ['once', 'preload'],
+			'v-intersect': ['once', 'repeat'],
+		}
+
+		if (invalidCombos[directiveName]) {
+			const forbidden = invalidCombos[directiveName]
+			if (modifiers.some(m => forbidden.includes(m))) {
+				const range = new vscode.Range(pos, pos.translate(0, directiveName.length + modifiers.map(m => `.${m}`).join('').length))
+				diagnostics.push(
+					new vscode.Diagnostic(
+						range,
+						`[Directix] ${directiveName}: Modifier combination may cause unexpected behavior.`,
+						vscode.DiagnosticSeverity.Warning,
+					),
+				)
+			}
+		}
+
+		// Check for unsupported modifiers
+		if (meta.modifiers.length > 0 && modifiers.length > 0) {
+			const supported = meta.modifiers.map(m => m.name)
+			for (const mod of modifiers) {
+				if (!supported.includes(mod) && !['stop', 'prevent', 'capture', 'once', 'passive', 'self'].includes(mod)) {
+					const modStart = line.indexOf(`.${mod}`, pos.character)
+					if (modStart !== -1) {
+						const modPos = new vscode.Position(pos.line, modStart)
+						const range = new vscode.Range(modPos, modPos.translate(0, mod.length + 1))
+						diagnostics.push(
+							new vscode.Diagnostic(
+								range,
+								`[Directix] ${directiveName}.${mod}: Modifier "${mod}" is not supported by this directive.`,
+								vscode.DiagnosticSeverity.Information,
+							),
+						)
+					}
+				}
+			}
+		}
+
+		return diagnostics
+	}
+
+	/** Extract modifiers from directive attribute */
+	private extractModifiers(line: string, directiveName: string): string[] {
+		const match = line.match(new RegExp(`${directiveName}\\.([\\w-]+(?:\\.([\\w-]+))*)`))
+		if (!match) return []
+		return match[1].split('.')
+	}
+
+	/** Check for potential memory leak patterns */
+	private checkMemoryLeaks(
+		line: string,
+		pos: vscode.Position,
+		directiveName: string,
+	): vscode.Diagnostic[] {
+		const diagnostics: vscode.Diagnostic[] = []
+
+		// Directives that commonly leak if cleanup is missing
+		const leakRiskDirectives = ['v-click-outside', 'v-scroll', 'v-resize', 'v-intersect', 'v-mutation', 'v-draggable', 'v-touch']
+
+		if (leakRiskDirectives.includes(directiveName)) {
+			const valueMatch = line.match(new RegExp(`${directiveName}="([^"]*)"|${directiveName}:([\\w-]+)="([^"]*)"`))
+			if (valueMatch) {
+				const value = valueMatch[1] || valueMatch[3]
+				if (value && !value.includes('cleanup') && !value.includes('destroy') && !value.includes('disconnect')) {
+					const range = new vscode.Range(pos, pos.translate(0, directiveName.length))
+					diagnostics.push(
+						new vscode.Diagnostic(
+							range,
+							`[Directix] ${directiveName}: Ensure cleanup logic is provided to prevent memory leaks.`,
+							vscode.DiagnosticSeverity.Information,
+						),
+					)
+				}
+			}
+		}
+
+		return diagnostics
+	}
+
+	/** Check for SSR hydration issues */
+	private checkSSRHydration(
+		pos: vscode.Position,
+		directiveName: string,
+	): vscode.Diagnostic[] {
+		const diagnostics: vscode.Diagnostic[] = []
+
+		// Directives that modify DOM structure - risky for SSR
+		const domStructureDirectives = ['v-ripple', 'v-tooltip', 'v-watermark', 'v-skeleton', 'v-draggable']
+
+		if (domStructureDirectives.includes(directiveName)) {
+			const range = new vscode.Range(pos, pos.translate(0, directiveName.length))
+			diagnostics.push(
+				new vscode.Diagnostic(
+					range,
+					`[Directix] ${directiveName}: This directive modifies DOM structure. Ensure proper SSR hydration handling.`,
+					vscode.DiagnosticSeverity.Information,
+				),
+			)
+		}
+
+		return diagnostics
+	}
+
+	/** Check for accessibility concerns */
+	private checkAccessibility(
+		line: string,
+		pos: vscode.Position,
+		directiveName: string,
+	): vscode.Diagnostic[] {
+		const diagnostics: vscode.Diagnostic[] = []
+
+		// v-hover on interactive elements should have focus styles
+		if (directiveName === 'v-hover') {
+			const isInteractive = line.includes('button') || line.includes('a href') || line.includes('@click')
+			if (isInteractive) {
+				const range = new vscode.Range(pos, pos.translate(0, directiveName.length))
+				diagnostics.push(
+					new vscode.Diagnostic(
+						range,
+						`[Directix] v-hover: Consider also implementing focus styles for keyboard accessibility.`,
+						vscode.DiagnosticSeverity.Information,
+					),
+				)
+			}
+		}
+
+		// v-long-press should have alternative trigger
+		if (directiveName === 'v-long-press') {
+			const range = new vscode.Range(pos, pos.translate(0, directiveName.length))
+			diagnostics.push(
+				new vscode.Diagnostic(
+					range,
+					`[Directix] v-long-press: Provide an alternative interaction method for accessibility.`,
+					vscode.DiagnosticSeverity.Information,
+				),
+			)
 		}
 
 		return diagnostics
