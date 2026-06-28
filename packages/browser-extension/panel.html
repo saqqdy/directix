@@ -4,63 +4,378 @@
 	<meta charset="utf-8" />
 	<title>Directix</title>
 	<style>
-		* { box-sizing: border-box; margin: 0; padding: 0; }
-		body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; padding: 12px; color: #e0e0e0; background: #1e1e1e; }
-		h1 { font-size: 16px; margin-bottom: 8px; }
-		.status { font-size: 12px; color: #888; margin-bottom: 12px; }
-		.section { margin-bottom: 16px; }
-		.section h2 { font-size: 13px; color: #42b883; margin-bottom: 6px; }
-		.directive-list { list-style: none; }
-		.directive-list li { padding: 6px 8px; border-radius: 4px; margin-bottom: 4px; background: #2d2d2d; cursor: pointer; }
-		.directive-list li:hover { background: #3a3a3a; }
-		.directive-name { font-weight: 600; color: #42b883; font-family: monospace; }
-		.directive-element { font-size: 12px; color: #888; margin-left: 8px; }
-		.empty { text-align: center; padding: 32px; color: #666; }
+		*{box-sizing:border-box;margin:0;padding:0}
+		body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;color:#e0e0e0;background:#1e1e1e;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+		.header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#252526;border-bottom:1px solid #333;flex-shrink:0}
+		.header h1{font-size:14px;font-weight:600}
+		.header .status{font-size:11px;color:#888}
+		.header .status.connected{color:#42b883}
+		.header .btn{padding:3px 10px;border-radius:3px;border:1px solid #555;background:#333;color:#ccc;cursor:pointer;font-size:11px}
+		.header .btn:hover{background:#444}
+		.tabs{display:flex;background:#252526;border-bottom:1px solid #333;flex-shrink:0}
+		.tab{padding:6px 16px;cursor:pointer;font-size:12px;color:#888;border-bottom:2px solid transparent}
+		.tab:hover{color:#ccc}
+		.tab.active{color:#42b883;border-bottom-color:#42b883}
+		.tab .badge{font-size:10px;background:#42b883;color:#1e1e1e;border-radius:8px;padding:1px 6px;margin-left:4px}
+		.tab .badge.warn{background:#fa0}
+		.tab .badge.err{background:#f44}
+		.search-bar{display:flex;align-items:center;padding:6px 12px;background:#2d2d2d;border-bottom:1px solid #333;flex-shrink:0}
+		.search-bar input{flex:1;background:#1e1e1e;border:1px solid #444;border-radius:3px;padding:4px 8px;color:#e0e0e0;font-size:12px;outline:none}
+		.search-bar input:focus{border-color:#42b883}
+		.search-bar .filter-chips{display:flex;gap:4px;margin-left:8px;flex-wrap:wrap;max-width:60%}
+		.chip{font-size:10px;padding:2px 8px;border-radius:10px;cursor:pointer;background:#333;color:#aaa;border:1px solid #444;white-space:nowrap}
+		.chip.active{background:#42b883;color:#1e1e1e;border-color:#42b883}
+		.content{flex:1;overflow-y:auto;padding:8px 12px}
+		.panel{display:none}
+		.panel.active{display:block}
+		.directive-item{display:flex;align-items:center;padding:6px 8px;border-radius:4px;margin-bottom:2px;background:#2d2d2d;cursor:pointer;transition:background .15s}
+		.directive-item:hover{background:#3a3a3a}
+		.directive-item .name{font-weight:600;color:#42b883;font-family:monospace;min-width:140px}
+		.directive-item .element{font-size:11px;color:#888;margin-left:8px}
+		.directive-item .modifiers{display:flex;gap:2px;margin-left:8px}
+		.directive-item .mod{font-size:10px;background:#3a3a3a;color:#aaa;padding:1px 5px;border-radius:3px}
+		.directive-item .state{margin-left:auto;font-size:11px}
+		.directive-item .state.mounted{color:#42b883}
+		.directive-item .state.error{color:#f44}
+		.directive-item .value{font-size:11px;color:#999;margin-left:8px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+		.chart-container{background:#2d2d2d;border-radius:4px;padding:12px;margin-bottom:12px}
+		.chart-title{font-size:12px;color:#42b883;margin-bottom:8px;font-weight:600}
+		.bar-chart{display:flex;flex-direction:column;gap:4px}
+		.bar-row{display:flex;align-items:center;gap:8px}
+		.bar-label{width:120px;font-size:11px;color:#aaa;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+		.bar-track{flex:1;height:16px;background:#1e1e1e;border-radius:3px;position:relative;overflow:hidden}
+		.bar-fill{height:100%;border-radius:3px;transition:width .3s ease;position:absolute;left:0;top:0}
+		.bar-fill.mount{background:#42b883}
+		.bar-fill.update{background:#42a5f5}
+		.bar-fill.unmount{background:#ff7043}
+		.bar-value{font-size:10px;color:#888;min-width:50px;text-align:right}
+		.legend{display:flex;gap:16px;margin-top:8px;font-size:11px;color:#888}
+		.legend span{display:flex;align-items:center;gap:4px}
+		.legend .dot{width:8px;height:8px;border-radius:2px}
+		.issue-item{padding:8px;border-radius:4px;margin-bottom:4px;background:#2d2d2d;border-left:3px solid}
+		.issue-item.error{border-left-color:#f44}
+		.issue-item.warning{border-left-color:#fa0}
+		.issue-item.info{border-left-color:#4af}
+		.issue-item .issue-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+		.issue-item .severity{font-size:10px;padding:1px 6px;border-radius:3px;text-transform:uppercase;font-weight:600}
+		.issue-item .severity.high{background:#f44;color:#1e1e1e}
+		.issue-item .severity.medium{background:#fa0;color:#1e1e1e}
+		.issue-item .severity.low{background:#4af;color:#1e1e1e}
+		.issue-item .directive{color:#42b883;font-family:monospace;font-size:12px}
+		.issue-item .message{font-size:12px;color:#ccc}
+		.issue-item .suggestion{font-size:11px;color:#888;margin-top:4px}
+		.export-section{background:#2d2d2d;border-radius:4px;padding:16px;margin-bottom:12px}
+		.export-section h3{font-size:13px;color:#42b883;margin-bottom:12px}
+		.export-options{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+		.export-options label{display:flex;align-items:center;gap:6px;font-size:12px;color:#ccc;cursor:pointer}
+		.format-buttons{display:flex;gap:8px}
+		.format-btn{padding:8px 16px;border-radius:4px;border:1px solid #555;background:#333;color:#ccc;cursor:pointer;font-size:12px}
+		.format-btn:hover{background:#444}
+		.format-btn.primary{background:#42b883;color:#1e1e1e;border-color:#42b883}
+		.empty{text-align:center;padding:48px;color:#666}
+		.empty .icon{font-size:32px;margin-bottom:8px}
+		::-webkit-scrollbar{width:6px}
+		::-webkit-scrollbar-track{background:transparent}
+		::-webkit-scrollbar-thumb{background:#444;border-radius:3px}
+		::-webkit-scrollbar-thumb:hover{background:#555}
 	</style>
 </head>
 <body>
-	<h1>🎯 Directix DevTools</h1>
-	<p class="status" id="status">Connecting...</p>
-	<div class="section">
-		<h2>Directive Instances</h2>
-		<ul class="directive-list" id="directives"></ul>
-		<p class="empty" id="empty" style="display:none">No Directix directives detected.</p>
+	<div class="header">
+		<h1>🎯 Directix</h1>
+		<span class="status" id="status">Connecting...</span>
+		<button class="btn" id="refreshBtn" title="Refresh scan">🔄 Refresh</button>
 	</div>
-	<div class="section">
-		<h2>Performance</h2>
-		<pre id="perf" style="font-size:12px;color:#aaa;background:#2d2d2d;padding:8px;border-radius:4px;overflow:auto;max-height:200px;"></pre>
+	<div class="tabs">
+		<div class="tab active" data-tab="directives">Directives <span class="badge" id="directiveCount">0</span></div>
+		<div class="tab" data-tab="performance">Performance</div>
+		<div class="tab" data-tab="issues">Issues <span class="badge err" id="issueCount" style="display:none">0</span></div>
+		<div class="tab" data-tab="export">Export</div>
 	</div>
-	<div class="section">
-		<h2>Issues</h2>
-		<ul id="issues" style="list-style:none;"></ul>
+	<div class="search-bar" id="searchBar">
+		<input type="text" id="searchInput" placeholder="Search directives..." />
+		<div class="filter-chips" id="filterChips"></div>
+	</div>
+	<div class="content">
+		<div class="panel active" id="panel-directives">
+			<div id="directiveList"></div>
+			<div class="empty" id="directivesEmpty" style="display:none">
+				<div class="icon">🔍</div>No Directix directives detected on this page.
+			</div>
+		</div>
+		<div class="panel" id="panel-performance">
+			<div class="chart-container">
+				<div class="chart-title">Mount / Update / Unmount Timing</div>
+				<div class="bar-chart" id="perfChart"></div>
+				<div class="legend">
+					<span><span class="dot" style="background:#42b883"></span>Mount</span>
+					<span><span class="dot" style="background:#42a5f5"></span>Update</span>
+					<span><span class="dot" style="background:#ff7043"></span>Unmount</span>
+				</div>
+			</div>
+			<div class="chart-container">
+				<div class="chart-title">Summary</div>
+				<pre id="perfSummary" style="font-size:11px;color:#aaa;line-height:1.6"></pre>
+			</div>
+			<div class="empty" id="perfEmpty">
+				<div class="icon">📊</div>No performance data yet. Interact with the page to collect metrics.
+			</div>
+		</div>
+		<div class="panel" id="panel-issues">
+			<div id="issueList"></div>
+			<div class="empty" id="issuesEmpty" style="display:none">
+				<div class="icon">✅</div>No issues detected!
+			</div>
+		</div>
+		<div class="panel" id="panel-export">
+			<div class="export-section">
+				<h3>Export Diagnostic Report</h3>
+				<div class="export-options">
+					<label><input type="checkbox" id="exportTimestamps" checked /> Include timestamps</label>
+					<label><input type="checkbox" id="exportPerformance" checked /> Include performance</label>
+					<label><input type="checkbox" id="exportIssues" checked /> Include issues</label>
+				</div>
+				<div class="format-buttons">
+					<button class="format-btn primary" data-format="json">JSON</button>
+					<button class="format-btn" data-format="csv">CSV</button>
+					<button class="format-btn" data-format="html">HTML</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script>
-		(function () {
-			var tabId = chrome.devtools.inspectedWindow.tabId
-			var statusEl = document.getElementById('status')
-			var listEl = document.getElementById('directives')
-			var emptyEl = document.getElementById('empty')
+	(function() {
+		var directives = []
+		var issues = []
+		var perfMetrics = []
+		var activeTab = 'directives'
+		var searchQuery = ''
+		var activeFilters = new Set()
 
-			statusEl.textContent = 'Tab ID: ' + tabId
+		var statusEl = document.getElementById('status')
+		var directiveListEl = document.getElementById('directiveList')
+		var directivesEmptyEl = document.getElementById('directivesEmpty')
+		var directiveCountEl = document.getElementById('directiveCount')
+		var issueListEl = document.getElementById('issueList')
+		var issuesEmptyEl = document.getElementById('issuesEmpty')
+		var issueCountEl = document.getElementById('issueCount')
+		var perfChartEl = document.getElementById('perfChart')
+		var perfSummaryEl = document.getElementById('perfSummary')
+		var perfEmptyEl = document.getElementById('perfEmpty')
+		var searchInput = document.getElementById('searchInput')
+		var searchBar = document.getElementById('searchBar')
+		var filterChipsEl = document.getElementById('filterChips')
+		var refreshBtn = document.getElementById('refreshBtn')
 
-			function refresh() {
-				chrome.tabs.sendMessage(tabId, { type: 'inspect', target: 'content' }, function (response) {
-					if (!response || !response.payload) {
-						emptyEl.style.display = ''
-						listEl.innerHTML = ''
-						return
-					}
-					var directives = response.payload
-					emptyEl.style.display = directives.length ? 'none' : ''
-					listEl.innerHTML = directives.map(function (d) {
-						return '<li><span class="directive-name">' + d.name + '</span><span class="directive-element">' + d.element + '</span></li>'
-					}).join('')
+		document.querySelectorAll('.tab').forEach(function(tab) {
+			tab.addEventListener('click', function() {
+				activeTab = this.dataset.tab
+				document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active') })
+				this.classList.add('active')
+				document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active') })
+				document.getElementById('panel-' + activeTab).classList.add('active')
+				searchBar.style.display = activeTab === 'directives' ? 'flex' : 'none'
+			})
+		})
+
+		searchInput.addEventListener('input', function() {
+			searchQuery = this.value.toLowerCase()
+			renderDirectives()
+		})
+
+		refreshBtn.addEventListener('click', function() { requestScan() })
+
+		document.querySelectorAll('.format-btn').forEach(function(btn) {
+			btn.addEventListener('click', function() { downloadExport(this.dataset.format) })
+		})
+
+		var tabId = chrome.devtools.inspectedWindow.tabId
+		statusEl.textContent = 'Tab: ' + tabId
+		statusEl.classList.add('connected')
+
+		chrome.runtime.onMessage.addListener(function(msg) { handleMessage(msg) })
+
+		window.__directix_devtools_shown = function() { requestScan() }
+
+		function requestScan() {
+			chrome.tabs.sendMessage(tabId, { type: 'scan', target: 'content' }, function(response) {
+				if (chrome.runtime.lastError) {
+					statusEl.textContent = 'Disconnected'
+					statusEl.classList.remove('connected')
+					return
+				}
+				if (response && response.payload) {
+					handleMessage({ type: 'directives-update', payload: response.payload })
+				}
+			})
+		}
+
+		function handleMessage(msg) {
+			switch (msg.type) {
+				case 'directives-update':
+					directives = msg.payload.directives || []
+					issues = msg.payload.issues || []
+					renderDirectives()
+					renderIssues()
+					updateFilterChips()
+					break
+				case 'performance-update':
+					perfMetrics = msg.payload || []
+					renderPerformance()
+					break
+			}
+		}
+
+		function renderDirectives() {
+			var filtered = directives
+			if (searchQuery) {
+				filtered = filtered.filter(function(d) {
+					return d.name.toLowerCase().indexOf(searchQuery) !== -1
+						|| d.element.toLowerCase().indexOf(searchQuery) !== -1
+						|| (d.value && d.value.toLowerCase().indexOf(searchQuery) !== -1)
+						|| d.modifiers.some(function(m) { return m.toLowerCase().indexOf(searchQuery) !== -1 })
 				})
 			}
+			if (activeFilters.size > 0) {
+				filtered = filtered.filter(function(d) { return activeFilters.has(d.name) })
+			}
+			directiveCountEl.textContent = directives.length
+			if (filtered.length === 0) {
+				directiveListEl.innerHTML = ''
+				directivesEmptyEl.style.display = ''
+				return
+			}
+			directivesEmptyEl.style.display = 'none'
+			directiveListEl.innerHTML = filtered.map(function(d) {
+				var stateClass = d.state.error ? 'error' : d.state.mounted ? 'mounted' : ''
+				var stateText = d.state.error ? '❌ Error' : d.state.mounted ? '✅' : '⏳'
+				var modHtml = d.modifiers.map(function(m) { return '<span class="mod">.' + m + '</span>' }).join('')
+				return '<div class="directive-item">'
+					+ '<span class="name">' + d.name + '</span>'
+					+ modHtml
+					+ '<span class="element">' + d.element + '</span>'
+					+ (d.value ? '<span class="value" title="' + esc(d.value) + '">= ' + esc(d.value) + '</span>' : '')
+					+ '<span class="state ' + stateClass + '">' + stateText + '</span>'
+					+ '</div>'
+			}).join('')
+		}
 
-			window.__directix_devtools_shown = refresh
-			refresh()
-		})()
+		function renderPerformance() {
+			if (perfMetrics.length === 0) {
+				perfEmptyEl.style.display = ''
+				perfChartEl.innerHTML = ''
+				perfSummaryEl.textContent = ''
+				return
+			}
+			perfEmptyEl.style.display = 'none'
+			var grouped = {}
+			var maxDuration = 0
+			for (var i = 0; i < perfMetrics.length; i++) {
+				var m = perfMetrics[i]
+				if (!grouped[m.directiveName]) grouped[m.directiveName] = { mount: 0, update: 0, unmount: 0 }
+				grouped[m.directiveName][m.type] += m.duration
+				maxDuration = Math.max(maxDuration, grouped[m.directiveName].mount, grouped[m.directiveName].update, grouped[m.directiveName].unmount)
+			}
+			var html = ''
+			var names = Object.keys(grouped)
+			for (var j = 0; j < names.length; j++) {
+				var name = names[j]
+				var g = grouped[name]
+				var total = g.mount + g.update + g.unmount
+				html += '<div class="bar-row">'
+					+ '<span class="bar-label">' + name + '</span>'
+					+ '<div class="bar-track">'
+					+ (g.mount > 0 ? '<div class="bar-fill mount" style="width:' + (g.mount / maxDuration * 100) + '%"></div>' : '')
+					+ (g.update > 0 ? '<div class="bar-fill update" style="width:' + (g.update / maxDuration * 100) + '%;top:0"></div>' : '')
+					+ '</div>'
+					+ '<span class="bar-value">' + total.toFixed(1) + 'ms</span></div>'
+			}
+			perfChartEl.innerHTML = html
+			var totalTime = perfMetrics.reduce(function(s, m) { return s + m.duration }, 0)
+			var slowOnes = perfMetrics.filter(function(m) { return m.duration > 16 }).sort(function(a, b) { return b.duration - a.duration }).slice(0, 5)
+			perfSummaryEl.textContent = 'Total: ' + totalTime.toFixed(2) + 'ms across ' + perfMetrics.length + ' operations\n'
+				+ 'Slow operations (>16ms): ' + slowOnes.length + '\n'
+				+ slowOnes.map(function(s) { return '  ⚠️ ' + s.directiveName + ' (' + s.type + '): ' + s.duration.toFixed(2) + 'ms' }).join('\n')
+		}
+
+		function renderIssues() {
+			var errorCount = issues.filter(function(i) { return i.type === 'error' }).length
+			if (errorCount > 0) {
+				issueCountEl.textContent = errorCount
+				issueCountEl.style.display = ''
+			} else {
+				issueCountEl.style.display = 'none'
+			}
+			if (issues.length === 0) {
+				issueListEl.innerHTML = ''
+				issuesEmptyEl.style.display = 'none'
+				return
+			}
+			issuesEmptyEl.style.display = 'none'
+			issueListEl.innerHTML = issues.sort(function(a, b) {
+				var order = { error: 0, warning: 1, info: 2 }
+				return (order[a.type] || 3) - (order[b.type] || 3)
+			}).map(function(i) {
+				return '<div class="issue-item ' + i.type + '">'
+					+ '<div class="issue-header">'
+					+ '<span class="severity ' + i.severity + '">' + i.severity + '</span>'
+					+ '<span class="directive">' + i.directiveName + '</span>'
+					+ '<span style="color:#888">' + i.element + '</span></div>'
+					+ '<div class="message">' + esc(i.message) + '</div>'
+					+ (i.suggestion ? '<div class="suggestion">💡 ' + esc(i.suggestion) + '</div>' : '')
+					+ '</div>'
+			}).join('')
+		}
+
+		function updateFilterChips() {
+			var names = {}
+			for (var i = 0; i < directives.length; i++) {
+				names[directives[i].name] = (names[directives[i].name] || 0) + 1
+			}
+			filterChipsEl.innerHTML = Object.keys(names).sort().map(function(name) {
+				var cls = activeFilters.has(name) ? 'chip active' : 'chip'
+				return '<span class="' + cls + '" data-name="' + name + '">' + name + ' (' + names[name] + ')</span>'
+			}).join('')
+			filterChipsEl.querySelectorAll('.chip').forEach(function(chip) {
+				chip.addEventListener('click', function() {
+					var name = this.dataset.name
+					if (activeFilters.has(name)) { activeFilters.delete(name); this.classList.remove('active') }
+					else { activeFilters.add(name); this.classList.add('active') }
+					renderDirectives()
+				})
+			})
+		}
+
+		function downloadExport(format) {
+			var payload = {
+				type: format,
+				includeTimestamps: document.getElementById('exportTimestamps').checked,
+				includePerformance: document.getElementById('exportPerformance').checked,
+				includeIssues: document.getElementById('exportIssues').checked,
+			}
+			chrome.tabs.sendMessage(tabId, { type: 'export', target: 'content', payload: payload }, function(response) {
+				if (chrome.runtime.lastError || !response || !response.payload) {
+					alert('Export failed: content script not reachable')
+					return
+				}
+				var result = response.payload
+				var blob = new Blob([result.content], { type: result.mimeType })
+				var url = URL.createObjectURL(blob)
+				var a = document.createElement('a')
+				a.href = url
+				a.download = 'directix-report.' + result.extension
+				a.click()
+				URL.revokeObjectURL(url)
+			})
+		}
+
+		function esc(str) {
+			if (!str) return ''
+			return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+		}
+
+		requestScan()
+	})()
 	</script>
 </body>
 </html>
