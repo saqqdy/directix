@@ -25,30 +25,31 @@ A comprehensive, easy-to-use, and high-performance Vue custom directives library
 - 🌐 **i18n Support** - Built-in internationalization with 8 language translations (Chinese, English, Japanese, Korean, French, German, Spanish, Russian)
 - 🔌 **Plugin System** - Extensible plugin architecture for community contributions
 
-## What's New in v2.4.0
+## What's New in v2.5.0
 
-### Developer Experience Enhancement
+### Browser Extension Enhancement Release
 
-This release focuses on enhancing debugging capabilities, improving the VS Code extension, and adding interactive documentation.
+This release transforms the browser extension from skeleton to full-featured DevTools panel, enhances VS Code diagnostics, and improves documentation.
 
-**VS Code Extension Enhancements:**
-- 🔧 DirectiveCompletionProvider - Intelligent directive completion with parameters, modifiers, and documentation
-- 💡 HoverProvider - Rich hover tooltips with descriptions, parameters, modifiers, and code examples
-- 🔗 DefinitionProvider - Click-to-navigate to online documentation
-- 🎛️ ConfigEditor - Visual configuration editor with directive enable/disable, search, and filtering
-- 📝 snippets.json - Code snippets for all 57 directives
+**Browser Extension (DevTools Panel):**
+- 🎯 **Full-featured UI** — 4-tab interface (Directives, Performance, Issues, Export)
+- 🔄 **Real-time Monitoring** — MutationObserver auto-detects DOM changes
+- 📊 **Performance Charts** — Visual bar charts for mount/update/unmount timing
+- 🔍 **Enhanced State Inspector** — Unified types, directive parser, search/filter
+- 📤 **Export Reports** — JSON, CSV, HTML formats with timestamps
 
-**Debugging Tools:**
-- 🩺 DiagnosticsProvider - Real-time diagnostics (missing required params, SSR compatibility, deprecated patterns, duplicate/conflicting directives)
-- 📊 PerformanceAnalyzer - Directive performance profiling with grouped stats and optimization recommendations
-- 🔍 StateInspector - Searchable directive list with category browsing and parameter details
-- 🌐 Browser Extension (DevTools) - Chrome DevTools panel skeleton for DOM scanning, performance analysis, and state inspection
+**VS Code Extension:**
+- ⚠️ **Bottleneck Detection** — Slow mount (>50ms), slow update (>16ms), excessive updates, memory leaks
+- 🩺 **4 New Diagnostics** — Modifier combos, memory leaks, SSR hydration, accessibility
+- 🎯 **New Commands** — `inspectState`, `showBottlenecks`, `openDirectiveDocs`, `searchDocs`, `insertDirective`
 
 **Documentation:**
-- 📖 Interactive examples for Lazy Loading, Permission Control, Long Press, Context Menu, Watermark, Infinite Scroll & Virtual List
-- ✅ Best Practices Guide (directive selection, performance, SSR, security, TypeScript, Vue 2 migration)
+- 🔍 **MiniSearch Optimization** — Boosted titles, fuzzy matching (EN/ZH locales)
+- ▶️ **One-Click Run** — Playground "Run" button opens generated code
 
 ---
+
+## v2.4.0 (Previous Release)
 
 ## What's New in v2.3.0
 

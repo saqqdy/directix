@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-06-27
+
+### Browser Extension Enhancement Release
+
+### Added
+
+#### Browser Extension (DevTools Panel)
+
+- **Full-featured DevTools UI** — Tabbed interface with 4 panels (Directives, Performance, Issues, Export)
+- **Real-time Directive Monitoring** — MutationObserver auto-detects DOM changes and pushes updates
+- **Performance Charts** — Visual bar charts showing mount/update/unmount timing per directive
+- **State Inspector Enhancement** — Unified types, directive parser with scan/filter/sort utilities
+- **Directive Search & Filter** — Search bar + filter chips to narrow down directive list
+- **Diagnostic Report Export** — JSON, CSV, HTML export formats with timestamps, performance, issues
+
+#### New Files
+
+- `packages/browser-extension/src/shared/types.ts` — Unified type definitions (92 lines)
+- `packages/browser-extension/src/devtools/utils/directiveParser.ts` — Directive parser utilities (170 lines)
+
+#### VS Code Extension Enhancements
+
+- **Performance Bottleneck Detection** — `detectBottlenecks()` method with threshold-based warnings
+  - Slow mount (>50ms), slow update (>16ms), excessive updates (>100), memory leaks
+  - QuickPick UI for bottleneck warnings with optimization suggestions
+  - Command: `directix.showBottlenecks`
+- **Enhanced Diagnostics** — 4 new diagnostic checks
+  - Modifier combination validation
+  - Memory leak pattern detection
+  - SSR hydration issues
+  - Accessibility concerns
+- **New Commands**
+  - `directix.inspectState` — Quick pick state inspector
+  - `directix.openDirectiveDocs` — Open docs for cursor directive
+  - `directix.searchDocs` — Search documentation
+  - `directix.insertDirective` — Quick pick directive insertion
+
+#### Documentation
+
+- **MiniSearch Optimization** — Enhanced local search with boosted titles, fuzzy matching
+  - English locale: "Search directives, guides, API..."
+  - Chinese locale: "搜索指令、指南、API..."
+- **One-Click Run Button** — Playground component now has "Run" button to open generated code
+
+### Changed
+
+- `packages/browser-extension/panel.html` — From 66 to 380 lines (full tabbed UI)
+- `packages/browser-extension/src/content/index.ts` — From 113 to 336 lines (MutationObserver, export)
+- `packages/browser-extension/src/background/index.ts` — From 33 to 98 lines (port routing)
+- `packages/browser-extension/src/devtools/index.ts` — From 19 to 52 lines (port connection)
+
+---
+
 ## [2.4.0] - 2026-06-21
 
 ### Developer Experience Enhancement Release

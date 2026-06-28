@@ -25,30 +25,31 @@
 - 🌐 **国际化支持** - 内置中文、英文、日文、韩文、法文、德文、西班牙文、俄文 8 种语言翻译
 - 🔌 **插件系统** - 可扩展的插件架构，支持社区贡献
 
-## v2.4.0 更新内容
+## v2.5.0 更新内容
 
-### 开发者体验增强
+### 浏览器扩展增强版本
 
-本次版本专注于增强调试能力、完善 VS Code 插件，以及添加交互式文档。
+本次版本将浏览器扩展从骨架升级为完整的 DevTools 面板，增强 VS Code 诊断能力，并改进文档搜索。
 
-**VS Code 插件增强：**
-- 🔧 DirectiveCompletionProvider - 智能指令补全（含参数、修饰符、文档提示）
-- 💡 HoverProvider - 丰富悬浮提示（指令描述、参数、修饰符、示例代码）
-- 🔗 DefinitionProvider - 点击跳转到在线文档
-- 🎛️ ConfigEditor - 配置可视化编辑（含指令启用/禁用、搜索过滤）
-- 📝 snippets.json - 全部 57 个指令的代码片段
+**浏览器扩展 (DevTools 面板)：**
+- 🎯 **完整 UI** — 4 选项卡界面（指令、性能、问题、导出）
+- 🔄 **实时监控** — MutationObserver 自动检测 DOM 变更
+- 📊 **性能图表** — 可视化柱状图展示 mount/update/unmount 耗时
+- 🔍 **增强状态检查** — 统一类型、指令解析器、搜索过滤
+- 📤 **导出报告** — JSON、CSV、HTML 格式，含时间戳
 
-**调试工具：**
-- 🩺 DiagnosticsProvider - 实时诊断（缺失必需参数、SSR 兼容性、废弃模式、重复/冲突指令）
-- 📊 PerformanceAnalyzer - 指令性能分析（分组统计、优化建议）
-- 🔍 StateInspector - 可搜索指令列表、分类浏览、参数详情
-- 🌐 浏览器扩展 (DevTools) - Chrome DevTools 面板骨架（DOM 扫描、性能分析、状态检查）
+**VS Code 插件：**
+- ⚠️ **瓶颈检测** — 慢挂载(>50ms)、慢更新(>16ms)、过多更新、内存泄漏
+- 🩺 **4 项新诊断** — 修饰符组合、内存泄漏、SSR 水合、无障碍
+- 🎯 **新命令** — `inspectState`、`showBottlenecks`、`openDirectiveDocs`、`searchDocs`、`insertDirective`
 
-**文档完善：**
-- 📖 交互式示例（懒加载、权限控制、长按、右键菜单、水印、无限滚动和虚拟列表）
-- ✅ 最佳实践指南（指令选择、性能优化、SSR 兼容、安全、TypeScript、Vue 2 迁移）
+**文档：**
+- 🔍 **MiniSearch 优化** — 标题加权、模糊匹配（中英文本地化）
+- ▶️ **一键运行** — Playground 组件新增"运行"按钮
 
 ---
+
+## v2.4.0（上一版本）
 
 ## v2.3.0 更新内容
 

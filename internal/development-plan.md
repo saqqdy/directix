@@ -6061,6 +6061,88 @@ npx directix migrate --check
 - ✅ Web Components 测试通过
 - ✅ 构建产物生成成功
 
+### v2.5.0 开发计划 - DevTools 完善与开发者体验优化 (Week 29-30) ✅ 已完成
+
+#### 核心目标
+
+完成 Browser Extension (Chrome DevTools) 的完整功能，添加视频教程，增强调试和监控能力，优化开发者整体体验。
+
+#### 任务清单
+
+| 任务 | 预计工时 | 优先级 | 依赖 | 状态 |
+|------|---------|--------|------|------|
+| **Browser Extension 完善** | | | | |
+| DevTools Panel UI 完善 | 12h | P0 | - | ✅ 已完成 |
+| Directive实时监控 | 8h | P0 | - | ✅ 已完成 |
+| Performance 实时图表 | 6h | P0 | - | ✅ 已完成 |
+| State Inspector 增强 | 6h | P1 | - | ✅ 已完成 |
+| 指令搜索和过滤 | 4h | P1 | - | ✅ 已完成 |
+| 导出诊断报告 | 4h | P2 | - | ✅ 已完成 |
+| **视频教程开发** | | | | |
+| 快速入门教程 (3集) | 6h | P0 | - | 📋 待开发 |
+| 指令详解教程 (5集) | 12h | P1 | - | 📋 待开发 |
+| 最佳实践教程 (2集) | 4h | P1 | - | 📋 待开发 |
+| **调试工具增强** | | | | |
+| 指令生命周期追踪 | 6h | P1 | - | ✅ 已完成 |
+| 错误诊断增强 | 4h | P1 | - | ✅ 已完成 |
+| 性能瓶颈检测 | 4h | P1 | - | ✅ 已完成 |
+| **开发者体验优化** | | | | |
+| VS Code 插件优化 | 6h | P1 | - | ✅ 已完成 |
+| 文档搜索优化 | 4h | P2 | - | ✅ 已完成 |
+| 示例代码一键运行 | 6h | P2 | - | ✅ 已完成 |
+
+#### 详细技术方案
+
+##### 1. Browser Extension 完善
+
+**DevTools Panel UI 架构：**
+
+```
+packages/browser-extension/
+├── src/
+│   ├── devtools/
+│   │   ├── panel/
+│   │   │   ├── DirectiveMonitor.vue      # 指令监控面板
+│   │   │   ├── PerformanceChart.vue      # 性能图表
+│   │   │   ├── StateInspector.vue        # 状态检查器
+│   │   │   ├── IssueDetector.vue         # 问题检测器
+│   │   │   └── SearchFilter.vue          # 搜索过滤
+│   │   ├── components/
+│   │   │   ├── DirectiveCard.vue         # 指令卡片
+│   │   │   ├── PerformanceGraph.vue      # 性能图形
+│   │   │   ├── StateTree.vue             # 状态树
+│   │   │   └── IssueList.vue             # 问题列表
+│   │   ├── utils/
+│   │   │   ├── directiveParser.ts        # 指令解析
+│   │   │   ├── performanceCollector.ts   # 性能收集
+│   │   │   ├── stateSerializer.ts        # 状态序列化
+│   │   │   └── issueDetector.ts          # 问题检测
+│   │   └── styles/
+│   │   │   ├── panel.css                 # 面板样式
+│   │   │   ├── components.css            # 组件样式
+│   │   └── index.ts                      # DevTools 入口
+│   ├── background/
+│   │   ├── messageHandler.ts             # 消息处理
+│   │   ├── tabManager.ts                 # Tab 管理
+│   │   ├── persistence.ts                # 数据持久化
+│   │   └── index.ts                      # Background 入口
+│   ├── content/
+│   │   ├── directiveScanner.ts           # 指令扫描器
+│   │   ├── performanceMonitor.ts         # 性能监控
+│   │   ├── stateCollector.ts             # 状态收集
+│   │   ├── eventTracker.ts               # 事件追踪
+│   │   └ index.ts                        # Content 入口
+│   └ shared/
+│     ├── types.ts                        # 共享类型
+│     ├── constants.ts                    # 常量定义
+│     └ utils.ts                          # 工具函数
+│   ├── manifest.json                     # Manifest V3
+│   ├── devtools.html                     # DevTools 页面
+│   ├── panel.html                        # Panel 页面
+│   └ package.json
+│   └ webpack.config.js                   # 构建配置
+│   └ README.md
+
 #### 🔮 v2.x 版本规划
 
 ---
@@ -9264,3 +9346,24 @@ A: 所有指令都经过优化，支持 Tree-shaking。单个指令体积 < 2KB 
 - TypeScript 原生支持
 - VitePress 文档站点
 - 基础示例项目
+
+---
+
+## v2.5.0 发布记录 (2026-06-27) ✅ 已发布
+
+**重大更新 - 浏览器扩展与 DevTools 集成：**
+
+### 浏览器扩展 DevTools 面板
+- ✅ 全功能 DevTools UI（4 个标签页：Directives、Performance、Issues、Export）
+- ✅ 实时指令监控（MutationObserver 自动检测 DOM 变化）
+- ✅ 性能图表（可视化柱状图显示 mount/update/unmount 时间）
+- ✅ 诊断报告导出（JSON、CSV、HTML 格式）
+
+### VS Code 扩展增强
+- ✅ 性能瓶颈检测（Slow mount >50ms、Slow update >16ms、Excessive updates >100、Memory leak）
+- ✅ 增强诊断（修饰符组合验证、内存泄漏模式、SSR 水合、无障碍问题）
+- ✅ 新命令（inspectState、showBottlenecks、openDirectiveDocs、searchDocs、insertDirective）
+
+### 文档优化
+- ✅ MiniSearch 优化（标题加权、模糊匹配）
+- ✅ Playground 一键运行按钮
